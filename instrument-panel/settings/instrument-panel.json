@@ -1,0 +1,17 @@
+{
+    "Airspeed Indicator": {
+        "Position X": 425,
+        "Position Y": 60,
+        "Size": 304
+    }
+    "Attitude Indicator": {
+        "Position X": 792,
+        "Position Y": 50,
+        "Size": 336
+    }
+    "Altimeter": {
+        "Position X": 1191,
+        "Position Y": 60,
+        "Size": 304
+    }
+}

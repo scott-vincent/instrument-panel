@@ -1,0 +1,328 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "attitudeIndicator.h"
+#include "simvars.h"
+
+attitudeIndicator::attitudeIndicator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+{
+    setName("Attitude Indicator");
+    addVars();
+    resize();
+
+    time(&lastPowerTime);
+}
+
+/// <summary>
+/// Destroy and recreate all bitmaps as instrument has been resized
+/// </summary>
+void attitudeIndicator::resize()
+{
+    destroyBitmaps();
+
+    // Create bitmaps scaled to correct size (original size is 800)
+    scaleFactor = size / 800.0f;
+
+    // 0 = Original (loaded) bitmap
+    ALLEGRO_BITMAP* orig = loadBitmap("attitude-indicator.bmp");
+    addBitmap(orig);
+
+    // 1 = Destination bitmap (all other bitmaps get assembled to here)
+    ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
+    addBitmap(dest);
+
+    // 2 = Wheel
+    ALLEGRO_BITMAP* wheel = al_create_bitmap(506 * scaleFactor, 600 * scaleFactor);
+    addBitmap(wheel);
+
+    // 3 = Graduated transparency for wheel
+    ALLEGRO_BITMAP* trans = al_create_bitmap(506 * scaleFactor, 600 * scaleFactor);
+    al_set_target_bitmap(trans);
+    al_draw_scaled_bitmap(orig, 1311, 100, 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
+    addBitmap(trans);
+
+    // 4 = Horizon shadow
+    ALLEGRO_BITMAP* trans2 = al_create_bitmap(573 * scaleFactor, 110 * scaleFactor);
+    al_set_target_bitmap(trans2);
+    al_draw_scaled_bitmap(orig, 618, 1629, 573, 110, 0, 0, 573 * scaleFactor, 110 * scaleFactor, 0);
+    addBitmap(trans2);
+
+    // 5 = Bezel shadow
+    ALLEGRO_BITMAP* trans3 = al_create_bitmap(652 * scaleFactor, 324 * scaleFactor);
+    al_set_target_bitmap(trans3);
+    al_draw_scaled_bitmap(orig, 509, 1794, 652, 324, 0, 0, 652 * scaleFactor, 324 * scaleFactor, 0);
+    addBitmap(trans3);
+
+    // 6 = OFF indicator
+    ALLEGRO_BITMAP* trans4 = al_create_bitmap(229 * scaleFactor, 389 * scaleFactor);
+    al_set_target_bitmap(trans4);
+    al_draw_scaled_bitmap(orig, 1524, 858, 229, 389, 0, 0, 229 * scaleFactor, 389 * scaleFactor, 0);
+    addBitmap(trans4);
+
+    // 7 = Roll pointer shadow
+    ALLEGRO_BITMAP* trans5 = al_create_bitmap(size, size);
+    addBitmap(trans5);
+
+    // 8 = Roll pointer sprite
+    ALLEGRO_BITMAP* pointer = al_create_bitmap(100 * scaleFactor, 600 * scaleFactor);
+    al_set_target_bitmap(pointer);
+    al_draw_scaled_bitmap(orig, 1297, 1388, 99, 599, 0, 0, 100 * scaleFactor, 600 * scaleFactor, 0);
+    addBitmap(pointer);
+
+    // 9 = Roll pointer shadow sprite
+    ALLEGRO_BITMAP* pointerShadow = al_create_bitmap(100 * scaleFactor, 600 * scaleFactor);
+    al_set_target_bitmap(pointerShadow);
+    al_draw_scaled_bitmap(orig, 1498, 1386, 99, 599, 0, 0, 100 * scaleFactor, 600 * scaleFactor, 0);
+    addBitmap(pointerShadow);
+
+    // 10 = Fill with background colour (takes 1 pixel of background and scales it)
+    ALLEGRO_BITMAP* bg = al_create_bitmap(size, size);
+    al_set_target_bitmap(bg);
+    al_draw_scaled_bitmap(orig, 1267, 20, 1, 1, 0, 0, size, size, 0);
+    addBitmap(bg);
+
+    al_set_target_backbuffer(globals.display);
+}
+
+/// <summary>
+/// Draw the instrument at the stored position
+/// </summary>
+void attitudeIndicator::render()
+{
+    // Use normal blender
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+
+    // Draw stuff into dest bitmap
+    al_set_target_bitmap(bitmaps[1]);
+
+    // Fill with black
+    al_draw_scaled_bitmap(bitmaps[0], 628, 850, 1, 1, 0, 0, size, size, 0);
+
+    // Blit wheel into wheel sized bitmap
+    al_set_target_bitmap(bitmaps[2]);
+    al_draw_scaled_bitmap(bitmaps[0], 0, 1200 - 300 + (pitchAngle * 10), 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
+
+    // Set blender to multiply (shades of grey darken, white has no effect)
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+    // Draw graduation to make wheel look round
+    al_draw_bitmap(bitmaps[3], 0, 0, 0);
+    // Restore normal blender
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+
+    // Draw bits above and below the wheel
+    al_draw_scaled_bitmap(bitmaps[0], 507, 972, 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
+    al_set_target_bitmap(bitmaps[1]);
+
+    // Draw wheel
+    al_draw_rotated_bitmap(bitmaps[2], 253 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, bankAngle * 0.7111111 * AngleFactor, 0);
+
+    if (globals.enableShadows)
+    {
+        // Fill roll pointer shadow sprite with white
+        al_set_target_bitmap(bitmaps[7]);
+        al_draw_scaled_bitmap(bitmaps[0], 1484, 1387, 1, 1, 0, 0, size, size, 0);
+
+        // Draw roll_pointer shadow into trans5
+        al_draw_scaled_rotated_bitmap(bitmaps[9], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 415 * scaleFactor, .94, .94, bankAngle * 0.7111111 * AngleFactor, 0);
+        al_set_target_bitmap(bitmaps[1]);
+
+        // Draw shadows
+        // Set blender to multiply (shades of grey darken, white has no effect)
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+        // Wing pointer shadow
+        al_draw_bitmap(bitmaps[4], 186 * scaleFactor, (390 - (currentAdiCal * 10)) * scaleFactor, 0);
+
+        // Bezel shadow
+        al_draw_bitmap(bitmaps[5], 70 * scaleFactor, 90 * scaleFactor, 0);
+
+        if (!globals.electrics)
+        {
+            // OFF indicator shadow
+            al_draw_bitmap(bitmaps[6], 18 * scaleFactor, 200 * scaleFactor, 0);
+        }
+
+        // Roll pointer shadow
+        al_draw_bitmap(bitmaps[7], 0, 0, 0);
+
+        // Restore normal blender
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+    }
+
+    // Draw Bezel
+    al_draw_scaled_bitmap(bitmaps[0], 507, 0, 798, 798, 0, 0, size, size, 0);
+
+    if (!globals.electrics)
+    {
+        // Draw OFF Indicator
+        al_draw_scaled_bitmap(bitmaps[0], 1236, 874, 213, 362, 15 * scaleFactor, 200 * scaleFactor, 213 * scaleFactor, 362 * scaleFactor, 0);
+    }
+
+    // Draw wing pointer Indicator
+    al_draw_scaled_bitmap(bitmaps[0], 523, 820, 544, 92, 200 * scaleFactor, (380 - (currentAdiCal * 10)) * scaleFactor, 544 * scaleFactor, 92 * scaleFactor, 0);
+
+    // Draw roll pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[8], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, .94, .94, bankAngle * 0.7111111 * AngleFactor, 0);
+
+    // Display 'Not Connected message'
+    if (!globals.connected)
+    {
+        al_draw_scaled_bitmap(bitmaps[0], 506, 2198, 240, 84, 162 * scaleFactor, 318 * scaleFactor, 480 * scaleFactor, 168 * scaleFactor, 0);
+    }
+
+    // Position dest bitmap on screen
+    al_set_target_backbuffer(globals.display);
+    al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+}
+
+/// <summary>
+/// Fetch flightsim vars and then update all internal variables
+/// that affect this instrument.
+/// </summary>
+void attitudeIndicator::update()
+{
+    // Check for position or size change
+    long* settings = globals.simVars->readSettings(name, xPos, yPos, size);
+
+    xPos = settings[0];
+    yPos = settings[1];
+
+    if (size != settings[2]) {
+        size = settings[2];
+        resize();
+    }
+
+    // Get latest FlightSim variables
+    globals.connected = fetchVars();
+
+    // Calculate values
+
+    // If power is off for a random amount of time ( between 5 - 7 mins ) then simulate gyro stopping
+    double timeDifference = 0;
+    if (globals.electrics)
+    {
+        time(&lastPowerTime);
+
+        // Power to go off after 5 - 7 mins
+        gyroSpinTime = rand() % 120 + 300;
+        failCount = 0;
+    }
+    else
+    {
+        time_t now;
+        time(&now);
+
+        // Secs power is off
+        timeDifference = (double)difftime(now, lastPowerTime);
+    }
+
+    if (timeDifference >= gyroSpinTime)
+    {
+        if (failCount++ <= 200)
+        {
+            if (pitchAngle < 90)
+            {
+                pitchAngle += 0.03;
+            }
+
+            if (bankAngle < 180)
+            {
+                bankAngle += 0.3;
+            }
+        }
+        else
+        {
+            failCount = 201;
+        }
+    }
+    else
+    {
+        float pitchTest = (float)((float)pitch * 3.6 / (42949672.96));
+        if (pitchTest - pitchAngle > 6)
+        {
+            pitchAngle += 5;
+        }
+        else if (pitchAngle - pitchTest > 6)
+        {
+            pitchAngle -= 5;
+        }
+        else
+        {
+            pitchAngle = pitchTest;
+        }
+
+        float bankTest = (float)((float)bank * 3.6 / (42949672.96));
+        if (bankTest - bankAngle > 6 && bankTest - bankAngle < 180)
+        {
+            bankAngle += 5;
+        }
+        else if (bankAngle - bankTest > 6 && bankAngle - bankTest < 180)
+        {
+            bankAngle -= 5;
+        }
+        else
+        {
+            bankAngle = bankTest;
+        }
+
+        if (!globals.externalControls)
+        {
+            adiCal = 0;
+        }
+
+        if (currentAdiCal > adiCal)
+        {
+            currentAdiCal -= 1;
+        }
+        else if (currentAdiCal < adiCal)
+        {
+            currentAdiCal += 1;
+        }
+    }
+}
+
+/// <summary>
+/// Add FlightSim variables for this instrument (used for simulation mode)
+/// </summary>
+void attitudeIndicator::addVars()
+{
+    globals.simVars->addVar(name, "Pitch", 0x0578, false, 65536L * 64L, 0);
+    globals.simVars->addVar(name, "Bank", 0x057C, false, 65536L * 64L, 0);
+    globals.simVars->addVar(name, "ADI Cal", 0x73E4, false, 1, 0);
+}
+
+/// <summary>
+/// Use SDK to obtain latest values of all flightsim variables
+/// that affect this instrument.
+/// 
+/// Returns false if flightsim is not connected.
+/// </summary>
+bool attitudeIndicator::fetchVars()
+{
+    bool success = true;
+    DWORD dwResult;
+
+    // Pitch
+    if (!globals.simVars->FSUIPC_Read(0x0578, 4, &pitch, &dwResult)) {
+        pitch = 0;
+        success = false;
+    }
+
+    // Bank
+    if (!globals.simVars->FSUIPC_Read(0x057C, 4, &bank, &dwResult)) {
+        bank = 0;
+        success = false;
+    }
+
+    // ADI Cal (for manual calibration)
+    if (!globals.simVars->FSUIPC_Read(0x73E4, 2, &adiCal, &dwResult)) {
+        adiCal = 0;
+        success = false;
+    }
+
+    if (!globals.simVars->FSUIPC_Process(&dwResult))
+    {
+        success = false;
+    }
+
+    return success;
+}

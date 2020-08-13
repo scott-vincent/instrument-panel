@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="instrument-panel.cpp" />
+    <ClCompile Include="instrument.cpp" />
+    <ClCompile Include="instruments\airspeedIndicator.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\altimeter.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\attitudeIndicator.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="simvars.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="instrument.h" />
+    <ClInclude Include="instruments\airspeedIndicator.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\altimeter.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\attitudeIndicator.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="simvars.h" />
+    <ClInclude Include="globals.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="instruments">
+      <UniqueIdentifier>{c925723c-921c-4bd5-afc3-8fb981bb1458}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
