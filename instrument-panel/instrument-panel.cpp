@@ -31,14 +31,6 @@
  * To make adjustments use the arrow keys. Up/down arrows select the previous or next
  * setting and left/right arrows change the value. You can also use numpad left/right
  * arrows to make larger adjustments.
- 
- * NOTES
- * 
- * You can determine which instruments are included in the panel by editing the following
- * file and setting the enabled flags:
- * 
- *   settings/instrument-panel.json
- * 
  */
 
 #include <stdio.h>
