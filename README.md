@@ -1,6 +1,8 @@
 # MICROSOFT FLIGHT SIMULATOR 2020 - INSTRUMENT PANEL
 
-An instrument panel for Microsoft Flight Simulator 2020. This program is designed to run
+![Screenshot](Screenshot.png)
+
+An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020. It can run on either a PC or a
 Raspberry Pi.
 
@@ -24,9 +26,9 @@ NOTE: Allegro5 must be built on RasPi4 as a standard Linux build, not the
 specific Raspberry Pi build, i.e.:
 ```
   mkdir build
-    cd allegro5/build
-    cmake .. -DCMAKE_BUILD_TYPE=Release
-    make && sudo make install
+  cd allegro5/build
+  cmake .. -DCMAKE_BUILD_TYPE=Release
+  make && sudo make install
 ```
 ### KEYS
 ```
