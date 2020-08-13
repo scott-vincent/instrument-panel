@@ -12,10 +12,10 @@ The simvars part of this program will be enhanced to read them from the LAN. Cur
 the values are just simulated.
 
 This program was heavily inspired by Dave Ault and contains original artwork by him.
-``` 
-  http://82.7.215.98/Learjet45Chimera/index.html
+
+  http://82.7.215.98/Learjet45Chimera/index.html 
   https://hangar45.net/hangar-45-forum/topic/standby-gauge-software-by-dave-ault
-```
+  
 It has been completely rewritten and updated to use Allegro5. Hopefully,
 Allegro5 will support hardware acceleration on the Raspberry Pi 4 soon!
 
