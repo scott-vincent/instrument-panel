@@ -65,12 +65,7 @@ std::list<instrument*> instruments;
 /// </summary>
 void fatalError(const char* msg)
 {
-    char outMsg[256];
-
-    strcpy(outMsg, msg);
-    strcat(outMsg, "\n");
-
-    printf(outMsg);
+    printf("%s\n", msg);
 
 #ifdef _WIN32
     // Show message in IDE output window
