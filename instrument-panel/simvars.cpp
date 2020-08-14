@@ -413,13 +413,13 @@ BOOL simvars::simulatedRead(DWORD offset, DWORD size, void* dest, DWORD* result)
     {
     case 1:
     {
-        unsigned char val1 = (unsigned char)val;
+        signed char val1 = (signed char)val;
         memcpy(dest, &val1, size);
         break;
     }
     case 2:
     {
-        unsigned short val2 = (unsigned short)val;
+        signed short val2 = (signed short)val;
         memcpy(dest, &val2, size);
         break;
     }
