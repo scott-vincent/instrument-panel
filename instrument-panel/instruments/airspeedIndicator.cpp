@@ -214,21 +214,21 @@ void airspeedIndicator::addVars()
 bool airspeedIndicator::fetchVars()
 {
     bool success = true;
-    DWORD dwResult;
+    DWORD result;
 
     // Indicated Airspeed Value
-    if (!globals.simVars->FSUIPC_Read(0x02BC, 4, &airspeed, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x02BC, 4, &airspeed, &result)) {
         airspeed = 0;
         success = false;
     }
 
     // Mach speed Value
-    if (!globals.simVars->FSUIPC_Read(0x11C6, 2, &machSpeed, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x11C6, 2, &machSpeed, &result)) {
         machSpeed = 0;
         success = false;
     }
 
-    if (!globals.simVars->FSUIPC_Process(&dwResult))
+    if (!globals.simVars->FSUIPC_Process(&result))
     {
         success = false;
     }

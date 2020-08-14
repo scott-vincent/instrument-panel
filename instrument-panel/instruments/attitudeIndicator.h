@@ -21,6 +21,9 @@ private:
 	int failCount = 201;
 	time_t lastPowerTime;
 
+	// Hardware knobs
+	int adiCalKnob = -1;
+
 public:
 	attitudeIndicator(int xPos, int yPos, int size);
 	void render();
@@ -30,6 +33,8 @@ private:
 	void resize();
 	void addVars();
 	bool fetchVars();
+	void addKnobs();
+	bool updateKnobs();
 };
 
 #endif // _ATTITUDE_INDICATOR_H

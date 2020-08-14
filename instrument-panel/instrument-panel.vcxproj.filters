@@ -13,6 +13,10 @@
       <Filter>instruments</Filter>
     </ClCompile>
     <ClCompile Include="simvars.cpp" />
+    <ClCompile Include="instruments\newInstrument.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="knobs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -27,6 +31,10 @@
     </ClInclude>
     <ClInclude Include="simvars.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="instruments\newInstrument.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="knobs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

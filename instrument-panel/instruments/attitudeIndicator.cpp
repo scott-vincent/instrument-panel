@@ -7,8 +7,15 @@ attitudeIndicator::attitudeIndicator(int xPos, int yPos, int size) : instrument(
 {
     setName("Attitude Indicator");
     addVars();
-    resize();
 
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        addKnobs();
+    }
+#endif
+
+    resize();
     time(&lastPowerTime);
 }
 
@@ -191,6 +198,13 @@ void attitudeIndicator::update()
         resize();
     }
 
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        updateKnobs();
+    }
+#endif
+
     // Get latest FlightSim variables
     globals.connected = fetchVars();
 
@@ -299,30 +313,60 @@ void attitudeIndicator::addVars()
 bool attitudeIndicator::fetchVars()
 {
     bool success = true;
-    DWORD dwResult;
+    DWORD result;
 
     // Pitch
-    if (!globals.simVars->FSUIPC_Read(0x0578, 4, &pitch, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x0578, 4, &pitch, &result)) {
         pitch = 0;
         success = false;
     }
 
     // Bank
-    if (!globals.simVars->FSUIPC_Read(0x057C, 4, &bank, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x057C, 4, &bank, &result)) {
         bank = 0;
         success = false;
     }
 
     // ADI Cal (for manual calibration)
-    if (!globals.simVars->FSUIPC_Read(0x73E4, 2, &adiCal, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x73E4, 2, &adiCal, &result)) {
         adiCal = 0;
         success = false;
     }
 
-    if (!globals.simVars->FSUIPC_Process(&dwResult))
+    if (!globals.simVars->FSUIPC_Process(&result))
     {
         success = false;
     }
 
     return success;
 }
+
+#ifndef _WIN32
+
+void attitudeIndicator::addKnobs()
+{
+    // BCM GPIO 2 and 3
+    adiCalKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
+}
+
+bool attitudeIndicator::updateKnobs()
+{
+    DWORD result;
+
+    // Read knob for ADI calibration
+    int val = globals.hardwareKnobs->read(adiCalKnob);
+
+    if (val != INT_MIN) {
+        // Convert knob value to adi cal value (adjust for desired sensitivity)
+        adiCal = val / 5;
+
+        // Update ADI calibration variable
+        if (!globals.simVars->FSUIPC_Write(0x73E4, 2, &adiCal, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+#endif // !_WIN32

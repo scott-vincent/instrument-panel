@@ -451,13 +451,13 @@ BOOL simvars::simulatedWrite(DWORD offset, DWORD size, void* src, DWORD* result)
     {
     case 1:
     {
-        unsigned char *val1 = (unsigned char *)src;
+        signed char *val1 = (signed char *)src;
         varVal[idx] = *val1;
         break;
     }
     case 2:
     {
-        unsigned short *val2 = (unsigned short *)src;
+        signed short *val2 = (signed short *)src;
         varVal[idx] = *val2;
         break;
     }

@@ -7,6 +7,14 @@ newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yP
 {
     setName("New Instrument");
     addVars();
+
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        addKnobs();
+    }
+#endif
+
     resize();
 }
 
@@ -69,6 +77,13 @@ void newInstrument::update()
         resize();
     }
 
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        updateKnobs();
+    }
+#endif
+
     // Get latest FlightSim variables
     globals.connected = fetchVars();
 
@@ -93,18 +108,48 @@ void newInstrument ::addVars()
 bool newInstrument::fetchVars()
 {
     bool success = true;
-    DWORD dwResult;
+    DWORD result;
 
     // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x9999, 4, &instrumentVar, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x9999, 4, &instrumentVar, &result)) {
         instrumentVar = 0;
         success = false;
     }
 
-    if (!globals.simVars->FSUIPC_Process(&dwResult))
+    if (!globals.simVars->FSUIPC_Process(&result))
     {
         success = false;
     }
 
     return success;
 }
+
+#ifndef _WIN32
+
+void newInstrument::addKnobs()
+{
+    // BCM GPIO 38 and 39
+    newKnob = globals.hardwareKnobs->add(38, 39, -100, 100, 0);
+}
+
+bool newInstrument::updateKnobs()
+{
+    DWORD result;
+
+    // Read knob for new instrument calibration
+    int val = globals.hardwareKnobs->read(newKnob);
+
+    if (val != INT_MIN) {
+        // Convert knob value to new instrument value (adjust for desired sensitivity)
+        instrumentVar = val / 10;
+
+        // Update new instrument variable
+        if (!globals.simVars->FSUIPC_Write(0x9999, 2, &instrumentVar, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+#endif // !_WIN32

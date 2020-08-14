@@ -5,13 +5,15 @@
 #include <allegro5/allegro_font.h>
 
 class simvars;
+class knobs;
 
 struct globalVars
 {
 	const char* BitmapDir = "bitmaps/";
 	const char* SettingsFile = "settings/instrument-panel.json";
 
-	simvars * simVars;
+	simvars* simVars = NULL;
+	knobs* hardwareKnobs = NULL;
 
 	ALLEGRO_FONT* font = NULL;
 	ALLEGRO_DISPLAY* display = NULL;

@@ -6,9 +6,9 @@
  * 
  * This program was heavily inspired by Dave Ault and contains original artwork by him.
  * 
- *   http://82.7.215.98/Learjet45Chimera/index.html
- *   https://hangar45.net/hangar-45-forum/topic/standby-gauge-software-by-dave-ault
- * 
+ *    http://www.learjet45chimera.co.uk/
+ *    https://hangar45.net/hangar-45-forum/topic/standby-gauge-software-by-dave-ault
+ *
  * It has been completely rewritten and updated to use Allegro5. Hopefully,
  * Allegro5 will support hardware acceleration on the Raspberry Pi 4 soon!
  *
@@ -31,12 +31,34 @@
  * To make adjustments use the arrow keys. Up/down arrows select the previous or next
  * setting and left/right arrows change the value. You can also use numpad left/right
  * arrows to make larger adjustments.
+ * 
+ * On Raspberry Pi you can configure hardware Rotary Encoders for each instrument.
+ * 
+ *  Physical Pin to BCM GPIO
+ *   3  5  7 11 13 15 19 21 23 29 31 33 35 37
+ *   |  |  |  |  |  |  |  |  |  |  |  |  |  |
+ *   2  3  4 17 27 22 10  9 11  5  6 13 19 26
+ *
+ *  Physical Pin to BCM GPIO (avoid 8=14, 10=15 and 12=18)
+ *   8 10 12 16 18 22 24 26 32 36 38 40
+ *   |  |  |  |  |  |  |  |  |  |  |  |
+ *  14 15 18 23 24 25  8  7 12 16 20 21
+ * 
+ * Each rotary encoder is connected to two BCM GPIO pins (+ ground on centre pin).
+ * See individual instruments for pins used. Not all instruments have manual controls.
+ * 
+ * Note: pullUpDnControl does not work on RasPi4 so have to use raspi-gpio command-line
+ * to pull up resistors.
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef _WIN32
+// Windows only
 #include <Windows.h>
+#else
+ // Raspberry Pi only
+#include <knobs.h>
 #endif
 #include <list>
 #include <allegro5/allegro.h>
@@ -50,6 +72,7 @@
 #include "attitudeIndicator.h"
 #include "altimeter.h"
 
+const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
 
 struct globalVars globals;
@@ -137,6 +160,13 @@ void init()
     al_register_event_source(eventQueue, al_get_display_event_source(globals.display));
 
     globals.simVars = new simvars();
+
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (HaveHardwareKnobs) {
+        globals.hardwareKnobs = new knobs();
+    }
+#endif
 }
 
 /// <summary>
@@ -424,7 +454,9 @@ int main()
     }
 
     // Settings get saved when simVars are destructed
-    delete globals.simVars;
+    if (globals.simVars) {
+        delete globals.simVars;
+    }
 
     cleanup();
     return 0;

@@ -14,6 +14,9 @@ private:
 	// Instrument values (caclulated from variables and needed to draw the instrument)
 	float instrumentValue;
 
+	// Hardware knobs
+	int newKnob = -1;
+
 public:
 	newInstrument(int xPos, int yPos, int size);
 	void render();
@@ -23,6 +26,8 @@ private:
 	void resize();
 	void addVars();
 	bool fetchVars();
+	bool updateKnobs();
+
 };
 
 #endif // _NEW_INSTRUMENT_H

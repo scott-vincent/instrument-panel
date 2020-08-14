@@ -386,30 +386,30 @@ void altimeter::addVars()
 bool altimeter::fetchVars()
 {
     bool success = true;
-    DWORD dwResult;
+    DWORD result;
 
     // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x0330, 2, &pressure, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x0330, 2, &pressure, &result)) {
         pressure = 16402;
         success = false;
     }
 
-    if (!globals.simVars->FSUIPC_Read(0x0C18, 2, &units, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x0C18, 2, &units, &result)) {
         units = 2;
         return false;
     }
 
-    if (!globals.simVars->FSUIPC_Read(0x3324, 4, &altitude1, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x3324, 4, &altitude1, &result)) {
         altitude1 = 0;
         success = false;
     }
 
-    if (!globals.simVars->FSUIPC_Read(0x34B0, 8, &altitude2, &dwResult)) {
+    if (!globals.simVars->FSUIPC_Read(0x34B0, 8, &altitude2, &result)) {
         altitude2 = 0;
         success = false;
     }
 
-    if (!globals.simVars->FSUIPC_Process(&dwResult))
+    if (!globals.simVars->FSUIPC_Process(&result))
     {
         success = false;
     }
@@ -418,20 +418,20 @@ bool altimeter::fetchVars()
     if (globals.externalControls)
     {
         // Read pressure as hPa * 16
-        if (!globals.simVars->FSUIPC_Read(0x73E2, 2, &pressure2, &dwResult) || !globals.simVars->FSUIPC_Process(&dwResult)) {
+        if (!globals.simVars->FSUIPC_Read(0x73E2, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
             pressure2 = 16208;;
             success = false;
         }
 
         if (pressure2 < 15168) {
             pressure2 = 15168;
-            if (!globals.simVars->FSUIPC_Write(0x73E2, 2, &pressure2, &dwResult) || !globals.simVars->FSUIPC_Process(&dwResult)) {
+            if (!globals.simVars->FSUIPC_Write(0x73E2, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
                 success = false;
             }
         }
         else if (pressure2 > 17344) {
             pressure2 = 17344;
-            if (!globals.simVars->FSUIPC_Write(0x73E2, 2, &pressure2, &dwResult) || !globals.simVars->FSUIPC_Process(&dwResult)) {
+            if (!globals.simVars->FSUIPC_Write(0x73E2, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
                 success = false;
             }
         }
