@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "newInstrument.h"
 #include "simvars.h"
+#include "knobs.h"
 
 newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {

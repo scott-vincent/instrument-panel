@@ -9,29 +9,29 @@ class knobs;
 
 struct globalVars
 {
-	const char* BitmapDir = "bitmaps/";
-	const char* SettingsFile = "settings/instrument-panel.json";
+    const char* BitmapDir = "bitmaps/";
+    const char* SettingsFile = "settings/instrument-panel.json";
 
-	simvars* simVars = NULL;
-	knobs* hardwareKnobs = NULL;
+    simvars* simVars = NULL;
+    knobs* hardwareKnobs = NULL;
 
-	ALLEGRO_FONT* font = NULL;
-	ALLEGRO_DISPLAY* display = NULL;
+    ALLEGRO_FONT* font = NULL;
+    ALLEGRO_DISPLAY* display = NULL;
 
-	int displayX = 0;
-	int displayY = 0;
-	int displayWidth = 0;
-	int displayHeight = 0;
+    int displayX = 0;
+    int displayY = 0;
+    int displayWidth = 0;
+    int displayHeight = 0;
 
-	char error[256] = {'\0'};
+    char error[256] = {'\0'};
 
-	bool arranging = false;
-	bool simulating = false;
-	bool connected = false;
-	bool electrics = false;
-	bool externalControls = false;
-	bool enableShadows = true;
-	bool tweak = false;
+    bool arranging = false;
+    bool simulating = false;
+    bool connected = false;
+    bool electrics = false;
+    bool externalControls = false;
+    bool enableShadows = true;
+    bool tweak = false;
 };
 
 #endif // _GLOBALS_H_

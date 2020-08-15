@@ -4,7 +4,8 @@
  * Scott Vincent
  * August 2020
  * 
- * This program was heavily inspired by Dave Ault and contains original artwork by him.
+ * This program was heavily inspired by Dave Ault and contains original artwork
+ * by him.
  * 
  *    http://www.learjet45chimera.co.uk/
  *    https://hangar45.net/hangar-45-forum/topic/standby-gauge-software-by-dave-ault
@@ -23,16 +24,20 @@
  * KEYS
  * 
  * p ........ Adjust position and size of individual instruments.
- * v ........ Adjust FlightSim variables. Simulates changes even if no FlightSim connected.
- * m ........ Move the display to the next monitor if multiple monitors are connected.
- * s ........ Enable/disable shadows on instruments. Shadows give a more realistic 3D look.
+ * v ........ Adjust FlightSim variables. Simulates changes even if no
+ *            FlightSim connected.
+ * m ........ Move the display to the next monitor if multiple monitors are
+ *            connected.
+ * s ........ Enable/disable shadows on instruments. Shadows give a more
+ *            realistic 3D look.
  * Esc ...... Quit the program.
  * 
- * To make adjustments use the arrow keys. Up/down arrows select the previous or next
- * setting and left/right arrows change the value. You can also use numpad left/right
- * arrows to make larger adjustments.
+ * To make adjustments use the arrow keys. Up/down arrows select the previous
+ * or next setting and left/right arrows change the value. You can also use
+ * numpad left/right arrows to make larger adjustments.
  * 
- * On Raspberry Pi you can configure hardware Rotary Encoders for each instrument.
+ * On Raspberry Pi you can configure hardware Rotary Encoders for each
+ * instrument.
  * 
  *  Physical Pin to BCM GPIO
  *   3  5  7 11 13 15 19 21 23 29 31 33 35 37
@@ -40,15 +45,16 @@
  *   2  3  4 17 27 22 10  9 11  5  6 13 19 26
  *
  *  Physical Pin to BCM GPIO (avoid 8=14, 10=15 and 12=18)
- *   8 10 12 16 18 22 24 26 32 36 38 40
- *   |  |  |  |  |  |  |  |  |  |  |  |
- *  14 15 18 23 24 25  8  7 12 16 20 21
+ *   8 10 12 16 18 22 24 26 32 36 38
+ *   |  |  |  |  |  |  |  |  |  |  |
+ *  14 15 18 23 24 25  8  7 12 16 20
  * 
- * Each rotary encoder is connected to two BCM GPIO pins (+ ground on centre pin).
- * See individual instruments for pins used. Not all instruments have manual controls.
+ * Each rotary encoder is connected to two BCM GPIO pins (+ ground centre pin).
+ * See individual instruments for pins used. Not all instruments have manual
+ * controls.
  * 
- * Note: pullUpDnControl does not work on RasPi4 so have to use raspi-gpio command-line
- * to pull up resistors.
+ * Note: pullUpDnControl does not work on RasPi4 so have to use raspi-gpio
+ * command-line to pull up resistors.
  */
 
 #include <stdio.h>
@@ -74,6 +80,7 @@
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
+const bool Debug = false;
 
 struct globalVars globals;
 
@@ -136,7 +143,15 @@ void init()
 
     // Use existing desktop resolution/refresh rate and force OpenGL ES 3
     // for Raspberry Pi 4 hardware acceleration compatibility.
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW | ALLEGRO_FRAMELESS | ALLEGRO_OPENGL_3_0 | ALLEGRO_OPENGL_ES_PROFILE);
+    int flags;
+    if (Debug) {
+        flags = ALLEGRO_WINDOWED;
+    }
+    else {
+        flags = ALLEGRO_FULLSCREEN_WINDOW | ALLEGRO_FRAMELESS;
+    }
+
+    al_set_new_display_flags(flags | ALLEGRO_OPENGL_3_0 | ALLEGRO_OPENGL_ES_PROFILE);
 
 #ifdef _WIN32
     // Turn on vsync (fails on Raspberry Pi)
@@ -145,7 +160,7 @@ void init()
 
     // Resolution is ignored for fullscreen window (uses existing desktop resolution)
     // but fails on Rasberry Pi if set to 0!
-    if ((globals.display = al_create_display(500, 500)) == NULL) {
+    if ((globals.display = al_create_display(1200, 900)) == NULL) {
             fatalError("Failed to create display");
     }
 

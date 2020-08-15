@@ -1,8 +1,9 @@
-g++ -lallegro -lallegro_image -lallegro_font -o instrument-panel \
+g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
+    -o instrument-panel \
     -I . \
     -I instruments \
-    -I /opt/vc/include \
     simvars.cpp \
+    knobs.cpp \
     instrument.cpp \
     instruments/airspeedIndicator.cpp \
     instruments/altimeter.cpp \
@@ -10,3 +11,4 @@ g++ -lallegro -lallegro_image -lallegro_font -o instrument-panel \
     instrument-panel.cpp \
     || exit
 echo Built instrument-panel
+echo Run with: ./run.sh

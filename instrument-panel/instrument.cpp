@@ -8,7 +8,7 @@
 /// </summary>
 instrument::instrument()
 {
-	bitmapCount = 0;
+    bitmapCount = 0;
 }
 
 /// <summary>
@@ -16,9 +16,9 @@ instrument::instrument()
 /// </summary>
 instrument::instrument(int xPos, int yPos, int size)
 {
-	this->xPos = xPos;
-	this->yPos = yPos;
-	this->size = size;
+    this->xPos = xPos;
+    this->yPos = yPos;
+    this->size = size;
 }
 
 /// <summary>
@@ -26,7 +26,7 @@ instrument::instrument(int xPos, int yPos, int size)
 /// </summary>
 instrument::~instrument()
 {
-	destroyBitmaps();
+    destroyBitmaps();
 }
 
 /// <summary>
@@ -34,11 +34,11 @@ instrument::~instrument()
 /// </summary>
 void instrument::setName(const char *name)
 {
-	strcpy(this->name, name);
+    strcpy(this->name, name);
 
-	globals.simVars->addSetting(name, "Position X");
-	globals.simVars->addSetting(name, "Position Y");
-	globals.simVars->addSetting(name, "Size");
+    globals.simVars->addSetting(name, "Position X");
+    globals.simVars->addSetting(name, "Position Y");
+    globals.simVars->addSetting(name, "Size");
 }
 
 /// <summary>
@@ -46,36 +46,37 @@ void instrument::setName(const char *name)
 /// </summary>
 ALLEGRO_BITMAP *instrument::loadBitmap(const char* filename)
 {
-	char filepath[256];
-	strcpy(filepath, globals.BitmapDir);
-	strcat(filepath, filename);
+    char filepath[256];
+    strcpy(filepath, globals.BitmapDir);
+    strcat(filepath, filename);
 
-	ALLEGRO_BITMAP* bitmap = al_load_bitmap(filepath);
-	if (!bitmap) {
-		sprintf(globals.error, "Missing bitmap: %s", filepath);
-		return NULL;
-	}
+    ALLEGRO_BITMAP* bitmap = al_load_bitmap(filepath);
+    if (!bitmap) {
+        sprintf(globals.error, "Missing bitmap: %s", filepath);
+        return NULL;
+    }
 
-	return bitmap;
+    return bitmap;
 }
 
 void instrument::addBitmap(ALLEGRO_BITMAP* bitmap)
 {
-	if (bitmapCount >= MaxBitmaps) {
-		strcpy(globals.error, "Maximum number of bitmaps per instrument exceeded");
-		return;
-	}
+    if (bitmapCount >= MaxBitmaps) {
+        strcpy(globals.error, "Maximum number of bitmaps per instrument exceeded");
+        return;
+    }
 
-	bitmaps[bitmapCount] = bitmap;
-	bitmapCount++;
+    bitmaps[bitmapCount] = bitmap;
+    bitmapCount++;
 }
 
 void instrument::destroyBitmaps()
 {
-	// Destroy all bitmaps
-	for (int i = 0; i < bitmapCount; i++) {
-		al_destroy_bitmap(bitmaps[i]);
-	}
+    // Destroy all bitmaps
+    for (int i = 0; i < bitmapCount; i++) {
+        al_destroy_bitmap(bitmaps[i]);
+    }
 
-	bitmapCount = 0;
+    bitmapCount = 0;
 }
+

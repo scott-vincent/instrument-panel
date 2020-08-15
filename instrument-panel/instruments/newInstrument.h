@@ -6,27 +6,27 @@
 class newInstrument : public instrument
 {
 private:
-	float scaleFactor;
+    float scaleFactor;
 
-	// FlightSim vars (external variables that influence this instrument)
-	long instrumentVar;
+    // FlightSim vars (external variables that influence this instrument)
+    long instrumentVar;
 
-	// Instrument values (caclulated from variables and needed to draw the instrument)
-	float instrumentValue;
+    // Instrument values (caclulated from variables and needed to draw the instrument)
+    float instrumentValue;
 
-	// Hardware knobs
-	int newKnob = -1;
+    // Hardware knobs
+    int newKnob = -1;
 
 public:
-	newInstrument(int xPos, int yPos, int size);
-	void render();
-	void update();
+    newInstrument(int xPos, int yPos, int size);
+    void render();
+    void update();
 
 private:
-	void resize();
-	void addVars();
-	bool fetchVars();
-	bool updateKnobs();
+    void resize();
+    void addVars();
+    bool fetchVars();
+    bool updateKnobs();
 
 };
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "attitudeIndicator.h"
 #include "simvars.h"
+#include "knobs.h"
 
 attitudeIndicator::attitudeIndicator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
@@ -346,7 +347,7 @@ bool attitudeIndicator::fetchVars()
 void attitudeIndicator::addKnobs()
 {
     // BCM GPIO 2 and 3
-    adiCalKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
+    adiCalKnob = globals.hardwareKnobs->add(2, 3, -20, 20, 0);
 }
 
 bool attitudeIndicator::updateKnobs()
@@ -357,8 +358,7 @@ bool attitudeIndicator::updateKnobs()
     int val = globals.hardwareKnobs->read(adiCalKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to adi cal value (adjust for desired sensitivity)
-        adiCal = val / 5;
+        adiCal = val;
 
         // Update ADI calibration variable
         if (!globals.simVars->FSUIPC_Write(0x73E4, 2, &adiCal, &result) || !globals.simVars->FSUIPC_Process(&result)) {
