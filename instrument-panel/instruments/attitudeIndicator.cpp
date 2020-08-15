@@ -347,7 +347,7 @@ bool attitudeIndicator::fetchVars()
 void attitudeIndicator::addKnobs()
 {
     // BCM GPIO 2 and 3
-    adiCalKnob = globals.hardwareKnobs->add(2, 3, -20, 20, 0);
+    adiCalKnob = globals.hardwareKnobs->add(2, 3, -40, 40, 0);
 }
 
 bool attitudeIndicator::updateKnobs()
@@ -358,7 +358,8 @@ bool attitudeIndicator::updateKnobs()
     int val = globals.hardwareKnobs->read(adiCalKnob);
 
     if (val != INT_MIN) {
-        adiCal = val;
+        // Convert knob value to variable (adjust for sensitivity)
+        adiCal = val / 2;
 
         // Update ADI calibration variable
         if (!globals.simVars->FSUIPC_Write(0x73E4, 2, &adiCal, &result) || !globals.simVars->FSUIPC_Process(&result)) {
