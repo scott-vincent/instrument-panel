@@ -42,8 +42,8 @@ To make adjustments use the arrow keys. Up/down arrows select the previous or ne
 setting and left/right arrows change the value. You can also use numpad left/right
 arrows to make larger adjustments.
 
-Individual instruments can be shown or hidden by setting Enabled to true or false
-in the settings file:
+You can choose which instruments are included in the panel by setting the Enabled
+attribute for each instrument in the settings file:
 ```
   settings/instrument-panel.json
 ```
