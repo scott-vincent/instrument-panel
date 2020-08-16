@@ -44,9 +44,9 @@ arrows to make larger adjustments.
 
 Individual instruments can be shown or hidden by setting Enabled to true or false
 in the settings file:
-
+```
   settings/instrument-panel.json
-
+```
 On Raspberry Pi you can configure hardware Rotary Encoders for each instrument.
 
  Physical Pin to BCM GPIO
