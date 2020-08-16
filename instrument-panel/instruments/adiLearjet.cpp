@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "attitudeIndicator.h"
+#include "adiLearjet.h"
 #include "simvars.h"
 #include "knobs.h"
 
-attitudeIndicator::attitudeIndicator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+adiLearjet::adiLearjet(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
-    setName("Attitude Indicator");
+    setName("ADI Learjet");
     addVars();
 
 #ifndef _WIN32
@@ -23,7 +23,7 @@ attitudeIndicator::attitudeIndicator(int xPos, int yPos, int size) : instrument(
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void attitudeIndicator::resize()
+void adiLearjet::resize()
 {
     destroyBitmaps();
 
@@ -31,7 +31,7 @@ void attitudeIndicator::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("attitude-indicator.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("adi-learjet.bmp");
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
@@ -94,7 +94,7 @@ void attitudeIndicator::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void attitudeIndicator::render()
+void adiLearjet::render()
 {
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
@@ -186,7 +186,7 @@ void attitudeIndicator::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void attitudeIndicator::update()
+void adiLearjet::update()
 {
     // Check for position or size change
     long* settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -298,7 +298,7 @@ void attitudeIndicator::update()
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void attitudeIndicator::addVars()
+void adiLearjet::addVars()
 {
     globals.simVars->addVar(name, "Pitch", 0x0578, false, 65536L * 64L, 0);
     globals.simVars->addVar(name, "Bank", 0x057C, false, 65536L * 64L, 0);
@@ -311,7 +311,7 @@ void attitudeIndicator::addVars()
 /// 
 /// Returns false if flightsim is not connected.
 /// </summary>
-bool attitudeIndicator::fetchVars()
+bool adiLearjet::fetchVars()
 {
     bool success = true;
     DWORD result;
@@ -344,13 +344,13 @@ bool attitudeIndicator::fetchVars()
 
 #ifndef _WIN32
 
-void attitudeIndicator::addKnobs()
+void adiLearjet::addKnobs()
 {
     // BCM GPIO 2 and 3
     adiCalKnob = globals.hardwareKnobs->add(2, 3, -40, 40, 0);
 }
 
-bool attitudeIndicator::updateKnobs()
+bool adiLearjet::updateKnobs()
 {
     DWORD result;
 

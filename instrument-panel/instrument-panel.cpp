@@ -36,6 +36,11 @@
  * or next setting and left/right arrows change the value. You can also use
  * numpad left/right arrows to make larger adjustments.
  * 
+ * Individual instruments can be shown or hidden by setting Enabled to
+ * true or false in the settings file:
+ * 
+ *   settings/instrument-panel.json
+ * 
  * On Raspberry Pi you can configure hardware Rotary Encoders for each
  * instrument.
  * 
@@ -74,9 +79,9 @@
 #include "simvars.h"
 
 // Instruments
-#include "airspeedIndicator.h"
-#include "attitudeIndicator.h"
-#include "altimeter.h"
+#include "asiLearjet.h"
+#include "adiLearjet.h"
+#include "altLearjet.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -412,9 +417,17 @@ void doKeypress(ALLEGRO_EVENT *event)
 void addInstruments()
 {
     // Add instruments
-    instruments.push_back(new airspeedIndicator(100, 100, 350));
-    instruments.push_back(new attitudeIndicator(500, 100, 350));
-    instruments.push_back(new altimeter(900, 100, 350));
+    if (globals.simVars->isEnabled("ASI Learjet")) {
+        instruments.push_back(new asiLearjet(100, 100, 350));
+    }
+
+    if (globals.simVars->isEnabled("ADI Learjet")) {
+        instruments.push_back(new adiLearjet(500, 100, 350));
+    }
+
+    if (globals.simVars->isEnabled("ALT Learjet")) {
+        instruments.push_back(new altLearjet(900, 100, 350));
+    }
 }
 
 ///

@@ -1,9 +1,9 @@
-#ifndef _ATTITUDE_INDICATOR_H_
-#define _ATTITUDE_INDICATOR_H_
+#ifndef _ADI_LEARJET_H_
+#define _ADI_LEARJET_H_
 
 #include "instrument.h"
 
-class attitudeIndicator : public instrument
+class adiLearjet : public instrument
 {
 private:
     float scaleFactor;
@@ -25,7 +25,7 @@ private:
     int adiCalKnob = -1;
 
 public:
-    attitudeIndicator(int xPos, int yPos, int size);
+    adiLearjet(int xPos, int yPos, int size);
     void render();
     void update();
 
@@ -37,4 +37,4 @@ private:
     bool updateKnobs();
 };
 
-#endif // _ATTITUDE_INDICATOR_H
+#endif // _ADI_LEARJET_H

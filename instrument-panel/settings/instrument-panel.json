@@ -1,15 +1,18 @@
 {
-    "Airspeed Indicator": {
+    "ASI Learjet": {
+        "Enabled": true,
         "Position X": 425,
         "Position Y": 60,
         "Size": 304
-    }
-    "Attitude Indicator": {
+    },
+    "ADI Learjet": {
+        "Enabled": true,
         "Position X": 792,
         "Position Y": 50,
         "Size": 336
-    }
-    "Altimeter": {
+    },
+    "ALT Learjet": {
+        "Enabled": true,
         "Position X": 1191,
         "Position Y": 60,
         "Size": 304

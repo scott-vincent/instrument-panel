@@ -3,38 +3,38 @@
   <ItemGroup>
     <ClCompile Include="instrument-panel.cpp" />
     <ClCompile Include="instrument.cpp" />
-    <ClCompile Include="instruments\airspeedIndicator.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
-    <ClCompile Include="instruments\altimeter.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
-    <ClCompile Include="instruments\attitudeIndicator.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
     <ClCompile Include="simvars.cpp" />
     <ClCompile Include="instruments\newInstrument.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
     <ClCompile Include="knobs.cpp" />
+    <ClCompile Include="instruments\adiLearjet.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\altLearjet.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\asiLearjet.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
-    <ClInclude Include="instruments\airspeedIndicator.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
-    <ClInclude Include="instruments\altimeter.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
-    <ClInclude Include="instruments\attitudeIndicator.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
     <ClInclude Include="simvars.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="instruments\newInstrument.h">
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="knobs.h" />
+    <ClInclude Include="instruments\adiLearjet.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\altLearjet.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\asiLearjet.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

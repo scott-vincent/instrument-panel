@@ -103,12 +103,16 @@ public:
     void addVar(const char* group, const char* name, int num, bool isBool, long scaling, long val);
     void addSetting(const char* group, const char* name);
     long* readSettings(const char* group, int defaultX, int defaultY, int defaultSize);
+    bool isEnabled(const char* group);
     
     BOOL FSUIPC_Read(DWORD offset, DWORD size, void* dest, DWORD* result);
     BOOL FSUIPC_Write(DWORD dwOffset, DWORD dwSize, void* pSrce, DWORD* pdwResult);
     BOOL FSUIPC_Process(DWORD* p1);
     
 private:
+    int settingIndex(const char* attribName);
+    int settingValue(const char* value);
+    void saveGroup(FILE* outfile, const char* group);
     int getVarIdx(int num);
     bool isCorrectType(int idx);
     void getNextVar();

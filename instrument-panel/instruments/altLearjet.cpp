@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "altimeter.h"
+#include "altLearjet.h"
 #include "simvars.h"
 
-altimeter::altimeter(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+altLearjet::altLearjet(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
-    setName("Altimeter");
+    setName("ALT Learjet");
     addVars();
     resize();
 
@@ -17,7 +17,7 @@ altimeter::altimeter(int xPos, int yPos, int size) : instrument(xPos, yPos, size
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void altimeter::resize()
+void altLearjet::resize()
 {
     destroyBitmaps();
 
@@ -25,7 +25,7 @@ void altimeter::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("altimeter-pick.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("alt-pick-learjet.bmp");
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
@@ -33,7 +33,7 @@ void altimeter::resize()
     addBitmap(dest);
 
     // 2 = Another original (loaded) bitmap
-    ALLEGRO_BITMAP* orig2 = loadBitmap("altimeter-dial.bmp");
+    ALLEGRO_BITMAP* orig2 = loadBitmap("alt-dial-learjet.bmp");
     addBitmap(orig2);
 
     // 3 = Graduated transparency for altitude reels
@@ -72,7 +72,7 @@ void altimeter::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void altimeter::render()
+void altLearjet::render()
 {
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
@@ -183,7 +183,7 @@ void altimeter::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void altimeter::update()
+void altLearjet::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -368,7 +368,7 @@ void altimeter::update()
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void altimeter::addVars()
+void altLearjet::addVars()
 {
     globals.simVars->addVar(name, "Pressure 1", 0x0330, false, 10, 16212);
     globals.simVars->addVar(name, "Pressure 2", 0x73E2, false, 10, 16212);
@@ -383,7 +383,7 @@ void altimeter::addVars()
 /// 
 /// Returns false if flightsim is not connected.
 /// </summary>
-bool altimeter::fetchVars()
+bool altLearjet::fetchVars()
 {
     bool success = true;
     DWORD result;

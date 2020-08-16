@@ -58,17 +58,27 @@ simvars::simvars()
                 if (groupCount == 0 || strcmp(groups[groupCount - 1].name, group) != 0) {
                     // New group
                     strcpy(groups[groupCount].name, group);
-                    strcpy(groups[groupCount].settingName[0], name);
-                    groups[groupCount].settingVal[0] = atol(value);
-                    groups[groupCount].settingsCount = 1;
-                    groupCount++;
+                    int idx = settingIndex(name);
+                    if (idx == -1) {
+                        sprintf(globals.error, "Settings file group %s contains unknown attribute %s", group, name);
+                    }
+                    else {
+                        strcpy(groups[groupCount].settingName[idx], name);
+                        groups[groupCount].settingVal[idx] = settingValue(value);
+                        groups[groupCount].settingsCount = 4;
+                        groupCount++;
+                    }
                 }
                 else {
                     // Existing group
-                    int settingsCount = groups[groupCount - 1].settingsCount;
-                    strcpy(groups[groupCount - 1].settingName[settingsCount], name);
-                    groups[groupCount - 1].settingVal[settingsCount] = atol(value);
-                    groups[groupCount - 1].settingsCount++;
+                    int idx = settingIndex(name);
+                    if (idx == -1) {
+                        sprintf(globals.error, "Settings file group %s contains unknown attribute %s", group, name);
+                    }
+                    else {
+                        strcpy(groups[groupCount - 1].settingName[idx], name);
+                        groups[groupCount - 1].settingVal[idx] = settingValue(value);
+                    }
                 }
             }
             readingValue = false;
@@ -80,8 +90,10 @@ simvars::simvars()
         }
         else if (readingValue) {
             int len = strlen(value);
-            value[len] = ch;
-            value[len + 1] = '\0';
+            if (len != 0 || ch != ' ') {
+                value[len] = ch;
+                value[len + 1] = '\0';
+            }
         }
 
         pos++;
@@ -91,54 +103,104 @@ simvars::simvars()
 simvars::~simvars()
 {
     // Save settings to JSON file
-    char group[256];
-    group[0] = '\0';
-
     FILE* outfile = fopen(globals.SettingsFile, "w");
     if (outfile)
     {
         fprintf(outfile, "{\n");
 
-        // Only settings (negative nums) should be saved to the file
         int idx = 0;
-        while (idx < varCount)
+        while (idx < groupCount)
         {
-            if (varNum[idx] < 0) {
-                // Add to file
-                if (strcmp(varGroup[idx], group) == 0) {
-                    // Existing group
-                    fprintf(outfile, ",\n");
-                }
-                else {
-                    if (group[0] != '\0') {
-                        // End of previous group
-                        fprintf(outfile, "\n");
-                        fprintf(outfile, "    }\n");
-                    }
+            if (idx > 0) {
+                // End of previous group
+                fprintf(outfile, ",\n");
+            }
 
-                    // New group
-                    strcpy(group, varGroup[idx]);
-                    fprintf(outfile, "    \"%s\": {\n", group);
-                }
-
-                fprintf(outfile, "        \"%s\": %.0f", varName[idx], varVal[idx]);
+            // If group is enabled save new (possibly modified) settings otherwise save orig settings
+            if (groups[idx].settingVal[3] == 1) {
+                saveGroup(outfile, groups[idx].name);
+            }
+            else {
+                fprintf(outfile, "    \"%s\": {\n", groups[idx].name);
+                fprintf(outfile, "        \"Enabled\": false,\n");
+                fprintf(outfile, "        \"%s\": %ld,\n", groups[idx].settingName[0], groups[idx].settingVal[0]);
+                fprintf(outfile, "        \"%s\": %ld,\n", groups[idx].settingName[1], groups[idx].settingVal[1]);
+                fprintf(outfile, "        \"%s\": %ld\n", groups[idx].settingName[2], groups[idx].settingVal[2]);
+                fprintf(outfile, "    }");
             }
 
             idx++;
         }
 
-        if (group[0] != '0') {
-            // End of previous group
-            fprintf(outfile, "\n");
-            fprintf(outfile, "    }\n");
-        }
-
+        // End of previous group
+        fprintf(outfile, "\n");
         fprintf(outfile, "}\n");
         fclose(outfile);
     }
 
     // Disconnect from FlightSim
     FSUIPC_Close();
+}
+
+int simvars::settingIndex(const char* attribName)
+{
+    if (_stricmp(attribName, "Position X") == 0) {
+        return 0;
+    }
+    else if (_stricmp(attribName, "Position Y") == 0) {
+        return 1;
+    }
+    else if (_stricmp(attribName, "Size") == 0) {
+        return 2;
+    }
+    else if (_stricmp(attribName, "Enabled") == 0) {
+        return 3;
+    }
+    else {
+        return -1;
+    }
+}
+
+int simvars::settingValue(const char* value)
+{
+    if (_stricmp(value, "true") == 0) {
+        return 1;
+    }
+    else {
+        return atol(value);
+    }
+}
+
+void simvars::saveGroup(FILE *outfile, const char* group)
+{
+    bool foundGroup = false;
+
+    int idx = 0;
+    while (idx <= varCount)
+    {
+        if (idx < varCount && strcmp(varGroup[idx], group) == 0) {
+            if (!foundGroup) {
+                // Start of group
+                foundGroup = true;
+                fprintf(outfile, "    \"%s\": {\n", group);
+                fprintf(outfile, "        \"Enabled\": true");
+            }
+
+            // Only settings (negative nums) should be saved to the file
+            if (varNum[idx] < 0) {
+                fprintf(outfile, ",\n");
+                fprintf(outfile, "        \"%s\": %.0f", varName[idx], varVal[idx]);
+            }
+        }
+        else if (foundGroup) {
+            // End of group
+            fprintf(outfile, "\n");
+            fprintf(outfile, "    }");
+            return;
+        }
+
+        idx++;
+    }
 }
 
 int simvars::getVarIdx(int num)
@@ -359,6 +421,27 @@ void simvars::addSetting(const char* group, const char* name)
 
     addVar(group, name, settingNum, false, 1, val);
     settingNum--;
+}
+
+/// <summary>
+/// Returns true if the specified instrument is enabled
+/// </summary>
+bool simvars::isEnabled(const char* group)
+{
+    // Get value from loaded settings
+    long val = 0;
+    int groupNum = 0;
+    while (groupNum < groupCount)
+    {
+        if (strcmp(groups[groupNum].name, group) == 0) {
+            val = groups[groupNum].settingVal[3];
+            break;
+        }
+
+        groupNum++;
+    }
+
+    return (val == 1);
 }
 
 /// <summary>

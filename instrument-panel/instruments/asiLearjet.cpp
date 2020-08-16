@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "airspeedIndicator.h"
+#include "asiLearjet.h"
 #include "simvars.h"
 
-airspeedIndicator::airspeedIndicator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+asiLearjet::asiLearjet(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
-    setName("Airspeed Indicator");
+    setName("ASI Learjet");
     addVars();
     resize();
 }
@@ -14,7 +14,7 @@ airspeedIndicator::airspeedIndicator(int xPos, int yPos, int size) : instrument(
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void airspeedIndicator::resize()
+void asiLearjet::resize()
 {
     destroyBitmaps();
 
@@ -22,7 +22,7 @@ void airspeedIndicator::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("airspeed-indicator.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("asi-learjet.bmp");
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
@@ -69,7 +69,7 @@ void airspeedIndicator::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void airspeedIndicator::render()
+void asiLearjet::render()
 {
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
@@ -131,7 +131,7 @@ void airspeedIndicator::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void airspeedIndicator::update()
+void asiLearjet::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -199,7 +199,7 @@ void airspeedIndicator::update()
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void airspeedIndicator::addVars()
+void asiLearjet::addVars()
 {
     globals.simVars->addVar(name, "Airspeed", 0x02BC, false, 100, 0);
     globals.simVars->addVar(name, "Mach Speed", 0x11C6, false, 100, 0);
@@ -211,7 +211,7 @@ void airspeedIndicator::addVars()
 /// 
 /// Returns false if flightsim is not connected.
 /// </summary>
-bool airspeedIndicator::fetchVars()
+bool asiLearjet::fetchVars()
 {
     bool success = true;
     DWORD result;

@@ -1,9 +1,9 @@
-#ifndef _AIRSPEED_INDICATOR_H_
-#define _AIRSPEED_INDICATOR_H_
+#ifndef _ASI_LEARJET_H_
+#define _ASI_LEARJET_H_
 
 #include "instrument.h"
 
-class airspeedIndicator : public instrument
+class asiLearjet : public instrument
 {
 private:
     float scaleFactor = 1.0f;
@@ -19,7 +19,7 @@ private:
     float prevMachAngle = 248.144440;
 
 public:
-    airspeedIndicator(int xPos, int yPos, int size);
+    asiLearjet(int xPos, int yPos, int size);
     void render();
     void update();
 
@@ -29,4 +29,4 @@ private:
     bool fetchVars();
 };
 
-#endif // _AIRSPEED_INDICATOR_H
+#endif // _ASI_LEARJET_H

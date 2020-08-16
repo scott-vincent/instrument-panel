@@ -1,9 +1,9 @@
-#ifndef _ALTIMETER_H_
-#define _ALTIMETER_H_
+#ifndef _ALT_LEARJET_H_
+#define _ALT_LEARJET_H_
 
 #include "instrument.h"
 
-class altimeter : public instrument
+class altLearjet : public instrument
 {
 private:
     float scaleFactor;
@@ -27,7 +27,7 @@ private:
     int var30, var31, var32, var33, var34, var35, var36, var37;
 
 public:
-    altimeter(int xPos, int yPos, int size);
+    altLearjet(int xPos, int yPos, int size);
     void render();
     void update();
 
@@ -37,4 +37,4 @@ private:
     bool fetchVars();
 };
 
-#endif // _ALTIMETER_H
+#endif // _ALT_LEARJET_H
