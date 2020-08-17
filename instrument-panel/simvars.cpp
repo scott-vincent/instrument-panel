@@ -65,7 +65,7 @@ simvars::simvars()
                     else {
                         strcpy(groups[groupCount].settingName[idx], name);
                         groups[groupCount].settingVal[idx] = settingValue(value);
-                        groups[groupCount].settingsCount = 4;
+                        groups[groupCount].settingsCount = 1;
                         groupCount++;
                     }
                 }
@@ -78,6 +78,7 @@ simvars::simvars()
                     else {
                         strcpy(groups[groupCount - 1].settingName[idx], name);
                         groups[groupCount - 1].settingVal[idx] = settingValue(value);
+                        groups[groupCount - 1].settingsCount++;
                     }
                 }
             }
@@ -121,12 +122,17 @@ simvars::~simvars()
                 saveGroup(outfile, groups[idx].name);
             }
             else {
-                fprintf(outfile, "    \"%s\": {\n", groups[idx].name);
-                fprintf(outfile, "        \"Enabled\": false,\n");
-                fprintf(outfile, "        \"%s\": %ld,\n", groups[idx].settingName[0], groups[idx].settingVal[0]);
-                fprintf(outfile, "        \"%s\": %ld,\n", groups[idx].settingName[1], groups[idx].settingVal[1]);
-                fprintf(outfile, "        \"%s\": %ld\n", groups[idx].settingName[2], groups[idx].settingVal[2]);
-                fprintf(outfile, "    }");
+                fprintf(outfile, "  \"%s\": {\n", groups[idx].name);
+                if (groups[idx].settingsCount == 4) {
+                    fprintf(outfile, "    \"Enabled\": false,\n");
+                    fprintf(outfile, "    \"%s\": %ld,\n", groups[idx].settingName[0], groups[idx].settingVal[0]);
+                    fprintf(outfile, "    \"%s\": %ld,\n", groups[idx].settingName[1], groups[idx].settingVal[1]);
+                    fprintf(outfile, "    \"%s\": %ld\n", groups[idx].settingName[2], groups[idx].settingVal[2]);
+                }
+                else {
+                    fprintf(outfile, "    \"Enabled\": false\n");
+                }
+                fprintf(outfile, "  }");
             }
 
             idx++;
@@ -182,20 +188,20 @@ void simvars::saveGroup(FILE *outfile, const char* group)
             if (!foundGroup) {
                 // Start of group
                 foundGroup = true;
-                fprintf(outfile, "    \"%s\": {\n", group);
-                fprintf(outfile, "        \"Enabled\": true");
+                fprintf(outfile, "  \"%s\": {\n", group);
+                fprintf(outfile, "    \"Enabled\": true");
             }
 
             // Only settings (negative nums) should be saved to the file
             if (varNum[idx] < 0) {
                 fprintf(outfile, ",\n");
-                fprintf(outfile, "        \"%s\": %.0f", varName[idx], varVal[idx]);
+                fprintf(outfile, "    \"%s\": %.0f", varName[idx], varVal[idx]);
             }
         }
         else if (foundGroup) {
             // End of group
             fprintf(outfile, "\n");
-            fprintf(outfile, "    }");
+            fprintf(outfile, "  }");
             return;
         }
 
@@ -429,7 +435,7 @@ void simvars::addSetting(const char* group, const char* name)
 bool simvars::isEnabled(const char* group)
 {
     // Get value from loaded settings
-    long val = 0;
+    long val = -1;
     int groupNum = 0;
     while (groupNum < groupCount)
     {
@@ -439,6 +445,15 @@ bool simvars::isEnabled(const char* group)
         }
 
         groupNum++;
+    }
+
+    if (val == -1) {
+        // Add missing instrument to settings file
+        strcpy(groups[groupCount].name, group);
+        strcpy(groups[groupCount].settingName[0], "Enabled");
+        groups[groupCount].settingVal[0] = settingValue("false");
+        groups[groupCount].settingsCount = 1;
+        groupCount++;
     }
 
     return (val == 1);

@@ -17,6 +17,15 @@
     <ClCompile Include="instruments\asiLearjet.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\adi.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\alt.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\asi.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -35,13 +44,28 @@
     <ClInclude Include="instruments\asiLearjet.h">
       <Filter>instruments</Filter>
     </ClInclude>
+    <ClInclude Include="instruments\adi.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\alt.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\asi.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="settings\instrument-panel.json">
+      <Filter>settings</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="instruments">
       <UniqueIdentifier>{c925723c-921c-4bd5-afc3-8fb981bb1458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="settings">
+      <UniqueIdentifier>{094dab80-5399-4ed2-b45a-ef31f3d42e13}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

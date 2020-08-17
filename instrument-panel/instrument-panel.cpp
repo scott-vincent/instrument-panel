@@ -32,9 +32,9 @@
  *            realistic 3D look.
  * Esc ...... Quit the program.
  * 
- * To make adjustments use the arrow keys. Up/down arrows select the previous
- * or next setting and left/right arrows change the value. You can also use
- * numpad left/right arrows to make larger adjustments.
+ * To make adjustments use the arrow keys. Up/down arrows select the
+ * previous or next setting and left/right arrows change the value.
+ * You can also use numpad left/right arrows to make larger adjustments.
  * 
  * Individual instruments can be shown or hidden by setting Enabled to
  * true or false in the settings file:
@@ -82,6 +82,9 @@
 #include "asiLearjet.h"
 #include "adiLearjet.h"
 #include "altLearjet.h"
+#include "asi.h"
+#include "adi.h"
+#include "alt.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -427,6 +430,18 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("ALT Learjet")) {
         instruments.push_back(new altLearjet(900, 100, 350));
+    }
+
+    if (globals.simVars->isEnabled("ASI")) {
+        instruments.push_back(new asi(100, 600, 350));
+    }
+
+    if (globals.simVars->isEnabled("ADI")) {
+        instruments.push_back(new adi(500, 600, 350));
+    }
+
+    if (globals.simVars->isEnabled("ALT")) {
+        instruments.push_back(new alt(900, 600, 350));
     }
 }
 

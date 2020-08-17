@@ -30,8 +30,7 @@ void newInstrument::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    //ALLEGRO_BITMAP* orig = loadBitmap("new-instrument.bmp");
-    ALLEGRO_BITMAP* orig = al_create_bitmap(size, size);
+    ALLEGRO_BITMAP* orig = loadBitmap("new-instrument.bmp");
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
@@ -51,6 +50,9 @@ void newInstrument::render()
 
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
+
+    // Fill with ?
+    al_draw_scaled_bitmap(bitmaps[0], 0, 0, 800, 800, 0, 0, size, size, 0);
 
     if (globals.enableShadows) {
         // Display shadow

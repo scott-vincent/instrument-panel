@@ -1,20 +1,38 @@
 {
-    "ASI Learjet": {
-        "Enabled": true,
-        "Position X": 425,
-        "Position Y": 60,
-        "Size": 304
-    },
-    "ADI Learjet": {
-        "Enabled": true,
-        "Position X": 792,
-        "Position Y": 50,
-        "Size": 336
-    },
-    "ALT Learjet": {
-        "Enabled": true,
-        "Position X": 1191,
-        "Position Y": 60,
-        "Size": 304
-    }
+  "ASI Learjet": {
+    "Enabled": true,
+    "Position X": 425,
+    "Position Y": 10,
+    "Size": 304
+  },
+  "ADI Learjet": {
+    "Enabled": true,
+    "Position X": 792,
+    "Position Y": 0,
+    "Size": 336
+  },
+  "ALT Learjet": {
+    "Enabled": true,
+    "Position X": 1191,
+    "Position Y": 10,
+    "Size": 304
+  },
+  "ASI": {
+    "Enabled": true,
+    "Position X": 425,
+    "Position Y": 380,
+    "Size": 304
+  },
+  "ADI": {
+    "Enabled": true,
+    "Position X": 792,
+    "Position Y": 370,
+    "Size": 336
+  },
+  "ALT": {
+    "Enabled": true,
+    "Position X": 1191,
+    "Position Y": 380,
+    "Size": 304
+  }
 }
