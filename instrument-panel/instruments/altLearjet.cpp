@@ -25,42 +25,38 @@ void altLearjet::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("alt-pick-learjet.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("alt-learjet.bmp");
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
     ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
     addBitmap(dest);
 
-    // 2 = Another original (loaded) bitmap
-    ALLEGRO_BITMAP* orig2 = loadBitmap("alt-dial-learjet.bmp");
-    addBitmap(orig2);
-
-    // 3 = Graduated transparency for altitude reels
+    // 2 = Graduated transparency for altitude reels
     ALLEGRO_BITMAP* trans = al_create_bitmap(78 * scaleFactor, 393 * scaleFactor);
     addBitmap(trans);
 
-    // 4 = Graduated transparency for pressure reels
+    // 3 = Graduated transparency for pressure reels
     ALLEGRO_BITMAP* trans2 = al_create_bitmap(45 * scaleFactor, 162 * scaleFactor);
     addBitmap(trans2);
 
-    // 5 = Shadow background
+    // 4 = Shadow background
     ALLEGRO_BITMAP* shadowBackground = al_create_bitmap(800 * scaleFactor, 800 * scaleFactor);
     addBitmap(shadowBackground);
 
-    // 6 = Shadow sprite
+    // 5 = Shadow sprite
     ALLEGRO_BITMAP* shadow = al_create_bitmap(43 * scaleFactor, 562 * scaleFactor);
     al_set_target_bitmap(shadow);
     al_draw_scaled_bitmap(orig, 192, 649, 43, 562, 0, 0, 43 * scaleFactor, 562 * scaleFactor, 0);
     addBitmap(shadow);
 
-    // 7 = Fill with background colour (takes 1 pixel of background and scales it)
+    // 6 = Fill with background colour (takes 1 pixel of background and scales it)
     ALLEGRO_BITMAP* bg = al_create_bitmap(size, size);
     al_set_target_bitmap(bg);
     al_draw_scaled_bitmap(orig, 75, 61, 1, 1, 0, 0, size, size, 0);
     addBitmap(bg);
 
-    // 8 = Pointer sprite
+    // 7 = Pointer sprite
     ALLEGRO_BITMAP* pointer = al_create_bitmap(43, 562);
     al_set_target_bitmap(pointer);
     al_draw_bitmap_region(orig, 148, 649, 43, 562, 0, 0, 0);
@@ -81,15 +77,15 @@ void altLearjet::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Fill with black
-    al_draw_scaled_bitmap(bitmaps[2], 0, 0, 1, 1, 0, 0, size, size, 0);
+    al_draw_scaled_bitmap(bitmaps[0], 240, 312, 1, 1, 0, 0, size, size, 0);
 
     // Copy graduated pattern artwork into trans2 bitmap for the small digits
-    al_set_target_bitmap(bitmaps[4]);
+    al_set_target_bitmap(bitmaps[3]);
     al_draw_scaled_bitmap(bitmaps[0], 289, 0, 262, 254, 0, 0, var1, var2, 0);
     al_set_target_bitmap(bitmaps[1]);
 
     // Copy graduated pattern artwork into trans bitmap
-    al_set_target_bitmap(bitmaps[3]);
+    al_set_target_bitmap(bitmaps[2]);
     al_draw_scaled_bitmap(bitmaps[0], 289, 0, 262, 254, 0, 0, var6, var7, 0);
     al_set_target_bitmap(bitmaps[1]);
 
@@ -114,21 +110,21 @@ void altLearjet::render()
     al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
     // hPa Reels overlay graduated transparencies
-    al_draw_bitmap(bitmaps[4], var4, var5, 0);
-    al_draw_bitmap(bitmaps[4], var9, var5, 0);
-    al_draw_bitmap(bitmaps[4], var11, var5, 0);
-    al_draw_bitmap(bitmaps[4], var13, var5, 0);
+    al_draw_bitmap(bitmaps[3], var4, var5, 0);
+    al_draw_bitmap(bitmaps[3], var9, var5, 0);
+    al_draw_bitmap(bitmaps[3], var11, var5, 0);
+    al_draw_bitmap(bitmaps[3], var13, var5, 0);
 
     // IN HG Reels overlay the graduated transparencies
-    al_draw_bitmap(bitmaps[4], var4, var15, 0);
-    al_draw_bitmap(bitmaps[4], var9, var15, 0);
-    al_draw_bitmap(bitmaps[4], var11, var15, 0);
-    al_draw_bitmap(bitmaps[4], var13, var15, 0);
+    al_draw_bitmap(bitmaps[3], var4, var15, 0);
+    al_draw_bitmap(bitmaps[3], var9, var15, 0);
+    al_draw_bitmap(bitmaps[3], var11, var15, 0);
+    al_draw_bitmap(bitmaps[3], var13, var15, 0);
 
     // Altitutude Reels overlay the graduated transparencies
-    al_draw_bitmap(bitmaps[3], var20, var21, 0);
-    al_draw_bitmap(bitmaps[3], var25, var21, 0);
-    al_draw_bitmap(bitmaps[3], var27, var21, 0);
+    al_draw_bitmap(bitmaps[2], var20, var21, 0);
+    al_draw_bitmap(bitmaps[2], var25, var21, 0);
+    al_draw_bitmap(bitmaps[2], var27, var21, 0);
 
     // Restore normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
@@ -147,27 +143,27 @@ void altLearjet::render()
     }
 
     // Display Dial
-    al_draw_scaled_bitmap(bitmaps[2], 0, 0, 800, 800, 0, 0, size, size, 0);
+    al_draw_scaled_bitmap(bitmaps[0], 240, 312, 800, 800, 0, 0, size, size, 0);
 
     if (globals.enableShadows) {
         // Fill shadow_background bitmap with white
-        al_set_target_bitmap(bitmaps[5]);
+        al_set_target_bitmap(bitmaps[4]);
         al_draw_scaled_bitmap(bitmaps[0], 192, 649, 1, 1, 0, 0, var28, var28, 0);
 
         // Write shadow sprite to shadow background
-        al_draw_rotated_bitmap(bitmaps[6], var30, var31, var37, var29, angle * AngleFactor, 0);
+        al_draw_rotated_bitmap(bitmaps[5], var30, var31, var37, var29, angle * AngleFactor, 0);
         al_set_target_bitmap(bitmaps[1]);
 
         // Draw shadow
         // Set blender to multiply (shades of grey darken, white has no effect)
         al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
-        al_draw_bitmap(bitmaps[5], 0, 0, 0);
+        al_draw_bitmap(bitmaps[4], 0, 0, 0);
         // Restore normal blender
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
 
     //Draw needle pointer at angle
-    al_draw_scaled_rotated_bitmap(bitmaps[8], 21, 322, var32, var32, scaleFactor, scaleFactor, angle * AngleFactor, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[7], 21, 322, var32, var32, scaleFactor, scaleFactor, angle * AngleFactor, 0);
 
     if (!globals.connected) {
         // Display 'Not Connected message'
