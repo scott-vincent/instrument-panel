@@ -9,13 +9,21 @@ private:
     float scaleFactor;
 
     // FlightSim vars (external variables that influence this instrument)
-    long instrumentVar;
+    unsigned short pressure;
+    unsigned short pressure2;
+    short units;
+    long altitude1;
+    double altitude2;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float instrumentValue;
+    float mb;            // millibars
+    float inhg;          // inches of mercury
+    float angle;
+    long altitude = 0;
+    long altitudeTarget = 0;
 
     // Hardware knobs
-    int newKnob = -1;
+    int calKnob = -1;
 
 public:
     alt(int xPos, int yPos, int size);

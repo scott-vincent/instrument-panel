@@ -132,7 +132,7 @@ bool newInstrument::fetchVars()
 void newInstrument::addKnobs()
 {
     // BCM GPIO 38 and 39
-    newKnob = globals.hardwareKnobs->add(38, 39, -100, 100, 0);
+    calKnob = globals.hardwareKnobs->add(38, 39, -100, 100, 0);
 }
 
 bool newInstrument::updateKnobs()
@@ -140,7 +140,7 @@ bool newInstrument::updateKnobs()
     DWORD result;
 
     // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(newKnob);
+    int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
         // Convert knob value to new instrument value (adjust for desired sensitivity)

@@ -347,7 +347,7 @@ bool adiLearjet::fetchVars()
 void adiLearjet::addKnobs()
 {
     // BCM GPIO 2 and 3
-    adiCalKnob = globals.hardwareKnobs->add(2, 3, -40, 40, 0);
+    calKnob = globals.hardwareKnobs->add(2, 3, -40, 40, 0);
 }
 
 bool adiLearjet::updateKnobs()
@@ -355,7 +355,7 @@ bool adiLearjet::updateKnobs()
     DWORD result;
 
     // Read knob for ADI calibration
-    int val = globals.hardwareKnobs->read(adiCalKnob);
+    int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
         // Convert knob value to variable (adjust for sensitivity)

@@ -9,13 +9,16 @@ private:
     float scaleFactor;
 
     // FlightSim vars (external variables that influence this instrument)
-    long instrumentVar;
+    long airspeed;
+    signed short airspeedCal;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float instrumentValue;
+    long airspeedKnots;
+    float airspeedAngle;
+    float angle;
 
     // Hardware knobs
-    int newKnob = -1;
+    int calKnob = -1;
 
 public:
     asi(int xPos, int yPos, int size);

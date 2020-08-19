@@ -15,7 +15,7 @@ private:
     float instrumentValue;
 
     // Hardware knobs
-    int newKnob = -1;
+    int calKnob = -1;
 
 public:
     newInstrument(int xPos, int yPos, int size);

@@ -22,7 +22,7 @@ private:
     time_t lastPowerTime;
 
     // Hardware knobs
-    int adiCalKnob = -1;
+    int calKnob = -1;
 
 public:
     adiLearjet(int xPos, int yPos, int size);

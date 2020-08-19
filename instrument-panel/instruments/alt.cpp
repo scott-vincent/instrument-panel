@@ -37,6 +37,54 @@ void alt::resize()
     ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
     addBitmap(dest);
 
+    // 2 = Outer scale
+    ALLEGRO_BITMAP* outer = al_create_bitmap(800, 800);
+    al_set_target_bitmap(outer);
+    al_draw_bitmap_region(orig, 0, 800, 800, 800, 0, 0, 0);
+    addBitmap(outer);
+
+    // 3 = Inner scale
+    ALLEGRO_BITMAP* inner = al_create_bitmap(800, 800);
+    al_set_target_bitmap(inner);
+    al_draw_bitmap_region(orig, 800, 800, 800, 800, 0, 0, 0);
+    addBitmap(inner);
+
+    // 4 = 1000ft pointer
+    ALLEGRO_BITMAP* pointer1 = al_create_bitmap(800, 800);
+    al_set_target_bitmap(pointer1);
+    al_draw_bitmap_region(orig, 800, 0, 800, 800, 0, 0, 0);
+    addBitmap(pointer1);
+
+    // 5 = 100ft pointer
+    ALLEGRO_BITMAP* pointer2 = al_create_bitmap(800, 800);
+    al_set_target_bitmap(pointer2);
+    al_draw_bitmap_region(orig, 1600, 0, 100, 800, 0, 0, 0);
+    addBitmap(pointer2);
+
+    // 6 = 1ft pointer
+    ALLEGRO_BITMAP* pointer3 = al_create_bitmap(100, 800);
+    al_set_target_bitmap(pointer3);
+    al_draw_bitmap_region(orig, 1600, 800, 100, 800, 0, 0, 0);
+    addBitmap(pointer3);
+
+    // 7 = Inner hole shadow
+    ALLEGRO_BITMAP* shadow1 = al_create_bitmap(200 * scaleFactor, 200 * scaleFactor);
+    al_set_target_bitmap(shadow1);
+    al_draw_scaled_bitmap(orig, 1700, 0, 200, 200, 0, 0, 200 * scaleFactor, 200 * scaleFactor, 0);
+    addBitmap(shadow1);
+
+    // 8 = Outer hole shadow
+    ALLEGRO_BITMAP* shadow2 = al_create_bitmap(200 * scaleFactor, 200 * scaleFactor);
+    al_set_target_bitmap(shadow2);
+    al_draw_scaled_bitmap(orig, 1700, 200, 200, 200, 0, 0, 200 * scaleFactor, 200 * scaleFactor, 0);
+    addBitmap(shadow2);
+
+    // 9 = Pointer hole shadow
+    ALLEGRO_BITMAP* shadow3 = al_create_bitmap(200, 200);
+    al_set_target_bitmap(shadow3);
+    al_draw_bitmap_region(orig, 1700, 400, 200, 200, 0, 0, 0);
+    addBitmap(shadow3);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -51,12 +99,57 @@ void alt::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Fill with ?
+    // Add outer scale (inches of mercury) and rotate
+    // 29.5 = 0 radians
+    angle = (29.5f - inhg) * 1.8f;
+    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
+
+    // Add inner scale (millibars) and rotate
+    // 1000 = 0 radians
+    angle = (1000.0f - mb) * 0.0525f;
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_INVERSE_DEST_COLOR, ALLEGRO_ONE);
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+
+    if (globals.enableShadows) {
+        // Set blender to multiply (shades of grey darken, white has no effect)
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+        // Add inner hole shadow
+        al_draw_bitmap_region(bitmaps[7], 0, 0, 200, 200, 60 * scaleFactor, 310 * scaleFactor, 0);
+
+        // Add outer hole Shadow
+        al_draw_bitmap_region(bitmaps[8], 0, 0, 200, 200, 610 * scaleFactor, 310 * scaleFactor, 0);
+
+        // Restore normal blender
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+    }
+
+    // Add main dial
     al_draw_scaled_bitmap(bitmaps[0], 0, 0, 800, 800, 0, 0, size, size, 0);
 
     if (globals.enableShadows) {
-        // Display shadow
+        // Set blender to multiply (shades of grey darken, white has no effect)
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+        // Add pointer hole shadow
+        al_draw_scaled_bitmap(bitmaps[9], 0, 0, 200, 200, 310 * scaleFactor, 410 * scaleFactor, 200 * scaleFactor, 200 * scaleFactor, 0);
+
+        // Restore normal blender
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
+
+    // Add 1000ft pointer
+    // 0 = 0 radians
+    angle = altitude * 0.0062832f;
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle / 100, 0);
+
+    // Add 100ft pointer
+    // 0 = 0 radians
+    al_draw_scaled_rotated_bitmap(bitmaps[5], 50, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle / 10, 0);
+
+    // Add 1ft pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[6], 50, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -91,7 +184,58 @@ void alt::update()
     globals.connected = fetchVars();
 
     // Calculate values
-    instrumentValue = instrumentVar + 42;
+    // Calculate what to add to pressure to keep needle in the correct position.
+    long altitudeCorrection = 0;
+    if (globals.externalControls) {
+        altitudeCorrection = (long)(((((float)pressure2 / 0.3386389) / 16) - (((float)16208 / 0.3386389) / 16)) * 10);
+        pressure = pressure2;
+    }
+
+    mb = (float)pressure / 16.0f;
+    inhg = mb / 33.86389f;
+
+    long altitudeTarget = 0;
+
+    if (globals.externalControls)
+    {
+        //Altitude Value
+        units = 2;
+
+        // If altitude is in meters then convert to feet
+        altitudeTarget = (long)((float)altitude2 * 3.28084);
+    }
+    else
+    {
+        if (units == 0 || units == 1) {
+            altitudeTarget = altitude1;
+        }
+        else if (units == 2) {
+            //if altitude is in meters then convert to feet
+            altitudeTarget = (long)((float)altitude1 * 3.28084);
+        }
+    }
+
+    // If manually adjusting pressure cal then add correction offset to altitude
+    if (globals.externalControls) {
+        altitudeTarget += altitudeCorrection;
+    }
+
+    if (altitudeTarget < 0) {
+        altitudeTarget = 0;
+    }
+
+    if (altitude - altitudeTarget > 500) altitude -= 200;
+    else if (altitudeTarget - altitude > 500) altitude += 200;
+    else if (altitude - altitudeTarget > 100) altitude -= 40;
+    else if (altitudeTarget - altitude > 100) altitude += 40;
+    else if (altitude - altitudeTarget > 50) altitude -= 20;
+    else if (altitudeTarget - altitude > 50) altitude += 20;
+    else if (altitude - altitudeTarget > 10) altitude -= 5;
+    else if (altitudeTarget - altitude > 10) altitude += 5;
+    else if (altitude - altitudeTarget > 5) altitude -= 2;
+    else if (altitudeTarget - altitude > 5) altitude += 2;
+    else if (altitude - altitudeTarget > 0) altitude -= 1;
+    else if (altitudeTarget - altitude > 0) altitude += 1;
 }
 
 /// <summary>
@@ -99,7 +243,12 @@ void alt::update()
 /// </summary>
 void alt::addVars()
 {
-    globals.simVars->addVar(name, "Value", 0x9998, false, 1, 0);
+    // Add 0x8000 to all vars for now so that Learjet altimeter can be displayed at the same time
+    globals.simVars->addVar(name, "Pressure 1", 0x0330 + 0x8000, false, 10, 16208);
+    globals.simVars->addVar(name, "Pressure 2", 0x73E2 + 0x8000, false, 10, 16208);
+    globals.simVars->addVar(name, "Altitude Units (1=Ft, 2=M)", 0x0C18 + 0x8000, false, 1, 2);
+    globals.simVars->addVar(name, "Altitude 1", 0x3324 + 0x8000, false, 1, 0);
+    globals.simVars->addVar(name, "Altitude 2", 0x34B0 + 0x8000, false, 1, 0);
 }
 
 /// <summary>
@@ -114,14 +263,52 @@ bool alt::fetchVars()
     DWORD result;
 
     // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x9998, 4, &instrumentVar, &result)) {
-        instrumentVar = 0;
+    if (!globals.simVars->FSUIPC_Read(0x0330 + 0x8000, 2, &pressure, &result)) {
+        pressure = 16402;
+        success = false;
+    }
+
+    if (!globals.simVars->FSUIPC_Read(0x0C18 + 0x8000, 2, &units, &result)) {
+        units = 2;
+        return false;
+    }
+
+    if (!globals.simVars->FSUIPC_Read(0x3324 + 0x8000, 4, &altitude1, &result)) {
+        altitude1 = 0;
+        success = false;
+    }
+
+    if (!globals.simVars->FSUIPC_Read(0x34B0 + 0x8000, 8, &altitude2, &result)) {
+        altitude2 = 0;
         success = false;
     }
 
     if (!globals.simVars->FSUIPC_Process(&result))
     {
         success = false;
+    }
+
+    // If adjusting pressure cal manually rather than reading FS primus cal knob setting
+    if (globals.externalControls)
+    {
+        // Read pressure as hPa * 16
+        if (!globals.simVars->FSUIPC_Read(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+            pressure2 = 16208;
+            success = false;
+        }
+
+        if (pressure2 < 15168) {
+            pressure2 = 15168;
+            if (!globals.simVars->FSUIPC_Write(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+                success = false;
+            }
+        }
+        else if (pressure2 > 17344) {
+            pressure2 = 17344;
+            if (!globals.simVars->FSUIPC_Write(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+                success = false;
+            }
+        }
     }
 
     return success;
@@ -131,23 +318,23 @@ bool alt::fetchVars()
 
 void alt::addKnobs()
 {
-    // BCM GPIO 38 and 39
-    newKnob = globals.hardwareKnobs->add(38, 39, -100, 100, 0);
+    // BCM GPIO 2 and 3
+    calKnob = globals.hardwareKnobs->add(2, 3, 15168, 17344, 16208);
 }
 
 bool alt::updateKnobs()
 {
     DWORD result;
 
-    // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(newKnob);
+    // Read knob for pressure calibration
+    int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        instrumentVar = val / 10;
+        // Convert knob value to pressure (adjust for desired sensitivity)
+        pressure2 = val;
 
-        // Update new instrument variable
-        if (!globals.simVars->FSUIPC_Write(0x9999, 2, &instrumentVar, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+        // Update manual pressure adjust
+        if (!globals.simVars->FSUIPC_Write(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
             return false;
         }
     }

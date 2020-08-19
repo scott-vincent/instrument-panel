@@ -37,6 +37,30 @@ void asi::resize()
     ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
     addBitmap(dest);
 
+    // 2 = Outer scale
+    ALLEGRO_BITMAP* outer = al_create_bitmap(800, 800);
+    al_set_target_bitmap(outer);
+    al_draw_bitmap_region(orig, 0, 800, 800, 800, 0, 0, 0);
+    addBitmap(outer);
+
+    // 3 = Outer scale shadow
+    ALLEGRO_BITMAP* outerShadow = al_create_bitmap(size, 180 * scaleFactor);
+    al_set_target_bitmap(outerShadow);
+    al_draw_scaled_bitmap(orig, 0, 1600, 800, 180, 0, 0, size, 180 * scaleFactor, 0);
+    addBitmap(outerShadow);
+
+    // 4 = Pointer
+    ALLEGRO_BITMAP* pointer3 = al_create_bitmap(80, 800);
+    al_set_target_bitmap(pointer3);
+    al_draw_bitmap_region(orig, 800, 0, 80, 800, 0, 0, 0);
+    addBitmap(pointer3);
+
+    // 5 = Pointer shadow
+    ALLEGRO_BITMAP* shadow3 = al_create_bitmap(80, 800);
+    al_set_target_bitmap(shadow3);
+    al_draw_bitmap_region(orig, 800, 800, 80, 800, 0, 0, 0);
+    addBitmap(shadow3);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -51,12 +75,38 @@ void asi::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Fill with ?
+    // Add outer scale (adjusted airspeed) and rotate
+    // 0 = 0 radians
+    angle =  airspeedCal * 0.01f;
+    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
+
+    if (globals.enableShadows) {
+        // Set blender to multiply (shades of grey darken, white has no effect)
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+        // Add outer hole Shadow
+        al_draw_bitmap_region(bitmaps[3], 0, 0, size, 180 * scaleFactor, 10 * scaleFactor, 630 * scaleFactor, 0);
+
+        // Restore normal blender
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+    }
+
+    // Add main dial
     al_draw_scaled_bitmap(bitmaps[0], 0, 0, 800, 800, 0, 0, size, size, 0);
 
     if (globals.enableShadows) {
-        // Display shadow
+        // Set blender to multiply (shades of grey darken, white has no effect)
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+        // Add pointer shadow
+        al_draw_scaled_rotated_bitmap(bitmaps[5], 40, 400, 410 * scaleFactor, 410 * scaleFactor, scaleFactor, scaleFactor, airspeedAngle, 0);
+
+        // Restore normal blender
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
+
+    // Add pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 40, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, airspeedAngle, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -90,8 +140,23 @@ void asi::update()
     // Get latest FlightSim variables
     globals.connected = fetchVars();
 
-    // Calculate values
-    instrumentValue = instrumentVar + 42;
+    // Calculate values - Not a linear scale!
+    airspeedKnots = airspeed / 128;
+    if (airspeedKnots < 40) {
+        airspeedAngle = airspeedKnots * 0.013f;
+    }
+    else if (airspeedKnots < 90) {
+        airspeedAngle = -0.03f + pow(airspeedKnots - 12.1, 1.439) * 0.0047f;
+    }
+    else if (airspeedKnots < 120) {
+        airspeedAngle = 0.4f + pow(airspeedKnots - 12.1, 1.4) * 0.0046f;
+    }
+    else if (airspeedKnots < 160) {
+        airspeedAngle = 1.53f + pow(airspeedKnots - 12.0, 1.320) * 0.0043f;
+    }
+    else {
+        airspeedAngle = 2.27f + pow(airspeedKnots - 12.0, 1.28) * 0.0040f;
+    }
 }
 
 /// <summary>
@@ -99,7 +164,9 @@ void asi::update()
 /// </summary>
 void asi::addVars()
 {
-    globals.simVars->addVar(name, "Value", 0x9999, false, 1, 0);
+    // Add 0x8000 to all vars for now so that Learjet asi can be displayed at the same time
+    globals.simVars->addVar(name, "Airspeed", 0x02BC + 0x8000, false, 128, 0);
+    globals.simVars->addVar(name, "Airspeed Calibration", 0xF000, false, 1, 0);
 }
 
 /// <summary>
@@ -113,9 +180,14 @@ bool asi::fetchVars()
     bool success = true;
     DWORD result;
 
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x9999, 4, &instrumentVar, &result)) {
-        instrumentVar = 0;
+    // Values from FlightSim
+    if (!globals.simVars->FSUIPC_Read(0x02BC + 0x8000, 4, &airspeed, &result)) {
+        airspeed = 0;
+        success = false;
+    }
+
+    if (!globals.simVars->FSUIPC_Read(0xF000, 2, &airspeedCal, &result)) {
+        airspeedCal = 0;
         success = false;
     }
 
@@ -131,23 +203,23 @@ bool asi::fetchVars()
 
 void asi::addKnobs()
 {
-    // BCM GPIO 38 and 39
-    newKnob = globals.hardwareKnobs->add(38, 39, -100, 100, 0);
+    // BCM GPIO 2 and 3
+    calKnob = globals.hardwareKnobs->add(2, 3, -500, 500, 0);
 }
 
 bool asi::updateKnobs()
 {
     DWORD result;
 
-    // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(newKnob);
+    // Read knob for airspeed calibration
+    int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        instrumentVar = val / 10;
+        // Convert knob value to adjusted airspeed (adjust for desired sensitivity)
+        airspeedCal = val / 10;
 
-        // Update new instrument variable
-        if (!globals.simVars->FSUIPC_Write(0x9999, 2, &instrumentVar, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+        // Update airspeed calibration
+        if (!globals.simVars->FSUIPC_Write(0xF000, 2, &airspeedCal, &result) || !globals.simVars->FSUIPC_Process(&result)) {
             return false;
         }
     }

@@ -9,13 +9,17 @@ private:
     float scaleFactor;
 
     // FlightSim vars (external variables that influence this instrument)
-    long instrumentVar;
+    long pitch;
+    long bank;
+    signed short adiCal;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float instrumentValue;
+    float bankAngle = 0;
+    float pitchAngle = 0;
+    signed short currentAdiCal = 0;
 
     // Hardware knobs
-    int newKnob = -1;
+    int calKnob = -1;
 
 public:
     adi(int xPos, int yPos, int size);
