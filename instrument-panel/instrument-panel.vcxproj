@@ -161,6 +161,7 @@
     <ClCompile Include="instruments\altLearjet.cpp" />
     <ClCompile Include="instruments\asi.cpp" />
     <ClCompile Include="instruments\asiLearjet.cpp" />
+    <ClCompile Include="instruments\hi.cpp" />
     <ClCompile Include="instruments\newInstrument.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\vsi.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="instruments\altLearjet.h" />
     <ClInclude Include="instruments\asi.h" />
     <ClInclude Include="instruments\asiLearjet.h" />
+    <ClInclude Include="instruments\hi.h" />
     <ClInclude Include="instruments\newInstrument.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\vsi.h" />

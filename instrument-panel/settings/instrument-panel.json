@@ -41,9 +41,15 @@
     "Position Y": 730,
     "Size": 304
   },
-  "VSI": {
+  "HI": {
     "Enabled": true,
     "Position X": 808,
+    "Position Y": 730,
+    "Size": 304
+  },
+  "VSI": {
+    "Enabled": true,
+    "Position X": 1191,
     "Position Y": 730,
     "Size": 304
   }

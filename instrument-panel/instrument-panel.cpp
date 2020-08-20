@@ -32,9 +32,9 @@
  *            realistic 3D look.
  * Esc ...... Quit the program.
  * 
- * To make adjustments use the arrow keys. Up/down arrows select the
- * previous or next setting and left/right arrows change the value.
- * You can also use num pad left/right arrows to make larger adjustments.
+ * To make adjustments use the arrow keys. Up / down arrows select the
+ * previous or next setting and left / right arrows change the value.
+ * You can also use numpad left / right arrows to make larger adjustments.
  * 
  * Individual instruments can be shown or hidden by setting Enabled to
  * true or false in the settings file:
@@ -85,8 +85,9 @@
 #include "asi.h"
 #include "adi.h"
 #include "alt.h"
-#include "vsi.h"
 #include "tc.h"
+#include "hi.h"
+#include "vsi.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -446,12 +447,16 @@ void addInstruments()
         instruments.push_back(new alt(900, 400, 300));
     }
 
-    if (globals.simVars->isEnabled("VSI")) {
-        instruments.push_back(new vsi(100, 750, 300));
+    if (globals.simVars->isEnabled("TC")) {
+        instruments.push_back(new tc(100, 750, 300));
     }
 
-    if (globals.simVars->isEnabled("TC")) {
-        instruments.push_back(new tc(500, 750, 300));
+    if (globals.simVars->isEnabled("HI")) {
+        instruments.push_back(new hi(500, 750, 300));
+    }
+
+    if (globals.simVars->isEnabled("VSI")) {
+        instruments.push_back(new vsi(900, 750, 300));
     }
 }
 

@@ -32,6 +32,9 @@
     <ClCompile Include="instruments\tc.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\hi.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -63,6 +66,9 @@
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\tc.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\hi.h">
       <Filter>instruments</Filter>
     </ClInclude>
   </ItemGroup>

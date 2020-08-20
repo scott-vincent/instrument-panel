@@ -17,6 +17,7 @@ private:
 public:
     int knobCount = 0;
     int gpio[MaxKnobs][2];
+    bool limited[MaxKnobs];
     int minValue[MaxKnobs];
     int maxValue[MaxKnobs];
     int value[MaxKnobs];

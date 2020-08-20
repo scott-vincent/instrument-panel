@@ -119,7 +119,7 @@ void newInstrument::update()
     globals.connected = fetchVars();
 
     // Calculate values
-    angle = instrumentVar / 100;
+    angle = instrumentVar / 100.0f;
 }
 
 /// <summary>
