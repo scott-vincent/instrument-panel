@@ -20,19 +20,31 @@
   "ASI": {
     "Enabled": true,
     "Position X": 425,
-    "Position Y": 380,
+    "Position Y": 370,
     "Size": 304
   },
   "ADI": {
     "Enabled": true,
     "Position X": 800,
-    "Position Y": 372,
+    "Position Y": 362,
     "Size": 320
   },
   "ALT": {
     "Enabled": true,
     "Position X": 1191,
-    "Position Y": 380,
+    "Position Y": 370,
+    "Size": 304
+  },
+  "TC": {
+    "Enabled": true,
+    "Position X": 425,
+    "Position Y": 730,
+    "Size": 304
+  },
+  "VSI": {
+    "Enabled": true,
+    "Position X": 808,
+    "Position Y": 730,
     "Size": 304
   }
 }

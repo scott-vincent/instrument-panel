@@ -34,32 +34,32 @@ void asi::resize()
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
-    ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
-    addBitmap(dest);
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
+    addBitmap(bmp);
 
     // 2 = Outer scale
-    ALLEGRO_BITMAP* outer = al_create_bitmap(800, 800);
-    al_set_target_bitmap(outer);
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 0, 800, 800, 800, 0, 0, 0);
-    addBitmap(outer);
+    addBitmap(bmp);
 
     // 3 = Outer scale shadow
-    ALLEGRO_BITMAP* outerShadow = al_create_bitmap(size, 180 * scaleFactor);
-    al_set_target_bitmap(outerShadow);
+    bmp = al_create_bitmap(size, 180 * scaleFactor);
+    al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 1600, 800, 180, 0, 0, size, 180 * scaleFactor, 0);
-    addBitmap(outerShadow);
+    addBitmap(bmp);
 
     // 4 = Pointer
-    ALLEGRO_BITMAP* pointer3 = al_create_bitmap(80, 800);
-    al_set_target_bitmap(pointer3);
+    bmp = al_create_bitmap(80, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 800, 0, 80, 800, 0, 0, 0);
-    addBitmap(pointer3);
+    addBitmap(bmp);
 
     // 5 = Pointer shadow
-    ALLEGRO_BITMAP* shadow3 = al_create_bitmap(80, 800);
-    al_set_target_bitmap(shadow3);
+    bmp = al_create_bitmap(80, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 800, 800, 80, 800, 0, 0, 0);
-    addBitmap(shadow3);
+    addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
 }

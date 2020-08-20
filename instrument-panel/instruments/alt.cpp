@@ -34,56 +34,62 @@ void alt::resize()
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
-    ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
-    addBitmap(dest);
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
+    addBitmap(bmp);
 
     // 2 = Outer scale
-    ALLEGRO_BITMAP* outer = al_create_bitmap(800, 800);
-    al_set_target_bitmap(outer);
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 0, 800, 800, 800, 0, 0, 0);
-    addBitmap(outer);
+    addBitmap(bmp);
 
     // 3 = Inner scale
-    ALLEGRO_BITMAP* inner = al_create_bitmap(800, 800);
-    al_set_target_bitmap(inner);
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 800, 800, 800, 800, 0, 0, 0);
-    addBitmap(inner);
+    addBitmap(bmp);
 
     // 4 = 1000ft pointer
-    ALLEGRO_BITMAP* pointer1 = al_create_bitmap(800, 800);
-    al_set_target_bitmap(pointer1);
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 800, 0, 800, 800, 0, 0, 0);
-    addBitmap(pointer1);
+    addBitmap(bmp);
 
     // 5 = 100ft pointer
-    ALLEGRO_BITMAP* pointer2 = al_create_bitmap(800, 800);
-    al_set_target_bitmap(pointer2);
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 1600, 0, 100, 800, 0, 0, 0);
-    addBitmap(pointer2);
+    addBitmap(bmp);
 
     // 6 = 1ft pointer
-    ALLEGRO_BITMAP* pointer3 = al_create_bitmap(100, 800);
-    al_set_target_bitmap(pointer3);
+    bmp = al_create_bitmap(100, 800);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 1600, 800, 100, 800, 0, 0, 0);
-    addBitmap(pointer3);
+    addBitmap(bmp);
 
     // 7 = Inner hole shadow
-    ALLEGRO_BITMAP* shadow1 = al_create_bitmap(200 * scaleFactor, 200 * scaleFactor);
-    al_set_target_bitmap(shadow1);
+    bmp = al_create_bitmap(200 * scaleFactor, 200 * scaleFactor);
+    al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 1700, 0, 200, 200, 0, 0, 200 * scaleFactor, 200 * scaleFactor, 0);
-    addBitmap(shadow1);
+    addBitmap(bmp);
 
     // 8 = Outer hole shadow
-    ALLEGRO_BITMAP* shadow2 = al_create_bitmap(200 * scaleFactor, 200 * scaleFactor);
-    al_set_target_bitmap(shadow2);
+    bmp = al_create_bitmap(200 * scaleFactor, 200 * scaleFactor);
+    al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 1700, 200, 200, 200, 0, 0, 200 * scaleFactor, 200 * scaleFactor, 0);
-    addBitmap(shadow2);
+    addBitmap(bmp);
 
     // 9 = Pointer hole shadow
-    ALLEGRO_BITMAP* shadow3 = al_create_bitmap(200, 200);
-    al_set_target_bitmap(shadow3);
+    bmp = al_create_bitmap(200, 200);
+    al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 1700, 400, 200, 200, 0, 0, 0);
-    addBitmap(shadow3);
+    addBitmap(bmp);
+
+    // 10 = Main dial
+    bmp = al_create_bitmap(size, size);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
+    addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
 }
@@ -126,7 +132,7 @@ void alt::render()
     }
 
     // Add main dial
-    al_draw_scaled_bitmap(bitmaps[0], 0, 0, 800, 800, 0, 0, size, size, 0);
+    al_draw_bitmap(bitmaps[10], 0, 0, 0);
 
     if (globals.enableShadows) {
         // Set blender to multiply (shades of grey darken, white has no effect)

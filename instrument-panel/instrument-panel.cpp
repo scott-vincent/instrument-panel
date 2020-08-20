@@ -34,7 +34,7 @@
  * 
  * To make adjustments use the arrow keys. Up/down arrows select the
  * previous or next setting and left/right arrows change the value.
- * You can also use numpad left/right arrows to make larger adjustments.
+ * You can also use num pad left/right arrows to make larger adjustments.
  * 
  * Individual instruments can be shown or hidden by setting Enabled to
  * true or false in the settings file:
@@ -85,6 +85,8 @@
 #include "asi.h"
 #include "adi.h"
 #include "alt.h"
+#include "vsi.h"
+#include "tc.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -421,27 +423,35 @@ void addInstruments()
 {
     // Add instruments
     if (globals.simVars->isEnabled("ASI Learjet")) {
-        instruments.push_back(new asiLearjet(100, 100, 350));
+        instruments.push_back(new asiLearjet(100, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ADI Learjet")) {
-        instruments.push_back(new adiLearjet(500, 100, 350));
+        instruments.push_back(new adiLearjet(500, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ALT Learjet")) {
-        instruments.push_back(new altLearjet(900, 100, 350));
+        instruments.push_back(new altLearjet(900, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ASI")) {
-        instruments.push_back(new asi(100, 600, 350));
+        instruments.push_back(new asi(100, 400, 300));
     }
 
     if (globals.simVars->isEnabled("ADI")) {
-        instruments.push_back(new adi(500, 600, 350));
+        instruments.push_back(new adi(500, 400, 300));
     }
 
     if (globals.simVars->isEnabled("ALT")) {
-        instruments.push_back(new alt(900, 600, 350));
+        instruments.push_back(new alt(900, 400, 300));
+    }
+
+    if (globals.simVars->isEnabled("VSI")) {
+        instruments.push_back(new vsi(100, 750, 300));
+    }
+
+    if (globals.simVars->isEnabled("TC")) {
+        instruments.push_back(new tc(500, 750, 300));
     }
 }
 

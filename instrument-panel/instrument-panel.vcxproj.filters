@@ -26,6 +26,12 @@
     <ClCompile Include="instruments\asi.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\vsi.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\tc.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -51,6 +57,12 @@
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\asi.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\vsi.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\tc.h">
       <Filter>instruments</Filter>
     </ClInclude>
   </ItemGroup>

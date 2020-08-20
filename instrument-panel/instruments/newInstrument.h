@@ -12,7 +12,7 @@ private:
     long instrumentVar;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float instrumentValue;
+    float angle;
 
     // Hardware knobs
     int calKnob = -1;

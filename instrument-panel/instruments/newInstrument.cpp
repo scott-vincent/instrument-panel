@@ -34,8 +34,26 @@ void newInstrument::resize()
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
-    ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
-    addBitmap(dest);
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
+    addBitmap(bmp);
+
+    // 2 = Main dial
+    bmp = al_create_bitmap(size, size);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
+    addBitmap(bmp);
+
+    // 3 = Pointer
+    bmp = al_create_bitmap(800, 100);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 800, 800, 100, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 4 = Pointer shadow
+    bmp = al_create_bitmap(800, 100);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 900, 800, 100, 0, 0, 0);
+    addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
 }
@@ -51,12 +69,22 @@ void newInstrument::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Fill with ?
-    al_draw_scaled_bitmap(bitmaps[0], 0, 0, 800, 800, 0, 0, size, size, 0);
+    // Add main dial
+    al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
     if (globals.enableShadows) {
-        // Display shadow
+        // Set blender to multiply (shades of grey darken, white has no effect)
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+        // Add pointer shadow
+        al_draw_scaled_rotated_bitmap(bitmaps[4], 400, 50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * AngleFactor, 0);
+
+        // Restore normal blender
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
+
+    // Add pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * AngleFactor, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -91,7 +119,7 @@ void newInstrument::update()
     globals.connected = fetchVars();
 
     // Calculate values
-    instrumentValue = instrumentVar + 42;
+    angle = instrumentVar / 100;
 }
 
 /// <summary>
@@ -114,7 +142,7 @@ bool newInstrument::fetchVars()
     DWORD result;
 
     // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x9999, 4, &instrumentVar, &result)) {
+    if (!globals.simVars->FSUIPC_Read(0xf000, 4, &instrumentVar, &result)) {
         instrumentVar = 0;
         success = false;
     }
@@ -131,8 +159,8 @@ bool newInstrument::fetchVars()
 
 void newInstrument::addKnobs()
 {
-    // BCM GPIO 38 and 39
-    calKnob = globals.hardwareKnobs->add(38, 39, -100, 100, 0);
+    // BCM GPIO 2 and 3
+    calKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
 }
 
 bool newInstrument::updateKnobs()
@@ -147,7 +175,7 @@ bool newInstrument::updateKnobs()
         instrumentVar = val / 10;
 
         // Update new instrument variable
-        if (!globals.simVars->FSUIPC_Write(0x9999, 2, &instrumentVar, &result) || !globals.simVars->FSUIPC_Process(&result)) {
+        if (!globals.simVars->FSUIPC_Write(0xf000, 2, &instrumentVar, &result) || !globals.simVars->FSUIPC_Process(&result)) {
             return false;
         }
     }
