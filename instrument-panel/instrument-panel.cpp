@@ -88,6 +88,12 @@
 #include "tc.h"
 #include "hi.h"
 #include "vsi.h"
+#include "annunciator.h"
+#include "digitalClock.h"
+#include "egt.h"
+#include "vac.h"
+#include "oil.h"
+#include "trimFlaps.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -424,39 +430,63 @@ void addInstruments()
 {
     // Add instruments
     if (globals.simVars->isEnabled("ASI Learjet")) {
-        instruments.push_back(new asiLearjet(100, 50, 300));
+        instruments.push_back(new asiLearjet(300, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ADI Learjet")) {
-        instruments.push_back(new adiLearjet(500, 50, 300));
+        instruments.push_back(new adiLearjet(700, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ALT Learjet")) {
-        instruments.push_back(new altLearjet(900, 50, 300));
+        instruments.push_back(new altLearjet(1100, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ASI")) {
-        instruments.push_back(new asi(100, 400, 300));
+        instruments.push_back(new asi(300, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ADI")) {
-        instruments.push_back(new adi(500, 400, 300));
+        instruments.push_back(new adi(700, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ALT")) {
-        instruments.push_back(new alt(900, 400, 300));
+        instruments.push_back(new alt(1100, 50, 300));
     }
 
     if (globals.simVars->isEnabled("TC")) {
-        instruments.push_back(new tc(100, 750, 300));
+        instruments.push_back(new tc(300, 400, 300));
     }
 
     if (globals.simVars->isEnabled("HI")) {
-        instruments.push_back(new hi(500, 750, 300));
+        instruments.push_back(new hi(700, 400, 300));
     }
 
     if (globals.simVars->isEnabled("VSI")) {
-        instruments.push_back(new vsi(900, 750, 300));
+        instruments.push_back(new vsi(1100, 400, 300));
+    }
+
+    if (globals.simVars->isEnabled("Annunciator")) {
+        instruments.push_back(new annunciator(50, 50, 200));
+    }
+
+    if (globals.simVars->isEnabled("Digital Clock")) {
+        instruments.push_back(new digitalClock(250, 250, 200));
+    }
+
+    if (globals.simVars->isEnabled("EGT")) {
+        instruments.push_back(new egt(50, 500, 200));
+    }
+
+    if (globals.simVars->isEnabled("VAC")) {
+        instruments.push_back(new vac(250, 500, 200));
+    }
+
+    if (globals.simVars->isEnabled("Oil")) {
+        instruments.push_back(new oil(50, 750, 200));
+    }
+
+    if (globals.simVars->isEnabled("Trim Flaps")) {
+        instruments.push_back(new trimFlaps(700, 750, 300));
     }
 }
 

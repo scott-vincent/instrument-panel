@@ -4,9 +4,6 @@
     <ClCompile Include="instrument-panel.cpp" />
     <ClCompile Include="instrument.cpp" />
     <ClCompile Include="simvars.cpp" />
-    <ClCompile Include="instruments\newInstrument.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
     <ClCompile Include="knobs.cpp" />
     <ClCompile Include="instruments\adiLearjet.cpp">
       <Filter>instruments</Filter>
@@ -35,14 +32,29 @@
     <ClCompile Include="instruments\hi.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\annunciator.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\oil.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\trimFlaps.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\egt.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\vac.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\digitalClock.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
     <ClInclude Include="simvars.h" />
     <ClInclude Include="globals.h" />
-    <ClInclude Include="instruments\newInstrument.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
     <ClInclude Include="knobs.h" />
     <ClInclude Include="instruments\adiLearjet.h">
       <Filter>instruments</Filter>
@@ -69,6 +81,24 @@
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\hi.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\annunciator.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\oil.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\trimFlaps.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\egt.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\vac.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\digitalClock.h">
       <Filter>instruments</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "vsi.h"
+#include "oil.h"
 #include "simvars.h"
 
-vsi::vsi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+oil::oil(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
-    setName("VSI");
+    setName("Oil");
     addVars();
     resize();
 }
@@ -13,7 +13,7 @@ vsi::vsi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void vsi::resize()
+void oil::resize()
 {
     destroyBitmaps();
 
@@ -21,7 +21,7 @@ void vsi::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("vsi.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("oil.bmp");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -38,25 +38,13 @@ void vsi::resize()
     al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
     addBitmap(bmp);
 
-    // 3 = Pointer
-    bmp = al_create_bitmap(800, 100);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 800, 800, 100, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 4 = Pointer shadow
-    bmp = al_create_bitmap(800, 100);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 900, 800, 100, 0, 0, 0);
-    addBitmap(bmp);
-
     al_set_target_backbuffer(globals.display);
 }
 
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void vsi::render()
+void oil::render()
 {
     if (bitmaps[0] == NULL) {
         return;
@@ -71,20 +59,6 @@ void vsi::render()
     // Add main dial
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    if (globals.enableShadows) {
-        // Set blender to multiply (shades of grey darken, white has no effect)
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
-
-        // Add pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[4], 400,50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * AngleFactor, 0);
-
-        // Restore normal blender
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    }
-
-    // Add pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * AngleFactor, 0);
-
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
@@ -94,7 +68,7 @@ void vsi::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void vsi::update()
+void oil::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -111,39 +85,15 @@ void vsi::update()
     globals.connected = fetchVars();
 
     // Calculate values
-    targetAngle = verticalSpeed / 10.f;
-
-    float diff = abs(targetAngle - angle);
-
-    if (diff > 10.0f) {
-        if (angle < targetAngle) angle += 1.0f; else angle -= 1.0f;
-    }
-    else if (diff > 5.0f) {
-        if (angle < targetAngle) angle += 0.5f; else angle -= 0.5f;
-    }
-    else if (diff > 2.5f) {
-        if (angle < targetAngle) angle += 0.25f; else angle -= 0.25f;
-    }
-    else if (diff > 1.25f) {
-        if (angle < targetAngle) angle += 0.125f; else angle -= 0.125f;
-    }
-    else if (diff > 0.625f) {
-        if (angle < targetAngle) angle += 0.0625f; else angle -= 0.0625f;
-    }
-    else if (diff > 0.03f) {
-        if (angle < targetAngle) angle += 0.03f; else angle -= 0.03f;
-    }
-    else {
-        angle = targetAngle;
-    }
+    angle = instrumentVar / 100.0f;
 }
 
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void vsi::addVars()
+void oil::addVars()
 {
-    globals.simVars->addVar(name, "Vertical Speed", 0xf001, false, 4, 0);
+    globals.simVars->addVar(name, "Value", 0xf00c, false, 1, 0);
 }
 
 /// <summary>
@@ -152,14 +102,14 @@ void vsi::addVars()
 /// 
 /// Returns false if flightsim is not connected.
 /// </summary>
-bool vsi::fetchVars()
+bool oil::fetchVars()
 {
     bool success = true;
     DWORD result;
 
     // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf001, 4, &verticalSpeed, &result)) {
-        verticalSpeed = 0;
+    if (!globals.simVars->FSUIPC_Read(0xf00c, 4, &instrumentVar, &result)) {
+        instrumentVar = 0;
         success = false;
     }
 

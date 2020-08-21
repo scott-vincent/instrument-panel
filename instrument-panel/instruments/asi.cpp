@@ -33,6 +33,10 @@ void asi::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("asi.bmp");
     addBitmap(orig);
 
+    if (bitmaps[0] == NULL) {
+        return;
+    }
+
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
     ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
     addBitmap(bmp);
@@ -69,6 +73,10 @@ void asi::resize()
 /// </summary>
 void asi::render()
 {
+    if (bitmaps[0] == NULL) {
+        return;
+    }
+
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
 

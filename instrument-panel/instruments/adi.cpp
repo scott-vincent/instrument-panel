@@ -157,12 +157,6 @@ void adi::render()
     // Add outer casing
     al_draw_bitmap(bitmaps[8], 0, 0, 0);
 
-    // Display 'Not Connected message'
-    if (!globals.connected)
-    {
-        al_draw_scaled_bitmap(bitmaps[0], 801, 2601, 350, 150, 225 * scaleFactor, 325 * scaleFactor, 350 * scaleFactor, 150 * scaleFactor, 0);
-    }
-
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);

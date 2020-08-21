@@ -28,6 +28,10 @@ void altLearjet::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("alt-learjet.bmp");
     addBitmap(orig);
 
+    if (bitmaps[0] == NULL) {
+        return;
+    }
+
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
     ALLEGRO_BITMAP* dest = al_create_bitmap(size, size);
     addBitmap(dest);
@@ -70,6 +74,10 @@ void altLearjet::resize()
 /// </summary>
 void altLearjet::render()
 {
+    if (bitmaps[0] == NULL) {
+        return;
+    }
+
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
 
