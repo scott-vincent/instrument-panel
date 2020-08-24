@@ -65,4 +65,8 @@ See individual instruments for pins used. Not all instruments have manual contro
 Note: pullUpDnControl does not work on RasPi4 so have to use raspi-gpio command-line
 to pull up resistors.
 
+# Donate
+
+If you find this project useful, would like to see it developed further or would just like to buy the author a beer, please consider a small donation.
+
 [<img src="donate.svg" width="200" height="36">](https://paypal.me/scottvincent2020)
