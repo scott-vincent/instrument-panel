@@ -69,4 +69,4 @@ to pull up resistors.
 
 If you find this project useful, would like to see it developed further or would just like to buy the author a beer, please consider a small donation.
 
-[<img src="donate.svg" width="200" height="36">](https://paypal.me/scottvincent2020)
+[<img src="donate.svg" width="210" height="40">](https://paypal.me/scottvincent2020)
