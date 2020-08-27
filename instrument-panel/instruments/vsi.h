@@ -8,9 +8,6 @@ class vsi : public instrument
 private:
     float scaleFactor;
 
-    // FlightSim vars (external variables that influence this instrument)
-    long verticalSpeed;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     float angle = 0;
     float targetAngle;
@@ -23,7 +20,6 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
 
 };
 

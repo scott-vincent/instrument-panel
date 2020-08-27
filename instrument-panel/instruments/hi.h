@@ -8,10 +8,6 @@ class hi : public instrument
 private:
     float scaleFactor;
 
-    // FlightSim vars (external variables that influence this instrument)
-    long heading;
-    long headingBug;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     float angle;
     float bugAngle;
@@ -27,8 +23,6 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
-
 };
 
 #endif // _HI_H

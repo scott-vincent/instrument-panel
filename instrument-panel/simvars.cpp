@@ -1,9 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _WIN32
+#include <ws2tcpip.h>
+#include <winsock2.h>
+#include <Windows.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+typedef int SOCKET;
+#define _stricmp strcasecmp
+#endif
 #include <allegro5/allegro.h>
 #include "simvars.h"
 
+const char DataLinkGroup[] = "Data Link";
+const char DataLinkHost[] = "Host";
+const char DataLinkPort[] = "Port";
+
+extern const char* SimVarDefs[][2];
+
+void dataLink(simvars*);
+void showError(const char* msg);
+void fatalError(const char* msg);
+
 simvars::simvars()
+{
+    loadSettings();
+
+    // Start data link thread
+    dataLinkThread = new std::thread(dataLink, this);
+}
+
+simvars::~simvars()
+{
+    saveSettings();
+
+    if (dataLinkThread) {
+        // Wait for thread to exit
+        dataLinkThread->join();
+    }
+}
+
+void simvars::loadSettings()
 {
     // Load settings from JSON file
     static char buf[16384] = { '\0' };
@@ -12,7 +51,7 @@ simvars::simvars()
     FILE* infile = fopen(globals.SettingsFile, "r");
     if (infile)
     {
-        int bytes = fread(buf, 1, 16384, infile);
+        int bytes = (int)fread(buf, 1, 16384, infile);
         buf[bytes] = '\0';
         fclose(infile);
     }
@@ -55,7 +94,15 @@ simvars::simvars()
         }
         else if ((ch == ',' || ch == '\n') && readingValue && level == 2) {
             if (group[0] != '\0' && name[0] != '\0' && value[0] != '\0') {
-                if (groupCount == 0 || strcmp(groups[groupCount - 1].name, group) != 0) {
+                if (_stricmp(group, DataLinkGroup) == 0) {
+                    if (_stricmp(name, DataLinkHost) == 0) {
+                        strcpy(globals.dataLinkHost, value);
+                    }
+                    else if (_stricmp(name, DataLinkPort) == 0) {
+                        globals.dataLinkPort = settingValue(value);
+                    }
+                }
+                else if (groupCount == 0 || strcmp(groups[groupCount - 1].name, group) != 0) {
                     // New group
                     strcpy(groups[groupCount].name, group);
                     int idx = settingIndex(name);
@@ -85,12 +132,12 @@ simvars::simvars()
             readingValue = false;
         }
         else if (readingName) {
-            int len = strlen(name);
+            int len = (int)strlen(name);
             name[len] = ch;
             name[len + 1] = '\0';
         }
-        else if (readingValue) {
-            int len = strlen(value);
+        else if (readingValue && ch != '"') {
+            int len = (int)strlen(value);
             if (len != 0 || ch != ' ') {
                 value[len] = ch;
                 value[len + 1] = '\0';
@@ -101,13 +148,17 @@ simvars::simvars()
     }
 }
 
-simvars::~simvars()
+void simvars::saveSettings()
 {
     // Save settings to JSON file
     FILE* outfile = fopen(globals.SettingsFile, "w");
     if (outfile)
     {
         fprintf(outfile, "{\n");
+        fprintf(outfile, "  \"%s\": {\n", DataLinkGroup);
+        fprintf(outfile, "    \"%s\": \"%s\",\n", DataLinkHost, globals.dataLinkHost);
+        fprintf(outfile, "    \"%s\": %d\n", DataLinkPort, globals.dataLinkPort);
+        fprintf(outfile, "  },\n");
 
         int idx = 0;
         while (idx < groupCount)
@@ -143,9 +194,6 @@ simvars::~simvars()
         fprintf(outfile, "}\n");
         fclose(outfile);
     }
-
-    // Disconnect from FlightSim
-    FSUIPC_Close();
 }
 
 int simvars::settingIndex(const char* attribName)
@@ -193,7 +241,7 @@ void simvars::saveGroup(FILE *outfile, const char* group)
             }
 
             // Only settings (negative nums) should be saved to the file
-            if (varNum[idx] < 0) {
+            if (varOffset[idx] < 0) {
                 fprintf(outfile, ",\n");
                 fprintf(outfile, "    \"%s\": %.0f", varName[idx], varVal[idx]);
             }
@@ -209,12 +257,12 @@ void simvars::saveGroup(FILE *outfile, const char* group)
     }
 }
 
-int simvars::getVarIdx(int num)
+int simvars::getVarIdx(int offset)
 {
     int idx = 0;
     while (idx < varCount)
     {
-        if (varNum[idx] == num)
+        if (varOffset[idx] == offset)
         {
             return idx;
         }
@@ -228,7 +276,7 @@ int simvars::getVarIdx(int num)
 bool simvars::isCorrectType(int idx)
 {
     // Settings (for arranging) have negative values and variables (for simulating) have positive values
-    if (globals.arranging && varNum[idx] < 0 || globals.simulating && varNum[idx] > 0) {
+    if (globals.arranging && varOffset[idx] < 0 || globals.simulating && varOffset[idx] > 0) {
         return true;
     }
 
@@ -257,7 +305,7 @@ void simvars::getNextVar()
         }
 
         if (isCorrectType(idx)) {
-            currentVar = varNum[idx];
+            currentVar = varOffset[idx];
             return;
         }
 
@@ -289,7 +337,7 @@ void simvars::getPrevVar()
         }
 
         if (isCorrectType(idx)) {
-            currentVar = varNum[idx];
+            currentVar = varOffset[idx];
             return;
         }
 
@@ -299,11 +347,16 @@ void simvars::getPrevVar()
     }
 }
 
-void simvars::adjustVar(long amount)
+void simvars::adjustVar(double amount)
 {
     int idx = getVarIdx(currentVar);
     if (idx == -1)
     {
+        return;
+    }
+
+    if (globals.dataLinked && varOffset[idx] >= 0) {
+        showError("Cannot adjust variables when data linked");
         return;
     }
 
@@ -316,12 +369,20 @@ void simvars::adjustVar(long amount)
         }
     }
     else {
-        varVal[idx] += (long long)amount * varScaling[idx];
+        varVal[idx] += amount * varScaling[idx];
+    }
+
+    if (varOffset[idx] >= 0) {
+        // Update real SimVar variable
+        double *pVar = (double *)&simVars + varOffset[idx];
+        *pVar = varVal[idx];
     }
 }
 
-void simvars::view()
+char *simvars::view()
 {
+    static char text[256] = "\0";
+
     if (currentVar == 0) {
         getNextVar();
     }
@@ -329,23 +390,15 @@ void simvars::view()
     int idx = getVarIdx(currentVar);
     if (idx == -1)
     {
-        return;
+        return text;
     }
 
     if (!isCorrectType(idx)) {
         getNextVar();
     }
 
-    char text[256];
-    sprintf(text, "            %s %s: %.0f            ", varGroup[idx], varName[idx], varVal[idx]);
-    al_draw_text(globals.font, al_map_rgb(0x60, 0x60, 0x60), globals.displayWidth / 2, globals.displayHeight - 30,
-        ALLEGRO_ALIGN_CENTRE, text);
-}
-
-void simvars::viewClear()
-{
-    al_draw_text(globals.font, al_map_rgb(0x60, 0x60, 0x60), globals.displayWidth / 2, globals.displayHeight - 30,
-        ALLEGRO_ALIGN_CENTRE, "                                  ");
+    sprintf(text, "%s %s: %.0f", varGroup[idx], varName[idx], varVal[idx]);
+    return text;
 }
 
 void simvars::doKeypress(int keycode)
@@ -380,19 +433,34 @@ void simvars::doKeypress(int keycode)
     }
 }
 
-void simvars::addVar(const char* group, const char* name, int num, bool isBool, long scaling, long val)
+void simvars::addVar(const char* group, const char* name, bool isBool, long scaling, long val)
 {
+    // Convert SimVar name to address offset (number of doubles)
+    int offset = 1;
+    for (int i = 0;; i++) {
+        if (SimVarDefs[i][0] == NULL) {
+            sprintf(globals.error, "Unknown SimVar name: %s - %s", group, name);
+            return;
+        }
+
+        if (strcmp(SimVarDefs[i][0], name) == 0) {
+            break;
+        }
+
+        offset++;
+    }
+
     // Must not already be added
-    int idx = getVarIdx(num);
+    int idx = getVarIdx(offset);
     if (idx != -1)
     {
-        sprintf(globals.error, "Duplicate var %04x must be added to common instead of %s and %s", num, varGroup[idx], group);
+        sprintf(globals.error, "Duplicate var %s must be added to common instead of %s and %s", name, varGroup[idx], group);
         return;
     }
 
     strcpy(varGroup[varCount], group);
     strcpy(varName[varCount], name);
-    varNum[varCount] = num;
+    varOffset[varCount] = offset;
     varIsBool[varCount] = isBool;
     varScaling[varCount] = scaling;
     varVal[varCount] = val;
@@ -409,15 +477,15 @@ void simvars::addSetting(const char* group, const char* name)
     {
         if (strcmp(groups[groupNum].name, group) == 0) {
             // Find setting
-            int settingNum = 0;
-            while (settingNum < groups[groupNum].settingsCount)
+            int num = 0;
+            while (num < groups[groupNum].settingsCount)
             {
-                if (strcmp(groups[groupNum].settingName[settingNum], name) == 0) {
-                    val = groups[groupNum].settingVal[settingNum];
+                if (strcmp(groups[groupNum].settingName[num], name) == 0) {
+                    val = groups[groupNum].settingVal[num];
                     break;
                 }
 
-                settingNum++;
+                num++;
             }
             break;
         }
@@ -425,8 +493,14 @@ void simvars::addSetting(const char* group, const char* name)
         groupNum++;
     }
 
-    addVar(group, name, settingNum, false, 1, val);
-    settingNum--;
+    strcpy(varGroup[varCount], group);
+    strcpy(varName[varCount], name);
+    varOffset[varCount] = settingOffset--;
+    varIsBool[varCount] = false;
+    varScaling[varCount] = 1;
+    varVal[varCount] = val;
+
+    varCount++;
 }
 
 /// <summary>
@@ -497,138 +571,127 @@ long * simvars::readSettings(const char* group, int defaultX, int defaultY, int 
     return vals;
 }
 
-BOOL simvars::simulatedRead(DWORD offset, DWORD size, void* dest, DWORD* result)
+/// <summary>
+/// Write manually updated value back to Flight Sim
+/// </summary>
+void simvars::write(const char* name, double value)
 {
-    double val = 0;
+    int idx;
+    for (idx = 0;; idx++)
+    {
+        if (idx == varCount) {
+            sprintf(globals.error, "Unknown SimVar writing: %s", name);
+            return;
+        }
 
-    int idx = getVarIdx(offset);
-    if (idx != -1)
-    {
-        val = varVal[idx];
-    }
-
-    switch (size)
-    {
-    case 1:
-    {
-        signed char val1 = (signed char)val;
-        memcpy(dest, &val1, size);
-        break;
-    }
-    case 2:
-    {
-        signed short val2 = (signed short)val;
-        memcpy(dest, &val2, size);
-        break;
-    }
-    case 4:
-    {
-        long val4 = (long)val;
-        memcpy(dest, &val4, size);
-        break;
-    }
-    case 8:
-    {
-        memcpy(dest, &val, size);
-        break;
-    }
-    }
-
-    return TRUE;
-}
-
-BOOL simvars::simulatedWrite(DWORD offset, DWORD size, void* src, DWORD* result)
-{
-    int idx = getVarIdx(offset);
-    if (idx == -1)
-    {
-        return FALSE;
-    }
-
-    switch (size)
-    {
-    case 1:
-    {
-        signed char *val1 = (signed char *)src;
-        varVal[idx] = *val1;
-        break;
-    }
-    case 2:
-    {
-        signed short *val2 = (signed short *)src;
-        varVal[idx] = *val2;
-        break;
-    }
-    case 4:
-    {
-        long *val4 = (long *)src;
-        varVal[idx] = *val4;
-        break;
-    }
-    case 8:
-    {
-        double *val8 = (double *)src;
-        varVal[idx] = *val8;
-        break;
-    }
-    }
-
-    return TRUE;
-}
-
-BOOL simvars::FSUIPC_Open(DWORD p1, DWORD* p2)
-{
-    if (globals.simulating) {
-        return TRUE;
-    }
-
-    // Connect to FlightSim
-    globals.connected = false;
-    return FALSE;
-}
-
-void simvars::FSUIPC_Close()
-{
-}
-
-BOOL simvars::FSUIPC_Read(DWORD offset, DWORD size, void *dest, DWORD* result)
-{
-    if (!globals.connected) {
-        if (!FSUIPC_Open(SIM_ANY, result)) {
-            return FALSE;
+        if (strcmp(varName[idx], name) == 0) {
+            break;
         }
     }
 
-    if (globals.simulating) {
-        return simulatedRead(offset, size, dest, result);
-    }
+    // Update SimVar variable
+    double* pVar = (double*)&simVars + varOffset[idx];
+    *pVar = value;
 
-    // Read FlightSim variable
-    return FALSE;
+    // TODO: Update Flight Sim
 }
 
-BOOL simvars::FSUIPC_Write(DWORD offset, DWORD size, void *src , DWORD* result)
+/// <summary>
+/// A separate thread constantly collects the latest
+/// SimVar values from instrument-data-link.
+/// </summary>
+void dataLink(simvars* t)
 {
-    if (!globals.connected) {
-        if (!FSUIPC_Open(SIM_ANY, result)) {
-            return FALSE;
+    char errMsg[256];
+
+#ifdef _WIN32
+    WSADATA wsaData;
+    int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (err != 0) {
+        sprintf(errMsg, "DataLink: Failed to initialise Windows Sockets: %d\n", err);
+        fatalError(errMsg);
+    }
+#endif
+
+    // Create a UDP socket
+    SOCKET sockfd;
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
+        fatalError("DataLink: Failed to create UDP socket");
+    }
+
+    int opt = 1;
+    setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt));
+
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(globals.dataLinkPort);
+    if (inet_pton(AF_INET, globals.dataLinkHost, &addr.sin_addr) <= 0)
+    {
+        sprintf(errMsg, "DataLink: Invalid server address: %s\n", globals.dataLinkHost);
+        fatalError(errMsg);
+    }
+
+    timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 500000;
+
+    long dataSize = sizeof(SimVars);
+    long actualSize;
+    int bytes;
+
+    int loop = 0;
+    while (!globals.quit) {
+        // Poll instrument data link
+        bytes = sendto(sockfd, (char*)&dataSize, sizeof(long), 0, (SOCKADDR*)&addr, sizeof(addr));
+
+        if (bytes > 0) {
+            fd_set fds;
+            FD_ZERO(&fds);
+            FD_SET(sockfd, &fds);
+
+            int sel = select(FD_SETSIZE, &fds, 0, 0, &timeout);
+            if (sel > 0) {
+                // Receive latest data
+                bytes = recv(sockfd, (char*)&t->simVars, dataSize, 0);
+
+                if (bytes == dataSize) {
+                    globals.dataLinked = true;
+                    globals.connected = (t->simVars.connected == 1);
+
+                    printf("%.2f %f %f %f %s\n", t->simVars.kohlsmann, t->simVars.altitude,
+                        t->simVars.latitude, t->simVars.longitude, t->simVars.title);
+                }
+                else if (bytes > 0) {
+                    memcpy(&actualSize, &t->simVars, sizeof(long));
+                    sprintf(errMsg, "DataLink: Requested %ld bytes but server has %ld bytes\n", dataSize, actualSize);
+                    fatalError(errMsg);
+                }
+                else {
+                    bytes = SOCKET_ERROR;
+                }
+            }
+            else {
+                bytes = SOCKET_ERROR;
+            }
         }
+        else {
+            bytes = SOCKET_ERROR;
+        }
+
+        if (bytes == SOCKET_ERROR && globals.dataLinked) {
+            globals.dataLinked = false;
+        }
+
+#ifdef _WIN32
+        Sleep(10);
+#else
+        usleep(10000);
+#endif
     }
 
-    if (globals.simulating) {
-        return simulatedWrite(offset, size, src, result);
-    }
+    closesocket(sockfd);
 
-    // Write FlightSim variable
-    return FALSE;
-}
-
-BOOL simvars::FSUIPC_Process(DWORD *p1)
-{
-    if (globals.simulating) {
-        return TRUE;
-    }
-
-    // Process FlightSim variables
-    return FALSE;
+#ifdef _WIN32
+    WSACleanup();
+#endif
 }

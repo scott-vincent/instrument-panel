@@ -25,6 +25,7 @@ public:
     int lastState[MaxKnobs];
 
     knobs();
+    ~knobs();
     int add(int gpio1, int gpio2, int minValue, int maxValue, int startValue);
     int read(int knobNum);
 };

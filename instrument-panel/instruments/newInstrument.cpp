@@ -124,10 +124,10 @@ void newInstrument::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = instrumentVar / 100.0f;
+    angle = simVars->adiBank / 100.0f;
 }
 
 /// <summary>
@@ -135,32 +135,7 @@ void newInstrument::update()
 /// </summary>
 void newInstrument ::addVars()
 {
-    globals.simVars->addVar(name, "Value", 0x9999, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool newInstrument::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf000, 4, &instrumentVar, &result)) {
-        instrumentVar = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Value", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -180,12 +155,10 @@ bool newInstrument::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to new instrument value (adjust for desired sensitivity)
-        instrumentVar = val / 10;
+        double simVarVal = val / 10;
 
         // Update new instrument variable
-        if (!globals.simVars->FSUIPC_Write(0xf000, 2, &instrumentVar, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        globals.simVars->write("simvar", simVarVal);
     }
 
     return true;

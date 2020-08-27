@@ -1,5 +1,4 @@
 #ifndef _WIN32
-
 #include <wiringPi.h>
 #include "knobs.h"
 
@@ -9,6 +8,14 @@ knobs::knobs()
 {
     // Use BCM GPIO pin numbers
     wiringPiSetupGpio();
+}
+
+knobs::~knobs()
+{
+    if (watcherThread) {
+        // Wait for thread to exit
+        watcherThread->join();
+    }
 }
 
 int knobs::add(int gpio1, int gpio2, int minVal, int maxVal, int startVal)
@@ -71,7 +78,7 @@ void watcher(knobs *t)
 {
     int state;
 
-    while (true) {
+    while (!globals.quit) {
         for (int num = 0; num < t->knobCount; num++) {
             state = digitalRead(t->gpio[num][1]) * 2 + digitalRead(t->gpio[num][0]);
 

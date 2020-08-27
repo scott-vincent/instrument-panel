@@ -134,12 +134,12 @@ void hi::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = -heading * M_PI / 180.0f;
+    angle = -simVars->hiHeading * M_PI / 180.0f;
 
-    int diff = headingBug - heading;
+    int diff = simVars->hiHeadingBug - simVars->hiHeading;
     bugAngle = diff * M_PI / 180.0f;
 }
 
@@ -148,38 +148,8 @@ void hi::update()
 /// </summary>
 void hi::addVars()
 {
-    globals.simVars->addVar(name, "Heading", 0xf00a, false, 1, 0);
-    globals.simVars->addVar(name, "Heading Bug", 0xf00b, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool hi::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf00a, 4, &heading, &result)) {
-        heading = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0xf00b, 4, &headingBug, &result)) {
-        headingBug = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Heading", false, 1, 0);
+    globals.simVars->addVar(name, "Heading Bug", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -199,12 +169,10 @@ bool newInstrument::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to new instrument value (adjust for desired sensitivity)
-        headingBug = val;
+        double headingBug = val;
 
         // Update heading bug variable
-        if (!globals.simVars->FSUIPC_Write(0xf00b, 2, &headingBug, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        globals.simVars->write("heading bug", headingBug);
     }
 
     return true;

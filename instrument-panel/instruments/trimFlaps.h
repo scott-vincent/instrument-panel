@@ -8,10 +8,6 @@ class trimFlaps : public instrument
 private:
     float scaleFactor;
 
-    // FlightSim vars (external variables that influence this instrument)
-    long trim;
-    long flaps;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     float trimOffset;
     float flapsOffset = 0;
@@ -29,7 +25,6 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
     bool updateKnobs();
 };
 

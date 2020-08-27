@@ -101,7 +101,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,6 +119,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -132,7 +133,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,6 +151,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -165,12 +167,14 @@
     <ClCompile Include="instruments\digitalClock.cpp" />
     <ClCompile Include="instruments\egt.cpp" />
     <ClCompile Include="instruments\hi.cpp" />
+    <ClCompile Include="instruments\newInstrument.cpp" />
     <ClCompile Include="instruments\oil.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\trimFlaps.cpp" />
     <ClCompile Include="instruments\vac.cpp" />
     <ClCompile Include="instruments\vsi.cpp" />
     <ClCompile Include="knobs.cpp" />
+    <ClCompile Include="simvarDefs.cpp" />
     <ClCompile Include="simvars.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,12 +190,14 @@
     <ClInclude Include="instruments\digitalClock.h" />
     <ClInclude Include="instruments\egt.h" />
     <ClInclude Include="instruments\hi.h" />
+    <ClInclude Include="instruments\newInstrument.h" />
     <ClInclude Include="instruments\oil.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\trimFlaps.h" />
     <ClInclude Include="instruments\vac.h" />
     <ClInclude Include="instruments\vsi.h" />
     <ClInclude Include="knobs.h" />
+    <ClInclude Include="simvarDefs.h" />
     <ClInclude Include="simvars.h" />
   </ItemGroup>
   <ItemGroup>

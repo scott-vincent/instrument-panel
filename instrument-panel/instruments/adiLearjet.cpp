@@ -215,11 +215,11 @@ void adiLearjet::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
 
-    // If power is off for a random amount of time ( between 5 - 7 mins ) then simulate gyro stopping
+    // If power is off for a random amount of time (between 5 - 7 mins) then simulate gyro stopping
     double timeDifference = 0;
     if (globals.electrics)
     {
@@ -259,7 +259,7 @@ void adiLearjet::update()
     }
     else
     {
-        float pitchTest = (float)((float)pitch * 3.6 / (42949672.96));
+        float pitchTest = (float)((float)simVars->adiPitch * 3.6 / (42949672.96));
         if (pitchTest - pitchAngle > 6)
         {
             pitchAngle += 5;
@@ -273,7 +273,7 @@ void adiLearjet::update()
             pitchAngle = pitchTest;
         }
 
-        float bankTest = (float)((float)bank * 3.6 / (42949672.96));
+        float bankTest = (float)((float)simVars->adiBank * 3.6 / (42949672.96));
         if (bankTest - bankAngle > 6 && bankTest - bankAngle < 180)
         {
             bankAngle += 5;
@@ -289,14 +289,13 @@ void adiLearjet::update()
 
         if (!globals.externalControls)
         {
-            adiCal = 0;
+            currentAdiCal = 0;
         }
-
-        if (currentAdiCal > adiCal)
+        else if (currentAdiCal > simVars->adiCal && currentAdiCal > -10)
         {
             currentAdiCal -= 1;
         }
-        else if (currentAdiCal < adiCal)
+        else if (currentAdiCal < simVars->adiCal && currentAdiCal < 10)
         {
             currentAdiCal += 1;
         }
@@ -308,46 +307,9 @@ void adiLearjet::update()
 /// </summary>
 void adiLearjet::addVars()
 {
-    globals.simVars->addVar(name, "Pitch", 0x0578, false, 65536L * 64L, 0);
-    globals.simVars->addVar(name, "Bank", 0x057C, false, 65536L * 64L, 0);
-    globals.simVars->addVar(name, "ADI Cal", 0x73E4, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool adiLearjet::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Pitch
-    if (!globals.simVars->FSUIPC_Read(0x0578, 4, &pitch, &result)) {
-        pitch = 0;
-        success = false;
-    }
-
-    // Bank
-    if (!globals.simVars->FSUIPC_Read(0x057C, 4, &bank, &result)) {
-        bank = 0;
-        success = false;
-    }
-
-    // ADI Cal (for manual calibration)
-    if (!globals.simVars->FSUIPC_Read(0x73E4, 2, &adiCal, &result)) {
-        adiCal = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Pitch", false, 65536L * 64L, 0);
+    globals.simVars->addVar(name, "Bank", false, 65536L * 64L, 0);
+    globals.simVars->addVar(name, "ADI Cal", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -358,7 +320,7 @@ void adiLearjet::addKnobs()
     calKnob = globals.hardwareKnobs->add(2, 3, -40, 40, 0);
 }
 
-bool adiLearjet::updateKnobs()
+void adiLearjet::updateKnobs()
 {
     DWORD result;
 
@@ -367,12 +329,10 @@ bool adiLearjet::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to variable (adjust for sensitivity)
-        adiCal = val / 2;
+        double adiCal = val / 2;
 
         // Update ADI calibration variable
-        if (!globals.simVars->FSUIPC_Write(0x73E4, 2, &adiCal, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        globals.simVars->write("adi cal", adiCal);
     }
 
     return true;

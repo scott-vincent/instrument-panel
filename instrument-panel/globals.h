@@ -25,8 +25,13 @@ struct globalVars
 
     char error[256] = {'\0'};
 
+    char dataLinkHost[64] = "127.0.0.1";
+    int dataLinkPort = 52020;
+
+    bool quit = false;
     bool arranging = false;
     bool simulating = false;
+    bool dataLinked = false;
     bool connected = false;
     bool electrics = false;
     bool externalControls = false;

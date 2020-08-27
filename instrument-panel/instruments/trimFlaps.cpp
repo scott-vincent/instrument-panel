@@ -59,12 +59,6 @@ void trimFlaps::resize()
     al_draw_scaled_bitmap(orig, 800, 24, 36, 36, 0, 0, 36 * scaleFactor, 36 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 5 = Not connected
-    bmp = al_create_bitmap(372 * scaleFactor, 50 * scaleFactor);
-    al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 800, 372, 50, 0, 0, 372 * scaleFactor, 50 * scaleFactor, 0);
-    addBitmap(bmp);
-
     al_set_target_backbuffer(globals.display);
 }
 
@@ -91,12 +85,6 @@ void trimFlaps::render()
 
     // Add flaps
     al_draw_bitmap(bitmaps[4], 501 * scaleFactor, (211 + flapsOffset) * scaleFactor, 0);
-
-    // Display 'Not Connected message'
-    if (!globals.connected)
-    {
-        al_draw_bitmap(bitmaps[5], 214 * scaleFactor, 650 * scaleFactor, 0);
-    }
 
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
@@ -127,10 +115,10 @@ void trimFlaps::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    trimOffset = trim * 2.0f;
+    trimOffset = simVars->tfTrim * 2.0f;
 
     if (trimOffset < -150) {
         trimOffset = -150;
@@ -139,7 +127,7 @@ void trimFlaps::update()
         trimOffset = 150;
     }
 
-    targetFlaps = flaps * 86.0f;
+    targetFlaps = simVars->tfFlaps * 86.0f;
 
     if (targetFlaps < 0) {
         targetFlaps = 0;
@@ -168,38 +156,8 @@ void trimFlaps::update()
 /// </summary>
 void trimFlaps::addVars()
 {
-    globals.simVars->addVar(name, "Trim", 0xf010, false, 1, 0);
-    globals.simVars->addVar(name, "Flaps", 0xf011, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool trimFlaps::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf010, 4, &trim, &result)) {
-        trim = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0xf011, 4, &flaps, &result)) {
-        flaps = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Trim", false, 1, 0);
+    globals.simVars->addVar(name, "Flaps", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -222,12 +180,10 @@ bool trimFlaps::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to trim (adjust for desired sensitivity)
-        trim = val;
+        double trim = val;
 
         // Update trim
-        if (!globals.simVars->FSUIPC_Write(0xf010, 4, &trim, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        globals.simVars->write("trim", trim);
     }
 
     // Read knob for flaps
@@ -235,12 +191,10 @@ bool trimFlaps::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to flaps (adjust for desired sensitivity)
-        flaps = val;
+        double flaps = val;
 
-        // Update trim
-        if (!globals.simVars->FSUIPC_Write(0xf011, 4, &flaps, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        // Update flaps
+        globals.simVars->write("flaps", flaps);
     }
 
     return true;

@@ -38,6 +38,18 @@ void annunciator::resize()
     al_draw_scaled_bitmap(orig, 0, 0, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
+    // 3 = No data link
+    bmp = al_create_bitmap(size, size / 4);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 200, 800, 200, 0, 0, size, size / 4, 0);
+    addBitmap(bmp);
+
+    // 4 = Not connected
+    bmp = al_create_bitmap(size, size / 4);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 400, 800, 200, 0, 0, size, size / 4, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -56,8 +68,20 @@ void annunciator::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Add main dial
-    al_draw_bitmap(bitmaps[2], 0, 0, 0);
+    if (!globals.dataLinked)
+    {
+        // 'No Data Link' message
+        al_draw_bitmap(bitmaps[3], 0, 0, 0);
+    }
+    else if (!globals.connected)
+    {
+        // 'Not Connected' message
+        al_draw_bitmap(bitmaps[4], 0, 0, 0);
+    }
+    else {
+        // Main display
+        al_draw_bitmap(bitmaps[2], 0, 0, 0);
+    }
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -82,10 +106,10 @@ void annunciator::update()
     }
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = instrumentVar / 100.0f;
+    angle = simVars->adiBank / 100.0f;
 }
 
 /// <summary>
@@ -93,30 +117,5 @@ void annunciator::update()
 /// </summary>
 void annunciator::addVars()
 {
-    globals.simVars->addVar(name, "Value", 0xf004, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool annunciator::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf0004, 4, &instrumentVar, &result)) {
-        instrumentVar = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    // globals.simVars->addVar(name, "Value", false, 1, 0);
 }

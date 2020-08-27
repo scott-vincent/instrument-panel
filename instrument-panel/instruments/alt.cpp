@@ -195,12 +195,23 @@ void alt::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
+    double pressure = simVars->altPressure1;
+    double units = simVars->altUnits;
+
     // Calculate what to add to pressure to keep needle in the correct position.
     long altitudeCorrection = 0;
     if (globals.externalControls) {
+        double pressure2 = simVars->altPressure2;
+        if (pressure2 < 15168) {
+            pressure2 = 15168;
+        }
+        else if (pressure2 > 17344) {
+            pressure2 = 17344;
+        }
+
         altitudeCorrection = (long)(((((float)pressure2 / 0.3386389) / 16) - (((float)16208 / 0.3386389) / 16)) * 10);
         pressure = pressure2;
     }
@@ -216,16 +227,16 @@ void alt::update()
         units = 2;
 
         // If altitude is in meters then convert to feet
-        altitudeTarget = (long)((float)altitude2 * 3.28084);
+        altitudeTarget = (long)((float)simVars->altAltitude2 * 3.28084);
     }
     else
     {
         if (units == 0 || units == 1) {
-            altitudeTarget = altitude1;
+            altitudeTarget = simVars->altAltitude1;
         }
         else if (units == 2) {
             //if altitude is in meters then convert to feet
-            altitudeTarget = (long)((float)altitude1 * 3.28084);
+            altitudeTarget = (long)((float)simVars->altAltitude1 * 3.28084);
         }
     }
 
@@ -258,74 +269,11 @@ void alt::update()
 void alt::addVars()
 {
     // Add 0x8000 to all vars for now so that Learjet altimeter can be displayed at the same time
-    globals.simVars->addVar(name, "Pressure 1", 0x0330 + 0x8000, false, 10, 16208);
-    globals.simVars->addVar(name, "Pressure 2", 0x73E2 + 0x8000, false, 10, 16208);
-    globals.simVars->addVar(name, "Altitude Units (1=Ft, 2=M)", 0x0C18 + 0x8000, false, 1, 2);
-    globals.simVars->addVar(name, "Altitude 1", 0x3324 + 0x8000, false, 1, 0);
-    globals.simVars->addVar(name, "Altitude 2", 0x34B0 + 0x8000, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool alt::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x0330 + 0x8000, 2, &pressure, &result)) {
-        pressure = 16402;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0x0C18 + 0x8000, 2, &units, &result)) {
-        units = 2;
-        return false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0x3324 + 0x8000, 4, &altitude1, &result)) {
-        altitude1 = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0x34B0 + 0x8000, 8, &altitude2, &result)) {
-        altitude2 = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    // If adjusting pressure cal manually rather than reading FS primus cal knob setting
-    if (globals.externalControls)
-    {
-        // Read pressure as hPa * 16
-        if (!globals.simVars->FSUIPC_Read(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            pressure2 = 16208;
-            success = false;
-        }
-
-        if (pressure2 < 15168) {
-            pressure2 = 15168;
-            if (!globals.simVars->FSUIPC_Write(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-                success = false;
-            }
-        }
-        else if (pressure2 > 17344) {
-            pressure2 = 17344;
-            if (!globals.simVars->FSUIPC_Write(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-                success = false;
-            }
-        }
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Pressure 1", false, 10, 16208);
+    globals.simVars->addVar(name, "Pressure 2", false, 10, 16208);
+    globals.simVars->addVar(name, "Altitude Units", false, 1, 2);
+    globals.simVars->addVar(name, "Altitude 1", false, 1, 0);
+    globals.simVars->addVar(name, "Altitude 2", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -345,12 +293,10 @@ bool alt::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to pressure (adjust for desired sensitivity)
-        pressure2 = val;
+        double pressure2 = val;
 
         // Update manual pressure adjust
-        if (!globals.simVars->FSUIPC_Write(0x73E2 + 0x8000, 2, &pressure2, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        globals.simVars->write("pressure2", pressure2);
     }
 
     return true;

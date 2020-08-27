@@ -8,13 +8,6 @@ class altLearjet : public instrument
 private:
     float scaleFactor;
 
-    // FlightSim vars (external variables that influence this instrument)
-    unsigned short pressure;
-    unsigned short pressure2;
-    short units;
-    long altitude1;
-    double altitude2;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     char hpa[5];
     char inhg[5];
@@ -34,7 +27,6 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
 };
 
 #endif // _ALT_LEARJET_H

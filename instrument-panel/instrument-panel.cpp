@@ -69,7 +69,7 @@
 #include <Windows.h>
 #else
  // Raspberry Pi only
-#include <knobs.h>
+#include "knobs.h"
 #endif
 #include <list>
 #include <allegro5/allegro.h>
@@ -97,26 +97,41 @@
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
-const bool Debug = false;
+const bool Debug = true;
 
 struct globalVars globals;
 
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_EVENT_QUEUE* eventQueue = NULL;
-bool finish = false;
 std::list<instrument*> instruments;
+char lastError[256] = "\0";
+int errorPersist;
 
+/// <summary>
+/// Display an error message
+/// </summary>
+void showError(const char* msg)
+{
+    printf("%s\n", msg);
+    strcpy(globals.error, msg);
+
+#ifdef _WIN32
+    // Show message in IDE output window
+    OutputDebugStringA(msg);
+#endif
+}
 
 /// <summary>
 /// Display an error message and terminate
 /// </summary>
 void fatalError(const char* msg)
 {
-    printf("%s\n", msg);
+    showError(msg);
 
 #ifdef _WIN32
-    // Show message in IDE output window
-    OutputDebugStringA(msg);
+    Sleep(5000);
+#else
+    usleep(5000000);
 #endif
 
     printf("Exiting\n");
@@ -177,7 +192,7 @@ void init()
 
     // Resolution is ignored for fullscreen window (uses existing desktop resolution)
     // but fails on Rasberry Pi if set to 0!
-    if ((globals.display = al_create_display(1200, 900)) == NULL) {
+    if ((globals.display = al_create_display(1200, 800)) == NULL) {
             fatalError("Failed to create display");
     }
 
@@ -236,58 +251,20 @@ void cleanup()
 /// </summary>
 void addCommon()
 {
-    globals.simVars->addVar("Common", "Electrics", 0x0B6A, true, 1, 0);
-    globals.simVars->addVar("Common", "External Controls", 0x73E0, true, 1, 1);
+    // globals.simVars->addVar("Common", "Electrics", true, 1, 0);
+    // globals.simVars->addVar("Common", "External Controls", true, 1, 1);
 }
 
 /// <summary>
 /// Fetch latest values of common variables
 /// </summary>
-bool updateCommon()
+void updateCommon()
 {
-    bool success = true;
-    DWORD dwResult;
-
     // Electrics check
-    unsigned char charVal;
-    if (!globals.simVars->FSUIPC_Read(0x0B6A, 1, &charVal, &dwResult))
-    {
-        globals.electrics = false;
-        success = false;
-    }
-    else
-    {
-        globals.electrics = (charVal != 1);
-    }
-
-    // APU_Status check
-    if (!globals.simVars->FSUIPC_Read(0x0B52, 1, &charVal, &dwResult))
-    {
-        success = false;
-    }
-    else if (charVal == 1)
-    {
-        globals.electrics = true;
-    }
+    globals.electrics = true;
 
     // Check if FS or external controls
-    unsigned short fs_ext;
-    if (!globals.simVars->FSUIPC_Read(0x73E0, 2, &fs_ext, &dwResult))
-    {
-        globals.externalControls = true;
-        success = false;
-    }
-    else
-    {
-        globals.externalControls = (fs_ext == 1);
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&dwResult))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.externalControls = true;
 }
 
 /// <summary>
@@ -296,11 +273,64 @@ bool updateCommon()
 void doUpdate()
 {
     // Update variables common to all instruments
-    globals.connected = updateCommon();
+    updateCommon();
 
     // Update all instruments
     for (auto const& instrument : instruments) {
         instrument->update();
+    }
+}
+
+/// <summary>
+/// Try to show any messages on the annunciator display 
+/// </summary>
+void getMessagePos(int *x, int *y, int *width)
+{
+    *x = 0;
+    *y = globals.displayHeight - 60;
+    *width = 300;
+
+    // Do we have an annunciator?
+    for (std::list<instrument*>::iterator it = instruments.begin(); it != instruments.end(); ++it) {
+        instrument* inst = *it;
+        if (_stricmp(inst->name, "Annunciator") == 0) {
+            *x = inst->xPos;
+            *y = inst->yPos;
+            *width = inst->size;
+            return;
+        }
+    }
+}
+
+/// <summary>
+/// Clears an area of the screen and shows a message
+/// </summary>
+void showMessage(ALLEGRO_COLOR backgroundColour, const char *message)
+{
+    int x, y, width;
+    getMessagePos(&x, &y, &width);
+
+    al_set_clipping_rectangle(x, y, width, width / 4);
+    al_clear_to_color(backgroundColour);
+    al_set_clipping_rectangle(0, 0, globals.displayWidth, globals.displayHeight);
+
+    int splitPos = 0;
+    if (strlen(message) > 34) {
+        splitPos = 34;
+        while (splitPos > 0 && message[splitPos] != ' ') {
+            splitPos--;
+        }
+    }
+
+    if (splitPos > 0) {
+        char msg[256];
+        strcpy(msg, message);
+        msg[splitPos] = '\0';
+        al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), x + 15, y + 15, 0, msg);
+        al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), x + 15, y + 30, 0, &msg[splitPos + 1]);
+    }
+    else {
+        al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), x + 15, y + 15, 0, message);
     }
 }
 
@@ -317,14 +347,28 @@ void doRender()
         instrument->render();
     }
 
-    // Display variable if required
-    if (globals.arranging || globals.simulating) {
-        globals.simVars->view();
-    }
-
     // Display any error message
     if (globals.error[0] != '\0') {
-        al_draw_text(globals.font, al_map_rgb(0x50, 0x50, 0x50), 10, globals.displayHeight - 30, 0, globals.error);
+        showMessage(al_map_rgb(0x50, 0x10, 0x10), globals.error);
+
+        if (strcmp(lastError, globals.error) == 0) {
+            // Clear error message after a short delay
+            if (errorPersist > 0) {
+                errorPersist--;
+            }
+            else {
+                globals.error[0] = '\0';
+                lastError[0] = '\0';
+            }
+        }
+        else {
+            strcpy(lastError, globals.error);
+            errorPersist = 150;
+        }
+    }
+    else if (globals.arranging || globals.simulating) {
+        char* text = globals.simVars->view();
+        showMessage(al_map_rgb(0x10, 0x10, 0x50), text);
     }
 }
 
@@ -381,9 +425,6 @@ void doKeypress(ALLEGRO_EVENT *event)
         if (globals.arranging) {
             globals.simulating = false;
         }
-        else {
-            globals.simVars->viewClear();
-        }
         break;
 
     case ALLEGRO_KEY_V:
@@ -391,9 +432,6 @@ void doKeypress(ALLEGRO_EVENT *event)
         globals.simulating = !globals.simulating;
         if (globals.simulating) {
             globals.arranging = false;
-        }
-        else {
-            globals.simVars->viewClear();
         }
         break;
 
@@ -414,7 +452,7 @@ void doKeypress(ALLEGRO_EVENT *event)
 
     case ALLEGRO_KEY_ESCAPE:
         // Quit program
-        finish = true;
+        globals.quit = true;
         break;
     }
 
@@ -510,31 +548,25 @@ int main()
     ALLEGRO_EVENT event;
 
     al_start_timer(timer);
-    while (true)
-    {
+    while (!globals.quit) {
         al_wait_for_event(eventQueue, &event);
 
-        switch (event.type)
-        {
-        case ALLEGRO_EVENT_TIMER:
-            doUpdate();
-            redraw = true;
-            break;
+        switch (event.type) {
+            case ALLEGRO_EVENT_TIMER:
+                doUpdate();
+                redraw = true;
+                break;
 
-        case ALLEGRO_EVENT_KEY_CHAR:
-            doKeypress(&event);
-            break;
+            case ALLEGRO_EVENT_KEY_DOWN:
+                doKeypress(&event);
+                break;
 
-        case ALLEGRO_EVENT_DISPLAY_CLOSE:
-            finish = true;
-            break;
+            case ALLEGRO_EVENT_DISPLAY_CLOSE:
+                globals.quit = true;
+                break;
         }
 
-        if (finish)
-            break;
-
-        if (redraw && al_is_event_queue_empty(eventQueue))
-        {
+        if (redraw && al_is_event_queue_empty(eventQueue) && !globals.quit) {
             doRender();
             al_flip_display();
             redraw = false;
@@ -545,6 +577,12 @@ int main()
     if (globals.simVars) {
         delete globals.simVars;
     }
+
+#ifndef _WIN32
+    if (globals.hardwareKnobs) {
+        delete globals.hardwareKnobs;
+    }
+#endif
 
     cleanup();
     return 0;

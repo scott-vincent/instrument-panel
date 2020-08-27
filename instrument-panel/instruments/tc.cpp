@@ -134,10 +134,10 @@ void tc::update()
     }
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    planeAngle = turn / 10.0f;
+    planeAngle = simVars->tcTurn / 10.0f;
 
     if (planeAngle < -23) {
         planeAngle = -23;
@@ -147,7 +147,7 @@ void tc::update()
     }
 
     // Need to turn ball by -90 degrees = -64
-    targetAngle = (slip / 20.0f) - 64.0f;
+    targetAngle = (simVars->tcSlip / 20.0f) - 64.0f;
 
     float diff = abs(targetAngle - ballAngle);
 
@@ -187,36 +187,6 @@ void tc::update()
 /// </summary>
 void tc::addVars()
 {
-    globals.simVars->addVar(name, "Turn", 0xf002, false, 4, 0);
-    globals.simVars->addVar(name, "Slip", 0xf003, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool tc::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf002, 4, &turn, &result)) {
-        turn = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0xf003, 4, &slip, &result)) {
-        slip = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Turn", false, 4, 0);
+    globals.simVars->addVar(name, "Slip", false, 1, 0);
 }

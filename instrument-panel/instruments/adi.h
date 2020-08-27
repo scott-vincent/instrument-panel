@@ -8,11 +8,6 @@ class adi : public instrument
 private:
     float scaleFactor;
 
-    // FlightSim vars (external variables that influence this instrument)
-    long pitch;
-    long bank;
-    signed short adiCal;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     float bankAngle = 0;
     float pitchAngle = 0;
@@ -29,7 +24,6 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
     bool updateKnobs();
 
 };

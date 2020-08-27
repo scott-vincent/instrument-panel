@@ -82,10 +82,10 @@ void vac::update()
     }
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = instrumentVar / 100.0f;
+    angle = simVars->adiBank / 100.0f;
 }
 
 /// <summary>
@@ -93,30 +93,5 @@ void vac::update()
 /// </summary>
 void vac::addVars()
 {
-    globals.simVars->addVar(name, "Value", 0xf014, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool vac::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf014, 4, &instrumentVar, &result)) {
-        instrumentVar = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    // globals.simVars->addVar(name, "Value", false, 1, 0);
 }

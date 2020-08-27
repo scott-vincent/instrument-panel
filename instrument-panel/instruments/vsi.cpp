@@ -108,10 +108,10 @@ void vsi::update()
     }
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    targetAngle = verticalSpeed / 10.f;
+    targetAngle = simVars->vsiVerticalSpeed / 10.f;
 
     float diff = abs(targetAngle - angle);
 
@@ -143,30 +143,5 @@ void vsi::update()
 /// </summary>
 void vsi::addVars()
 {
-    globals.simVars->addVar(name, "Vertical Speed", 0xf001, false, 4, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool vsi::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Value from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0xf001, 4, &verticalSpeed, &result)) {
-        verticalSpeed = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Vertical Speed", false, 4, 0);
 }

@@ -8,10 +8,6 @@ class asiLearjet : public instrument
 private:
     float scaleFactor = 1.0f;
 
-    // FlightSim vars (external variables that influence this instrument)
-    long airspeed;
-    unsigned short machSpeed;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     float airspeedAngle = 0;
     float targetAirspeedAngle;
@@ -26,7 +22,6 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
 };
 
 #endif // _ASI_LEARJET_H

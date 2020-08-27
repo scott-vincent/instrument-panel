@@ -97,7 +97,7 @@ void digitalClock::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
 }
@@ -107,19 +107,7 @@ void digitalClock::update()
 /// </summary>
 void digitalClock::addVars()
 {
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool digitalClock::fetchVars()
-{
-    bool success = true;
-
-    return success;
+    // globals.simVars->addVar(name, "Value", false, 1, 0);
 }
 
 #ifndef _WIN32

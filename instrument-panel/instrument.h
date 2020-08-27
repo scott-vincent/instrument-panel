@@ -16,14 +16,15 @@ const float AngleFactor = 2.0f * ALLEGRO_PI / 256.0f;
 class instrument
 {
 protected:
-    char name[256];
-    int xPos = 0;
-    int yPos = 0;
-    int size = 0;
     int bitmapCount = 0;
     ALLEGRO_BITMAP* bitmaps[MaxBitmaps] = { NULL };
 
 public:
+    char name[256];
+    int xPos = 0;
+    int yPos = 0;
+    int size = 0;
+
     instrument();
     instrument(int xPos, int yPos, int size);
     ~instrument();

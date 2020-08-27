@@ -153,10 +153,10 @@ void asiLearjet::update()
     }
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate airspeed angle
-    float speed = airspeed / 1280.0f;
+    float speed = simVars->asiAirspeed / 1280.0f;
 
     if (speed > 40) {
         targetAirspeedAngle = 233.65;
@@ -186,7 +186,7 @@ void asiLearjet::update()
     }
 
     // Calculate mach angle
-    speed = machSpeed / 20480.0f;
+    speed = simVars->asiMachSpeed / 20480.0f;
 
     if (speed > 0.3) {
         machAngle = 256 - ((((251.3 * log(speed) + 446.1) + 4.02) * 0.71111111111111) - airspeedAngle);
@@ -209,37 +209,6 @@ void asiLearjet::update()
 /// </summary>
 void asiLearjet::addVars()
 {
-    globals.simVars->addVar(name, "Airspeed", 0x02BC, false, 100, 0);
-    globals.simVars->addVar(name, "Mach Speed", 0x11C6, false, 100, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool asiLearjet::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Indicated Airspeed Value
-    if (!globals.simVars->FSUIPC_Read(0x02BC, 4, &airspeed, &result)) {
-        airspeed = 0;
-        success = false;
-    }
-
-    // Mach speed Value
-    if (!globals.simVars->FSUIPC_Read(0x11C6, 2, &machSpeed, &result)) {
-        machSpeed = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Airspeed", false, 100, 0);
+    globals.simVars->addVar(name, "Mach Speed", false, 100, 0);
 }

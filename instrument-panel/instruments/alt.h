@@ -8,13 +8,6 @@ class alt : public instrument
 private:
     float scaleFactor;
 
-    // FlightSim vars (external variables that influence this instrument)
-    unsigned short pressure;
-    unsigned short pressure2;
-    short units;
-    long altitude1;
-    double altitude2;
-
     // Instrument values (caclulated from variables and needed to draw the instrument)
     float mb;            // millibars
     float inhg;          // inches of mercury

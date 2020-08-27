@@ -146,10 +146,12 @@ void asi::update()
 #endif
 
     // Get latest FlightSim variables
-    globals.connected = fetchVars();
+    SimVars* simVars = &globals.simVars->simVars;
+
+    airspeedCal = simVars->asiAirspeedCal;
 
     // Calculate values - Not a linear scale!
-    airspeedKnots = airspeed / 128;
+    airspeedKnots = simVars->asiAirspeed / 128;
     if (airspeedKnots < 40) {
         airspeedAngle = airspeedKnots * 0.013f;
     }
@@ -173,38 +175,8 @@ void asi::update()
 void asi::addVars()
 {
     // Add 0x8000 to all vars for now so that Learjet asi can be displayed at the same time
-    globals.simVars->addVar(name, "Airspeed", 0x02BC + 0x8000, false, 128, 0);
-    globals.simVars->addVar(name, "Airspeed Calibration", 0xF000, false, 1, 0);
-}
-
-/// <summary>
-/// Use SDK to obtain latest values of all flightsim variables
-/// that affect this instrument.
-/// 
-/// Returns false if flightsim is not connected.
-/// </summary>
-bool asi::fetchVars()
-{
-    bool success = true;
-    DWORD result;
-
-    // Values from FlightSim
-    if (!globals.simVars->FSUIPC_Read(0x02BC + 0x8000, 4, &airspeed, &result)) {
-        airspeed = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Read(0xF000, 2, &airspeedCal, &result)) {
-        airspeedCal = 0;
-        success = false;
-    }
-
-    if (!globals.simVars->FSUIPC_Process(&result))
-    {
-        success = false;
-    }
-
-    return success;
+    globals.simVars->addVar(name, "Airspeed", false, 128, 0);
+    globals.simVars->addVar(name, "Airspeed Calibration", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -224,12 +196,10 @@ bool asi::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to adjusted airspeed (adjust for desired sensitivity)
-        airspeedCal = val / 10;
+        double airspeedCal = val / 10;
 
         // Update airspeed calibration
-        if (!globals.simVars->FSUIPC_Write(0xF000, 2, &airspeedCal, &result) || !globals.simVars->FSUIPC_Process(&result)) {
-            return false;
-        }
+        globals.simVars->write("airspeed cal", airspeedCal);
     }
 
     return true;

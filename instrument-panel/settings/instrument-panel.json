@@ -1,4 +1,8 @@
 {
+  "Data Link": {
+    "Host": "127.0.0.1",
+    "Port": 52020
+  },
   "ASI Learjet": {
     "Enabled": false,
     "Position X": 530,
