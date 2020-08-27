@@ -6,12 +6,20 @@ An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020. It can run on either a PC or a
 Raspberry Pi.
 
-This is a work in progress but the idea is to read the variables from the flight
-simulator over the network. A small program will be required on the host PC to obtain
-these variables using the FS2020 SDK and make them available over the LAN.
+It requires the companion program from here
 
-The simvars part of this program will be enhanced to read them from the LAN. Currently
-the values are just simulated.
+  https://github.com/scott-vincent/instrument-data-link
+
+The companion program runs on the same host as MS FS2020 and collects all
+the data required by the instrument panel.
+
+The instrument panel connects to the instrument-data-link over your network and
+receives the data at regular intervals so that the instruments can be drawn with
+up-to-date values.
+
+This program is a work in progress, currently the values are just simulated.
+The simvars part of this program is being enhanced so that it is fully
+operational with instrument-data-link which is also a work in progress.
 
 This program was heavily inspired by Dave Ault and contains original artwork by him.
 
