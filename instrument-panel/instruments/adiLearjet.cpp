@@ -182,7 +182,7 @@ void adiLearjet::render()
     // Display 'Not Connected message'
     if (!globals.connected)
     {
-        al_draw_scaled_bitmap(bitmaps[0], 506, 2198, 240, 84, 162 * scaleFactor, 318 * scaleFactor, 480 * scaleFactor, 168 * scaleFactor, 0);
+        //al_draw_scaled_bitmap(bitmaps[0], 506, 2198, 240, 84, 162 * scaleFactor, 318 * scaleFactor, 480 * scaleFactor, 168 * scaleFactor, 0);
     }
 
     // Position dest bitmap on screen

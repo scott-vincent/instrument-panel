@@ -34,7 +34,9 @@ simvars::simvars()
 
 simvars::~simvars()
 {
-    saveSettings();
+    //if (strlen(globals.error) == 0) {
+        saveSettings();
+    //}
 
     if (dataLinkThread) {
         // Wait for thread to exit
@@ -80,6 +82,10 @@ void simvars::loadSettings()
                 if (level == 1) {
                     strcpy(group, name);
                     name[0] = '\0';
+                }
+                else if (strcmp(name, "Centre") == 0) {
+                    // Ignore "Centre"
+                    while (buf[pos++] != '\n');
                 }
                 readingName = false;
             }
@@ -225,6 +231,21 @@ int simvars::settingValue(const char* value)
     }
 }
 
+/// <summary>
+/// Show offset of centre of instrument from centre of monitor in mm.
+/// Adjust the formula to suit your monitor size. This is only required
+/// if you are going to place plywood over your monitor and nedd to know
+/// where the cutouts should be positioned to match your instrument layout.
+/// </summary>
+void simvars::showCentre(FILE *outfile, int x, int y, int size)
+{
+    float mX = (x + (size / 2.0) - (1920.0 / 2.0)) / 3.654;
+    float mY = (y + (size / 2.0) - (1080.0 / 2.0)) / 3.654;
+
+    fprintf(outfile, ",\n");
+    fprintf(outfile, "    \"Centre\": \"cx%+.1fmm,cy%+.1fmm\"", mX, mY);
+}
+
 void simvars::saveGroup(FILE *outfile, const char* group)
 {
     bool foundGroup = false;
@@ -242,6 +263,9 @@ void simvars::saveGroup(FILE *outfile, const char* group)
 
             // Only settings (negative nums) should be saved to the file
             if (varOffset[idx] < 0) {
+                //if (strcmp(varName[idx], "Position X") == 0) {
+                //    showCentre(outfile, varVal[idx], varVal[idx + 1], varVal[idx + 2]);
+                //}
                 fprintf(outfile, ",\n");
                 fprintf(outfile, "    \"%s\": %.0f", varName[idx], varVal[idx]);
             }

@@ -97,7 +97,7 @@
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
-const bool Debug = true;
+const bool Debug = false;
 
 struct globalVars globals;
 
