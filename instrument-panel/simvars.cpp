@@ -34,9 +34,9 @@ simvars::simvars()
 
 simvars::~simvars()
 {
-    //if (strlen(globals.error) == 0) {
+    if (strlen(globals.error) == 0) {
         saveSettings();
-    //}
+    }
 
     if (dataLinkThread) {
         // Wait for thread to exit
@@ -237,10 +237,16 @@ int simvars::settingValue(const char* value)
 /// if you are going to place plywood over your monitor and nedd to know
 /// where the cutouts should be positioned to match your instrument layout.
 /// </summary>
-void simvars::showCentre(FILE *outfile, int x, int y, int size)
+void simvars::showCentre(FILE *outfile, const char *group, int x, int y, int size)
 {
+    float sizeY = size;
+
+    if (_stricmp(group, "Annunciator") == 0) {
+        sizeY = size / 4;
+    }
+
     float mX = (x + (size / 2.0) - (1920.0 / 2.0)) / 3.654;
-    float mY = (y + (size / 2.0) - (1080.0 / 2.0)) / 3.654;
+    float mY = (y + (sizeY / 2.0) - (1080.0 / 2.0)) / 3.654;
 
     fprintf(outfile, ",\n");
     fprintf(outfile, "    \"Centre\": \"cx%+.1fmm,cy%+.1fmm\"", mX, mY);
@@ -263,9 +269,9 @@ void simvars::saveGroup(FILE *outfile, const char* group)
 
             // Only settings (negative nums) should be saved to the file
             if (varOffset[idx] < 0) {
-                //if (strcmp(varName[idx], "Position X") == 0) {
-                //    showCentre(outfile, varVal[idx], varVal[idx + 1], varVal[idx + 2]);
-                //}
+                if (_stricmp(varName[idx], "Position X") == 0) {
+                    showCentre(outfile, group, varVal[idx], varVal[idx + 1], varVal[idx + 2]);
+                }
                 fprintf(outfile, ",\n");
                 fprintf(outfile, "    \"%s\": %.0f", varName[idx], varVal[idx]);
             }

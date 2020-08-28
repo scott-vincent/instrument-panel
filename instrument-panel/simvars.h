@@ -50,7 +50,7 @@ private:
     void saveSettings();
     int settingIndex(const char* attribName);
     int settingValue(const char* value);
-    void showCentre(FILE* outfile, int x, int y, int size);
+    void showCentre(FILE* outfile, const char* group, int x, int y, int size);
     void saveGroup(FILE* outfile, const char* group);
     int getVarIdx(int num);
     bool isCorrectType(int idx);
