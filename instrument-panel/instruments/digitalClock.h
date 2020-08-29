@@ -9,9 +9,19 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    int button1;
-    int button2;
-    int button3;
+    int topView = 0;
+    int bottomView = 0;
+    int busVoltsx10;
+    int tempFx10;
+    int tempCx10;
+    int utcHours;
+    int utcMins;
+    int localHours;
+    int localMins;
+    int flightHours;
+    int flightMins;
+    int elapsedHours;
+    int elapsedMins;
 
     // Hardware knobs
     int clockButton1 = -1;
@@ -24,6 +34,8 @@ public:
     void update();
 
 private:
+    void drawTop(int digit1, int digit2, int digit3, int letter);
+    void drawBottom(int digit1, int digit2, int digit3, int digit4);
     void resize();
     void addVars();
     bool updateKnobs();

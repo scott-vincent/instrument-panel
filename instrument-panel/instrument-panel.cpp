@@ -363,7 +363,7 @@ void doRender()
         }
         else {
             strcpy(lastError, globals.error);
-            errorPersist = 150;
+            errorPersist = 200;
         }
     }
     else if (globals.arranging || globals.simulating) {

@@ -47,6 +47,90 @@ void digitalClock::resize()
     al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
     addBitmap(bmp);
 
+    // 3 = Selector arrow
+    bmp = al_create_bitmap(52 * scaleFactor, 30 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 0, 52, 30, 0, 0, 52 * scaleFactor, 30 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 4 = Digit 0
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 5 = Digit 1
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 94, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 6 = Digit 2
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 188, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 7 = Digit 3
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 282, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 8 = Digit 4
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 376, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 9 = Digit 5
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 470, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 10 = Digit 6
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 564, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 11 = Digit 7
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 658, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 12 = Digit 8
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 752, 800, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 13 = Digit 9
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 666, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 14 = Letter E
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 264, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 15 = Letter F
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 398, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 16 = Letter C
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 532, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -68,8 +152,93 @@ void digitalClock::render()
     // Add main panel
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
+    // Add selector arrow
+    int arrowX;
+    int arrowY;
+
+    if (bottomView == 0 || bottomView == 2) {
+        arrowX = 111;
+    }
+    else {
+        arrowX = 196;
+    }
+
+    if (bottomView < 2) {
+        arrowY = 464;
+    }
+    else {
+        arrowY = 550;
+    }
+
+    al_draw_bitmap(bitmaps[3], arrowX * scaleFactor, arrowY * scaleFactor, 0);
+
+    switch (topView) {
+    case 0:
+        // Bus volts
+        drawTop(busVoltsx10 / 100, (busVoltsx10 / 10) % 10, busVoltsx10 % 10, 0);
+        break;
+
+    case 1:
+        // Temp Fahrenheit
+        drawTop(tempFx10 / 100, (tempFx10 / 10) % 10, tempFx10 % 10, 1);
+        break;
+
+    case 2:
+        // Temp Celsius
+        drawTop(tempCx10 / 100, (tempCx10 / 10) % 10, tempCx10 % 10, 2);
+        break;
+    }
+
+    switch (bottomView) {
+    case 0:
+        // UTC
+        drawBottom(utcHours / 10, utcHours % 10, utcMins / 10, utcMins % 10);
+        break;
+
+    case 1:
+        // Local time
+        drawBottom(localHours / 10, localHours % 10, localMins / 10, localMins % 10);
+        break;
+
+    case 2:
+        // Flight time
+        drawBottom(flightHours / 10, flightHours % 10, flightMins / 10, flightMins % 10);
+        break;
+
+    case 3:
+        // Elapsed time (stopwatch)
+        drawBottom(elapsedHours / 10, elapsedHours % 10, elapsedMins / 10, elapsedMins % 10);
+        break;
+    }
+
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+}
+
+/// <summary>
+/// Draw top row of digits + letter
+/// </summary>
+void digitalClock::drawTop(int digit1, int digit2, int digit3, int letter)
+{
+    int y = 255 * scaleFactor;
+
+    al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[4 + digit2], 289 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[4 + digit3], 417 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[14 + letter], 519 * scaleFactor, y, 0);
+}
+
+/// <summary>
+/// Draw bottom row of digits
+/// </summary>
+void digitalClock::drawBottom(int digit1, int digit2, int digit3, int digit4)
+{
+    int y = 430 * scaleFactor;
+
+    al_draw_bitmap(bitmaps[4 + digit1], 277 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[4 + digit2], 379 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[4 + digit3], 507 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[4 + digit4], 609 * scaleFactor, y, 0);
 }
 
 /// <summary>
@@ -100,6 +269,17 @@ void digitalClock::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
+    busVoltsx10 = 236;
+    tempFx10 = 745;
+    tempCx10 = 262;
+    utcHours = 11;
+    utcMins = 34;
+    localHours = 12;
+    localMins = 34;
+    flightHours = 1;
+    flightMins = 17;
+    elapsedHours = 0;
+    elapsedMins = 0;
 }
 
 /// <summary>
