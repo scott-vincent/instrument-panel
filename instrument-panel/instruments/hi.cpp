@@ -166,11 +166,11 @@ void hi::updateKnobs()
     int val = globals.hardwareKnobs->read(hdgKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
+        // Convert knob value to heading (adjust for desired sensitivity)
         double headingBug = val;
 
         // Update heading bug variable
-        globals.simVars->write("heading bug", headingBug);
+        //globals.simVars->write("heading bug", headingBug);
     }
 }
 
