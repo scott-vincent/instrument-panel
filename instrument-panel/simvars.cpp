@@ -273,7 +273,7 @@ void simvars::saveGroup(FILE *outfile, const char* group)
             // Only settings (negative nums) should be saved to the file
             if (varOffset[idx] < 0) {
                 if (_stricmp(varName[idx], "Position X") == 0) {
-                    showCentre(outfile, group, varVal[idx], varVal[idx + 1], varVal[idx + 2]);
+                    //showCentre(outfile, group, varVal[idx], varVal[idx + 1], varVal[idx + 2]);
                 }
                 fprintf(outfile, ",\n");
                 fprintf(outfile, "    \"%s\": %.0f", varName[idx], varVal[idx]);
