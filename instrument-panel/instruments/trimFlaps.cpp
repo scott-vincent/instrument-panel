@@ -118,7 +118,7 @@ void trimFlaps::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    trimOffset = simVars->tfTrim * 2.0f;
+    trimOffset = simVars->tfElevatorTrim * 2.0f;
 
     if (trimOffset < -150) {
         trimOffset = -150;
@@ -127,23 +127,16 @@ void trimFlaps::update()
         trimOffset = 150;
     }
 
-    targetFlaps = simVars->tfFlaps * 86.0f;
+    targetFlaps = 344.0 * simVars->tfFlapsIndex / (simVars->tfFlapsCount - 1);
 
-    if (targetFlaps < 0) {
-        targetFlaps = 0;
-    }
-    else if (targetFlaps > 344) {
-        targetFlaps = 344;
-    }
+    double diff = abs(targetFlaps - flapsOffset);
 
-    float diff = abs(targetFlaps - flapsOffset);
-
-    if (diff > 4.0f) {
+    if (diff > 4.0) {
         if (flapsOffset < targetFlaps) {
-            flapsOffset += 4.0f;
+            flapsOffset += 4.0;
         }
         else {
-            flapsOffset -= 4.0f;
+            flapsOffset -= 4.0;
         }
     }
     else {
@@ -156,8 +149,9 @@ void trimFlaps::update()
 /// </summary>
 void trimFlaps::addVars()
 {
-    globals.simVars->addVar(name, "Trim", false, 1, 0);
-    globals.simVars->addVar(name, "Flaps", false, 1, 0);
+    globals.simVars->addVar(name, "Elevator Trim Position", false, 1, 0);
+    globals.simVars->addVar(name, "Flaps Num Handle Positions", false, 1, 0);
+    globals.simVars->addVar(name, "Flaps Handle Index", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -190,7 +184,7 @@ void trimFlaps::updateKnobs()
         double flaps = val;
 
         // Update flaps
-        globals.simVars->write("flaps", flaps);
+        //globals.simVars->write("flaps Handle Index", flaps);
     }
 }
 

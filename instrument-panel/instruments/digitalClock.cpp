@@ -269,15 +269,15 @@ void digitalClock::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    busVoltsx10 = 236;
-    tempFx10 = 745;
-    tempCx10 = 262;
-    utcHours = 11;
-    utcMins = 34;
-    localHours = 12;
-    localMins = 34;
-    flightHours = 1;
-    flightMins = 17;
+    busVoltsx10 = simVars->busVoltage * 10;
+    tempFx10 = simVars->tempC * 338.0;
+    tempCx10 = simVars->tempC * 10.0;
+    utcHours = simVars->utcSeconds / 3600;
+    utcMins = (simVars->utcSeconds - utcHours * 3600.0) / 60;
+    localHours = simVars->localSeconds / 3600;
+    localMins = (simVars->localSeconds - localHours * 3600.0) / 60;
+    flightHours = simVars->flightSeconds / 3600;
+    flightMins = (simVars->flightSeconds - flightHours * 3600.0) / 60;
     elapsedHours = 0;
     elapsedMins = 0;
 }
@@ -287,7 +287,10 @@ void digitalClock::update()
 /// </summary>
 void digitalClock::addVars()
 {
-    // globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "Zulu Time", false, 60, 43200);
+    globals.simVars->addVar(name, "Local Time", false, 60, 46800);
+    globals.simVars->addVar(name, "Absolute Time", false, 60, 0);
+    globals.simVars->addVar(name, "Bus Voltage", false, 0.1, 23.7);
 }
 
 #ifndef _WIN32

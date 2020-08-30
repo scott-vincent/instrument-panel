@@ -9,8 +9,8 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float angle;
-    float bugAngle;
+    double angle;
+    double bugAngle;
 
     // Hardware knobs
     int hdgKnob = -1;

@@ -9,10 +9,10 @@ private:
     float scaleFactor = 1.0f;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float airspeedAngle = 0;
-    float targetAirspeedAngle;
-    float machAngle;
-    float prevMachAngle = 248.144440;
+    double airspeedAngle = 0;
+    double targetAirspeedAngle;
+    double machAngle;
+    double prevMachAngle = 248.14444;
 
 public:
     asiLearjet(int xPos, int yPos, int size);

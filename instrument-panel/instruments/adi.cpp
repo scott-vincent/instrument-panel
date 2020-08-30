@@ -112,21 +112,21 @@ void adi::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Add back horizon and rotate
-    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, (400 + pitchAngle * 10) * scaleFactor, scaleFactor, scaleFactor, bankAngle * AngleFactor, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, (400 - pitchAngle * 5) * scaleFactor, scaleFactor, scaleFactor, bankAngle * DegreesToRadians, 0);
 
     if (globals.enableShadows) {
         // Set blender to multiply (shades of grey darken, white has no effect)
         al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
         // Add horizon shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[4], 400, 400, 415 * scaleFactor, (415 + pitchAngle * 10) * scaleFactor, scaleFactor, scaleFactor, bankAngle * AngleFactor, 0);
+        al_draw_scaled_rotated_bitmap(bitmaps[4], 400, 400, 415 * scaleFactor, (415 - pitchAngle * 5) * scaleFactor, scaleFactor, scaleFactor, bankAngle * DegreesToRadians, 0);
 
         // Restore normal blender
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
 
     // Add horizon
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, (400 + pitchAngle * 10) * scaleFactor, scaleFactor, scaleFactor, bankAngle * AngleFactor, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, (400 - pitchAngle * 5) * scaleFactor, scaleFactor, scaleFactor, bankAngle * DegreesToRadians, 0);
 
     if (globals.enableShadows) {
         // Set blender to multiply (shades of grey darken, white has no effect)
@@ -152,7 +152,7 @@ void adi::render()
     al_draw_bitmap(bitmaps[7], 0, 0, 0);
 
     // Add rim
-    al_draw_scaled_rotated_bitmap(bitmaps[5], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, bankAngle * AngleFactor, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[5], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, bankAngle * DegreesToRadians, 0);
 
     // Add outer casing
     al_draw_bitmap(bitmaps[8], 0, 0, 0);
@@ -190,39 +190,54 @@ void adi::update()
     SimVars *simVars = &globals.simVars->simVars;
 
     // Calculate values
-    float pitchTest = (float)((float)simVars->adiPitch * 3.6 / (42949672.96));
-    if (pitchTest - pitchAngle > 6)
-    {
-        pitchAngle += 5;
+    double targetPitch = simVars->adiPitch;
+    double diff = abs(targetPitch - pitchAngle);
+
+    if (diff > 80.0) {
+        if (pitchAngle < targetPitch) pitchAngle += 20.0; else pitchAngle -= 20.0;
     }
-    else if (pitchAngle - pitchTest > 6)
-    {
-        pitchAngle -= 5;
+    else if (diff > 40.0) {
+        if (pitchAngle < targetPitch) pitchAngle += 10.0; else pitchAngle -= 10.0;
     }
-    else
-    {
-        pitchAngle = pitchTest;
+    else if (diff > 20.0) {
+        if (pitchAngle < targetPitch) pitchAngle += 5.0; else pitchAngle -= 5.0;
+    }
+    else if (diff > 10.0) {
+        if (pitchAngle < targetPitch) pitchAngle += 2.5; else pitchAngle -= 2.5;
+    }
+    else if (diff > 5.0) {
+        if (pitchAngle < targetPitch) pitchAngle += 1.25; else pitchAngle -= 1.25;
+    }
+    else if (diff > 0.625) {
+        if (pitchAngle < targetPitch) pitchAngle += 0.625; else pitchAngle -= 0.625;
+    }
+    else {
+        pitchAngle = targetPitch;
     }
 
-    if (pitchAngle > 11.5f) {
-        pitchAngle = 11.5;
-    }
-    else if (pitchAngle < -11.5f) {
-        pitchAngle = -11.5f;
-    }
+    double targetBank = simVars->adiBank;
+    diff = abs(targetBank - bankAngle);
 
-    float bankTest = (float)((float)simVars->adiBank * 3.6 / (42949672.96));
-    if (bankTest - bankAngle > 6 && bankTest - bankAngle < 180)
-    {
-        bankAngle += 5;
+    if (diff > 80.0) {
+        if (bankAngle < targetBank) bankAngle += 20.0; else bankAngle -= 20.0;
     }
-    else if (bankAngle - bankTest > 6 && bankAngle - bankTest < 180)
-    {
-        bankAngle -= 5;
+    else if (diff > 40.0) {
+        if (bankAngle < targetBank) bankAngle += 10.0; else bankAngle -= 10.0;
     }
-    else
-    {
-        bankAngle = bankTest;
+    else if (diff > 20.0) {
+        if (bankAngle < targetBank) bankAngle += 5.0; else bankAngle -= 5.0;
+    }
+    else if (diff > 10.0) {
+        if (bankAngle < targetBank) bankAngle += 2.5; else bankAngle -= 2.5;
+    }
+    else if (diff > 5.0) {
+        if (bankAngle < targetBank) bankAngle += 1.25; else bankAngle -= 1.25;
+    }
+    else if (diff > 0.625) {
+        if (bankAngle < targetBank) bankAngle += 0.625; else bankAngle -= 0.625;
+    }
+    else {
+        bankAngle = targetBank;
     }
 
     if (!globals.externalControls)
@@ -244,8 +259,8 @@ void adi::update()
 /// </summary>
 void adi::addVars()
 {
-    globals.simVars->addVar(name, "Pitch", false, 65536L * 64L, 0);
-    globals.simVars->addVar(name, "Bank", false, 65536L * 64L, 0);
+    globals.simVars->addVar(name, "Attitude Indicator Pitch Degrees", false, 1, 0);
+    globals.simVars->addVar(name, "Attitude Indicator Bank Degrees", false, 1, 0);
     globals.simVars->addVar(name, "ADI Cal", false, 1, 0);
 }
 

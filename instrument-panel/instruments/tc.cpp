@@ -129,7 +129,7 @@ void tc::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    planeAngle = simVars->tcTurn / 10.0f;
+    planeAngle = simVars->tcRate * 200;
 
     if (planeAngle < -23) {
         planeAngle = -23;
@@ -139,38 +139,38 @@ void tc::update()
     }
 
     // Need to turn ball by -90 degrees = -64
-    targetAngle = (simVars->tcSlip / 20.0f) - 64.0f;
+    targetAngle = (simVars->tcBall / 20.0) - 64.0;
 
-    float diff = abs(targetAngle - ballAngle);
+    double diff = abs(targetAngle - ballAngle);
 
-    if (diff > 10.0f) {
-        if (ballAngle < targetAngle) ballAngle += 1.0f; else ballAngle -= 1.0f;
+    if (diff > 10.0) {
+        if (ballAngle < targetAngle) ballAngle += 1.0; else ballAngle -= 1.0;
     }
-    else if (diff > 5.0f) {
-        if (ballAngle < targetAngle) ballAngle += 0.5f; else ballAngle -= 0.5f;
+    else if (diff > 5.0) {
+        if (ballAngle < targetAngle) ballAngle += 0.5; else ballAngle -= 0.5;
     }
-    else if (diff > 2.5f) {
-        if (ballAngle < targetAngle) ballAngle += 0.25f; else ballAngle -= 0.25f;
+    else if (diff > 2.5) {
+        if (ballAngle < targetAngle) ballAngle += 0.25; else ballAngle -= 0.25;
     }
-    else if (diff > 1.25f) {
-        if (ballAngle < targetAngle) ballAngle += 0.125f; else ballAngle -= 0.125f;
+    else if (diff > 1.25) {
+        if (ballAngle < targetAngle) ballAngle += 0.125; else ballAngle -= 0.125;
     }
-    else if (diff > 0.625f) {
-        if (ballAngle < targetAngle) ballAngle += 0.0625f; else ballAngle -= 0.0625f;
+    else if (diff > 0.625) {
+        if (ballAngle < targetAngle) ballAngle += 0.0625; else ballAngle -= 0.0625;
     }
-    else if (diff > 0.03f) {
-        if (ballAngle < targetAngle) ballAngle += 0.03f; else ballAngle -= 0.03f;
+    else if (diff > 0.03) {
+        if (ballAngle < targetAngle) ballAngle += 0.03; else ballAngle -= 0.03;
     }
     else {
         ballAngle = targetAngle;
     }
 
     // Hard stop at edge
-    if (ballAngle < -73.5f) {
-        ballAngle = -73.5f;
+    if (ballAngle < -73.5) {
+        ballAngle = -73.5;
     }
-    else if (ballAngle > -54.5f) {
-        ballAngle = -54.5f;
+    else if (ballAngle > -54.5) {
+        ballAngle = -54.5;
     }
 }
 
@@ -179,6 +179,6 @@ void tc::update()
 /// </summary>
 void tc::addVars()
 {
-    globals.simVars->addVar(name, "Turn", false, 4, 0);
-    globals.simVars->addVar(name, "Slip", false, 1, 0);
+    globals.simVars->addVar(name, "Turn Coordinator Bank", false, 4, 0);
+    globals.simVars->addVar(name, "Turn Coordinator Ball", false, 1, 0);
 }

@@ -365,9 +365,6 @@ void altLearjet::update()
 /// </summary>
 void altLearjet::addVars()
 {
-    globals.simVars->addVar(name, "Pressure 1", false, 10, 16212);
-    globals.simVars->addVar(name, "Pressure 2", false, 10, 16212);
-    globals.simVars->addVar(name, "Altitude Units", false, 1, 2);
-    globals.simVars->addVar(name, "Altitude 1", false, 1, 0);
-    globals.simVars->addVar(name, "Altitude 2", false, 1, 0);
+    globals.simVars->addVar(name, "Plane Altitude", false, 10, 0);
+    globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92f);
 }

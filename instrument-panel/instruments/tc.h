@@ -9,9 +9,9 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float planeAngle = 0;
-    float ballAngle = -64;      // Need to turn -90 degrees
-    float targetAngle;
+    double planeAngle = 0;
+    double ballAngle = -64;      // Need to turn -90 degrees
+    double targetAngle;
 
 public:
     tc(int xPos, int yPos, int size);

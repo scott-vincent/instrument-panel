@@ -152,21 +152,21 @@ void asi::update()
     airspeedCal = simVars->asiAirspeedCal;
 
     // Calculate values - Not a linear scale!
-    airspeedKnots = simVars->asiAirspeed / 128;
+    airspeedKnots = simVars->asiAirspeed;
     if (airspeedKnots < 40) {
-        airspeedAngle = airspeedKnots * 0.013f;
+        airspeedAngle = airspeedKnots * 0.013;
     }
     else if (airspeedKnots < 90) {
-        airspeedAngle = -0.03f + pow(airspeedKnots - 12.1, 1.439) * 0.0047f;
+        airspeedAngle = -0.03 + pow(airspeedKnots - 12.1, 1.439) * 0.0047;
     }
     else if (airspeedKnots < 120) {
-        airspeedAngle = 0.4f + pow(airspeedKnots - 12.1, 1.4) * 0.0046f;
+        airspeedAngle = 0.4 + pow(airspeedKnots - 12.1, 1.4) * 0.0046;
     }
     else if (airspeedKnots < 160) {
-        airspeedAngle = 1.53f + pow(airspeedKnots - 12.0, 1.320) * 0.0043f;
+        airspeedAngle = 1.53 + pow(airspeedKnots - 12.0, 1.320) * 0.0043;
     }
     else {
-        airspeedAngle = 2.27f + pow(airspeedKnots - 12.0, 1.28) * 0.0040f;
+        airspeedAngle = 2.27 + pow(airspeedKnots - 12.0, 1.28) * 0.0040;
     }
 }
 
@@ -175,9 +175,8 @@ void asi::update()
 /// </summary>
 void asi::addVars()
 {
-    // Add 0x8000 to all vars for now so that Learjet asi can be displayed at the same time
-    globals.simVars->addVar(name, "Airspeed", false, 128, 0);
-    globals.simVars->addVar(name, "Airspeed Calibration", false, 1, 0);
+    globals.simVars->addVar(name, "Airspeed Indicated", false, 1, 0);
+    globals.simVars->addVar(name, "Airspeed True Calibrate", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -198,7 +197,7 @@ void asi::updateKnobs()
         double airspeedCal = val / 10;
 
         // Update airspeed calibration
-        globals.simVars->write("airspeed cal", airspeedCal);
+        //globals.simVars->write("airspeed cal", airspeedCal);
     }
 }
 

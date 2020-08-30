@@ -19,7 +19,7 @@ private:
     char varName[256][256] = {};
     int varOffset[256] = {};
     bool varIsBool[256] = {};
-    long varScaling[256] = {};
+    double varScaling[256] = {};
     double varVal[256] = {};
     int settingOffset = -100;
     
@@ -39,7 +39,7 @@ public:
     ~simvars();
     char *view();
     void doKeypress(int keycode);
-    void addVar(const char* group, const char* name, bool isBool, long scaling, long val);
+    void addVar(const char* group, const char* name, bool isBool, double scaling, double val);
     void addSetting(const char* group, const char* name);
     long* readSettings(const char* group, int defaultX, int defaultY, int defaultSize);
     bool isEnabled(const char* group);

@@ -115,7 +115,7 @@ void adiLearjet::render()
 
     // Blit wheel into wheel sized bitmap
     al_set_target_bitmap(bitmaps[2]);
-    al_draw_scaled_bitmap(bitmaps[0], 0, 1200 - 300 + (pitchAngle * 10), 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
+    al_draw_scaled_bitmap(bitmaps[0], 0, 900 - (pitchAngle * 5), 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
 
     // Set blender to multiply (shades of grey darken, white has no effect)
     al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
@@ -129,7 +129,7 @@ void adiLearjet::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Draw wheel
-    al_draw_rotated_bitmap(bitmaps[2], 253 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, bankAngle * 0.7111111 * AngleFactor, 0);
+    al_draw_rotated_bitmap(bitmaps[2], 253 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, bankAngle * 0.7111111 * DegreesToRadians, 0);
 
     if (globals.enableShadows)
     {
@@ -138,7 +138,7 @@ void adiLearjet::render()
         al_draw_scaled_bitmap(bitmaps[0], 1484, 1387, 1, 1, 0, 0, size, size, 0);
 
         // Draw roll_pointer shadow into trans5
-        al_draw_scaled_rotated_bitmap(bitmaps[9], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 415 * scaleFactor, .94, .94, bankAngle * 0.7111111 * AngleFactor, 0);
+        al_draw_scaled_rotated_bitmap(bitmaps[9], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 415 * scaleFactor, .94, .94, bankAngle * 0.7111111 * DegreesToRadians, 0);
         al_set_target_bitmap(bitmaps[1]);
 
         // Draw shadows
@@ -177,7 +177,7 @@ void adiLearjet::render()
     al_draw_scaled_bitmap(bitmaps[0], 523, 820, 544, 92, 200 * scaleFactor, (380 - (currentAdiCal * 10)) * scaleFactor, 544 * scaleFactor, 92 * scaleFactor, 0);
 
     // Draw roll pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[8], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, .94, .94, bankAngle * 0.7111111 * AngleFactor, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[8], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, .94, .94, bankAngle * 0.7111111 * DegreesToRadians, 0);
 
     // Display 'Not Connected message'
     if (!globals.connected)
@@ -259,32 +259,54 @@ void adiLearjet::update()
     }
     else
     {
-        float pitchTest = (float)((float)simVars->adiPitch * 3.6 / (42949672.96));
-        if (pitchTest - pitchAngle > 6)
-        {
-            pitchAngle += 5;
+        double targetPitch = simVars->adiPitch;
+        double diff = abs(targetPitch - pitchAngle);
+
+        if (diff > 80.0) {
+            if (pitchAngle < targetPitch) pitchAngle += 20.0; else pitchAngle -= 20.0;
         }
-        else if (pitchAngle - pitchTest > 6)
-        {
-            pitchAngle -= 5;
+        else if (diff > 40.0) {
+            if (pitchAngle < targetPitch) pitchAngle += 10.0; else pitchAngle -= 10.0;
         }
-        else
-        {
-            pitchAngle = pitchTest;
+        else if (diff > 20.0) {
+            if (pitchAngle < targetPitch) pitchAngle += 5.0; else pitchAngle -= 5.0;
+        }
+        else if (diff > 10.0) {
+            if (pitchAngle < targetPitch) pitchAngle += 2.5; else pitchAngle -= 2.5;
+        }
+        else if (diff > 5.0) {
+            if (pitchAngle < targetPitch) pitchAngle += 1.25; else pitchAngle -= 1.25;
+        }
+        else if (diff > 0.625) {
+            if (pitchAngle < targetPitch) pitchAngle += 0.625; else pitchAngle -= 0.625;
+        }
+        else {
+            pitchAngle = targetPitch;
         }
 
-        float bankTest = (float)((float)simVars->adiBank * 3.6 / (42949672.96));
-        if (bankTest - bankAngle > 6 && bankTest - bankAngle < 180)
-        {
-            bankAngle += 5;
+        double targetBank = simVars->adiBank;
+        diff = abs(targetBank - bankAngle);
+
+        if (diff > 80.0) {
+            if (bankAngle < targetBank) bankAngle += 20.0; else bankAngle -= 20.0;
         }
-        else if (bankAngle - bankTest > 6 && bankAngle - bankTest < 180)
-        {
-            bankAngle -= 5;
+        else if (diff > 40.0) {
+            if (bankAngle < targetBank) bankAngle += 10.0; else bankAngle -= 10.0;
         }
-        else
-        {
-            bankAngle = bankTest;
+        else if (diff > 20.0) {
+            if (bankAngle < targetBank) bankAngle += 5.0; else bankAngle -= 5.0;
+        }
+        else if (diff > 10.0) {
+            if (bankAngle < targetBank) bankAngle += 2.5; else bankAngle -= 2.5;
+        }
+        else if (diff > 5.0) {
+            if (bankAngle < targetBank) bankAngle += 1.25; else bankAngle -= 1.25;
+        }
+        else if (diff > 0.625) {
+            if (bankAngle < targetBank) bankAngle += 0.625; else bankAngle -= 0.625;
+        }
+        else {
+            bankAngle = targetBank;
         }
 
         if (!globals.externalControls)
@@ -307,8 +329,8 @@ void adiLearjet::update()
 /// </summary>
 void adiLearjet::addVars()
 {
-    globals.simVars->addVar(name, "Pitch", false, 65536L * 64L, 0);
-    globals.simVars->addVar(name, "Bank", false, 65536L * 64L, 0);
+    globals.simVars->addVar(name, "Attitude Indicator Pitch Degrees", false, 1, 0);
+    globals.simVars->addVar(name, "Attitude Indicator Bank Degrees", false, 1, 0);
     globals.simVars->addVar(name, "ADI Cal", false, 1, 0);
 }
 

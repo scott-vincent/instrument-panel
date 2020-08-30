@@ -468,7 +468,7 @@ void simvars::doKeypress(int keycode)
     }
 }
 
-void simvars::addVar(const char* group, const char* name, bool isBool, long scaling, long val)
+void simvars::addVar(const char* group, const char* name, bool isBool, double scaling, double val)
 {
     // Convert SimVar name to address offset (number of doubles)
     int offset = 1;

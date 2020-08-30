@@ -10,9 +10,9 @@ private:
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
     double airspeedCal;
-    long airspeedKnots;
-    float airspeedAngle;
-    float angle;
+    double airspeedKnots;
+    double airspeedAngle;
+    double angle;
 
     // Hardware knobs
     int calKnob = -1;

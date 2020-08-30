@@ -137,10 +137,8 @@ void hi::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = -simVars->hiHeading * M_PI / 180.0f;
-
-    int diff = simVars->hiHeadingBug - simVars->hiHeading;
-    bugAngle = diff * M_PI / 180.0f;
+    angle = -simVars->hiHeading * DegreesToRadians;
+    bugAngle = (simVars->hiHeadingBug - simVars->hiHeading) * DegreesToRadians;
 }
 
 /// <summary>
@@ -148,7 +146,7 @@ void hi::update()
 /// </summary>
 void hi::addVars()
 {
-    globals.simVars->addVar(name, "Heading", false, 1, 0);
+    globals.simVars->addVar(name, "Heading Indicator", false, 1, 0);
     globals.simVars->addVar(name, "Heading Bug", false, 1, 0);
 }
 

@@ -12,6 +12,7 @@ const int MaxBitmaps = 18;
 
 // Convert Allegro4 angle (256 = full circle) into radians
 const float AngleFactor = 2.0f * ALLEGRO_PI / 256.0f;
+const float DegreesToRadians = ALLEGRO_PI / 180.0f;
 
 class instrument
 {

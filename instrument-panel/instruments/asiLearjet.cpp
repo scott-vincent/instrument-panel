@@ -156,7 +156,7 @@ void asiLearjet::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate airspeed angle
-    float speed = simVars->asiAirspeed / 1280.0f;
+    double speed = simVars->asiAirspeed / 1280.0f;
 
     if (speed > 40) {
         targetAirspeedAngle = 233.65;
@@ -186,13 +186,13 @@ void asiLearjet::update()
     }
 
     // Calculate mach angle
-    speed = simVars->asiMachSpeed / 20480.0f;
+    speed = simVars->asiMachSpeed / 20480.0;
 
     if (speed > 0.3) {
         machAngle = 256 - ((((251.3 * log(speed) + 446.1) + 4.02) * 0.71111111111111) - airspeedAngle);
     }
     else {
-        machAngle = 248.144440;
+        machAngle = 248.14444;
     }
 
     if (abs(machAngle - prevMachAngle) < 1)
@@ -209,6 +209,6 @@ void asiLearjet::update()
 /// </summary>
 void asiLearjet::addVars()
 {
-    globals.simVars->addVar(name, "Airspeed", false, 100, 0);
-    globals.simVars->addVar(name, "Mach Speed", false, 100, 0);
+    globals.simVars->addVar(name, "Airspeed Indicated", false, 1, 0);
+    globals.simVars->addVar(name, "Airspeed Mach", false, 100, 0);
 }

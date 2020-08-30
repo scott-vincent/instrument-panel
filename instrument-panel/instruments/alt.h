@@ -9,11 +9,11 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float mb;            // millibars
-    float inhg;          // inches of mercury
-    float angle;
-    long altitude = 0;
-    long altitudeTarget = 0;
+    double mb;            // millibars
+    double inhg;          // inches of mercury
+    double angle;
+    double altitude = 0;
+    double altitudeTarget = 0;
 
     // Hardware knobs
     int calKnob = -1;

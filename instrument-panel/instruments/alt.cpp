@@ -200,7 +200,7 @@ void alt::update()
     // Calculate values
 
     // Add altitude correction
-    long altitudeTarget = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
+    double altitudeTarget = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
 
     mb = simVars->altKollsman * 33.86389;
     inhg = simVars->altKollsman;
@@ -228,12 +228,8 @@ void alt::update()
 /// </summary>
 void alt::addVars()
 {
-    // Add 0x8000 to all vars for now so that Learjet altimeter can be displayed at the same time
-    globals.simVars->addVar(name, "Pressure 1", false, 10, 16208);
-    globals.simVars->addVar(name, "Pressure 2", false, 10, 16208);
-    globals.simVars->addVar(name, "Altitude Units", false, 1, 2);
-    globals.simVars->addVar(name, "Altitude 1", false, 1, 0);
-    globals.simVars->addVar(name, "Altitude 2", false, 1, 0);
+    globals.simVars->addVar(name, "Plane Altitude", false, 10, 0);
+    globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92f);
 }
 
 #ifndef _WIN32

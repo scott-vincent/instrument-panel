@@ -9,9 +9,9 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float bankAngle = 0;
-    float pitchAngle = 0;
-    signed short currentAdiCal = 0;
+    double bankAngle = 0;
+    double pitchAngle = 0;
+    int currentAdiCal = 0;
 
     // Hardware knobs
     int calKnob = -1;
