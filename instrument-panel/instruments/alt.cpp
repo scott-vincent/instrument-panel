@@ -198,52 +198,12 @@ void alt::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    double pressure = simVars->altPressure1;
-    double units = simVars->altUnits;
 
-    // Calculate what to add to pressure to keep needle in the correct position.
-    long altitudeCorrection = 0;
-    if (globals.externalControls) {
-        double pressure2 = simVars->altPressure2;
-        if (pressure2 < 15168) {
-            pressure2 = 15168;
-        }
-        else if (pressure2 > 17344) {
-            pressure2 = 17344;
-        }
+    // Add altitude correction
+    long altitudeTarget = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
 
-        altitudeCorrection = (long)(((((float)pressure2 / 0.3386389) / 16) - (((float)16208 / 0.3386389) / 16)) * 10);
-        pressure = pressure2;
-    }
-
-    mb = (float)pressure / 16.0f;
-    inhg = mb / 33.86389f;
-
-    long altitudeTarget = 0;
-
-    if (globals.externalControls)
-    {
-        //Altitude Value
-        units = 2;
-
-        // If altitude is in meters then convert to feet
-        altitudeTarget = (long)((float)simVars->altAltitude2 * 3.28084);
-    }
-    else
-    {
-        if (units == 0 || units == 1) {
-            altitudeTarget = simVars->altAltitude1;
-        }
-        else if (units == 2) {
-            //if altitude is in meters then convert to feet
-            altitudeTarget = (long)((float)simVars->altAltitude1 * 3.28084);
-        }
-    }
-
-    // If manually adjusting pressure cal then add correction offset to altitude
-    if (globals.externalControls) {
-        altitudeTarget += altitudeCorrection;
-    }
+    mb = simVars->altKollsman * 33.86389;
+    inhg = simVars->altKollsman;
 
     if (altitudeTarget < 0) {
         altitudeTarget = 0;

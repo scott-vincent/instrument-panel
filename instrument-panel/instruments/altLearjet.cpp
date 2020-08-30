@@ -204,45 +204,26 @@ void altLearjet::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    double pressure = simVars->altPressure1;
-    double units = simVars->altUnits;
+    double pressure = simVars->altKollsman * 33.8639 * 16;
 
     // Calculate what to add to pressure to keep needle in the correct position.
     long altitudeCorrection = 0;
     if (globals.externalControls) {
-        double pressure2 = simVars->altPressure2;
-        if (pressure2 < 15168) {
-            pressure2 = 15168;
+        if (pressure < 15168) {
+            pressure = 15168;
         }
-        else if (pressure2 > 17344) {
-            pressure2 = 17344;
+        else if (pressure > 17344) {
+            pressure = 17344;
         }
 
-        altitudeCorrection = (long)(((((float)pressure2 / 0.3386389) / 16) - (((float)16208 / 0.3386389) / 16)) * 10);
-        pressure = pressure2;
+        altitudeCorrection = (long)(((((float)pressure / 0.3386389) / 16) - (((float)16208 / 0.3386389) / 16)) * 10);
     }
 
-    sprintf(hpa, "%4.4d", (int)((float)pressure / 16));
-    sprintf(inhg, "%4.4d", (int)((((float)pressure / 0.3386389) / 16) + 0));
+    sprintf(hpa, "%4.4d", (int)(pressure / 16));
+    sprintf(inhg, "%4.4d", (int)(simVars->altKollsman * 100));
 
-    if (globals.externalControls)
-    {
-        //Altitude Value
-        units = 2;
-
-        // If altitude is in meters then convert to feet
-        altitudeTarget = (long)((float)simVars->altAltitude2 * 3.28084);
-    }
-    else
-    {
-        if (units == 0 || units == 1) {
-            altitudeTarget = simVars->altAltitude1;
-        }
-        else if (units == 2) {
-            //if altitude is in meters then convert to feet
-            altitudeTarget = (long)((float)simVars->altAltitude1 * 3.28084);
-        }
-    }
+    //altitudeTarget = (long)(simVars->altAltitude * 3.28084);
+    altitudeTarget = simVars->altAltitude;
 
     // If manually adjusting pressure cal then add correction offset to altitude
     if (globals.externalControls) {

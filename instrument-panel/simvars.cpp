@@ -692,9 +692,6 @@ void dataLink(simvars* t)
                 if (bytes == dataSize) {
                     globals.dataLinked = true;
                     globals.connected = (t->simVars.connected == 1);
-
-                    printf("%.2f %f %f %f %s\n", t->simVars.kohlsmann, t->simVars.altitude,
-                        t->simVars.latitude, t->simVars.longitude, t->simVars.title);
                 }
                 else if (bytes > 0) {
                     memcpy(&actualSize, &t->simVars, sizeof(long));
