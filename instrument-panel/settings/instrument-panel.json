@@ -23,8 +23,8 @@
   },
   "ASI": {
     "Enabled": true,
-    "Position X": 562,
-    "Position Y": 20,
+    "Position X": 565,
+    "Position Y": 15,
     "Size": 280
   },
   "ADI": {
@@ -36,26 +36,26 @@
   "ALT": {
     "Enabled": true,
     "Position X": 1222,
-    "Position Y": 20,
-    "Size": 280
+    "Position Y": 13,
+    "Size": 275
   },
   "TC": {
     "Enabled": true,
     "Position X": 562,
-    "Position Y": 350,
+    "Position Y": 342,
     "Size": 280
   },
   "HI": {
     "Enabled": true,
     "Position X": 892,
-    "Position Y": 350,
-    "Size": 280
+    "Position Y": 345,
+    "Size": 274
   },
   "VSI": {
     "Enabled": true,
-    "Position X": 1222,
-    "Position Y": 350,
-    "Size": 280
+    "Position X": 1219,
+    "Position Y": 342,
+    "Size": 284
   },
   "Annunciator": {
     "Enabled": true,
@@ -89,8 +89,8 @@
   },
   "Trim Flaps": {
     "Enabled": true,
-    "Position X": 892,
-    "Position Y": 680,
+    "Position X": 885,
+    "Position Y": 676,
     "Size": 280
   }
 }
