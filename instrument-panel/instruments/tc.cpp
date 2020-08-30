@@ -179,6 +179,6 @@ void tc::update()
 /// </summary>
 void tc::addVars()
 {
-    globals.simVars->addVar(name, "Turn Coordinator Bank", false, 4, 0);
+    globals.simVars->addVar(name, "Turn Indicator Rate", false, 0.01, 0);
     globals.simVars->addVar(name, "Turn Coordinator Ball", false, 1, 0);
 }

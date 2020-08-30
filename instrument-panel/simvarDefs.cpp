@@ -2,7 +2,7 @@
 
 const char* SimVarDefs[][2] = {
     { "Plane Altitude", "feet" },
-    { "Kohlsman setting hg", "inHg" },
+    { "Kohlsman Setting Hg", "inHg" },
     { "Attitude Indicator Pitch Degrees", "degrees" },
     { "Attitude Indicator Bank Degrees", "degrees" },
     { "Airspeed Indicated", "knots" },
