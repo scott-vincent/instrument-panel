@@ -4,6 +4,11 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 
+#ifndef _WIN32
+#include <strings.h>
+#define _stricmp strcasecmp
+#endif
+
 class simvars;
 class knobs;
 

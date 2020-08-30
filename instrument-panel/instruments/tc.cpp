@@ -7,14 +7,6 @@ tc::tc(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("TC");
     addVars();
-
-#ifndef _WIN32
-    // Only have hardware knobs on Raspberry Pi
-    if (globals.hardwareKnobs) {
-        addKnobs();
-    }
-#endif
-
     resize();
 }
 

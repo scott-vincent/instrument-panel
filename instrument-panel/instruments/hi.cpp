@@ -160,10 +160,8 @@ void hi::addKnobs()
     hdgKnob = globals.hardwareKnobs->add(2, 3, -1, -1, 0);
 }
 
-bool newInstrument::updateKnobs()
+void hi::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for new instrument calibration
     int val = globals.hardwareKnobs->read(hdgKnob);
 
@@ -174,8 +172,6 @@ bool newInstrument::updateKnobs()
         // Update heading bug variable
         globals.simVars->write("heading bug", headingBug);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

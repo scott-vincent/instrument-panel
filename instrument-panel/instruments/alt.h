@@ -26,8 +26,8 @@ public:
 private:
     void resize();
     void addVars();
-    bool fetchVars();
-    bool updateKnobs();
+    void addKnobs();
+    void updateKnobs();
 
 };
 

@@ -284,10 +284,8 @@ void alt::addKnobs()
     calKnob = globals.hardwareKnobs->add(2, 3, 15168, 17344, 16208);
 }
 
-bool alt::updateKnobs()
+void alt::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for pressure calibration
     int val = globals.hardwareKnobs->read(calKnob);
 
@@ -298,8 +296,6 @@ bool alt::updateKnobs()
         // Update manual pressure adjust
         globals.simVars->write("pressure2", pressure2);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

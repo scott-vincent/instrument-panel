@@ -171,13 +171,10 @@ void trimFlaps::addKnobs()
     flapsKnob = globals.hardwareKnobs->add(4, 5, 0, 4, 0);
 }
 
-bool trimFlaps::updateKnobs()
+void trimFlaps::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for trim adjustment
     int val = globals.hardwareKnobs->read(trimKnob);
-
     if (val != INT_MIN) {
         // Convert knob value to trim (adjust for desired sensitivity)
         double trim = val;
@@ -187,8 +184,7 @@ bool trimFlaps::updateKnobs()
     }
 
     // Read knob for flaps
-    int val = globals.hardwareKnobs->read(flapsKnob);
-
+    val = globals.hardwareKnobs->read(flapsKnob);
     if (val != INT_MIN) {
         // Convert knob value to flaps (adjust for desired sensitivity)
         double flaps = val;
@@ -196,8 +192,6 @@ bool trimFlaps::updateKnobs()
         // Update flaps
         globals.simVars->write("flaps", flaps);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

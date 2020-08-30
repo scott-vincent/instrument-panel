@@ -257,10 +257,8 @@ void adi::addKnobs()
     calKnob = globals.hardwareKnobs->add(2, 3, -20, 20, 0);
 }
 
-bool adi::updateKnobs()
+void adi::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for ADI calibration
     int val = globals.hardwareKnobs->read(calKnob);
 
@@ -271,8 +269,6 @@ bool adi::updateKnobs()
         // Update ADI calibration variable
         globals.simVars->write("adi cal", adiCal);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

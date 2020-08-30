@@ -9,7 +9,10 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 typedef int SOCKET;
-#define _stricmp strcasecmp
+#define SOCKET_ERROR -1
+#define INVALID_SOCKET -1
+#define SOCKADDR sockaddr
+#define closesocket close
 #endif
 #include <allegro5/allegro.h>
 #include "simvars.h"

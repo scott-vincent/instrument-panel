@@ -322,8 +322,6 @@ void adiLearjet::addKnobs()
 
 void adiLearjet::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for ADI calibration
     int val = globals.hardwareKnobs->read(calKnob);
 
@@ -334,8 +332,6 @@ void adiLearjet::updateKnobs()
         // Update ADI calibration variable
         globals.simVars->write("adi cal", adiCal);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

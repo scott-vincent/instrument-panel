@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "asi.h"
 #include "simvars.h"
 #include "knobs.h"
@@ -187,10 +188,8 @@ void asi::addKnobs()
     calKnob = globals.hardwareKnobs->add(2, 3, -500, 500, 0);
 }
 
-bool asi::updateKnobs()
+void asi::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for airspeed calibration
     int val = globals.hardwareKnobs->read(calKnob);
 
@@ -201,8 +200,6 @@ bool asi::updateKnobs()
         // Update airspeed calibration
         globals.simVars->write("airspeed cal", airspeedCal);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

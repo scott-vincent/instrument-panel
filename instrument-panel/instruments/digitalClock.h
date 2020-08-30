@@ -9,6 +9,9 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    int button1 = 0;
+    int button2 = 0;
+    int button3 = 0;
     int topView = 0;
     int bottomView = 0;
     int busVoltsx10;
@@ -38,7 +41,8 @@ private:
     void drawBottom(int digit1, int digit2, int digit3, int digit4);
     void resize();
     void addVars();
-    bool updateKnobs();
+    void addKnobs();
+    void updateKnobs();
 };
 
 #endif // _DIGITAL_CLOCK_H

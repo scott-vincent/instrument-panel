@@ -304,27 +304,23 @@ void digitalClock::addKnobs()
     clockButton3 = globals.hardwareKnobs->add(6, 7, 0, 1, 0);
 }
 
-bool digitalClock::updateKnobs()
+void digitalClock::updateKnobs()
 {
-    DWORD result;
-
     // Read buttons for clock adjustment
     int val = globals.hardwareKnobs->read(clockButton1);
     if (val != INT_MIN) {
         button1 = val;
     }
 
-    int val = globals.hardwareKnobs->read(clockButton2);
+    val = globals.hardwareKnobs->read(clockButton2);
     if (val != INT_MIN) {
         button2 = val;
     }
 
-    int val = globals.hardwareKnobs->read(clockButton3);
+    val = globals.hardwareKnobs->read(clockButton3);
     if (val != INT_MIN) {
         button3 = val;
     }
-
-    return true;
 }
 
 #endif // !_WIN32

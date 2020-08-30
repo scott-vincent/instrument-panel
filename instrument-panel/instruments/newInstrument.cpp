@@ -146,10 +146,8 @@ void newInstrument::addKnobs()
     calKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
 }
 
-bool newInstrument::updateKnobs()
+void newInstrument::updateKnobs()
 {
-    DWORD result;
-
     // Read knob for new instrument calibration
     int val = globals.hardwareKnobs->read(calKnob);
 
@@ -160,8 +158,6 @@ bool newInstrument::updateKnobs()
         // Update new instrument variable
         globals.simVars->write("simvar", simVarVal);
     }
-
-    return true;
 }
 
 #endif // !_WIN32

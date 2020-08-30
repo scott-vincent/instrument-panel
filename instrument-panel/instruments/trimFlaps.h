@@ -15,7 +15,7 @@ private:
 
     // Hardware knobs
     int trimKnob = -1;
-    int flapKnob = -1;
+    int flapsKnob = -1;
 
 public:
     trimFlaps(int xPos, int yPos, int size);
@@ -25,7 +25,8 @@ public:
 private:
     void resize();
     void addVars();
-    bool updateKnobs();
+    void addKnobs();
+    void updateKnobs();
 };
 
 #endif // _TRIM_FLAPS_H

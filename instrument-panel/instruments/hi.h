@@ -23,6 +23,8 @@ public:
 private:
     void resize();
     void addVars();
+    void addKnobs();
+    void updateKnobs();
 };
 
 #endif // _HI_H

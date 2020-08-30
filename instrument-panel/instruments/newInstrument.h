@@ -22,7 +22,8 @@ public:
 private:
     void resize();
     void addVars();
-    bool updateKnobs();
+    void addKnobs();
+    void updateKnobs();
 
 };
 
