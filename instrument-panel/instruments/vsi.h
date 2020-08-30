@@ -9,8 +9,8 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float angle = 0;
-    float targetAngle;
+    double angle = 0;
+    double targetAngle;
 
 public:
     vsi(int xPos, int yPos, int size);

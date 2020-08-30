@@ -139,27 +139,24 @@ void tc::update()
     }
 
     // Need to turn ball by -90 degrees = -64
-    targetAngle = (simVars->tcBall / 20.0) - 64.0;
+    targetAngle = (-simVars->tcBall * 9) - 64.0;
 
     double diff = abs(targetAngle - ballAngle);
 
-    if (diff > 10.0) {
-        if (ballAngle < targetAngle) ballAngle += 1.0; else ballAngle -= 1.0;
+    if (diff > 20.0) {
+        if (ballAngle < targetAngle) ballAngle += 4.0; else ballAngle -= 4.0;
+    }
+    else if (diff > 10.0) {
+        if (ballAngle < targetAngle) ballAngle += 2.0; else ballAngle -= 2.0;
     }
     else if (diff > 5.0) {
-        if (ballAngle < targetAngle) ballAngle += 0.5; else ballAngle -= 0.5;
+        if (ballAngle < targetAngle) ballAngle += 1.0; else ballAngle -= 1.0;
     }
     else if (diff > 2.5) {
+        if (ballAngle < targetAngle) ballAngle += 0.5; else ballAngle -= 0.5;
+    }
+    else if (diff > 0.25) {
         if (ballAngle < targetAngle) ballAngle += 0.25; else ballAngle -= 0.25;
-    }
-    else if (diff > 1.25) {
-        if (ballAngle < targetAngle) ballAngle += 0.125; else ballAngle -= 0.125;
-    }
-    else if (diff > 0.625) {
-        if (ballAngle < targetAngle) ballAngle += 0.0625; else ballAngle -= 0.0625;
-    }
-    else if (diff > 0.03) {
-        if (ballAngle < targetAngle) ballAngle += 0.03; else ballAngle -= 0.03;
     }
     else {
         ballAngle = targetAngle;

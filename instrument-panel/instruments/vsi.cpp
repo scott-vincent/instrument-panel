@@ -111,27 +111,36 @@ void vsi::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    targetAngle = simVars->vsiVerticalSpeed / 10.f;
+    if (simVars->vsiVerticalSpeed < 0) {
+        targetAngle = -2.65 * pow(-simVars->vsiVerticalSpeed, 1.1);
+    }
+    else {
+        targetAngle = 2.65 * pow(simVars->vsiVerticalSpeed, 1.1);
+    }
 
-    float diff = abs(targetAngle - angle);
+    if (targetAngle > 123) {
+        targetAngle = 123;
+    }
+    else if (targetAngle < -123) {
+        targetAngle = -123;
+    }
 
-    if (diff > 10.0f) {
-        if (angle < targetAngle) angle += 1.0f; else angle -= 1.0f;
+    double diff = abs(targetAngle - angle);
+
+    if (diff > 40.0) {
+        if (angle < targetAngle) angle += 20.0; else angle -= 20.0;
     }
-    else if (diff > 5.0f) {
-        if (angle < targetAngle) angle += 0.5f; else angle -= 0.5f;
+    else if (diff > 20.0) {
+        if (angle < targetAngle) angle += 10.0; else angle -= 10.0;
     }
-    else if (diff > 2.5f) {
-        if (angle < targetAngle) angle += 0.25f; else angle -= 0.25f;
+    else if (diff > 10.0) {
+        if (angle < targetAngle) angle += 5.0; else angle -= 5.0;
     }
-    else if (diff > 1.25f) {
-        if (angle < targetAngle) angle += 0.125f; else angle -= 0.125f;
+    else if (diff > 5.0) {
+        if (angle < targetAngle) angle += 2.5; else angle -= 2.5;
     }
-    else if (diff > 0.625f) {
-        if (angle < targetAngle) angle += 0.0625f; else angle -= 0.0625f;
-    }
-    else if (diff > 0.03f) {
-        if (angle < targetAngle) angle += 0.03f; else angle -= 0.03f;
+    else if (diff > 1.25) {
+        if (angle < targetAngle) angle += 1.25; else angle -= 1.25;
     }
     else {
         angle = targetAngle;
