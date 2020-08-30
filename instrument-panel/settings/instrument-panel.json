@@ -23,84 +23,72 @@
   },
   "ASI": {
     "Enabled": true,
-    "Centre": "cx-79.4mm,cy-104.0mm",
     "Position X": 530,
     "Position Y": 20,
     "Size": 280
   },
   "ADI": {
     "Enabled": true,
-    "Centre": "cx+10.9mm,cy-104.0mm",
     "Position X": 860,
     "Position Y": 20,
     "Size": 280
   },
   "ALT": {
     "Enabled": true,
-    "Centre": "cx+101.3mm,cy-104.0mm",
     "Position X": 1190,
     "Position Y": 20,
     "Size": 280
   },
   "TC": {
     "Enabled": true,
-    "Centre": "cx-79.4mm,cy-13.7mm",
     "Position X": 530,
     "Position Y": 350,
     "Size": 280
   },
   "HI": {
     "Enabled": true,
-    "Centre": "cx+10.9mm,cy-13.7mm",
     "Position X": 860,
     "Position Y": 350,
     "Size": 280
   },
   "VSI": {
     "Enabled": true,
-    "Centre": "cx+101.3mm,cy-13.7mm",
     "Position X": 1190,
     "Position Y": 350,
     "Size": 280
   },
   "Annunciator": {
     "Enabled": true,
-    "Centre": "cx-172.4mm,cy-132.0mm",
     "Position X": 180,
     "Position Y": 20,
     "Size": 300
   },
   "Digital Clock": {
     "Enabled": true,
-    "Centre": "cx-158.7mm,cy-83.5mm",
     "Position X": 280,
     "Position Y": 135,
     "Size": 200
   },
   "EGT": {
     "Enabled": true,
-    "Centre": "cx-158.7mm,cy-17.8mm",
     "Position X": 280,
     "Position Y": 375,
     "Size": 200
   },
   "VAC": {
     "Enabled": true,
-    "Centre": "cx-224.4mm,cy+47.9mm",
     "Position X": 40,
     "Position Y": 615,
     "Size": 200
   },
   "Oil": {
     "Enabled": true,
-    "Centre": "cx-158.7mm,cy+47.9mm",
     "Position X": 280,
     "Position Y": 615,
     "Size": 200
   },
   "Trim Flaps": {
     "Enabled": true,
-    "Centre": "cx+10.9mm,cy+76.6mm",
     "Position X": 860,
     "Position Y": 680,
     "Size": 280

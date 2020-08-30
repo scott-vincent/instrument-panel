@@ -54,11 +54,13 @@ void simvars::loadSettings()
 
     // Read file in a single chunk
     FILE* infile = fopen(globals.SettingsFile, "r");
-    if (infile)
-    {
+    if (infile) {
         int bytes = (int)fread(buf, 1, 16384, infile);
         buf[bytes] = '\0';
         fclose(infile);
+    }
+    else {
+        printf("Settings file %s not found\n", globals.SettingsFile);
     }
 
     groupCount = 0;

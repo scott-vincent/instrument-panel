@@ -294,7 +294,7 @@ void alt::updateKnobs()
         double pressure2 = val;
 
         // Update manual pressure adjust
-        globals.simVars->write("pressure2", pressure2);
+        //globals.simVars->write("pressure2", pressure2);
     }
 }
 
