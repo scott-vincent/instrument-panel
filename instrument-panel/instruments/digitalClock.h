@@ -14,7 +14,7 @@ private:
     int button3 = 0;
     int topView = 0;
     int bottomView = 0;
-    int busVoltsx10;
+    int voltsx10;
     int tempFx10;
     int tempCx10;
     int utcHours;

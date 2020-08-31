@@ -331,7 +331,7 @@ void adiLearjet::addVars()
 {
     globals.simVars->addVar(name, "Attitude Indicator Pitch Degrees", false, 1, 0);
     globals.simVars->addVar(name, "Attitude Indicator Bank Degrees", false, 1, 0);
-    globals.simVars->addVar(name, "ADI Cal", false, 1, 0);
+    globals.simVars->addVar(name, "Adi Cal", false, 1, 0);
 }
 
 #ifndef _WIN32

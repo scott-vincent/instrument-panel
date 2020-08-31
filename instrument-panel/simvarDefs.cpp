@@ -18,9 +18,11 @@ const char* SimVarDefs[][2] = {
     { "Zulu Time", "seconds" },
     { "Local Time", "seconds" },
     { "Absolute Time", "seconds" },
-    { "Bus Voltage", "volts" },
+    { "Electrical Battery Voltage", "volts" },
     { "Ambient Temperature", "celsius" },
-    { "ADI Cal", "todo" },
+    { "General Eng Rpm:1", "rpm" },
+    { "General Eng Elapsed Time:1", "hours" },
+    { "Adi Cal", "todo" },
     { "Heading Bug", "todo" },
     { NULL, NULL }
 };

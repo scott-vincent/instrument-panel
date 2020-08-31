@@ -1,29 +1,29 @@
-#ifndef _NEW_INSTRUMENT_H_
-#define _NEW_INSTRUMENT_H_
+#ifndef _RPM_H_
+#define _RPM_H_
 
 #include "instrument.h"
 
-class newInstrument : public instrument
+class rpm : public instrument
 {
 private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    int digit1;
+    int digit2;
+    int digit3;
+    int digit4;
+    int digit5;
     double angle;
 
-    // Hardware knobs
-    int calKnob = -1;
-
 public:
-    newInstrument(int xPos, int yPos, int size);
+    rpm(int xPos, int yPos, int size);
     void render();
     void update();
 
 private:
     void resize();
     void addVars();
-    void addKnobs();
-    void updateKnobs();
 };
 
-#endif // _NEW_INSTRUMENT_H
+#endif // _RPM_H

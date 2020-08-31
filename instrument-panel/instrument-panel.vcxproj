@@ -167,8 +167,8 @@
     <ClCompile Include="instruments\digitalClock.cpp" />
     <ClCompile Include="instruments\egt.cpp" />
     <ClCompile Include="instruments\hi.cpp" />
-    <ClCompile Include="instruments\newInstrument.cpp" />
     <ClCompile Include="instruments\oil.cpp" />
+    <ClCompile Include="instruments\rpm.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\trimFlaps.cpp" />
     <ClCompile Include="instruments\vac.cpp" />
@@ -190,8 +190,8 @@
     <ClInclude Include="instruments\digitalClock.h" />
     <ClInclude Include="instruments\egt.h" />
     <ClInclude Include="instruments\hi.h" />
-    <ClInclude Include="instruments\newInstrument.h" />
     <ClInclude Include="instruments\oil.h" />
+    <ClInclude Include="instruments\rpm.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\trimFlaps.h" />
     <ClInclude Include="instruments\vac.h" />

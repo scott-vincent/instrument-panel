@@ -175,7 +175,7 @@ void digitalClock::render()
     switch (topView) {
     case 0:
         // Bus volts
-        drawTop(busVoltsx10 / 100, (busVoltsx10 / 10) % 10, busVoltsx10 % 10, 0);
+        drawTop(voltsx10 / 100, (voltsx10 / 10) % 10, voltsx10 % 10, 0);
         break;
 
     case 1:
@@ -269,15 +269,15 @@ void digitalClock::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    busVoltsx10 = simVars->busVoltage * 10;
-    tempFx10 = simVars->tempC * 338.0;
-    tempCx10 = simVars->tempC * 10.0;
-    utcHours = simVars->utcSeconds / 3600;
-    utcMins = (simVars->utcSeconds - utcHours * 3600.0) / 60;
-    localHours = simVars->localSeconds / 3600;
-    localMins = (simVars->localSeconds - localHours * 3600.0) / 60;
-    flightHours = simVars->flightSeconds / 3600;
-    flightMins = (simVars->flightSeconds - flightHours * 3600.0) / 60;
+    voltsx10 = simVars->dcVolts * 10;
+    tempFx10 = simVars->dcTempC * 338.0;
+    tempCx10 = simVars->dcTempC * 10.0;
+    utcHours = simVars->dcUtcSeconds / 3600;
+    utcMins = (simVars->dcUtcSeconds - utcHours * 3600.0) / 60;
+    localHours = simVars->dcLocalSeconds / 3600;
+    localMins = (simVars->dcLocalSeconds - localHours * 3600.0) / 60;
+    flightHours = simVars->dcFlightSeconds / 3600;
+    flightMins = (simVars->dcFlightSeconds - flightHours * 3600.0) / 60;
     elapsedHours = 0;
     elapsedMins = 0;
 }
@@ -290,7 +290,7 @@ void digitalClock::addVars()
     globals.simVars->addVar(name, "Zulu Time", false, 60, 43200);
     globals.simVars->addVar(name, "Local Time", false, 60, 46800);
     globals.simVars->addVar(name, "Absolute Time", false, 60, 0);
-    globals.simVars->addVar(name, "Bus Voltage", false, 0.1, 23.7);
+    globals.simVars->addVar(name, "Electrical Battery Voltage", false, 0.1, 23.7);
 }
 
 #ifndef _WIN32

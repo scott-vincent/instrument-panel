@@ -20,11 +20,13 @@ struct SimVars
     double tfElevatorTrim = 0;
     double tfFlapsCount = 0;
     double tfFlapsIndex = 0;
-    double utcSeconds = 43200;
-    double localSeconds = 46800;
-    double flightSeconds = 0;
-    double busVoltage = 23.7;
-    double tempC = 26.2;
+    double dcUtcSeconds = 43200;
+    double dcLocalSeconds = 46800;
+    double dcFlightSeconds = 0;
+    double dcVolts = 23.7;
+    double dcTempC = 26.2;
+    double rpmEngine = 0;
+    double rpmElapsedTime = 294.5;
     double adiCal = 0;
     double hiHeadingBug = 0;
 };

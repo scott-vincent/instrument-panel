@@ -85,6 +85,7 @@
 #include "asi.h"
 #include "adi.h"
 #include "alt.h"
+#include "rpm.h"
 #include "tc.h"
 #include "hi.h"
 #include "vsi.h"
@@ -489,6 +490,10 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("ALT")) {
         instruments.push_back(new alt(1100, 50, 300));
+    }
+
+    if (globals.simVars->isEnabled("RPM")) {
+        instruments.push_back(new rpm(1500, 50, 300));
     }
 
     if (globals.simVars->isEnabled("TC")) {

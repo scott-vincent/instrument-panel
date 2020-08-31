@@ -127,7 +127,7 @@ void newInstrument::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = simVars->adiBank / 100.0f;
+    angle = simVars->adiBank / 100.0;
 }
 
 /// <summary>

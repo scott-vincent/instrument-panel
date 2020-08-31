@@ -50,10 +50,10 @@
     <ClCompile Include="instruments\digitalClock.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
-    <ClCompile Include="instruments\newInstrument.cpp">
+    <ClCompile Include="simvarDefs.cpp" />
+    <ClCompile Include="instruments\rpm.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
-    <ClCompile Include="simvarDefs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -105,10 +105,10 @@
     <ClInclude Include="instruments\digitalClock.h">
       <Filter>instruments</Filter>
     </ClInclude>
-    <ClInclude Include="instruments\newInstrument.h">
+    <ClInclude Include="simvarDefs.h" />
+    <ClInclude Include="instruments\rpm.h">
       <Filter>instruments</Filter>
     </ClInclude>
-    <ClInclude Include="simvarDefs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

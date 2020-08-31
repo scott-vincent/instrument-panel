@@ -168,7 +168,7 @@ void hi::updateKnobs()
         double headingBug = val;
 
         // Update heading bug variable
-        //globals.simVars->write("heading bug", headingBug);
+        //globals.simVars->write("Heading Bug", headingBug);
     }
 }
 
