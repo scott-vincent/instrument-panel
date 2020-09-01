@@ -125,16 +125,11 @@ void asiLearjet::render()
     // Draw needle pointer at angle
     al_draw_scaled_rotated_bitmap(bitmaps[6], 54, 348, centre, centre, scaleFactor, scaleFactor, airspeedAngle * AngleFactor, 0);
 
-    if (!globals.connected) {
-        // Display 'Not Connected message'
-        //al_draw_scaled_bitmap(bitmaps[0], 1245, 879, 230, 73, 162 * scaleFactor, 318 * scaleFactor, 480 * scaleFactor, 168 * scaleFactor, 0);
-    }
-
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
-    if (!globals.connected) {
+    if (!globals.active) {
         dimInstrument();
     }
 }

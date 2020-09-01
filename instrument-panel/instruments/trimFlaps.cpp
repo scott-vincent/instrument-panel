@@ -89,7 +89,7 @@ void trimFlaps::render()
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
-    if (!globals.connected) {
+    if (!globals.active) {
         dimInstrument();
     }
 }

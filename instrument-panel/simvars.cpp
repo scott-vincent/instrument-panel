@@ -674,6 +674,10 @@ void dataLink(simvars* t)
     long actualSize;
     int bytes;
 
+    // Detect if sim is active by looking for rpm variance
+    double lastRpm = 0;
+    int rpmMatch = 0;
+
     int loop = 0;
     while (!globals.quit) {
         // Poll instrument data link
@@ -692,6 +696,14 @@ void dataLink(simvars* t)
                 if (bytes == dataSize) {
                     globals.dataLinked = true;
                     globals.connected = (t->simVars.connected == 1);
+
+                    if (t->simVars.rpmEngine == lastRpm) {
+                        rpmMatch++;
+                    }
+                    else {
+                        rpmMatch = 0;
+                    }
+                    globals.active = (rpmMatch < 10);
                 }
                 else if (bytes > 0) {
                     memcpy(&actualSize, &t->simVars, sizeof(long));
