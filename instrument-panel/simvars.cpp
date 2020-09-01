@@ -702,6 +702,7 @@ void dataLink(simvars* t)
                     }
                     else {
                         rpmMatch = 0;
+                        lastRpm = t->simVars.rpmEngine;
                     }
                     globals.active = (rpmMatch < 10);
                 }
@@ -724,6 +725,7 @@ void dataLink(simvars* t)
 
         if (bytes == SOCKET_ERROR && globals.dataLinked) {
             globals.dataLinked = false;
+            globals.active = false;
         }
 
 #ifdef _WIN32
