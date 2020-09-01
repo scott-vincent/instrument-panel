@@ -204,27 +204,38 @@ void alt::update()
     // Calculate values
 
     // Add altitude correction
-    double altitudeTarget = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
+    targetAltitude = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
 
     mb = simVars->altKollsman * 33.86389;
     inhg = simVars->altKollsman;
 
-    if (altitudeTarget < 0) {
-        altitudeTarget = 0;
+    if (targetAltitude < 0) {
+        targetAltitude = 0;
     }
 
-    if (altitude - altitudeTarget > 500) altitude -= 200;
-    else if (altitudeTarget - altitude > 500) altitude += 200;
-    else if (altitude - altitudeTarget > 100) altitude -= 40;
-    else if (altitudeTarget - altitude > 100) altitude += 40;
-    else if (altitude - altitudeTarget > 50) altitude -= 20;
-    else if (altitudeTarget - altitude > 50) altitude += 20;
-    else if (altitude - altitudeTarget > 10) altitude -= 5;
-    else if (altitudeTarget - altitude > 10) altitude += 5;
-    else if (altitude - altitudeTarget > 5) altitude -= 2;
-    else if (altitudeTarget - altitude > 5) altitude += 2;
-    else if (altitude - altitudeTarget > 0) altitude -= 1;
-    else if (altitudeTarget - altitude > 0) altitude += 1;
+    double diff = abs(targetAltitude - altitude);
+
+    if (diff > 500.0) {
+        if (altitude < targetAltitude) altitude += 200.0; else altitude -= 200.0;
+    }
+    else if (diff > 100.0) {
+        if (altitude < targetAltitude) altitude += 40.0; else altitude -= 40.0;
+    }
+    else if (diff > 50.0) {
+        if (altitude < targetAltitude) altitude += 20.0; else altitude -= 20.0;
+    }
+    else if (diff > 10.0) {
+        if (altitude < targetAltitude) altitude += 5.0; else altitude -= 5.0;
+    }
+    else if (diff > 5.0) {
+        if (altitude < targetAltitude) altitude += 2.0; else altitude -= 2.0;
+    }
+    else if (diff > 1) {
+        if (altitude < targetAltitude) altitude += 1.0; else altitude -= 1.0;
+    }
+    else {
+        altitude = targetAltitude;
+    }
 }
 
 /// <summary>

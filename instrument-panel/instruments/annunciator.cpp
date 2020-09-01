@@ -91,14 +91,14 @@ void annunciator::render()
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
-    if (globals.active || state != prevState) {
+    if (state != prevState) {
         dimDelay = 750;
         prevState = state;
     }
     else if (dimDelay > 0) {
         dimDelay--;
     }
-    else {
+    else if (!globals.active) {
         dimInstrument();
     }
 }

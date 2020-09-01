@@ -12,8 +12,8 @@ private:
     double mb;            // millibars
     double inhg;          // inches of mercury
     double angle;
+    double targetAltitude;
     double altitude = 0;
-    double altitudeTarget = 0;
 
     // Hardware knobs
     int calKnob = -1;
