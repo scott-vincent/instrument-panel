@@ -41,9 +41,9 @@
   },
   "RPM": {
     "Enabled": true,
-    "Position X": 1562,
-    "Position Y": 13,
-    "Size": 275
+    "Position X": 1543,
+    "Position Y": 10,
+    "Size": 284
   },
   "TC": {
     "Enabled": true,
