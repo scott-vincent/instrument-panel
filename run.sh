@@ -4,4 +4,5 @@ raspi-gpio set 14,15,18,23,24,25,8,7,12,16,20 pu
 # gpio readall
 
 # Run instrument panel
+cd instrument-panel
 ./instrument-panel

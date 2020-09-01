@@ -1,3 +1,5 @@
+echo Building instrument-panel
+cd instrument-panel
 g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     -o instrument-panel \
     -I . \
@@ -24,5 +26,5 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/vsi.cpp \
     instrument-panel.cpp \
     || exit
-echo Built instrument-panel
+echo Done
 echo Run with: ./run.sh
