@@ -75,6 +75,12 @@
     "Position Y": 135,
     "Size": 200
   },
+  "Fuel": {
+    "Enabled": true,
+    "Position X": 72,
+    "Position Y": 375,
+    "Size": 200
+  },
   "EGT": {
     "Enabled": true,
     "Position X": 312,

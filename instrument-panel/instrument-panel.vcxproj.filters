@@ -54,6 +54,9 @@
     <ClCompile Include="instruments\rpm.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\fuel.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="simvarDefs.h" />
     <ClInclude Include="instruments\rpm.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\fuel.h">
       <Filter>instruments</Filter>
     </ClInclude>
   </ItemGroup>

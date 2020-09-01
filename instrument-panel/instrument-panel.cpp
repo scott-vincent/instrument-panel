@@ -91,6 +91,7 @@
 #include "vsi.h"
 #include "annunciator.h"
 #include "digitalClock.h"
+#include "fuel.h"
 #include "egt.h"
 #include "vac.h"
 #include "oil.h"
@@ -516,16 +517,20 @@ void addInstruments()
         instruments.push_back(new digitalClock(250, 250, 200));
     }
 
+    if (globals.simVars->isEnabled("Fuel")) {
+        instruments.push_back(new fuel(50, 500, 200));
+    }
+
     if (globals.simVars->isEnabled("EGT")) {
-        instruments.push_back(new egt(50, 500, 200));
+        instruments.push_back(new egt(250, 500, 200));
     }
 
     if (globals.simVars->isEnabled("VAC")) {
-        instruments.push_back(new vac(250, 500, 200));
+        instruments.push_back(new vac(50, 750, 200));
     }
 
     if (globals.simVars->isEnabled("Oil")) {
-        instruments.push_back(new oil(50, 750, 200));
+        instruments.push_back(new oil(250, 750, 200));
     }
 
     if (globals.simVars->isEnabled("Trim Flaps")) {

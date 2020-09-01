@@ -22,6 +22,8 @@ const char* SimVarDefs[][2] = {
     { "Ambient Temperature", "celsius" },
     { "General Eng Rpm:1", "rpm" },
     { "General Eng Elapsed Time:1", "hours" },
+    { "Fuel Tank Left Main Level", "percent" },
+    { "Fuel Tank Right Main Level", "percent" },
     { "Adi Cal", "todo" },
     { "Heading Bug", "todo" },
     { NULL, NULL }

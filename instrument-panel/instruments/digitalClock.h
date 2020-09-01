@@ -13,7 +13,7 @@ private:
     int button2 = 0;
     int button3 = 0;
     int topView = 0;
-    int bottomView = 0;
+    int bottomView = 1;
     int voltsx10;
     int tempFx10;
     int tempCx10;

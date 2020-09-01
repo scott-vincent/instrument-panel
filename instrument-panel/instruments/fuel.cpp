@@ -1,36 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "newInstrument.h"
+#include "fuel.h"
 #include "simvars.h"
 #include "knobs.h"
 
-newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+fuel::fuel(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
-    setName("New Instrument");
+    setName("Fuel");
     addVars();
-
-#ifndef _WIN32
-    // Only have hardware knobs on Raspberry Pi
-    if (globals.hardwareKnobs) {
-        addKnobs();
-    }
-#endif
-
     resize();
 }
 
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void newInstrument::resize()
+void fuel::resize()
 {
     destroyBitmaps();
 
-    // Create bitmaps scaled to correct size (original size is 800)
-    scaleFactor = size / 800.0f;
+    // Create bitmaps scaled to correct size (original size is 400)
+    scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("new-instrument.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("fuel.bmp");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -41,22 +33,28 @@ void newInstrument::resize()
     ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
     addBitmap(bmp);
 
-    // 2 = Main dial
+    // 2 = Dials
     bmp = al_create_bitmap(size, size);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
+    al_draw_scaled_bitmap(orig, 0, 0, 400, 400, 0, 0, size, size, 0);
     addBitmap(bmp);
 
-    // 3 = Pointer
-    bmp = al_create_bitmap(800, 100);
+    // 3 = Top layer
+    bmp = al_create_bitmap(size, size);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 800, 800, 100, 0, 0, 0);
+    al_draw_scaled_bitmap(orig, 0, 400, 400, 400, 0, 0, size, size, 0);
     addBitmap(bmp);
 
-    // 4 = Pointer shadow
-    bmp = al_create_bitmap(800, 100);
+    // 4 = Pointer
+    bmp = al_create_bitmap(200, 40);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 900, 800, 100, 0, 0, 0);
+    al_draw_bitmap_region(orig, 0, 800, 200, 40, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 5 = Pointer shadow
+    bmp = al_create_bitmap(200, 40);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 200, 800, 200, 40, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -65,7 +63,7 @@ void newInstrument::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void newInstrument::render()
+void fuel::render()
 {
     if (bitmaps[0] == NULL) {
         return;
@@ -77,22 +75,31 @@ void newInstrument::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Add main dial
+    // Add dials
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
     if (globals.enableShadows) {
         // Set blender to multiply (shades of grey darken, white has no effect)
         al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
-        // Add pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[4], 400, 50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
+        // Add left pointer shadow
+        al_draw_scaled_rotated_bitmap(bitmaps[5], 72, 20, 82 * scaleFactor, 210 * scaleFactor, scaleFactor, scaleFactor, angleLeft * DegreesToRadians, 0);
+
+        // Add right pointer shadow
+        al_draw_scaled_rotated_bitmap(bitmaps[5], 72, 20, 338 * scaleFactor, 210 * scaleFactor, scaleFactor, scaleFactor, angleRight * DegreesToRadians, 0);
 
         // Restore normal blender
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
 
-    // Add pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
+    // Add left pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 72, 20, 72 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, angleLeft * DegreesToRadians, 0);
+
+    // Add right pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 72, 20, 328 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, angleRight * DegreesToRadians, 0);
+
+    // Add top layer
+    al_draw_bitmap(bitmaps[3], 0, 0, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -107,7 +114,7 @@ void newInstrument::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void newInstrument::update()
+void fuel::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -120,48 +127,19 @@ void newInstrument::update()
         resize();
     }
 
-#ifndef _WIN32
-    // Only have hardware knobs on Raspberry Pi
-    if (globals.hardwareKnobs) {
-        updateKnobs();
-    }
-#endif
-
     // Get latest FlightSim variables
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = simVars->adiBank / 100.0;
+    angleLeft = 51 - simVars->fuelLeft * 1.02;
+    angleRight = 127 + simVars->fuelRight * 1.04;
 }
 
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void newInstrument ::addVars()
+void fuel::addVars()
 {
-    globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "Fuel Tank Left Main Level", false, 1, 0);
+    globals.simVars->addVar(name, "Fuel Tank Right Main Level", false, 1, 0);
 }
-
-#ifndef _WIN32
-
-void newInstrument::addKnobs()
-{
-    // BCM GPIO 2 and 3
-    calKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
-}
-
-void newInstrument::updateKnobs()
-{
-    // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(calKnob);
-
-    if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double simVarVal = val / 10;
-
-        // Update new instrument variable
-        globals.simVars->write("simvar", simVarVal);
-    }
-}
-
-#endif // !_WIN32
