@@ -11,14 +11,15 @@ extern globalVars globals;
 const int MaxBitmaps = 18;
 
 // Convert Allegro4 angle (256 = full circle) into radians
-const float AngleFactor = 2.0f * ALLEGRO_PI / 256.0f;
-const float DegreesToRadians = ALLEGRO_PI / 180.0f;
+const double AngleFactor = 2.0f * ALLEGRO_PI / 256.0f;
+const double DegreesToRadians = ALLEGRO_PI / 180.0f;
 
 class instrument
 {
 protected:
     int bitmapCount = 0;
     ALLEGRO_BITMAP* bitmaps[MaxBitmaps] = { NULL };
+    ALLEGRO_BITMAP* dim = NULL;
 
 public:
     char name[256];
@@ -30,6 +31,7 @@ public:
     instrument(int xPos, int yPos, int size);
     ~instrument();
     void setName(const char* name);
+    void dimInstrument();
     virtual void resize() = 0;
     virtual void render() = 0;
     virtual void update() = 0;

@@ -179,15 +179,13 @@ void adiLearjet::render()
     // Draw roll pointer
     al_draw_scaled_rotated_bitmap(bitmaps[8], 50 * scaleFactor, 300 * scaleFactor, 400 * scaleFactor, 400 * scaleFactor, .94, .94, bankAngle * 0.7111111 * DegreesToRadians, 0);
 
-    // Display 'Not Connected message'
-    if (!globals.connected)
-    {
-        //al_draw_scaled_bitmap(bitmaps[0], 506, 2198, 240, 84, 162 * scaleFactor, 318 * scaleFactor, 480 * scaleFactor, 168 * scaleFactor, 0);
-    }
-
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+
+    if (!globals.connected) {
+        dimInstrument();
+    }
 }
 
 /// <summary>

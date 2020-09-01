@@ -9,7 +9,8 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    float angle;
+    int prevState = -1;
+    int dimDelay;
 
 public:
     annunciator(int xPos, int yPos, int size);

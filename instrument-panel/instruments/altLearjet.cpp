@@ -173,14 +173,13 @@ void altLearjet::render()
     //Draw needle pointer at angle
     al_draw_scaled_rotated_bitmap(bitmaps[7], 21, 322, var32, var32, scaleFactor, scaleFactor, angle * AngleFactor, 0);
 
-    if (!globals.connected) {
-        // Display 'Not Connected message'
-        //al_draw_scaled_bitmap(bitmaps[0], 289, 229, 240, 84, 162 * scaleFactor, 318 * scaleFactor, 480 * scaleFactor, 168 * scaleFactor, 0);
-    }
-
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+
+    if (!globals.connected) {
+        dimInstrument();
+    }
 }
 
 /// <summary>
@@ -204,35 +203,17 @@ void altLearjet::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    double pressure = simVars->altKollsman * 33.8639 * 16;
+    double altitudeTarget = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
 
-    // Calculate what to add to pressure to keep needle in the correct position.
-    long altitudeCorrection = 0;
-    if (globals.externalControls) {
-        if (pressure < 15168) {
-            pressure = 15168;
-        }
-        else if (pressure > 17344) {
-            pressure = 17344;
-        }
-
-        altitudeCorrection = (long)(((((float)pressure / 0.3386389) / 16) - (((float)16208 / 0.3386389) / 16)) * 10);
-    }
-
-    sprintf(hpa, "%4.4d", (int)(pressure / 16));
-    sprintf(inhg, "%4.4d", (int)(simVars->altKollsman * 100));
-
-    //altitudeTarget = (long)(simVars->altAltitude * 3.28084);
-    altitudeTarget = simVars->altAltitude;
-
-    // If manually adjusting pressure cal then add correction offset to altitude
-    if (globals.externalControls) {
-        altitudeTarget += altitudeCorrection;
-    }
+    int mb = simVars->altKollsman * 33.86389;
+    int inhgx100 = simVars->altKollsman * 100;
 
     if (altitudeTarget < 0) {
         altitudeTarget = 0;
     }
+
+    sprintf(hpa, "%4.4d", mb);
+    sprintf(inhg, "%4.4d", inhgx100);
 
     if (altitude - altitudeTarget > 500) altitude -= 200;
     else if (altitudeTarget - altitude > 500) altitude += 200;
@@ -351,7 +332,7 @@ void altLearjet::update()
     var30 = (int)(21 * scaleFactor);
     var31 = (int)(322 * scaleFactor);
     var32 = (int)(400 * scaleFactor);
-    angle = (((float)(100 * atoi(two_char)) + (float)(10 * atoi(tens_char)) + (float)atoi(ones_char)) * .256256256) - 0.15;
+    angle = (100.0 * atoi(two_char) + 10.0 * atoi(tens_char) + atoi(ones_char) * .256256256) - 0.15;
 
     // Calculations for electrics on/off display
     var33 = (int)(277 * scaleFactor);

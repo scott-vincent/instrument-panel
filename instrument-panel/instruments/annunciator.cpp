@@ -68,24 +68,39 @@ void annunciator::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
+    int state;
     if (!globals.dataLinked)
     {
         // 'No Data Link' message
         al_draw_bitmap(bitmaps[3], 0, 0, 0);
+        state = 0;
     }
     else if (!globals.connected)
     {
         // 'Not Connected' message
         al_draw_bitmap(bitmaps[4], 0, 0, 0);
+        state = 1;
     }
     else {
         // Main display
         al_draw_bitmap(bitmaps[2], 0, 0, 0);
+        state = 2;
     }
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+
+    if (state == 2 || state != prevState) {
+        dimDelay = 750;
+        prevState = state;
+    }
+    else if (dimDelay > 0) {
+        dimDelay--;
+    }
+    else {
+        dimInstrument();
+    }
 }
 
 /// <summary>
@@ -109,7 +124,6 @@ void annunciator::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = simVars->adiBank / 100.0f;
 }
 
 /// <summary>

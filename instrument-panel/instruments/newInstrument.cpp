@@ -97,6 +97,10 @@ void newInstrument::render()
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+
+    if (!globals.connected) {
+        dimInstrument();
+    }
 }
 
 /// <summary>

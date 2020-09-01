@@ -78,5 +78,28 @@ void instrument::destroyBitmaps()
     }
 
     bitmapCount = 0;
+
+    if (dim) {
+        al_destroy_bitmap(dim);
+        dim = NULL;
+    }
 }
 
+/// <summary>
+/// Will dim the instrument when not connected, i.e. screensaver
+/// </summary>
+void instrument::dimInstrument()
+{
+    if (dim == NULL) {
+        dim = loadBitmap("dim.bmp");
+    }
+
+    // Set blender to multiply (shades of grey darken, white has no effect)
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+    // Add pointer shadow
+    al_draw_scaled_bitmap(dim, 0, 0, 8, 8, xPos, yPos, size, size, 0);
+
+    // Restore normal blender
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
+}
