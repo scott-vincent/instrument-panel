@@ -85,17 +85,21 @@
 #include "asi.h"
 #include "adi.h"
 #include "alt.h"
-#include "rpm.h"
+#include "vor1.h"
 #include "tc.h"
 #include "hi.h"
 #include "vsi.h"
+#include "vor2.h"
+#include "trimFlaps.h"
+#include "rpm.h"
+#include "adf.h"
 #include "annunciator.h"
 #include "digitalClock.h"
 #include "fuel.h"
 #include "egt.h"
 #include "vac.h"
 #include "oil.h"
-#include "trimFlaps.h"
+#include "radio.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -493,8 +497,8 @@ void addInstruments()
         instruments.push_back(new alt(1100, 50, 300));
     }
 
-    if (globals.simVars->isEnabled("RPM")) {
-        instruments.push_back(new rpm(1500, 50, 300));
+    if (globals.simVars->isEnabled("VOR1")) {
+        instruments.push_back(new vor1(1500, 50, 300));
     }
 
     if (globals.simVars->isEnabled("TC")) {
@@ -507,6 +511,22 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("VSI")) {
         instruments.push_back(new vsi(1100, 400, 300));
+    }
+
+    if (globals.simVars->isEnabled("VOR2")) {
+        instruments.push_back(new vor2(1500, 400, 300));
+    }
+
+    if (globals.simVars->isEnabled("Trim Flaps")) {
+        instruments.push_back(new trimFlaps(700, 750, 300));
+    }
+
+    if (globals.simVars->isEnabled("RPM")) {
+        instruments.push_back(new rpm(1100, 750, 300));
+    }
+
+    if (globals.simVars->isEnabled("ADF")) {
+        instruments.push_back(new adf(1500, 750, 300));
     }
 
     if (globals.simVars->isEnabled("Annunciator")) {
@@ -533,8 +553,8 @@ void addInstruments()
         instruments.push_back(new oil(250, 750, 200));
     }
 
-    if (globals.simVars->isEnabled("Trim Flaps")) {
-        instruments.push_back(new trimFlaps(700, 750, 300));
+    if (globals.simVars->isEnabled("Radio")) {
+        instruments.push_back(new radio(50, 1000, 600));
     }
 }
 

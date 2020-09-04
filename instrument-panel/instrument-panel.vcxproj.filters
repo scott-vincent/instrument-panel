@@ -57,6 +57,18 @@
     <ClCompile Include="instruments\fuel.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\vor1.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\radio.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\adf.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\vor2.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -113,6 +125,18 @@
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\fuel.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\vor1.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\radio.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\adf.h">
+      <Filter>instruments</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\vor2.h">
       <Filter>instruments</Filter>
     </ClInclude>
   </ItemGroup>

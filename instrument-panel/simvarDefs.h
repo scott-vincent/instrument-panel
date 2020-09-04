@@ -29,6 +29,11 @@ struct SimVars
     double rpmElapsedTime = 0;
     double fuelLeft = 0;
     double fuelRight = 0;
+    double vor1Obs = 0;
+    double vor1RadialError = 0;
+    double vor1GlideSlopeError = 0;
+    double vor1ToFrom = 0;
+    double vor1GlideSlopeFlag = 0;
     double adiCal = 0;
     double hiHeadingBug = 0;
 };

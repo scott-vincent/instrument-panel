@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="instrument-panel.cpp" />
     <ClCompile Include="instrument.cpp" />
+    <ClCompile Include="instruments\adf.cpp" />
     <ClCompile Include="instruments\adi.cpp" />
     <ClCompile Include="instruments\adiLearjet.cpp" />
     <ClCompile Include="instruments\alt.cpp" />
@@ -169,10 +170,13 @@
     <ClCompile Include="instruments\fuel.cpp" />
     <ClCompile Include="instruments\hi.cpp" />
     <ClCompile Include="instruments\oil.cpp" />
+    <ClCompile Include="instruments\radio.cpp" />
     <ClCompile Include="instruments\rpm.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\trimFlaps.cpp" />
     <ClCompile Include="instruments\vac.cpp" />
+    <ClCompile Include="instruments\vor1.cpp" />
+    <ClCompile Include="instruments\vor2.cpp" />
     <ClCompile Include="instruments\vsi.cpp" />
     <ClCompile Include="knobs.cpp" />
     <ClCompile Include="simvarDefs.cpp" />
@@ -181,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="globals.h" />
     <ClInclude Include="instrument.h" />
+    <ClInclude Include="instruments\adf.h" />
     <ClInclude Include="instruments\adi.h" />
     <ClInclude Include="instruments\adiLearjet.h" />
     <ClInclude Include="instruments\alt.h" />
@@ -193,10 +198,13 @@
     <ClInclude Include="instruments\fuel.h" />
     <ClInclude Include="instruments\hi.h" />
     <ClInclude Include="instruments\oil.h" />
+    <ClInclude Include="instruments\radio.h" />
     <ClInclude Include="instruments\rpm.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\trimFlaps.h" />
     <ClInclude Include="instruments\vac.h" />
+    <ClInclude Include="instruments\vor1.h" />
+    <ClInclude Include="instruments\vor2.h" />
     <ClInclude Include="instruments\vsi.h" />
     <ClInclude Include="knobs.h" />
     <ClInclude Include="simvarDefs.h" />

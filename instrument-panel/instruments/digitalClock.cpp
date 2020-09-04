@@ -294,7 +294,7 @@ void digitalClock::addVars()
     globals.simVars->addVar(name, "Zulu Time", false, 60, 43200);
     globals.simVars->addVar(name, "Local Time", false, 60, 46800);
     globals.simVars->addVar(name, "Absolute Time", false, 60, 0);
-    globals.simVars->addVar(name, "Electrical Battery Voltage", false, 0.1, 23.7);
+    globals.simVars->addVar(name, "Electrical Battery Bus Voltage", false, 0.1, 23.7);
 }
 
 #ifndef _WIN32

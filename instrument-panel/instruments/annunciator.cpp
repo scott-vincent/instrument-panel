@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 #include "annunciator.h"
 #include "simvars.h"
 
 annunciator::annunciator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Annunciator");
-    addVars();
     resize();
 }
 
@@ -32,22 +34,28 @@ void annunciator::resize()
     ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size / 4);
     addBitmap(bmp);
 
-    // 2 = Main panel
+    // 2 = No warnings
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 0, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 3 = No data link
+    // 3 = Low fuel
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 200, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 4 = Not connected
+    // 4 = No data link
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 400, 800, 200, 0, 0, size, size / 4, 0);
+    addBitmap(bmp);
+
+    // 5 = Not connected
+    bmp = al_create_bitmap(size, size / 4);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 600, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -72,19 +80,25 @@ void annunciator::render()
     if (!globals.dataLinked)
     {
         // 'No Data Link' message
-        al_draw_bitmap(bitmaps[3], 0, 0, 0);
+        al_draw_bitmap(bitmaps[4], 0, 0, 0);
         state = 0;
     }
     else if (!globals.connected)
     {
         // 'Not Connected' message
-        al_draw_bitmap(bitmaps[4], 0, 0, 0);
+        al_draw_bitmap(bitmaps[5], 0, 0, 0);
         state = 1;
     }
     else {
-        // Main display
-        al_draw_bitmap(bitmaps[2], 0, 0, 0);
         state = 2;
+
+        if (fuelWarning) {
+            al_draw_bitmap(bitmaps[3], 0, 0, 0);
+        }
+        else {
+            // No warnings
+            al_draw_bitmap(bitmaps[2], 0, 0, 0);
+        }
     }
 
     // Position dest bitmap on screen
@@ -124,12 +138,42 @@ void annunciator::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-}
+    double fuelLevel = (simVars->fuelLeft + simVars->fuelRight) / 2;
 
-/// <summary>
-/// Add FlightSim variables for this instrument (used for simulation mode)
-/// </summary>
-void annunciator::addVars()
-{
-    // globals.simVars->addVar(name, "Value", false, 1, 0);
+    // Warning at 5 gallons = 19%
+    if (fuelLevel > 19) {
+        fuelWarning = false;
+    }
+    else if (prevFuel > 19) {
+        // Start flashing for 10 seconds
+        prevFuel = fuelLevel;
+        flashCount = 20;
+        fuelWarning = true;
+#ifdef _WIN32
+        lastFlash = GetTickCount64();
+#else
+        clock_gettime(CLOCK_MONOTONIC, &lastFlash);
+#endif
+    }
+    else if (flashCount > 0) {
+        // Alternate on/off every 1 second
+        long timeDiff;
+#ifdef _WIN32
+        long now = GetTickCount64();
+        timeDiff = now - lastFlash;
+#else
+        timespec now;
+        clock_gettime(CLOCK_MONOTONIC, &now);
+        timeDiff = (now.tv_sec - lastFlash.tv_sec) * 1000 + (now.tv_nsec - lastFlash.tv_nsec) / 1000000);
+#endif
+        if (timeDiff >= 500) {
+            fuelWarning = !fuelWarning;
+            flashCount--;
+            lastFlash = now;
+        }
+    }
+    else {
+        // Steady fuel warning
+        fuelWarning = true;
+    }
 }

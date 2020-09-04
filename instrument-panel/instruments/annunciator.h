@@ -2,6 +2,9 @@
 #define _ANNUNCIATOR_H_
 
 #include "instrument.h"
+#ifndef _WIN32
+#include <time.h>
+#endif
 
 class annunciator : public instrument
 {
@@ -10,6 +13,14 @@ private:
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
     int prevState = -1;
+    bool fuelWarning;
+    double prevFuel = 100;
+    int flashCount;
+#ifdef _WIN32
+    long lastFlash;
+#else
+    timespec lastFlash;
+#endif
     int dimDelay;
 
 public:
@@ -19,7 +30,6 @@ public:
 
 private:
     void resize();
-    void addVars();
 };
 
 #endif // _ANNUNCIATOR_H

@@ -139,7 +139,7 @@ void newInstrument::update()
 /// </summary>
 void newInstrument ::addVars()
 {
-    globals.simVars->addVar(name, "Value", false, 1, 0);
+    //globals.simVars->addVar(name, "Value", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -160,7 +160,7 @@ void newInstrument::updateKnobs()
         double simVarVal = val / 10;
 
         // Update new instrument variable
-        globals.simVars->write("simvar", simVarVal);
+        //globals.simVars->write("simvar", simVarVal);
     }
 }
 
