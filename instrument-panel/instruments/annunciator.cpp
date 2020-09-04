@@ -106,7 +106,7 @@ void annunciator::render()
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
     if (state != prevState) {
-        dimDelay = 750;
+        dimDelay = 1000;
         prevState = state;
     }
     else if (dimDelay > 0) {

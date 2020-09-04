@@ -123,10 +123,10 @@
     "Position Y": 615,
     "Size": 200
   },
-  "Radio": {
+  "Nav": {
     "Enabled": true,
     "Position X": 72,
     "Position Y": 855,
-    "Size": 560
+    "Size": 600
   }
 }

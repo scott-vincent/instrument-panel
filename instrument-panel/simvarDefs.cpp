@@ -29,6 +29,11 @@ const char* SimVarDefs[][2] = {
     { "Nav Glide Slope Error:1", "degrees" },
     { "Nav ToFrom:1", "enum" },
     { "Nav Gs Flag:1", "bool" },
+    { "Nav Obs:2", "degrees" },
+    { "Nav Radial Error:2", "degrees" },
+    { "Nav ToFrom:2", "enum" },
+    { "Adf Radial:1", "degrees" },
+    { "Adf Card", "degrees" },
     { "Adi Cal", "todo" },
     { "Heading Bug", "todo" },
     { NULL, NULL }

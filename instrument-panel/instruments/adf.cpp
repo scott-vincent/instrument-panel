@@ -41,22 +41,22 @@ void adf::resize()
     ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
     addBitmap(bmp);
 
-    // 2 = Main dial
+    // 2 = Locator
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 0, 800, 800, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 3 = Compass
+    bmp = al_create_bitmap(800, 800);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 800, 0, 800, 800, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 4 = Top
     bmp = al_create_bitmap(size, size);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
-    addBitmap(bmp);
-
-    // 3 = Pointer
-    bmp = al_create_bitmap(800, 100);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 800, 800, 100, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 4 = Pointer shadow
-    bmp = al_create_bitmap(800, 100);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 900, 800, 100, 0, 0, 0);
+    al_draw_scaled_bitmap(orig, 1600, 0, 800, 800, 0, 0, size, size, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -77,22 +77,14 @@ void adf::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Add main dial
-    al_draw_bitmap(bitmaps[2], 0, 0, 0);
+    // Add locator
+    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, locAngle * DegreesToRadians, 0);
 
-    if (globals.enableShadows) {
-        // Set blender to multiply (shades of grey darken, white has no effect)
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+    // Add compass
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, compassAngle * DegreesToRadians, 0);
 
-        // Add pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[4], 400, 50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
-
-        // Restore normal blender
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    }
-
-    // Add pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
+    // Add top
+    al_draw_bitmap(bitmaps[4], 0, 0, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -131,7 +123,8 @@ void adf::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = simVars->adiBank / 100.0;
+    locAngle = simVars->adfRadial;
+    compassAngle = simVars->adfCard;
 }
 
 /// <summary>
@@ -139,7 +132,8 @@ void adf::update()
 /// </summary>
 void adf::addVars()
 {
-    //globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "Adf Radial:1", false, 1, 0);
+    globals.simVars->addVar(name, "Adf Card", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -147,20 +141,20 @@ void adf::addVars()
 void adf::addKnobs()
 {
     // BCM GPIO 2 and 3
-    calKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
+    hdgKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
 }
 
 void adf::updateKnobs()
 {
     // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(calKnob);
+    int val = globals.hardwareKnobs->read(hdgKnob);
 
     if (val != INT_MIN) {
         // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double simVarVal = val / 10;
+        double hdgVal = val / 10;
 
         // Update new instrument variable
-        globals.simVars->write("simvar", simVarVal);
+        //globals.simVars->write("Adf Card", hdgVal);
     }
 }
 

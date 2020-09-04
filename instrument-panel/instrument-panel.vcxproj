@@ -170,7 +170,7 @@
     <ClCompile Include="instruments\fuel.cpp" />
     <ClCompile Include="instruments\hi.cpp" />
     <ClCompile Include="instruments\oil.cpp" />
-    <ClCompile Include="instruments\radio.cpp" />
+    <ClCompile Include="instruments\nav.cpp" />
     <ClCompile Include="instruments\rpm.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\trimFlaps.cpp" />
@@ -198,7 +198,7 @@
     <ClInclude Include="instruments\fuel.h" />
     <ClInclude Include="instruments\hi.h" />
     <ClInclude Include="instruments\oil.h" />
-    <ClInclude Include="instruments\radio.h" />
+    <ClInclude Include="instruments\nav.h" />
     <ClInclude Include="instruments\rpm.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\trimFlaps.h" />

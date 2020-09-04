@@ -9,10 +9,12 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    double angle;
+    double compassAngle;
+    double locAngle;
+    int toFromOn;
 
     // Hardware knobs
-    int calKnob = -1;
+    int obsKnob = -1;
 
 public:
     vor2(int xPos, int yPos, int size);

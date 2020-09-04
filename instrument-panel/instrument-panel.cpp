@@ -99,7 +99,7 @@
 #include "egt.h"
 #include "vac.h"
 #include "oil.h"
-#include "radio.h"
+#include "nav.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -553,8 +553,8 @@ void addInstruments()
         instruments.push_back(new oil(250, 750, 200));
     }
 
-    if (globals.simVars->isEnabled("Radio")) {
-        instruments.push_back(new radio(50, 1000, 600));
+    if (globals.simVars->isEnabled("Nav")) {
+        instruments.push_back(new nav(50, 1000, 600));
     }
 }
 

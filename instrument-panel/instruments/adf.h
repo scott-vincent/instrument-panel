@@ -9,10 +9,11 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    double angle;
+    double locAngle;
+    double compassAngle;
 
     // Hardware knobs
-    int calKnob = -1;
+    int hdgKnob = -1;
 
 public:
     adf(int xPos, int yPos, int size);

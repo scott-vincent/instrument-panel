@@ -34,6 +34,11 @@ struct SimVars
     double vor1GlideSlopeError = 0;
     double vor1ToFrom = 0;
     double vor1GlideSlopeFlag = 0;
+    double vor2Obs = 0;
+    double vor2RadialError = 0;
+    double vor2ToFrom = 0;
+    double adfRadial = 0;
+    double adfCard = 0;
     double adiCal = 0;
     double hiHeadingBug = 0;
 };
