@@ -9,6 +9,7 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    int switchSel = 0;
     int com1Freq;
     int com1Standby;
     int nav1Freq;
@@ -32,6 +33,8 @@ public:
 private:
     void resize();
     void addFreq(int freq, int x, int y);
+    void addFreq2dp(int freq, int x, int y);
+    void addFreq3dp(int freq, int x, int y);
     void addVars();
     void addKnobs();
     void updateKnobs();

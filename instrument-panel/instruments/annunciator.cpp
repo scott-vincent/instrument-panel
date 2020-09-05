@@ -141,7 +141,7 @@ void annunciator::update()
     double fuelLevel = (simVars->fuelLeft + simVars->fuelRight) / 2;
 
     // Warning at 5 gallons = 19%
-    if (fuelLevel > 19) {
+    if (fuelLevel == 0 || fuelLevel > 19) {
         fuelWarning = false;
     }
     else if (prevFuel > 19) {

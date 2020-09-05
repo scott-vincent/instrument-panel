@@ -59,6 +59,12 @@ void nav::resize()
     al_draw_bitmap_region(orig, 380, 400, 20, 80, 0, 0, 0);
     addBitmap(bmp);
 
+    // 5 = Switch
+    bmp = al_create_bitmap(80 * scaleFactor, 34 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 400, 400, 80, 34, 0, 0, 80 * scaleFactor, 34 * scaleFactor, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -80,20 +86,37 @@ void nav::render()
     // Add main
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
+    // Add selected switch
+    int switchX;
+    int switchY;
+    switch (switchSel) {
+    case 0:
+        switchX = 460; switchY = 104; break;
+    case 1:
+        switchX = 1064; switchY = 104; break;
+    case 2:
+        switchX = 460; switchY = 233; break;
+    case 3:
+        switchX = 1064; switchY = 233; break;
+    default:
+        switchX = 649; switchY = 363; break;
+    }
+    al_draw_bitmap(bitmaps[5], switchX * scaleFactor, switchY * scaleFactor, 0);
+
     // Add panel 1 frequencies
-    addFreq(com1Freq, 237, 19);
-    addFreq(com1Standby, 553, 19);
-    addFreq(nav1Freq, 837, 19);
-    addFreq(nav1Standby, 1153, 19);
+    addFreq3dp(com1Freq, 237, 19);
+    addFreq3dp(com1Standby, 523, 19);
+    addFreq2dp(nav1Freq, 837, 19);
+    addFreq2dp(nav1Standby, 1153, 19);
 
     // Add panel 2 frequencies
-    addFreq(com2Freq, 237, 148);
-    addFreq(com2Standby, 553, 148);
-    addFreq(nav2Freq, 837, 148);
-    addFreq(nav2Standby, 1153, 148);
+    addFreq3dp(com2Freq, 237, 148);
+    addFreq3dp(com2Standby, 523, 148);
+    addFreq2dp(nav2Freq, 837, 148);
+    addFreq2dp(nav2Standby, 1153, 148);
 
     // Add panel 3 frequencies
-    addFreq(adfFreq, 374, 278);
+    addFreq(adfFreq, 370, 278);
     addFreq(adfStandby, 790, 278);
 
     // Position dest bitmap on screen
@@ -101,11 +124,34 @@ void nav::render()
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
     if (!globals.active) {
-        dimInstrument();
+        //dimInstrument();
     }
 }
 
+/// <summary>
+/// Displays the specified frequency to 0 d.p.
+/// </summary>
 void nav::addFreq(int freq, int x, int y)
+{
+    int digit1 = (freq % 10000) / 1000;
+    int digit2 = (freq % 1000) / 100;
+    int digit3 = (freq % 100) / 10;
+    int digit4 = freq % 10;
+
+    int yPos = y * scaleFactor;
+    int width = 38 * scaleFactor;
+    int height = 80 * scaleFactor;
+
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 114) * scaleFactor, yPos, width, height, 0);
+}
+
+/// <summary>
+/// Displays the specified frequency to 2 d.p.
+/// </summary>
+void nav::addFreq2dp(int freq, int x, int y)
 {
     int digit1 = freq / 10000;
     int digit2 = (freq % 10000) / 1000;
@@ -123,6 +169,31 @@ void nav::addFreq(int freq, int x, int y)
     al_draw_scaled_bitmap(bitmaps[4], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
     al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
     al_draw_scaled_bitmap(bitmaps[3], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
+}
+
+/// <summary>
+/// Displays the specified frequency to 3 d.p.
+/// </summary>
+void nav::addFreq3dp(int freq, int x, int y)
+{
+    int digit1 = freq / 100000;
+    int digit2 = (freq % 100000) / 10000;
+    int digit3 = (freq % 10000) / 1000;
+    int digit4 = (freq % 1000) / 100;
+    int digit5 = (freq % 100) / 10;
+    int digit6 = freq % 10;
+
+    int yPos = y * scaleFactor;
+    int width = 38 * scaleFactor;
+    int height = 80 * scaleFactor;
+
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit6, 0, 38, 80, (x + 210) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -152,17 +223,17 @@ void nav::update()
     // Get latest FlightSim variables
     SimVars* simVars = &globals.simVars->simVars;
 
-    // Calculate values
-    int com1Freq = simVars->com1Freq * 100.0;
-    int com1Standby = simVars->com1Standby * 100.0;
-    int nav1Freq = simVars->nav1Freq * 100.0;
-    int nav1Standby = simVars->nav1Standby * 100.0;
-    int com2Freq = simVars->com2Freq * 100.0;
-    int com2Standby = simVars->com2Standby * 100.0;
-    int nav2Freq = simVars->nav2Freq * 100.0;
-    int nav2Standby = simVars->nav2Standby * 100.0;
-    int adfFreq = simVars->adfFreq * 100.0;
-    int adfStandby = simVars->adfStandby * 100.0;
+    // Calculate values - 3 d.p. for comms, 2 d.p. for nav, 0 d.p. for adf
+    com1Freq = (simVars->com1Freq + 0.0000001) * 1000.0;
+    com1Standby = (simVars->com1Standby + 0.0000001) * 1000.0;
+    nav1Freq = (simVars->nav1Freq + 0.0000001) * 100.0;
+    nav1Standby = (simVars->nav1Standby + 0.0000001) * 100.0;
+    com2Freq = (simVars->com2Freq + 0.0000001) * 1000.0;
+    com2Standby = (simVars->com2Standby + 0.0000001) * 1000.0;
+    nav2Freq = (simVars->nav2Freq + 0.0000001) * 100.0;
+    nav2Standby = (simVars->nav2Standby + 0.0000001) * 100.0;
+    adfFreq = simVars->adfFreq;
+    adfStandby = simVars->adfStandby;
 }
 
 /// <summary>
@@ -195,12 +266,12 @@ void nav::addKnobs()
 
 void nav::updateKnobs()
 {
-    // Read knob for radio select
+    // Read knob for switch selection
     int val = globals.hardwareKnobs->read(selKnob);
 
     if (val != INT_MIN) {
         // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double selVal = val / 10;
+        switchSel = val / 10;
 
         // Update new instrument variable
         //globals.simVars->write("simvar", simVarVal);
