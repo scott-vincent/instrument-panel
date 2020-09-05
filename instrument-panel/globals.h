@@ -32,6 +32,7 @@ struct globalVars
 
     char dataLinkHost[64] = "127.0.0.1";
     int dataLinkPort = 52020;
+    int startOnMonitor = 0;
 
     bool quit = false;
     bool arranging = false;
@@ -42,7 +43,6 @@ struct globalVars
     bool electrics = false;
     bool externalControls = false;
     bool enableShadows = true;
-    bool tweak = false;
 };
 
 #endif // _GLOBALS_H_

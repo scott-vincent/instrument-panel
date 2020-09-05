@@ -288,6 +288,46 @@ void doUpdate()
 }
 
 /// <summary>
+/// Switches the display to the next monitor if multiple monitors are connected
+/// </summary>
+void switchMonitor()
+{
+    // Find all monitor positions
+    int monCount = al_get_num_video_adapters();
+
+    if (monCount <= 1) {
+        return;
+    }
+
+    int monX[16];
+    int monY[16];
+
+    int monNum = 0;
+    for (int i = 0; i < monCount; i++) {
+        ALLEGRO_MONITOR_INFO monitorInfo;
+        al_get_monitor_info(i, &monitorInfo);
+
+        monX[i] = monitorInfo.x1;
+        monY[i] = monitorInfo.y1;
+
+        if (monX[i] == globals.displayX && monY[i] == globals.displayY) {
+            monNum = i;
+        }
+    }
+
+    // Move to next monitor
+    monNum++;
+    if (monNum == monCount) {
+        monNum = 0;
+    }
+
+    globals.displayX = monX[monNum];
+    globals.displayY = monY[monNum];
+
+    al_set_window_position(globals.display, globals.displayX, globals.displayY);
+}
+
+/// <summary>
 /// Try to show any messages on the annunciator display 
 /// </summary>
 void getMessagePos(int *x, int *y, int *width)
@@ -379,46 +419,6 @@ void doRender()
 }
 
 /// <summary>
-/// Switches the display to the next monitor if multiple monitors are connected
-/// </summary>
-void switchMonitor()
-{
-    // Find all monitor positions
-    int monCount = al_get_num_video_adapters();
-
-    if (monCount <= 1) {
-        return;
-    }
-
-    int monX[16];
-    int monY[16];
-
-    int monNum = 0;
-    for (int i = 0; i < monCount; i++) {
-        ALLEGRO_MONITOR_INFO monitorInfo;
-        al_get_monitor_info(i, &monitorInfo);
-
-        monX[i] = monitorInfo.x1;
-        monY[i] = monitorInfo.y1;
-
-        if (monX[i] == globals.displayX && monY[i] == globals.displayY) {
-            monNum = i;
-        }
-    }
-
-    // Move to next monitor
-    monNum++;
-    if (monNum == monCount) {
-        monNum = 0;
-    }
-
-    globals.displayX = monX[monNum];
-    globals.displayY = monY[monNum];
-
-    al_set_window_position(globals.display, globals.displayX, globals.displayY);
-}
-
-/// <summary>
 /// Handle keypress
 /// </summary>
 void doKeypress(ALLEGRO_EVENT *event)
@@ -449,11 +449,6 @@ void doKeypress(ALLEGRO_EVENT *event)
     case ALLEGRO_KEY_S:
         // Enable/disable shadows on instruments
         globals.enableShadows = !globals.enableShadows;
-        break;
-
-    case ALLEGRO_KEY_T:
-        // Used for debugging
-        globals.tweak = !globals.tweak;
         break;
 
     case ALLEGRO_KEY_ESCAPE:
@@ -564,6 +559,10 @@ void addInstruments()
 int main()
 {
     init();
+
+    for (int i = 0; i < globals.startOnMonitor; i++) {
+        switchMonitor();
+    }
 
     addCommon();
     addInstruments();

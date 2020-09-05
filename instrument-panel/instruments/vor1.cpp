@@ -116,9 +116,6 @@ void vor1::render()
     // Add back
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    // Add compass
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, compassAngle * DegreesToRadians, 0);
-
     // Add glide slope on
     if (glideSlopeOn == 1) {
         al_draw_bitmap(bitmaps[4], 490 * scaleFactor, 335 * scaleFactor, 0);
@@ -137,6 +134,9 @@ void vor1::render()
 
     // Add glide slope needle
     al_draw_scaled_rotated_bitmap(bitmaps[8], 140, 15, 140 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, slopeAngle * DegreesToRadians, 0);
+
+    // Add compass
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, compassAngle * DegreesToRadians, 0);
 
     // Add top guide
     al_draw_bitmap(bitmaps[9], 365 * scaleFactor, 0, 0);
@@ -181,11 +181,20 @@ void vor1::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    compassAngle = simVars->vor1Obs;
-    locAngle = simVars->vor1RadialError;
-    slopeAngle = simVars->vor1GlideSlopeError;
+    compassAngle = -simVars->vor1Obs;
+    locAngle = -simVars->vor1RadialError * 15.0;
+    slopeAngle = 50;
     toFromOn = simVars->vor1ToFrom;
     glideSlopeOn = simVars->vor1GlideSlopeFlag;
+
+    if (abs(locAngle) > 50) {
+        if (locAngle > 0) locAngle = 50; else locAngle = -50;
+    }
+
+    slopeAngle = simVars->vor1GlideSlopeError * 25.0;
+    if (abs(slopeAngle) > 50) {
+        if (slopeAngle > 0) slopeAngle = 50; else slopeAngle = -50;
+    }
 }
 
 /// <summary>

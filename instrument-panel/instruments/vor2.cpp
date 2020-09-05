@@ -104,9 +104,6 @@ void vor2::render()
     // Add back
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    // Add compass
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, compassAngle * DegreesToRadians, 0);
-
     // Add to/from on
     if (toFromOn == 1) {
         al_draw_bitmap(bitmaps[5], 478 * scaleFactor, 379 * scaleFactor, 0);
@@ -117,6 +114,9 @@ void vor2::render()
 
     // Add locator needle
     al_draw_scaled_rotated_bitmap(bitmaps[6], 15, 125, 400 * scaleFactor, 125 * scaleFactor, scaleFactor, scaleFactor, locAngle * DegreesToRadians, 0);
+
+    // Add compass
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, compassAngle * DegreesToRadians, 0);
 
     // Add top guide
     al_draw_bitmap(bitmaps[7], 365 * scaleFactor, 0, 0);
@@ -161,9 +161,13 @@ void vor2::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    compassAngle = simVars->vor2Obs;
-    locAngle = simVars->vor2RadialError;
+    compassAngle = -simVars->vor2Obs;
+    locAngle = -simVars->vor2RadialError * 15.0;
     toFromOn = simVars->vor2ToFrom;
+
+    if (abs(locAngle) > 50) {
+        if (locAngle > 0) locAngle = 50; else locAngle = -50;
+    }
 }
 
 /// <summary>

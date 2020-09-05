@@ -124,7 +124,7 @@ void adf::update()
 
     // Calculate values
     locAngle = simVars->adfRadial;
-    compassAngle = simVars->adfCard;
+    compassAngle = -simVars->adfCard;
 }
 
 /// <summary>

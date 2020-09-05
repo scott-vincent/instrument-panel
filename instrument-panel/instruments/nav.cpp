@@ -124,7 +124,7 @@ void nav::render()
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
     if (!globals.active) {
-        //dimInstrument();
+        dimInstrument();
     }
 }
 

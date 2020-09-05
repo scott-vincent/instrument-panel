@@ -17,9 +17,11 @@ typedef int SOCKET;
 #include <allegro5/allegro.h>
 #include "simvars.h"
 
-const char DataLinkGroup[] = "Data Link";
-const char DataLinkHost[] = "Host";
-const char DataLinkPort[] = "Port";
+const char *DataLinkGroup = "Data Link";
+const char *DataLinkHost = "Host";
+const char *DataLinkPort = "Port";
+const char *MonitorGroup = "Monitor";
+const char *MonitorStartOn = "StartOn";
 
 extern const char* SimVarDefs[][2];
 
@@ -113,6 +115,11 @@ void simvars::loadSettings()
                         globals.dataLinkPort = settingValue(value);
                     }
                 }
+                else if (_stricmp(group, MonitorGroup) == 0) {
+                    if (_stricmp(name, MonitorStartOn) == 0) {
+                        globals.startOnMonitor = atoi(value);
+                    }
+                }
                 else if (groupCount == 0 || strcmp(groups[groupCount - 1].name, group) != 0) {
                     // New group
                     strcpy(groups[groupCount].name, group);
@@ -170,6 +177,12 @@ void simvars::saveSettings()
         fprintf(outfile, "    \"%s\": \"%s\",\n", DataLinkHost, globals.dataLinkHost);
         fprintf(outfile, "    \"%s\": %d\n", DataLinkPort, globals.dataLinkPort);
         fprintf(outfile, "  },\n");
+
+        if (globals.startOnMonitor != 0) {
+            fprintf(outfile, "  \"%s\": {\n", MonitorGroup);
+            fprintf(outfile, "    \"%s\": %d\n", MonitorStartOn, globals.startOnMonitor);
+            fprintf(outfile, "  },\n");
+        }
 
         int idx = 0;
         while (idx < groupCount)
@@ -704,7 +717,7 @@ void dataLink(simvars* t)
                         rpmMatch = 0;
                         lastRpm = t->simVars.rpmEngine;
                     }
-                    globals.active = (rpmMatch < 10);
+                    globals.active = (rpmMatch < 60);
                 }
                 else if (bytes > 0) {
                     memcpy(&actualSize, &t->simVars, sizeof(long));
