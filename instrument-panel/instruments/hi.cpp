@@ -142,7 +142,7 @@ void hi::update()
 
     // Calculate values
     angle = -simVars->hiHeading * DegreesToRadians;
-    bugAngle = (simVars->hiHeadingBug - simVars->hiHeading) * DegreesToRadians;
+    bugAngle = (headingBug - simVars->hiHeading) * DegreesToRadians;
 }
 
 /// <summary>
@@ -151,7 +151,6 @@ void hi::update()
 void hi::addVars()
 {
     globals.simVars->addVar(name, "Heading Indicator", false, 1, 0);
-    globals.simVars->addVar(name, "Heading Bug", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -169,10 +168,7 @@ void hi::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to heading (adjust for desired sensitivity)
-        double headingBug = val;
-
-        // Update heading bug variable
-        //globals.simVars->write("Heading Bug", headingBug);
+        headingBug = val;
     }
 }
 

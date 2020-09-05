@@ -47,6 +47,18 @@ void nav::resize()
     al_draw_scaled_bitmap(orig, 0, 0, 1600, 400, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
+    // 3 = Digits
+    bmp = al_create_bitmap(380, 80);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 400, 380, 80, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 4 = Dot
+    bmp = al_create_bitmap(20, 80);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 380, 400, 20, 80, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -68,6 +80,22 @@ void nav::render()
     // Add main
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
+    // Add panel 1 frequencies
+    addFreq(com1Freq, 237, 19);
+    addFreq(com1Standby, 553, 19);
+    addFreq(nav1Freq, 837, 19);
+    addFreq(nav1Standby, 1153, 19);
+
+    // Add panel 2 frequencies
+    addFreq(com2Freq, 237, 148);
+    addFreq(com2Standby, 553, 148);
+    addFreq(nav2Freq, 837, 148);
+    addFreq(nav2Standby, 1153, 148);
+
+    // Add panel 3 frequencies
+    addFreq(adfFreq, 374, 278);
+    addFreq(adfStandby, 790, 278);
+
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
@@ -75,6 +103,26 @@ void nav::render()
     if (!globals.active) {
         dimInstrument();
     }
+}
+
+void nav::addFreq(int freq, int x, int y)
+{
+    int digit1 = freq / 10000;
+    int digit2 = (freq % 10000) / 1000;
+    int digit3 = (freq % 1000) / 100;
+    int digit4 = (freq % 100) / 10;
+    int digit5 = freq % 10;
+
+    int yPos = y * scaleFactor;
+    int width = 38 * scaleFactor;
+    int height = 80 * scaleFactor;
+
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -105,7 +153,16 @@ void nav::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    angle = simVars->adiBank / 100.0;
+    int com1Freq = simVars->com1Freq * 100.0;
+    int com1Standby = simVars->com1Standby * 100.0;
+    int nav1Freq = simVars->nav1Freq * 100.0;
+    int nav1Standby = simVars->nav1Standby * 100.0;
+    int com2Freq = simVars->com2Freq * 100.0;
+    int com2Standby = simVars->com2Standby * 100.0;
+    int nav2Freq = simVars->nav2Freq * 100.0;
+    int nav2Standby = simVars->nav2Standby * 100.0;
+    int adfFreq = simVars->adfFreq * 100.0;
+    int adfStandby = simVars->adfStandby * 100.0;
 }
 
 /// <summary>
@@ -113,7 +170,16 @@ void nav::update()
 /// </summary>
 void nav::addVars()
 {
-    //globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "Com Active Frequency:1", false, 0.01, 100);
+    globals.simVars->addVar(name, "Com Standby Frequency:1", false, 0.01, 100);
+    globals.simVars->addVar(name, "Nav Active Frequency:1", false, 0.01, 100);
+    globals.simVars->addVar(name, "Nav Standby Frequency:1", false, 0.01, 100);
+    globals.simVars->addVar(name, "Com Active Frequency:2", false, 0.01, 100);
+    globals.simVars->addVar(name, "Com Standby Frequency:2", false, 0.01, 100);
+    globals.simVars->addVar(name, "Nav Active Frequency:2", false, 0.01, 100);
+    globals.simVars->addVar(name, "Nav Standby Frequency:2", false, 0.01, 100);
+    globals.simVars->addVar(name, "Adf Active Frequency:1", false, 0.01, 100);
+    globals.simVars->addVar(name, "Adf Standby Frequency:1", false, 0.01, 100);
 }
 
 #ifndef _WIN32
@@ -121,17 +187,31 @@ void nav::addVars()
 void nav::addKnobs()
 {
     // BCM GPIO 2 and 3
-    calKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
+    selKnob = globals.hardwareKnobs->add(2, 3, 0, 49, 0);
+
+    // BCM GPIO 4 and 5
+    freqKnob = globals.hardwareKnobs->add(2, 3, 100, 200, 0);
 }
 
 void nav::updateKnobs()
 {
-    // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(calKnob);
+    // Read knob for radio select
+    int val = globals.hardwareKnobs->read(selKnob);
 
     if (val != INT_MIN) {
         // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double simVarVal = val / 10;
+        double selVal = val / 10;
+
+        // Update new instrument variable
+        //globals.simVars->write("simvar", simVarVal);
+    }
+
+    // Read knob for frequency set
+    val = globals.hardwareKnobs->read(freqKnob);
+
+    if (val != INT_MIN) {
+        // Convert knob value to new instrument value (adjust for desired sensitivity)
+        double freqVal = val;
 
         // Update new instrument variable
         //globals.simVars->write("simvar", simVarVal);

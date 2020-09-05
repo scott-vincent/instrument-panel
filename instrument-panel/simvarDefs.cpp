@@ -34,7 +34,15 @@ const char* SimVarDefs[][2] = {
     { "Nav ToFrom:2", "enum" },
     { "Adf Radial:1", "degrees" },
     { "Adf Card", "degrees" },
-    { "Adi Cal", "todo" },
-    { "Heading Bug", "todo" },
+    { "Com Active Frequency:1", "frequency" },
+    { "Com Standby Frequency:1", "frequency" },
+    { "Nav Active Frequency:1", "mhz" },
+    { "Nav Standby Frequency:1", "mhz" },
+    { "Com Active Frequency:2", "frequency" },
+    { "Com Standby Frequency:2", "frequency" },
+    { "Nav Active Frequency:2", "mhz" },
+    { "Nav Standby Frequency:2", "mhz" },
+    { "Adf Active Frequency:1", "frequency" },
+    { "Adf Standby Frequency:1", "hz" },
     { NULL, NULL }
 };

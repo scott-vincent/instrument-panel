@@ -248,11 +248,11 @@ void adi::update()
     {
         currentAdiCal = 0;
     }
-    else if (currentAdiCal > simVars->adiCal && currentAdiCal > -10)
+    else if (currentAdiCal > adiCal && currentAdiCal > -10)
     {
         currentAdiCal -= 1;
     }
-    else if (currentAdiCal < simVars ->adiCal && currentAdiCal < 10)
+    else if (currentAdiCal < adiCal && currentAdiCal < 10)
     {
         currentAdiCal += 1;
     }
@@ -265,7 +265,6 @@ void adi::addVars()
 {
     globals.simVars->addVar(name, "Attitude Indicator Pitch Degrees", false, 1, 0);
     globals.simVars->addVar(name, "Attitude Indicator Bank Degrees", false, 1, 0);
-    globals.simVars->addVar(name, "Adi Cal", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -283,10 +282,7 @@ void adi::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to variable (adjust for sensitivity)
-        double adiCal = val / 2;
-
-        // Update heading bug variable
-        //globals.simVars->write("Adi Cal", adiCal);
+        adiCal = val / 2;
     }
 }
 

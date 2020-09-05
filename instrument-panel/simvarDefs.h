@@ -39,8 +39,16 @@ struct SimVars
     double vor2ToFrom = 0;
     double adfRadial = 0;
     double adfCard = 0;
-    double adiCal = 0;
-    double hiHeadingBug = 0;
+    double com1Freq = 118.70;
+    double com1Standby = 121.20;
+    double nav1Freq = 113.00;
+    double nav1Standby = 117.20;
+    double com2Freq = 126.30;
+    double com2Standby = 124.50;
+    double nav2Freq = 110.60;
+    double nav2Standby = 116.80;
+    double adfFreq = 394.0;
+    double adfStandby = 368.0;
 };
 
 #endif // _SIMVARDEFS_H_

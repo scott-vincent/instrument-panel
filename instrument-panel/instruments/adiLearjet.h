@@ -11,6 +11,7 @@ private:
     // Instrument values (caclulated from variables and needed to draw the instrument)
     double bankAngle = 0;
     double pitchAngle = 0;
+    int adiCal = 0;
     int currentAdiCal = 0;
     int gyroSpinTime = 0;
     int failCount = 201;

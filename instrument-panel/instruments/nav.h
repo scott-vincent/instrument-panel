@@ -9,10 +9,20 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    double angle;
+    int com1Freq;
+    int com1Standby;
+    int nav1Freq;
+    int nav1Standby;
+    int com2Freq;
+    int com2Standby;
+    int nav2Freq;
+    int nav2Standby;
+    int adfFreq;
+    int adfStandby;
 
     // Hardware knobs
-    int calKnob = -1;
+    int selKnob = -1;
+    int freqKnob = -1;
 
 public:
     nav(int xPos, int yPos, int size);
@@ -21,6 +31,7 @@ public:
 
 private:
     void resize();
+    void addFreq(int freq, int x, int y);
     void addVars();
     void addKnobs();
     void updateKnobs();

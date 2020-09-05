@@ -11,6 +11,7 @@ private:
     // Instrument values (caclulated from variables and needed to draw the instrument)
     double angle;
     double bugAngle;
+    double headingBug = 0;
 
     // Hardware knobs
     int hdgKnob = -1;
