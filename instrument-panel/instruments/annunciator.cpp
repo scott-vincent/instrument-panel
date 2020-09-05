@@ -164,7 +164,7 @@ void annunciator::update()
 #else
         timespec now;
         clock_gettime(CLOCK_MONOTONIC, &now);
-        timeDiff = (now.tv_sec - lastFlash.tv_sec) * 1000 + (now.tv_nsec - lastFlash.tv_nsec) / 1000000);
+        timeDiff = (now.tv_sec - lastFlash.tv_sec) * 1000 + (now.tv_nsec - lastFlash.tv_nsec) / 1000000;
 #endif
         if (timeDiff >= 500) {
             fuelWarning = !fuelWarning;

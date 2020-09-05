@@ -8,6 +8,7 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     simvars.cpp \
     knobs.cpp \
     instrument.cpp \
+    instruments/adf.cpp \
     instruments/adi.cpp \
     instruments/adiLearjet.cpp \
     instruments/alt.cpp \
@@ -17,12 +18,16 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/asiLearjet.cpp \
     instruments/digitalClock.cpp \
     instruments/egt.cpp \
+    instruments/fuel.cpp \
     instruments/hi.cpp \
+    instruments/nav.cpp \
     instruments/oil.cpp \
     instruments/rpm.cpp \
     instruments/tc.cpp \
     instruments/trimFlaps.cpp \
     instruments/vac.cpp \
+    instruments/vor1.cpp \
+    instruments/vor2.cpp \
     instruments/vsi.cpp \
     instrument-panel.cpp \
     || exit
