@@ -26,9 +26,9 @@
   },
   "ASI": {
     "Enabled": true,
-    "Position X": 565,
-    "Position Y": 15,
-    "Size": 280
+    "Position X": 566,
+    "Position Y": 17,
+    "Size": 277
   },
   "ADI": {
     "Enabled": true,
@@ -38,15 +38,15 @@
   },
   "ALT": {
     "Enabled": true,
-    "Position X": 1222,
-    "Position Y": 13,
-    "Size": 275
+    "Position X": 1223,
+    "Position Y": 14,
+    "Size": 272
   },
   "VOR1": {
     "Enabled": true,
-    "Position X": 1543,
-    "Position Y": 10,
-    "Size": 280
+    "Position X": 1548,
+    "Position Y": 12,
+    "Size": 274
   },
   "TC": {
     "Enabled": true,
@@ -68,9 +68,9 @@
   },
   "VOR2": {
     "Enabled": true,
-    "Position X": 1543,
-    "Position Y": 342,
-    "Size": 280
+    "Position X": 1553,
+    "Position Y": 348,
+    "Size": 276
   },
   "Trim Flaps": {
     "Enabled": true,
@@ -80,15 +80,15 @@
   },
   "RPM": {
     "Enabled": true,
-    "Position X": 1217,
-    "Position Y": 674,
+    "Position X": 1222,
+    "Position Y": 669,
     "Size": 284
   },
   "ADF": {
     "Enabled": true,
-    "Position X": 1543,
-    "Position Y": 676,
-    "Size": 280
+    "Position X": 1556,
+    "Position Y": 672,
+    "Size": 266
   },
   "Annunciator": {
     "Enabled": true,
@@ -98,38 +98,38 @@
   },
   "Digital Clock": {
     "Enabled": true,
-    "Position X": 312,
-    "Position Y": 135,
+    "Position X": 320,
+    "Position Y": 124,
     "Size": 200
   },
   "Fuel": {
     "Enabled": true,
-    "Position X": 72,
-    "Position Y": 375,
+    "Position X": 83,
+    "Position Y": 360,
     "Size": 200
   },
   "EGT": {
     "Enabled": true,
-    "Position X": 312,
-    "Position Y": 375,
+    "Position X": 322,
+    "Position Y": 364,
     "Size": 200
   },
   "VAC": {
     "Enabled": true,
-    "Position X": 72,
-    "Position Y": 615,
-    "Size": 200
+    "Position X": 81,
+    "Position Y": 603,
+    "Size": 206
   },
   "Oil": {
     "Enabled": true,
-    "Position X": 312,
-    "Position Y": 615,
-    "Size": 200
+    "Position X": 314,
+    "Position Y": 599,
+    "Size": 218
   },
   "Nav": {
     "Enabled": true,
-    "Position X": 72,
-    "Position Y": 855,
-    "Size": 608
+    "Position X": 88,
+    "Position Y": 882,
+    "Size": 562
   }
 }

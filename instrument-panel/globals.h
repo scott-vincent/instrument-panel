@@ -39,7 +39,7 @@ struct globalVars
     bool simulating = false;
     bool dataLinked = false;
     bool connected = false;
-    bool active = false;
+    bool active = true;
     bool electrics = false;
     bool externalControls = false;
     bool enableShadows = true;

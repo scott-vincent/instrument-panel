@@ -687,7 +687,9 @@ void dataLink(simvars* t)
     long actualSize;
     int bytes;
 
-    // Detect if sim is active by looking for rpm variance
+    // Detect if sim is active by looking for rpm variance.
+    // Want about 30 seconds of inactivity before we activate
+    // screensaver.
     double lastRpm = 0;
     int rpmMatch = 0;
 
@@ -717,7 +719,7 @@ void dataLink(simvars* t)
                         rpmMatch = 0;
                         lastRpm = t->simVars.rpmEngine;
                     }
-                    globals.active = (rpmMatch < 60);
+                    globals.active = (rpmMatch < 30000);
                 }
                 else if (bytes > 0) {
                     memcpy(&actualSize, &t->simVars, sizeof(long));
