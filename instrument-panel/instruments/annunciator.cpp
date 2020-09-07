@@ -58,6 +58,12 @@ void annunciator::resize()
     al_draw_scaled_bitmap(orig, 0, 600, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
+    // 6 = ATC info background
+    bmp = al_create_bitmap(size, size / 4);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 600, 1, 1, 0, 0, size, size / 4, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -97,7 +103,12 @@ void annunciator::render()
         }
         else {
             // No warnings
-            al_draw_bitmap(bitmaps[2], 0, 0, 0);
+            if (selection == 0) {
+                al_draw_bitmap(bitmaps[2], 0, 0, 0);
+            }
+            else {
+                showAtcInfo();
+            }
         }
     }
 
@@ -109,12 +120,35 @@ void annunciator::render()
         dimDelay = 1000;
         prevState = state;
     }
-    else if (dimDelay > 0) {
+    else if (state < 2 && dimDelay > 0) {
         dimDelay--;
     }
     else if (!globals.active) {
         dimInstrument();
     }
+}
+
+void annunciator::showAtcInfo()
+{
+    SimVars* simVars = &globals.simVars->simVars;
+    char callSign[256];
+
+    if (simVars->atcFlightNumber[0] == '\0') {
+        sprintf(callSign, "%s ", simVars->atcCallSign);
+    }
+    else {
+        sprintf(callSign, "%s %s ", simVars->atcCallSign, simVars->atcFlightNumber);
+    }
+
+    if (simVars->atcHeavy == 1) {
+        strcat(callSign, "Heavy");
+    }
+
+    al_draw_bitmap(bitmaps[6], 0, 0, 0);
+    al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 20, 0, simVars->atcTailNumber);
+    // Temp hack - Comment next line out
+    //strcpy(callSign, simVars->aircraft);
+    al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 40, 0, callSign);
 }
 
 /// <summary>

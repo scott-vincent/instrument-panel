@@ -50,6 +50,11 @@ struct SimVars
     double nav2Standby = 113.90;
     double adfFreq = 394;
     double adfStandby = 368;
+    char atcTailNumber[64] = "\0";
+    char atcCallSign[64] = "\0";
+    char atcFlightNumber[8] = "\0";
+    double atcHeavy = 0;
+    char aircraft[256] = "\0";
 };
 
 #endif // _SIMVARDEFS_H_

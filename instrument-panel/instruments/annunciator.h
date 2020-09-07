@@ -12,6 +12,7 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    int selection = 0;
     int prevState = -1;
     bool fuelWarning;
     double prevFuel = 100;
@@ -26,6 +27,7 @@ private:
 public:
     annunciator(int xPos, int yPos, int size);
     void render();
+    void showAtcInfo();
     void update();
 
 private:

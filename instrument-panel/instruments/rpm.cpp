@@ -152,7 +152,23 @@ void rpm::update()
     digit3 = ((int)simVars->rpmElapsedTime % 100) / 10;
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
-    angle = pow(3.0 * simVars->rpmPercent, 1.15) / 44 - 123;
+
+    if (_stricmp(simVars->aircraft, "Asobo Savage Cub") == 0) {
+        if (simVars->rpmPercent > 10) {
+            angle = (simVars->rpmPercent - 10) * 2 + 25.0 - 123;
+        }
+        else {
+            angle = (simVars->rpmPercent / 10) * 25.0 - 123;
+        }
+    }
+    else {
+        if (simVars->rpmPercent > 10) {
+            angle = (simVars->rpmPercent - 10) * 1.98 + 6.0 - 123;
+        }
+        else {
+            angle = (simVars->rpmPercent / 10) * 6.0 - 123;
+        }
+    }
 }
 
 /// <summary>

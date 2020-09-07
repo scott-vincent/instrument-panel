@@ -45,5 +45,10 @@ const char* SimVarDefs[][2] = {
     { "Nav Standby Frequency:2", "mhz" },
     { "Adf Active Frequency:1", "khz" },
     { "Adf Standby Frequency:1", "khz" },
+    { "Atc Id", "string64" },
+    { "Atc Airline", "string64" },
+    { "Atc Flight Number", "string8" },
+    { "Atc Heavy", "bool" },
+    { "Title", "string256" },
     { NULL, NULL }
 };
