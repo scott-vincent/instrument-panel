@@ -204,7 +204,7 @@ void alt::update()
     // Calculate values
 
     // Add altitude correction
-    targetAltitude = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
+    targetAltitude = simVars->altAltitude - 1000 * (29.92 - simVars->altKollsman);
 
     mb = simVars->altKollsman * 33.86389;
     inhg = simVars->altKollsman;

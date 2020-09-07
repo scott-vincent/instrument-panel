@@ -122,7 +122,7 @@ void trimFlaps::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    trimOffset = simVars->tfElevatorTrim * 7.5f;
+    trimOffset = simVars->tfElevatorTrim * 30.0;
 
     if (trimOffset < -150) {
         trimOffset = -150;
@@ -131,7 +131,7 @@ void trimFlaps::update()
         trimOffset = 150;
     }
 
-    targetFlaps = 230.0 * simVars->tfFlapsIndex / (simVars->tfFlapsCount - 1);
+    targetFlaps = 345.0 * simVars->tfFlapsIndex / simVars->tfFlapsCount;
 
     double diff = abs(targetFlaps - flapsOffset);
 

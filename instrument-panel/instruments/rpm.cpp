@@ -152,7 +152,7 @@ void rpm::update()
     digit3 = ((int)simVars->rpmElapsedTime % 100) / 10;
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
-    angle = pow(simVars->rpmEngine, 1.15) / 44 - 123;
+    angle = pow((simVars->rpmEngine * simVar->rpmMax) / 350.0, 1.15) / 44 - 123;
 }
 
 /// <summary>
@@ -161,5 +161,6 @@ void rpm::update()
 void rpm::addVars()
 {
     globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
+    globals.simVars->addVar(name, "Eng Max Rpm", false, 1, 350);
     globals.simVars->addVar(name, "General Eng Elapsed Time:1", false, 1, 0);
 }

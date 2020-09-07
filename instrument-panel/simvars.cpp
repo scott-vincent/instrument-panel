@@ -445,6 +445,12 @@ char *simvars::view()
         getNextVar();
     }
 
+    if (globals.dataLinked) {
+        // Update with real value
+        double *pVar = (double *)&simVars + varOffset[idx];
+        varVal[idx] = *pVar;
+    }
+
     sprintf(text, "%s %s: %.0f", varGroup[idx], varName[idx], varVal[idx]);
     return text;
 }
@@ -719,7 +725,7 @@ void dataLink(simvars* t)
                         rpmMatch = 0;
                         lastRpm = t->simVars.rpmEngine;
                     }
-                    globals.active = (rpmMatch < 30000);
+                    globals.active = (rpmMatch < 3000);
                 }
                 else if (bytes > 0) {
                     memcpy(&actualSize, &t->simVars, sizeof(long));
