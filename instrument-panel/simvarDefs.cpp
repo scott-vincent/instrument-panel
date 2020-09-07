@@ -21,7 +21,7 @@ const char* SimVarDefs[][2] = {
     { "Electrical Battery Bus Voltage", "volts" },
     { "Ambient Temperature", "celsius" },
     { "General Eng Rpm:1", "rpm" },
-    { "Eng Max Rpm", "rpm" },
+    { "Eng Percent Max Rpm:1", "percent" },
     { "General Eng Elapsed Time:1", "hours" },
     { "Fuel Tank Left Main Level", "percent" },
     { "Fuel Tank Right Main Level", "percent" },

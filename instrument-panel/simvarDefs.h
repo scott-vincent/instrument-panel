@@ -26,7 +26,7 @@ struct SimVars
     double dcVolts = 23.7;
     double dcTempC = 26.2;
     double rpmEngine = 0;
-    double rpmMax = 0;
+    double rpmPercent = 0;
     double rpmElapsedTime = 0;
     double fuelLeft = 0;
     double fuelRight = 0;
