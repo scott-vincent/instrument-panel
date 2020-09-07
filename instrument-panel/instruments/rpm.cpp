@@ -152,7 +152,7 @@ void rpm::update()
     digit3 = ((int)simVars->rpmElapsedTime % 100) / 10;
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
-    angle = pow((simVars->rpmEngine * simVar->rpmMax) / 350.0, 1.15) / 44 - 123;
+    angle = pow((simVars->rpmEngine * simVars->rpmMax) / 350.0, 1.15) / 44 - 123;
 }
 
 /// <summary>
