@@ -699,6 +699,11 @@ void dataLink(simvars* t)
     double lastRpm = 0;
     int rpmMatch = 0;
 
+    // Detect current aircraft and convert to an int.
+    // We do this here to save having to do it for each instrument.
+    globals.aircraft = globals.CESSNA_152;
+    strcpy(globals.lastAircraft, globals.Cessna_152_Text);
+
     int loop = 0;
     while (!globals.quit) {
         // Poll instrument data link
@@ -718,6 +723,7 @@ void dataLink(simvars* t)
                     globals.dataLinked = true;
                     globals.connected = (t->simVars.connected == 1);
 
+                    // Activate screensaver?
                     if (t->simVars.rpmEngine == lastRpm) {
                         rpmMatch++;
                     }
@@ -726,6 +732,21 @@ void dataLink(simvars* t)
                         lastRpm = t->simVars.rpmEngine;
                     }
                     globals.active = (rpmMatch < 3000);
+
+                    // Identify aircraft
+                    if (strcmp(t->simVars.aircraft, globals.lastAircraft) != 0) {
+                        if (strcmp(t->simVars.aircraft, globals.Cessna_172_Text) == 0) {
+                            globals.aircraft = globals.CESSNA_172;
+                        }
+                        else if (strcmp(t->simVars.aircraft, globals.Savage_Cub_Text) == 0) {
+                            globals.aircraft = globals.SAVAGE_CUB;
+                        }
+                        else {
+                            globals.aircraft = globals.CESSNA_152;
+                        }
+
+                        strcpy(globals.lastAircraft, t->simVars.aircraft);
+                    }
                 }
                 else if (bytes > 0) {
                     memcpy(&actualSize, &t->simVars, sizeof(long));

@@ -122,7 +122,7 @@ void trimFlaps::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    trimOffset = simVars->tfElevatorTrim * 30.0;
+    trimOffset = simVars->tfElevatorTrim * 20.0;
 
     if (trimOffset < -150) {
         trimOffset = -150;

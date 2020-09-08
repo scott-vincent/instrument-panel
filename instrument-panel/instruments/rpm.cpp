@@ -153,7 +153,7 @@ void rpm::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    if (_stricmp(simVars->aircraft, "Asobo Savage Cub") == 0) {
+    if (globals.aircraft == globals.SAVAGE_CUB) {
         if (simVars->rpmPercent > 10) {
             angle = (simVars->rpmPercent - 10) * 2 + 25.0 - 123;
         }
@@ -162,6 +162,7 @@ void rpm::update()
         }
     }
     else {
+        // Cessna
         if (simVars->rpmPercent > 10) {
             angle = (simVars->rpmPercent - 10) * 1.98 + 6.0 - 123;
         }

@@ -17,6 +17,16 @@ struct globalVars
     const char* BitmapDir = "bitmaps/";
     const char* SettingsFile = "settings/instrument-panel.json";
 
+    const char* Cessna_152_Text = "Cessna 152 Asobo";
+    const char* Cessna_172_Text = "Cessna Skyhawk G1000 Asobo";
+    const char* Savage_Cub_Text = "Asobo Savage Cub";
+
+    enum Aircraft {
+        CESSNA_152,
+        CESSNA_172,
+        SAVAGE_CUB,
+    };
+
     simvars* simVars = NULL;
     knobs* hardwareKnobs = NULL;
 
@@ -33,6 +43,9 @@ struct globalVars
     char dataLinkHost[64] = "127.0.0.1";
     int dataLinkPort = 52020;
     int startOnMonitor = 0;
+
+    int aircraft;
+    char lastAircraft[256] = "\0";
 
     bool quit = false;
     bool arranging = false;

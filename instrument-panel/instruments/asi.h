@@ -9,6 +9,7 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    int loadedAircraft;
     double airspeedCal;
     double airspeedKnots;
     double airspeedAngle;

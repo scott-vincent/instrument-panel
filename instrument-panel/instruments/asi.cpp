@@ -30,8 +30,16 @@ void asi::resize()
     // Create bitmaps scaled to correct size (original size is 800)
     scaleFactor = size / 800.0f;
 
+    char origName[256] = "asi.bmp";
+
+    if (globals.aircraft == globals.SAVAGE_CUB) {
+        strcpy(origName, "asi-savage-cub.bmp");
+    }
+
+    loadedAircraft = globals.aircraft;
+
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("asi.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap(origName);
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -138,7 +146,7 @@ void asi::update()
     xPos = settings[0];
     yPos = settings[1];
 
-    if (size != settings[2]) {
+    if (size != settings[2] || loadedAircraft != globals.aircraft) {
         size = settings[2];
         resize();
     }
@@ -156,7 +164,14 @@ void asi::update()
     airspeedCal = simVars->asiAirspeedCal;
 
     // Calculate values - Not a linear scale!
-    airspeedKnots = simVars->asiAirspeed;
+    if (globals.aircraft == globals.SAVAGE_CUB) {
+        airspeedKnots = simVars->asiAirspeed * 2;
+    }
+    else {
+        airspeedKnots = simVars->asiAirspeed;
+    }
+
+    // Not a linear scale!
     if (airspeedKnots < 40) {
         airspeedAngle = airspeedKnots * 0.013;
     }
