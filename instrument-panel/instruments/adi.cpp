@@ -222,6 +222,12 @@ void adi::update()
     double targetBank = simVars->adiBank;
     diff = abs(targetBank - bankAngle);
 
+    // Stop instrument flipping by 360 degrees
+    if (diff > 300.0) {
+        if (bankAngle < targetBank) bankAngle += 360.0; else bankAngle -= 360.0;
+        diff = abs(targetBank - bankAngle);
+    }
+
     if (diff > 80.0) {
         if (bankAngle < targetBank) bankAngle += 20.0; else bankAngle -= 20.0;
     }
