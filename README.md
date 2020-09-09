@@ -1,6 +1,6 @@
 # MICROSOFT FLIGHT SIMULATOR 2020 - INSTRUMENT PANEL
 
-![Screenshot](Screenshot.png)
+![Screenshot](Screenshot.jpg)
 
 An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020. It can run on either a PC or a
@@ -17,9 +17,12 @@ The instrument panel connects to the instrument-data-link over your network and
 receives the data at regular intervals so that the instruments can be drawn with
 up-to-date values.
 
-This program is a work in progress, currently the values are just simulated.
-The simvars part of this program is being enhanced so that it is fully
-operational with instrument-data-link which is also a work in progress.
+You can run as many instrument panels as you like. They all connect to the same
+data-link. Each panel must be configured to point to the host where data-link
+is running. You do this by editing the settings file and updating the Data Link
+Host IP address. If you just want to test the instrument panel on the same
+host where FS2020 is running leave the IP address as 127.0.0.1 and it will
+connect to the local host.
 
 This program was heavily inspired by Dave Ault and contains original artwork by him.
 
