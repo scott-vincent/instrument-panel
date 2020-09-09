@@ -135,9 +135,9 @@ void fatalError(const char* msg)
     showError(msg);
 
 #ifdef _WIN32
-    Sleep(5000);
+    Sleep(10000);
 #else
-    usleep(5000000);
+    usleep(10000000);
 #endif
 
     printf("Exiting\n");
