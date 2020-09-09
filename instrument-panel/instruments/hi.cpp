@@ -150,7 +150,7 @@ void hi::update()
 /// </summary>
 void hi::addVars()
 {
-    globals.simVars->addVar(name, "Heading Indicator", false, 1, 0);
+    globals.simVars->addVar(name, "Plane Heading Degrees Magnetic", false, 1, 0);
 }
 
 #ifndef _WIN32

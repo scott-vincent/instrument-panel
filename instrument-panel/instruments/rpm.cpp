@@ -178,6 +178,6 @@ void rpm::update()
 void rpm::addVars()
 {
     globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
-    globals.simVars->addVar(name, "Eng Percent Max Rpm:1", false, 1, 350);
+    globals.simVars->addVar(name, "Eng Rpm Animation Percent:1", false, 1, 0);
     globals.simVars->addVar(name, "General Eng Elapsed Time:1", false, 1, 0);
 }
