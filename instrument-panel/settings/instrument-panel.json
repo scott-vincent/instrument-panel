@@ -110,21 +110,21 @@
   },
   "EGT": {
     "Enabled": true,
-    "Position X": 322,
-    "Position Y": 360,
-    "Size": 200
+    "Position X": 334,
+    "Position Y": 379,
+    "Size": 176
   },
   "VAC": {
     "Enabled": true,
-    "Position X": 83,
-    "Position Y": 600,
-    "Size": 200
+    "Position X": 95,
+    "Position Y": 618,
+    "Size": 182
   },
   "Oil": {
     "Enabled": true,
-    "Position X": 322,
-    "Position Y": 600,
-    "Size": 200
+    "Position X": 334,
+    "Position Y": 618,
+    "Size": 182
   },
   "Nav": {
     "Enabled": true,
