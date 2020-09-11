@@ -30,8 +30,13 @@ int knobs::add(int gpio1, int gpio2, int minVal, int maxVal, int startVal)
 
     // NOTE: pullUpDnControl does not work on RasPi4 so have
     // to use raspi-gpio command line to pull up resistors.
-    pullUpDnControl(gpio1, PUD_UP);
-    pullUpDnControl(gpio2, PUD_UP);
+    //pullUpDnControl(gpio1, PUD_UP);
+    //pullUpDnControl(gpio2, PUD_UP);
+    char command[256];
+    sprintf(command, "raspi-gpio set %d,%d pu", gpio1, gpio2);
+    if (system(command) != 0) {
+        strcpy(globals.error, "Failed to run raspi-gpio command");
+    }
 
     gpio[knobCount][0] = gpio1;
     gpio[knobCount][1] = gpio2;
