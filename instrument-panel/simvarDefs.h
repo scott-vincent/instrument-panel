@@ -18,7 +18,7 @@ struct SimVars
     double tcRate = 0;
     double tcBall = 0;
     double tfElevatorTrim = 0;
-    double tfFlapsCount = 0;
+    double tfFlapsCount = 1;
     double tfFlapsIndex = 0;
     double dcUtcSeconds = 43200;
     double dcLocalSeconds = 46800;
