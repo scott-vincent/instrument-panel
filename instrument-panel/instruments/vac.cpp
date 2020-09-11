@@ -18,7 +18,7 @@ void vac::resize()
     destroyBitmaps();
 
     // Create bitmaps scaled to correct size (original size is 800)
-    scaleFactor = size / 800.0f;
+    scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
     ALLEGRO_BITMAP* orig = loadBitmap("vac.bmp");
@@ -35,7 +35,7 @@ void vac::resize()
     // 2 = Main dial
     bmp = al_create_bitmap(size, size);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 0, 800, 800, 0, 0, size, size, 0);
+    al_draw_scaled_bitmap(orig, 0, 0, 400, 400, 0, 0, size, size, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);

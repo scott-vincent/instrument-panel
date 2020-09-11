@@ -111,20 +111,20 @@
   "EGT": {
     "Enabled": true,
     "Position X": 322,
-    "Position Y": 364,
+    "Position Y": 360,
     "Size": 200
   },
   "VAC": {
     "Enabled": true,
-    "Position X": 81,
-    "Position Y": 603,
-    "Size": 206
+    "Position X": 83,
+    "Position Y": 600,
+    "Size": 200
   },
   "Oil": {
     "Enabled": true,
-    "Position X": 314,
-    "Position Y": 599,
-    "Size": 218
+    "Position X": 322,
+    "Position Y": 600,
+    "Size": 200
   },
   "Nav": {
     "Enabled": true,
