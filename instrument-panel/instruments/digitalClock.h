@@ -13,6 +13,7 @@ private:
     int bottomView = 1;
     bool stopWatchRunning = false;
     int stopWatchSeconds = 0;
+    time_t startTime;
     time_t now;
     time_t stopWatchStarted;
     time_t stopWatchPressed;

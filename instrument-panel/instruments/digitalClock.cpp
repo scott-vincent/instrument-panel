@@ -17,6 +17,7 @@ digitalClock::digitalClock(int xPos, int yPos, int size) : instrument(xPos, yPos
 #endif
 
     resize();
+    time(&startTime);
 }
 
 /// <summary>
@@ -291,13 +292,15 @@ void digitalClock::update()
     localHours = (mins / 60) % 24;
     localMins = mins % 60;
 
-    mins = (simVars->dcFlightSeconds + .05) / 60;
+    time(&now);
+
+    // Sim time doesn't work so just use panel start time
+    mins = (now - startTime) / 60;
     flightHours = (mins / 60) % 24;
     flightMins = mins % 60;
 
     int seconds = stopWatchSeconds;
     if (stopWatchRunning) {
-        time(&now);
         seconds += now - stopWatchStarted;
     }
 
@@ -312,7 +315,7 @@ void digitalClock::addVars()
 {
     globals.simVars->addVar(name, "Zulu Time", false, 60, 43200);
     globals.simVars->addVar(name, "Local Time", false, 60, 46800);
-    globals.simVars->addVar(name, "Absolute Time", false, 60, 0);
+    globals.simVars->addVar(name, "Sim Time", false, 60, 0);
     globals.simVars->addVar(name, "Electrical Battery Bus Voltage", false, 0.1, 23.7);
 }
 
