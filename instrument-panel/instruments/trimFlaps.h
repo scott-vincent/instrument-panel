@@ -16,6 +16,9 @@ private:
     // Hardware knobs
     int trimKnob = -1;
     int flapsKnob = -1;
+    int lastTrimVal;
+    time_t lastTurn = 0;
+    int lastFlapsVal;
 
 public:
     trimFlaps(int xPos, int yPos, int size);

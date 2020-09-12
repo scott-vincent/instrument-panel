@@ -2,6 +2,20 @@
 #define _SIMVARS_H_
 
 #include <thread>
+#ifdef _WIN32
+#include <ws2tcpip.h>
+#include <winsock2.h>
+#include <Windows.h>
+#else
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+typedef int SOCKET;
+#define SOCKET_ERROR -1
+#define INVALID_SOCKET -1
+#define SOCKADDR sockaddr
+#define closesocket close
+#endif
 #include "globals.h"
 #include "simvarDefs.h"
 
@@ -13,6 +27,9 @@ public:
 
 private:
     std::thread* dataLinkThread = NULL;
+    SOCKET writeSockfd = INVALID_SOCKET;
+    sockaddr_in writeAddr;
+    timeval writeTimeout;
     int currentVar = 0;
     int varCount = 0;
     char varGroup[256][256] = {};
@@ -43,7 +60,7 @@ public:
     void addSetting(const char* group, const char* name);
     long* readSettings(const char* group, int defaultX, int defaultY, int defaultSize);
     bool isEnabled(const char* group);
-    void write(const char *name, double value);
+    void write(int defId, void* data, int dataSize);
     
 private:
     void loadSettings();

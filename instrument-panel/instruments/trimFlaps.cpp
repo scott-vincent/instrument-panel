@@ -59,6 +59,12 @@ void trimFlaps::resize()
     al_draw_scaled_bitmap(orig, 800, 24, 36, 36, 0, 0, 36 * scaleFactor, 36 * scaleFactor, 0);
     addBitmap(bmp);
 
+    // 5 = Flaps target
+    bmp = al_create_bitmap(36 * scaleFactor, 36 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 60, 36, 36, 0, 0, 36 * scaleFactor, 36 * scaleFactor, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -82,6 +88,9 @@ void trimFlaps::render()
 
     // Add trim
     al_draw_bitmap(bitmaps[3], 262 * scaleFactor, (388 + trimOffset) * scaleFactor, 0);
+
+    // Add flaps target
+    al_draw_bitmap(bitmaps[5], 501 * scaleFactor, (211 + targetFlaps) * scaleFactor, 0);
 
     // Add flaps
     al_draw_bitmap(bitmaps[4], 501 * scaleFactor, (211 + flapsOffset) * scaleFactor, 0);
@@ -161,32 +170,71 @@ void trimFlaps::addVars()
 void trimFlaps::addKnobs()
 {
     // BCM GPIO 14 and 15
-    trimKnob = globals.hardwareKnobs->add(14, 15, -50, 50, 0);
+    trimKnob = globals.hardwareKnobs->add(14, 15, -1, -1, 0);
 
     // BCM GPIO 18 and 23
-    flapsKnob = globals.hardwareKnobs->add(18, 23, 0, 4, 0);
+    flapsKnob = globals.hardwareKnobs->add(18, 23, -1, -1, 0);
 }
 
 void trimFlaps::updateKnobs()
 {
+    SimVars* simVars = &globals.simVars->simVars;
+    bool needWrite = false;
+
+    TrimFlapsData trimFlapsData;
+    trimFlapsData.tfElevatorTrim = simVars->tfElevatorTrim;
+    trimFlapsData.tfFlapsIndex = simVars->tfFlapsIndex;
+
     // Read knob for trim adjustment
     int val = globals.hardwareKnobs->read(trimKnob);
     if (val != INT_MIN) {
         // Convert knob value to trim (adjust for desired sensitivity)
-        double trim = val;
-
-        // Update trim
-        //globals.simVars->write("trim", trim);
+        int diff = lastTrimVal - val;
+        trimFlapsData.tfElevatorTrim += diff / 40.0;
+        needWrite = true;
+        lastTrimVal = val;
     }
 
     // Read knob for flaps
     val = globals.hardwareKnobs->read(flapsKnob);
     if (val != INT_MIN) {
-        // Convert knob value to flaps (adjust for desired sensitivity)
-        double flaps = val;
+        // Need a minimum number of turns to move flaps
+        if (lastTurn == 0) {
+            // Start monitoring value
+            lastFlapsVal = val;
+        }
+        else {
+            double newPos = simVars->tfFlapsIndex;
 
-        // Update flaps
-        //globals.simVars->write("flaps Handle Index", flaps);
+            // Value large enough to trigger yet?
+            if (lastFlapsVal - val > 6 && newPos < simVars->tfFlapsCount) {
+                // Flaps down one notch
+                newPos++;
+            }
+            else if (val - lastFlapsVal > 6 && newPos > 0) {
+                // Flaps up one notch
+                newPos--;
+            }
+
+            if (newPos != simVars->tfFlapsIndex) {
+                trimFlapsData.tfFlapsIndex = newPos;
+                needWrite = true;
+                lastFlapsVal = val;
+            }
+        }
+        time(&lastTurn);
+    }
+    else if (lastTurn != 0) {
+        // Reset if not turned for 1 sec
+        time_t now;
+        time(&now);
+        if (now > lastTurn) {
+            lastTurn = 0;
+        }
+    }
+
+    if (needWrite) {
+        globals.simVars->write(DEF_WRITE_TRIM_FLAPS, &trimFlapsData, sizeof(trimFlapsData));
     }
 }
 
