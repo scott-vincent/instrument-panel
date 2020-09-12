@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "simvarDefs.h"
 
 const char* SimVarDefs[][2] = {
     { "Plane Altitude", "feet" },
@@ -51,4 +52,10 @@ const char* SimVarDefs[][2] = {
     { "Atc Heavy", "bool" },
     { "Title", "string256" },
     { NULL, NULL }
+};
+
+WriteDef WriteDefs[] = {
+    { DEF_WRITE_TRIM_FLAPS, "Elevator Trim Position" },
+    { DEF_WRITE_TRIM_FLAPS, "Flaps Handle Index" },
+    { DEF_READ_ALL, NULL }
 };
