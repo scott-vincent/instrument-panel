@@ -1,19 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
-#include <ws2tcpip.h>
-#include <winsock2.h>
-#include <Windows.h>
-#else
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-typedef int SOCKET;
-#define SOCKET_ERROR -1
-#define INVALID_SOCKET -1
-#define SOCKADDR sockaddr
-#define closesocket close
-#endif
+#include <string.h>
 #include <allegro5/allegro.h>
 #include "simvars.h"
 
@@ -626,28 +613,66 @@ long * simvars::readSettings(const char* group, int defaultX, int defaultY, int 
 }
 
 /// <summary>
-/// Write manually updated value back to Flight Sim
+/// Write manually updated values back to Flight Sim
 /// </summary>
-void simvars::write(const char* name, double value)
+void simvars::write(int defId, void* data, int dataSize)
 {
-    int idx;
-    for (idx = 0;; idx++)
-    {
-        if (idx == varCount) {
-            sprintf(globals.error, "Unknown SimVar writing: %s", name);
-            return;
-        }
+    struct {
+        long defId;
+        char writeData[256];
+    } sendBuffer;
 
-        if (strcmp(varName[idx], name) == 0) {
-            break;
-        }
+    if (!globals.dataLinked) {
+        return;
     }
 
-    // Update SimVar variable
-    double* pVar = (double*)&simVars + varOffset[idx];
-    *pVar = value;
+    sendBuffer.defId = defId;
+    memcpy(sendBuffer.writeData, data, dataSize);
+    dataSize += sizeof(long);
 
-    // TODO: Update Flight Sim
+    if (writeSockfd == INVALID_SOCKET) {
+        if ((writeSockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
+            fatalError("Failed to create UDP socket for writing");
+        }
+
+        int opt = 1;
+        setsockopt(writeSockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&opt, sizeof(opt));
+
+        writeAddr.sin_family = AF_INET;
+        writeAddr.sin_port = htons(globals.dataLinkPort);
+        inet_pton(AF_INET, globals.dataLinkHost, &writeAddr.sin_addr);
+
+        writeTimeout.tv_sec = 0;
+        writeTimeout.tv_usec = 500000;
+    }
+
+    int bytes = sendto(writeSockfd, (char*)&sendBuffer, dataSize, 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
+    if (bytes > 0) {
+        fd_set fds;
+        FD_ZERO(&fds);
+        FD_SET(writeSockfd, &fds);
+
+        int sel = select(FD_SETSIZE, &fds, 0, 0, &writeTimeout);
+        if (sel > 0) {
+            // Receive write confirmation
+            long ackBytes;
+            bytes = recv(writeSockfd, (char*)&ackBytes, sizeof(ackBytes), 0);
+            if (bytes > 0 && ackBytes != dataSize) {
+                sprintf(globals.error, "Sent %ld bytes for write def %d but server expected %ld bytes",
+                    dataSize, defId, ackBytes);
+            }
+        }
+        else {
+            bytes = SOCKET_ERROR;
+        }
+    }
+    else {
+        bytes = SOCKET_ERROR;
+    }
+
+    //if (bytes == SOCKET_ERROR) {
+    //    sprintf(globals.error, "Failed to write def %d", defId);
+    //}
 }
 
 /// <summary>

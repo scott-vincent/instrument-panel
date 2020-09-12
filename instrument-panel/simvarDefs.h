@@ -57,4 +57,19 @@ struct SimVars
     char aircraft[256] = "\0";
 };
 
+enum DEFINITION_ID {
+    DEF_READ_ALL,
+    DEF_WRITE_TRIM_FLAPS
+};
+
+struct WriteDef {
+    DEFINITION_ID id;
+    const char* name;
+};
+
+struct TrimFlapsData {
+    double tfElevatorTrim;
+    double tfFlapsIndex;
+};
+
 #endif // _SIMVARDEFS_H_
