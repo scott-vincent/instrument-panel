@@ -174,7 +174,7 @@ void digitalClock::render()
 
     switch (topView) {
     case 0:
-        // Bus volts
+        // Battery bus volts
         drawTop(voltsx10 / 100, (voltsx10 / 10) % 10, voltsx10 % 10, 0);
         break;
 
@@ -207,7 +207,7 @@ void digitalClock::render()
 
     case 3:
         // Elapsed time (stopwatch)
-        drawBottom(elapsedHours / 10, elapsedHours % 10, elapsedMins / 10, elapsedMins % 10);
+        drawBottom(elapsedMins / 10, elapsedMins % 10, elapsedSecs / 10, elapsedSecs % 10);
         break;
     }
 
@@ -225,6 +225,12 @@ void digitalClock::render()
 void digitalClock::drawTop(int digit1, int digit2, int digit3, int letter)
 {
     int y = 255 * scaleFactor;
+
+    // Farenheit can be > 99
+    if (digit1 > 9) {
+        al_draw_bitmap(bitmaps[5], 85 * scaleFactor, y, 0);
+        digit1 = digit1 % 10;
+    }
 
     al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
     al_draw_bitmap(bitmaps[4 + digit2], 289 * scaleFactor, y, 0);
@@ -273,17 +279,30 @@ void digitalClock::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    voltsx10 = simVars->dcVolts * 10;
-    tempFx10 = simVars->dcTempC * 338.0;
-    tempCx10 = simVars->dcTempC * 10.0;
-    utcHours = simVars->dcUtcSeconds / 3600;
-    utcMins = (simVars->dcUtcSeconds - utcHours * 3600.0) / 60;
-    localHours = simVars->dcLocalSeconds / 3600;
-    localMins = (simVars->dcLocalSeconds - localHours * 3600.0) / 60;
-    flightHours = simVars->dcFlightSeconds / 3600;
-    flightMins = (simVars->dcFlightSeconds - flightHours * 3600.0) / 60;
-    elapsedHours = 0;
-    elapsedMins = 0;
+    voltsx10 = (simVars->dcVolts + .05) * 10;
+    tempCx10 = (simVars->dcTempC + .05) * 10;
+    tempFx10 = (tempCx10 * 9) / 5 + 320;
+
+    int mins = (simVars->dcUtcSeconds + .05) / 60;
+    utcHours = (mins / 60) % 24;
+    utcMins = mins % 60;
+
+    mins = (simVars->dcLocalSeconds + .05) / 60;
+    localHours = (mins / 60) % 24;
+    localMins = mins % 60;
+
+    mins = (simVars->dcFlightSeconds + .05) / 60;
+    flightHours = (mins / 60) % 24;
+    flightMins = mins % 60;
+
+    int seconds = stopWatchSeconds;
+    if (stopWatchRunning) {
+        time(&now);
+        seconds += now - stopWatchStarted;
+    }
+
+    elapsedMins = (seconds / 60) % 99;
+    elapsedSecs = seconds % 60;
 }
 
 /// <summary>
@@ -301,32 +320,78 @@ void digitalClock::addVars()
 
 void digitalClock::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    clockButton1 = globals.hardwareKnobs->add(2, 3, 0, 1, 0);
+    // BCM GPIO 3
+    topButton = globals.hardwareKnobs->add(3, 0, -1, -1, 0);
 
-    // BCM GPIO 4 and 5
-    clockButton2 = globals.hardwareKnobs->add(4, 5, 0, 1, 0);
+    // BCM GPIO 4
+    leftButton = globals.hardwareKnobs->add(4, 0, -1, -1, 0);
 
-    // BCM GPIO 6 and 7
-    clockButton3 = globals.hardwareKnobs->add(6, 7, 0, 1, 0);
+    // BCM GPIO 17
+    rightButton = globals.hardwareKnobs->add(17, 0, -1, -1, 0);
 }
 
 void digitalClock::updateKnobs()
 {
     // Read buttons for clock adjustment
-    int val = globals.hardwareKnobs->read(clockButton1);
+    int val = globals.hardwareKnobs->read(topButton);
     if (val != INT_MIN) {
-        button1 = val;
+        // If previous state was unpressed then must have been pressed
+        if (prevTopVal % 2 == 1) {
+            if (topView < 2) {
+                topView++;
+            }
+            else {
+                topView = 0;
+            }
+        }
+        prevTopVal = val;
     }
 
-    val = globals.hardwareKnobs->read(clockButton2);
+    val = globals.hardwareKnobs->read(leftButton);
     if (val != INT_MIN) {
-        button2 = val;
+        if (prevLeftVal % 2 == 1) {
+            if (bottomView < 3) {
+                bottomView++;
+            }
+            else {
+                bottomView = 0;
+            }
+        }
+        prevLeftVal = val;
     }
 
-    val = globals.hardwareKnobs->read(clockButton3);
+    val = globals.hardwareKnobs->read(rightButton);
     if (val != INT_MIN) {
-        button3 = val;
+        if (prevRightVal % 2 == 1) {
+            time(&stopWatchPressed);
+
+            if (!stopWatchRunning) {
+                // Start
+                stopWatchRunning = true;
+                time(&stopWatchStarted);
+            }
+            else {
+                // Stop
+                stopWatchRunning = false;
+                time(&now);
+                stopWatchSeconds += now - stopWatchStarted;
+            }
+        }
+
+        if (val % 2 == 1) {
+            stopWatchPressed = 0;
+        }
+    
+        prevRightVal = val;
+    }
+    else if (stopWatchPressed != 0) {
+        // Reset if button held for more than 1 second
+        time(&now);
+        if (now - stopWatchPressed > 1) {
+            stopWatchRunning = false;
+            stopWatchSeconds = 0;
+            stopWatchPressed = 0;
+        }
     }
 }
 

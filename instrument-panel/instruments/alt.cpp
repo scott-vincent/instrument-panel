@@ -251,8 +251,8 @@ void alt::addVars()
 
 void alt::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    calKnob = globals.hardwareKnobs->add(2, 3, 15168, 17344, 16208);
+    // BCM GPIO 10 and 9
+    calKnob = globals.hardwareKnobs->add(10, 9, 15168, 17344, 16208);
 }
 
 void alt::updateKnobs()

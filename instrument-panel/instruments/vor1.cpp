@@ -213,8 +213,8 @@ void vor1::addVars()
 
 void vor1::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    obsKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
+    // BCM GPIO 11 and 5
+    obsKnob = globals.hardwareKnobs->add(11, 5, -100, 100, 0);
 }
 
 void vor1::updateKnobs()

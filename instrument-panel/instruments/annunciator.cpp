@@ -5,10 +5,19 @@
 #endif
 #include "annunciator.h"
 #include "simvars.h"
+#include "knobs.h"
 
 annunciator::annunciator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Annunciator");
+
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        addKnobs();
+    }
+#endif
+
     resize();
 }
 
@@ -104,10 +113,10 @@ void annunciator::render()
         else {
             // No warnings
             if (selection == 0) {
-                al_draw_bitmap(bitmaps[2], 0, 0, 0);
+                showAtcInfo();
             }
             else {
-                showAtcInfo();
+                al_draw_bitmap(bitmaps[2], 0, 0, 0);
             }
         }
     }
@@ -168,6 +177,13 @@ void annunciator::update()
         resize();
     }
 
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        updateKnobs();
+    }
+#endif
+
     // Get latest FlightSim variables
     SimVars* simVars = &globals.simVars->simVars;
 
@@ -211,3 +227,23 @@ void annunciator::update()
         fuelWarning = true;
     }
 }
+
+#ifndef _WIN32
+
+void annunciator::addKnobs()
+{
+    // BCM GPIO 2
+    selSwitch = globals.hardwareKnobs->add(2, 0, -1, -1, 0);
+}
+
+void annunciator::updateKnobs()
+{
+    // Read switch
+    int val = globals.hardwareKnobs->read(selSwitch);
+
+    if (val != INT_MIN) {
+        selection = 1 - (val % 2);
+    }
+}
+
+#endif // !_WIN32

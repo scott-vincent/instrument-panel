@@ -140,8 +140,8 @@ void adf::addVars()
 
 void adf::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    hdgKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
+    // BCM GPIO 24 and 25
+    hdgKnob = globals.hardwareKnobs->add(24, 25, -100, 100, 0);
 }
 
 void adf::updateKnobs()

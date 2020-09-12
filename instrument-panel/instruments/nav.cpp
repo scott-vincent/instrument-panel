@@ -257,11 +257,11 @@ void nav::addVars()
 
 void nav::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    selKnob = globals.hardwareKnobs->add(2, 3, 0, 49, 0);
+    // BCM GPIO 8 and 7
+    selKnob = globals.hardwareKnobs->add(8, 7, 0, 49, 0);
 
-    // BCM GPIO 4 and 5
-    freqKnob = globals.hardwareKnobs->add(2, 3, 100, 200, 0);
+    // BCM GPIO 20 and 21
+    freqKnob = globals.hardwareKnobs->add(20, 21, 100, 200, 0);
 }
 
 void nav::updateKnobs()

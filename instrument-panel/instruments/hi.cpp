@@ -157,8 +157,8 @@ void hi::addVars()
 
 void hi::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    hdgKnob = globals.hardwareKnobs->add(2, 3, -1, -1, 0);
+    // BCM GPIO 6 and 13
+    hdgKnob = globals.hardwareKnobs->add(6, 13, -1, -1, 0);
 }
 
 void hi::updateKnobs()

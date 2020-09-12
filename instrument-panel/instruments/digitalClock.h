@@ -9,11 +9,13 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    int button1 = 0;
-    int button2 = 0;
-    int button3 = 0;
     int topView = 0;
     int bottomView = 1;
+    bool stopWatchRunning = false;
+    int stopWatchSeconds = 0;
+    time_t now;
+    time_t stopWatchStarted;
+    time_t stopWatchPressed;
     int voltsx10;
     int tempFx10;
     int tempCx10;
@@ -23,13 +25,16 @@ private:
     int localMins;
     int flightHours;
     int flightMins;
-    int elapsedHours;
     int elapsedMins;
+    int elapsedSecs;
 
     // Hardware knobs
-    int clockButton1 = -1;
-    int clockButton2 = -1;
-    int clockButton3 = -1;
+    int topButton = -1;
+    int leftButton = -1;
+    int rightButton = -1;
+    int prevTopVal = 0;
+    int prevLeftVal = 0;
+    int prevRightVal = 0;
 
 public:
     digitalClock(int xPos, int yPos, int size);

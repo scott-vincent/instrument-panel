@@ -202,8 +202,8 @@ void asi::addVars()
 
 void asi::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    calKnob = globals.hardwareKnobs->add(2, 3, -500, 500, 0);
+    // BCM GPIO 27 and 22
+    calKnob = globals.hardwareKnobs->add(27, 22, -500, 500, 0);
 }
 
 void asi::updateKnobs()

@@ -12,7 +12,7 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    int selection = 0;
+    int selection = 1;
     int prevState = -1;
     bool fuelWarning;
     double prevFuel = 100;
@@ -24,6 +24,9 @@ private:
 #endif
     int dimDelay;
 
+    // Hardware knobs
+    int selSwitch = -1;
+
 public:
     annunciator(int xPos, int yPos, int size);
     void render();
@@ -32,6 +35,8 @@ public:
 
 private:
     void resize();
+    void addKnobs();
+    void updateKnobs();
 };
 
 #endif // _ANNUNCIATOR_H

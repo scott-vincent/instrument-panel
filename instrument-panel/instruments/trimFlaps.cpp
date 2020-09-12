@@ -160,11 +160,11 @@ void trimFlaps::addVars()
 
 void trimFlaps::addKnobs()
 {
-    // BCM GPIO 2 and 3
-    trimKnob = globals.hardwareKnobs->add(2, 3, -50, 50, 0);
+    // BCM GPIO 14 and 15
+    trimKnob = globals.hardwareKnobs->add(14, 15, -50, 50, 0);
 
-    // BCM GPIO 4 and 5
-    flapsKnob = globals.hardwareKnobs->add(4, 5, 0, 4, 0);
+    // BCM GPIO 18 and 23
+    flapsKnob = globals.hardwareKnobs->add(18, 23, 0, 4, 0);
 }
 
 void trimFlaps::updateKnobs()
@@ -176,7 +176,7 @@ void trimFlaps::updateKnobs()
         double trim = val;
 
         // Update trim
-        globals.simVars->write("trim", trim);
+        //globals.simVars->write("trim", trim);
     }
 
     // Read knob for flaps
