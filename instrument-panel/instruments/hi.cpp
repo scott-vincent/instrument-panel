@@ -157,8 +157,8 @@ void hi::addVars()
 
 void hi::addKnobs()
 {
-    // BCM GPIO 6 and 13
-    hdgKnob = globals.hardwareKnobs->add(6, 13, -1, -1, 0);
+    // BCM GPIO 13 and 6
+    hdgKnob = globals.hardwareKnobs->add(13, 6, -1, -1, 0);
 }
 
 void hi::updateKnobs()
@@ -168,7 +168,7 @@ void hi::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to heading (adjust for desired sensitivity)
-        headingBug = val;
+        headingBug = ((int)(val / 2) * 5) % 360;
     }
 }
 
