@@ -2,5 +2,7 @@
 .vs
 packages
 **/debug
+**/Debug
 **/release
+**/Release
 instrument-panel/instrument-panel
