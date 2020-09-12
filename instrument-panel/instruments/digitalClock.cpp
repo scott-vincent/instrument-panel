@@ -294,7 +294,7 @@ void digitalClock::update()
 
     time(&now);
 
-    // Sim time doesn't work so just use panel start time
+    // Absoulte time doesn't work so just use panel start time
     mins = (now - startTime) / 60;
     flightHours = (mins / 60) % 24;
     flightMins = mins % 60;
@@ -315,7 +315,7 @@ void digitalClock::addVars()
 {
     globals.simVars->addVar(name, "Zulu Time", false, 60, 43200);
     globals.simVars->addVar(name, "Local Time", false, 60, 46800);
-    globals.simVars->addVar(name, "Sim Time", false, 60, 0);
+    globals.simVars->addVar(name, "Absolute Time", false, 60, 0);
     globals.simVars->addVar(name, "Electrical Battery Bus Voltage", false, 0.1, 23.7);
 }
 
