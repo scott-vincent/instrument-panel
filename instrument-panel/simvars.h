@@ -3,8 +3,6 @@
 
 #include <thread>
 #ifdef _WIN32
-#include <ws2tcpip.h>
-#include <winsock2.h>
 #include <Windows.h>
 #else
 #include <sys/socket.h>

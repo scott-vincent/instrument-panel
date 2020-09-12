@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <allegro5/allegro.h>
+#ifdef _WIN32
+#include <WS2tcpip.h>
+#endif
 #include "simvars.h"
 
 const char *DataLinkGroup = "Data Link";
