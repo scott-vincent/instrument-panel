@@ -141,20 +141,29 @@ void adf::addVars()
 void adf::addKnobs()
 {
     // BCM GPIO 24 and 25
-    hdgKnob = globals.hardwareKnobs->add(24, 25, -100, 100, 0);
+    adfCardKnob = globals.hardwareKnobs->add(24, 25, -1, -1, 0);
 }
 
 void adf::updateKnobs()
 {
-    // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(hdgKnob);
+    // Read knob for ADF Card setting
+    int val = globals.hardwareKnobs->read(adfCardKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double hdgVal = val / 10;
+        // Change ADF Card by knob movement amount (adjust for desired sensitivity)
+        int adjust = (int)((prevVal - val) / 2) * 5;
+        if (adjust != 0) {
+            double newVal = globals.simVars->simVars.adfCard + adjust;
 
-        // Update new instrument variable
-        //globals.simVars->write("Adf Card", hdgVal);
+            if (newVal < 0) {
+                newVal += 360;
+            }
+            else if (newVal >= 360) {
+                newVal -= 360;
+            }
+            globals.simVars->write(KEY_ADF_CARD_SET, newVal);
+            prevVal = val;
+        }
     }
 }
 

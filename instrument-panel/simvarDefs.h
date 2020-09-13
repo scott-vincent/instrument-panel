@@ -57,19 +57,29 @@ struct SimVars
     char aircraft[256] = "\0";
 };
 
-enum DEFINITION_ID {
-    DEF_READ_ALL,
-    DEF_WRITE_TRIM_FLAPS
+enum EVENT_ID {
+    SIM_START,
+    SIM_STOP,
+    KEY_TRUE_AIRSPEED_CAL_SET,
+    KEY_KOHLSMAN_SET,
+    KEY_VOR1_SET,
+    KEY_VOR2_SET,
+    KEY_ELEV_TRIM_UP,
+    KEY_ELEV_TRIM_DN,
+    KEY_FLAPS_INCR,
+    KEY_FLAPS_DECR,
+    KEY_ADF_CARD_SET,
+    KEY_ADF_SET
 };
 
-struct WriteDef {
-    DEFINITION_ID id;
+struct WriteEvent {
+    EVENT_ID id;
     const char* name;
 };
 
-struct TrimFlapsData {
-    double tfElevatorTrim;
-    double tfFlapsIndex;
+struct WriteData {
+    EVENT_ID eventId;
+    double value;
 };
 
 #endif // _SIMVARDEFS_H_

@@ -616,22 +616,17 @@ long * simvars::readSettings(const char* group, int defaultX, int defaultY, int 
 }
 
 /// <summary>
-/// Write manually updated values back to Flight Sim
+/// Write event to Flight Sim with optional data value
 /// </summary>
-void simvars::write(int defId, void* data, int dataSize)
+void simvars::write(EVENT_ID eventId, double value)
 {
-    struct {
-        long defId;
-        char writeData[256];
-    } sendBuffer;
-
     if (!globals.dataLinked) {
         return;
     }
 
-    sendBuffer.defId = defId;
-    memcpy(sendBuffer.writeData, data, dataSize);
-    dataSize += sizeof(long);
+    sendBuffer.bytes = sizeof(WriteData);
+    sendBuffer.writeData.eventId = eventId;
+    sendBuffer.writeData.value = value;
 
     if (writeSockfd == INVALID_SOCKET) {
         if ((writeSockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
@@ -644,38 +639,12 @@ void simvars::write(int defId, void* data, int dataSize)
         writeAddr.sin_family = AF_INET;
         writeAddr.sin_port = htons(globals.dataLinkPort);
         inet_pton(AF_INET, globals.dataLinkHost, &writeAddr.sin_addr);
-
-        writeTimeout.tv_sec = 0;
-        writeTimeout.tv_usec = 500000;
     }
 
-    int bytes = sendto(writeSockfd, (char*)&sendBuffer, dataSize, 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
-    if (bytes > 0) {
-        fd_set fds;
-        FD_ZERO(&fds);
-        FD_SET(writeSockfd, &fds);
-
-        int sel = select(FD_SETSIZE, &fds, 0, 0, &writeTimeout);
-        if (sel > 0) {
-            // Receive write confirmation
-            long ackBytes;
-            bytes = recv(writeSockfd, (char*)&ackBytes, sizeof(ackBytes), 0);
-            if (bytes > 0 && ackBytes != dataSize) {
-                sprintf(globals.error, "Sent %ld bytes for write def %d but server expected %ld bytes",
-                    dataSize, defId, ackBytes);
-            }
-        }
-        else {
-            bytes = SOCKET_ERROR;
-        }
+    int bytes = sendto(writeSockfd, (char*)&sendBuffer, sizeof(sendBuffer), 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
+    if (bytes <= 0) {
+        sprintf(globals.error, "Failed to write event %d", eventId);
     }
-    else {
-        bytes = SOCKET_ERROR;
-    }
-
-    //if (bytes == SOCKET_ERROR) {
-    //    sprintf(globals.error, "Failed to write def %d", defId);
-    //}
 }
 
 /// <summary>

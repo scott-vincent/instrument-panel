@@ -13,7 +13,8 @@ private:
     double compassAngle;
 
     // Hardware knobs
-    int hdgKnob = -1;
+    int adfCardKnob = -1;
+    int prevVal = 0;
 
 public:
     adf(int xPos, int yPos, int size);

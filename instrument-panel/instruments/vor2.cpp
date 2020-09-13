@@ -185,7 +185,7 @@ void vor2::addVars()
 void vor2::addKnobs()
 {
     // BCM GPIO 19 and 26
-    obsKnob = globals.hardwareKnobs->add(19, 26, -100, 100, 0);
+    obsKnob = globals.hardwareKnobs->add(19, 26, -1, -1, 0);
 }
 
 void vor2::updateKnobs()
@@ -194,11 +194,20 @@ void vor2::updateKnobs()
     int val = globals.hardwareKnobs->read(obsKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double obsVal = val / 10;
+        // Change Obs by knob movement amount (adjust for desired sensitivity)
+        int adjust = (int)((val - prevVal) / 2) * 5;
+        if (adjust != 0) {
+            double newVal = globals.simVars->simVars.vor2Obs + adjust;
 
-        // Update new instrument variable
-        //globals.simVars->write("Nav Obs:2", simVarVal);
+            if (newVal < 0) {
+                newVal += 360;
+            }
+            else if (newVal >= 360) {
+                newVal -= 360;
+            }
+            globals.simVars->write(KEY_VOR2_SET, newVal);
+            prevVal = val;
+        }
     }
 }
 

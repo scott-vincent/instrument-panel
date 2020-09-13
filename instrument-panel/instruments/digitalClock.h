@@ -5,15 +5,28 @@
 
 class digitalClock : public instrument
 {
+    enum DisplayView {
+        Voltage,
+        Farenheit,
+        Celsius
+    };
+
+    enum ClockView {
+        UtcTime,
+        LocalTime,
+        FlightTime,
+        ElapsedTime
+    };
+
 private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    int topView = 0;
-    int bottomView = 1;
+    DisplayView displayView = Celsius;
+    ClockView clockView = LocalTime;
     bool stopWatchRunning = false;
     int stopWatchSeconds = 0;
-    time_t startTime;
+    time_t flightStartTime;
     time_t now;
     time_t stopWatchStarted;
     time_t stopWatchPressed;
@@ -43,8 +56,8 @@ public:
     void update();
 
 private:
-    void drawTop(int digit1, int digit2, int digit3, int letter);
-    void drawBottom(int digit1, int digit2, int digit3, int digit4);
+    void drawDisplay(int digit1, int digit2, int digit3, int letter);
+    void drawClock(int digit1, int digit2, int digit3, int digit4);
     void resize();
     void addVars();
     void addKnobs();

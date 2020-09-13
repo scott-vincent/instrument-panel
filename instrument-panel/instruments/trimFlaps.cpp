@@ -178,20 +178,15 @@ void trimFlaps::addKnobs()
 
 void trimFlaps::updateKnobs()
 {
-    SimVars* simVars = &globals.simVars->simVars;
-    bool needWrite = false;
-
-    TrimFlapsData trimFlapsData;
-    trimFlapsData.tfElevatorTrim = simVars->tfElevatorTrim;
-    trimFlapsData.tfFlapsIndex = simVars->tfFlapsIndex;
-
     // Read knob for trim adjustment
     int val = globals.hardwareKnobs->read(trimKnob);
     if (val != INT_MIN) {
-        // Convert knob value to trim (adjust for desired sensitivity)
-        int diff = lastTrimVal - val;
-        trimFlapsData.tfElevatorTrim += diff / 40.0;
-        needWrite = true;
+        if (val > lastTrimVal) {
+            globals.simVars->write(KEY_ELEV_TRIM_DN);
+        }
+        else if (val < lastTrimVal) {
+            globals.simVars->write(KEY_ELEV_TRIM_UP);
+        }
         lastTrimVal = val;
     }
 
@@ -204,21 +199,15 @@ void trimFlaps::updateKnobs()
             lastFlapsVal = val;
         }
         else {
-            double newPos = simVars->tfFlapsIndex;
-
             // Value large enough to trigger yet?
-            if (lastFlapsVal - val > 6 && newPos < simVars->tfFlapsCount) {
+            if (lastFlapsVal - val > 6) {
                 // Flaps down one notch
-                newPos++;
+                globals.simVars->write(KEY_FLAPS_INCR);
+                lastFlapsVal = val;
             }
-            else if (val - lastFlapsVal > 6 && newPos > 0) {
+            else if (val - lastFlapsVal > 6) {
                 // Flaps up one notch
-                newPos--;
-            }
-
-            if (newPos != simVars->tfFlapsIndex) {
-                trimFlapsData.tfFlapsIndex = newPos;
-                needWrite = true;
+                globals.simVars->write(KEY_FLAPS_DECR);
                 lastFlapsVal = val;
             }
         }
@@ -231,10 +220,6 @@ void trimFlaps::updateKnobs()
         if (now > lastTurn) {
             lastTurn = 0;
         }
-    }
-
-    if (needWrite) {
-        globals.simVars->write(DEF_WRITE_TRIM_FLAPS, &trimFlapsData, sizeof(trimFlapsData));
     }
 }
 

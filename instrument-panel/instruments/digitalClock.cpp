@@ -17,7 +17,7 @@ digitalClock::digitalClock(int xPos, int yPos, int size) : instrument(xPos, yPos
 #endif
 
     resize();
-    time(&startTime);
+    time(&flightStartTime);
 }
 
 /// <summary>
@@ -157,14 +157,14 @@ void digitalClock::render()
     int arrowX;
     int arrowY;
 
-    if (bottomView == 0 || bottomView == 2) {
+    if (clockView == UtcTime || clockView == FlightTime) {
         arrowX = 111;
     }
     else {
         arrowX = 196;
     }
 
-    if (bottomView < 2) {
+    if (clockView == UtcTime || clockView == LocalTime) {
         arrowY = 464;
     }
     else {
@@ -173,42 +173,35 @@ void digitalClock::render()
 
     al_draw_bitmap(bitmaps[3], arrowX * scaleFactor, arrowY * scaleFactor, 0);
 
-    switch (topView) {
-    case 0:
-        // Battery bus volts
-        drawTop(voltsx10 / 100, (voltsx10 / 10) % 10, voltsx10 % 10, 0);
+    switch (displayView) {
+    case Voltage:
+        drawDisplay(voltsx10 / 100, (voltsx10 / 10) % 10, voltsx10 % 10, 0);
         break;
 
-    case 1:
-        // Temp Fahrenheit
-        drawTop(tempFx10 / 100, (tempFx10 / 10) % 10, tempFx10 % 10, 1);
+    case Farenheit:
+        drawDisplay(tempFx10 / 100, (tempFx10 / 10) % 10, tempFx10 % 10, 1);
         break;
 
-    case 2:
-        // Temp Celsius
-        drawTop(tempCx10 / 100, (tempCx10 / 10) % 10, tempCx10 % 10, 2);
+    case Celsius:
+        drawDisplay(tempCx10 / 100, (tempCx10 / 10) % 10, tempCx10 % 10, 2);
         break;
     }
 
-    switch (bottomView) {
-    case 0:
-        // UTC
-        drawBottom(utcHours / 10, utcHours % 10, utcMins / 10, utcMins % 10);
+    switch (clockView) {
+    case UtcTime:
+        drawClock(utcHours / 10, utcHours % 10, utcMins / 10, utcMins % 10);
         break;
 
-    case 1:
-        // Local time
-        drawBottom(localHours / 10, localHours % 10, localMins / 10, localMins % 10);
+    case LocalTime:
+        drawClock(localHours / 10, localHours % 10, localMins / 10, localMins % 10);
         break;
 
-    case 2:
-        // Flight time
-        drawBottom(flightHours / 10, flightHours % 10, flightMins / 10, flightMins % 10);
+    case FlightTime:
+        drawClock(flightHours / 10, flightHours % 10, flightMins / 10, flightMins % 10);
         break;
 
-    case 3:
-        // Elapsed time (stopwatch)
-        drawBottom(elapsedMins / 10, elapsedMins % 10, elapsedSecs / 10, elapsedSecs % 10);
+    case ElapsedTime:
+        drawClock(elapsedMins / 10, elapsedMins % 10, elapsedSecs / 10, elapsedSecs % 10);
         break;
     }
 
@@ -223,7 +216,7 @@ void digitalClock::render()
 /// <summary>
 /// Draw top row of digits + letter
 /// </summary>
-void digitalClock::drawTop(int digit1, int digit2, int digit3, int letter)
+void digitalClock::drawDisplay(int digit1, int digit2, int digit3, int letter)
 {
     int y = 255 * scaleFactor;
 
@@ -242,7 +235,7 @@ void digitalClock::drawTop(int digit1, int digit2, int digit3, int letter)
 /// <summary>
 /// Draw bottom row of digits
 /// </summary>
-void digitalClock::drawBottom(int digit1, int digit2, int digit3, int digit4)
+void digitalClock::drawClock(int digit1, int digit2, int digit3, int digit4)
 {
     int y = 430 * scaleFactor;
 
@@ -295,7 +288,7 @@ void digitalClock::update()
     time(&now);
 
     // Absoulte time doesn't work so just use panel start time
-    mins = (now - startTime) / 60;
+    mins = (now - flightStartTime) / 60;
     flightHours = (mins / 60) % 24;
     flightMins = mins % 60;
 
@@ -340,11 +333,11 @@ void digitalClock::updateKnobs()
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
         if (prevTopVal % 2 == 1) {
-            if (topView < 2) {
-                topView++;
+            if (displayView == Celsius) {
+                displayView = Voltage;
             }
             else {
-                topView = 0;
+                displayView = (DisplayView)((int)displayView + 1);
             }
         }
         prevTopVal = val;
@@ -353,11 +346,11 @@ void digitalClock::updateKnobs()
     val = globals.hardwareKnobs->read(leftButton);
     if (val != INT_MIN) {
         if (prevLeftVal % 2 == 1) {
-            if (bottomView < 3) {
-                bottomView++;
+            if (clockView == ElapsedTime) {
+                clockView = UtcTime;
             }
             else {
-                bottomView = 0;
+                clockView = (ClockView)((int)clockView + 1);
             }
         }
         prevLeftVal = val;
@@ -368,16 +361,18 @@ void digitalClock::updateKnobs()
         if (prevRightVal % 2 == 1) {
             time(&stopWatchPressed);
 
-            if (!stopWatchRunning) {
-                // Start
-                stopWatchRunning = true;
-                time(&stopWatchStarted);
-            }
-            else {
-                // Stop
-                stopWatchRunning = false;
-                time(&now);
-                stopWatchSeconds += now - stopWatchStarted;
+            if (clockView == ElapsedTime) {
+                if (!stopWatchRunning) {
+                    // Start
+                    stopWatchRunning = true;
+                    time(&stopWatchStarted);
+                }
+                else {
+                    // Stop
+                    stopWatchRunning = false;
+                    time(&now);
+                    stopWatchSeconds += now - stopWatchStarted;
+                }
             }
         }
 
@@ -391,8 +386,16 @@ void digitalClock::updateKnobs()
         // Reset if button held for more than 1 second
         time(&now);
         if (now - stopWatchPressed > 1) {
-            stopWatchRunning = false;
-            stopWatchSeconds = 0;
+            if (clockView == FlightTime) {
+                // Reset flight time
+                time(&flightStartTime);
+            }
+            else if (clockView == ElapsedTime) {
+                // Reset stopwatch
+                stopWatchSeconds = 0;
+                stopWatchRunning = false;
+            }
+
             stopWatchPressed = 0;
         }
     }

@@ -2,7 +2,7 @@
 #include "simvarDefs.h"
 
 const char* SimVarDefs[][2] = {
-    { "Plane Altitude", "feet" },
+    { "Indicated Altitude", "feet" },
     { "Kohlsman Setting Hg", "inHg" },
     { "Attitude Indicator Pitch Degrees", "degrees" },
     { "Attitude Indicator Bank Degrees", "degrees" },
@@ -54,8 +54,16 @@ const char* SimVarDefs[][2] = {
     { NULL, NULL }
 };
 
-WriteDef WriteDefs[] = {
-    { DEF_WRITE_TRIM_FLAPS, "Elevator Trim Position" },
-    { DEF_WRITE_TRIM_FLAPS, "Flaps Handle Index" },
-    { DEF_READ_ALL, NULL }
+WriteEvent WriteEvents[] = {
+    { KEY_TRUE_AIRSPEED_CAL_SET, "TRUE_AIRSPEED_CAL_SET" },
+    { KEY_KOHLSMAN_SET, "KOHLSMAN_SET" },
+    { KEY_VOR1_SET, "VOR1_SET" },
+    { KEY_VOR2_SET, "VOR2_SET" },
+    { KEY_ELEV_TRIM_UP, "ELEV_TRIM_UP" },
+    { KEY_ELEV_TRIM_DN, "ELEV_TRIM_DN" },
+    { KEY_FLAPS_INCR, "FLAPS_INCR" },
+    { KEY_FLAPS_DECR, "FLAPS_DECR" },
+    { KEY_ADF_CARD_SET, "ADF_CARD_SET" },
+    { KEY_ADF_SET, "ADF_SET" },
+    { SIM_STOP, NULL }
 };

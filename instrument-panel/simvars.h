@@ -25,9 +25,14 @@ public:
 
 private:
     std::thread* dataLinkThread = NULL;
+
     SOCKET writeSockfd = INVALID_SOCKET;
     sockaddr_in writeAddr;
-    timeval writeTimeout;
+    struct {
+        long bytes;
+        WriteData writeData;
+    } sendBuffer;
+
     int currentVar = 0;
     int varCount = 0;
     char varGroup[256][256] = {};
@@ -58,7 +63,7 @@ public:
     void addSetting(const char* group, const char* name);
     long* readSettings(const char* group, int defaultX, int defaultY, int defaultSize);
     bool isEnabled(const char* group);
-    void write(int defId, void* data, int dataSize);
+    void write(EVENT_ID eventId, double value = 0);
     
 private:
     void loadSettings();

@@ -204,37 +204,31 @@ void alt::update()
     // Calculate values
 
     // Add altitude correction
-    targetAltitude = simVars->altAltitude - 1000 * (29.92 - simVars->altKollsman);
-
     mb = simVars->altKollsman * 33.86389;
     inhg = simVars->altKollsman;
 
-    if (targetAltitude < 0) {
-        targetAltitude = 0;
-    }
-
-    double diff = abs(targetAltitude - altitude);
+    double diff = abs(simVars->altAltitude - altitude);
 
     if (diff > 500.0) {
-        if (altitude < targetAltitude) altitude += 200.0; else altitude -= 200.0;
+        if (altitude < simVars->altAltitude) altitude += 200.0; else altitude -= 200.0;
     }
     else if (diff > 100.0) {
-        if (altitude < targetAltitude) altitude += 40.0; else altitude -= 40.0;
+        if (altitude < simVars->altAltitude) altitude += 40.0; else altitude -= 40.0;
     }
     else if (diff > 50.0) {
-        if (altitude < targetAltitude) altitude += 20.0; else altitude -= 20.0;
+        if (altitude < simVars->altAltitude) altitude += 20.0; else altitude -= 20.0;
     }
     else if (diff > 10.0) {
-        if (altitude < targetAltitude) altitude += 5.0; else altitude -= 5.0;
+        if (altitude < simVars->altAltitude) altitude += 5.0; else altitude -= 5.0;
     }
     else if (diff > 5.0) {
-        if (altitude < targetAltitude) altitude += 2.0; else altitude -= 2.0;
+        if (altitude < simVars->altAltitude) altitude += 2.0; else altitude -= 2.0;
     }
     else if (diff > 1) {
-        if (altitude < targetAltitude) altitude += 1.0; else altitude -= 1.0;
+        if (altitude < simVars->altAltitude) altitude += 1.0; else altitude -= 1.0;
     }
     else {
-        altitude = targetAltitude;
+        altitude = simVars->altAltitude;
     }
 }
 
@@ -252,7 +246,7 @@ void alt::addVars()
 void alt::addKnobs()
 {
     // BCM GPIO 10 and 9
-    calKnob = globals.hardwareKnobs->add(10, 9, 15168, 17344, 16208);
+    calKnob = globals.hardwareKnobs->add(10, 9, -1, -1, 0);
 }
 
 void alt::updateKnobs()
@@ -261,11 +255,14 @@ void alt::updateKnobs()
     int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to pressure (adjust for desired sensitivity)
-        double pressure2 = val;
+        // Change calibration by knob movement amount (adjust for desired sensitivity)
+        double adjust = (int)((val - prevVal) / 2) * 0.01;
+        if (adjust != 0) {
+            double newVal = globals.simVars->simVars.altKollsman + adjust;
 
-        // Update manual pressure adjust
-        //globals.simVars->write("pressure2", pressure2);
+            globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
+            prevVal = val;
+        }
     }
 }
 

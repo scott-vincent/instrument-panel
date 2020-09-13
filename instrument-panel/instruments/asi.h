@@ -17,6 +17,7 @@ private:
 
     // Hardware knobs
     int calKnob = -1;
+    int prevVal = 0;
 
 public:
     asi(int xPos, int yPos, int size);

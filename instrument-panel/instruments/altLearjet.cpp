@@ -203,40 +203,34 @@ void altLearjet::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    double altitudeTarget = simVars->altAltitude + 1000 * (29.92 - simVars->altKollsman);
-
     int mb = simVars->altKollsman * 33.86389;
     int inhgx100 = simVars->altKollsman * 100;
-
-    if (altitudeTarget < 0) {
-        altitudeTarget = 0;
-    }
 
     sprintf(hpa, "%4.4d", mb);
     sprintf(inhg, "%4.4d", inhgx100);
 
-    double diff = abs(targetAltitude - altitude);
+    double diff = abs(simVars->altAltitude - altitude);
 
     if (diff > 500.0) {
-        if (altitude < targetAltitude) altitude += 200.0; else altitude -= 200.0;
+        if (altitude < simVars->altAltitude) altitude += 200.0; else altitude -= 200.0;
     }
     else if (diff > 100.0) {
-        if (altitude < targetAltitude) altitude += 40.0; else altitude -= 40.0;
+        if (altitude < simVars->altAltitude) altitude += 40.0; else altitude -= 40.0;
     }
     else if (diff > 50.0) {
-        if (altitude < targetAltitude) altitude += 20.0; else altitude -= 20.0;
+        if (altitude < simVars->altAltitude) altitude += 20.0; else altitude -= 20.0;
     }
     else if (diff > 10.0) {
-        if (altitude < targetAltitude) altitude += 5.0; else altitude -= 5.0;
+        if (altitude < simVars->altAltitude) altitude += 5.0; else altitude -= 5.0;
     }
     else if (diff > 5.0) {
-        if (altitude < targetAltitude) altitude += 2.0; else altitude -= 2.0;
+        if (altitude < simVars->altAltitude) altitude += 2.0; else altitude -= 2.0;
     }
     else if (diff > 1) {
-        if (altitude < targetAltitude) altitude += 1.0; else altitude -= 1.0;
+        if (altitude < simVars->altAltitude) altitude += 1.0; else altitude -= 1.0;
     }
     else {
-        altitude = targetAltitude;
+        altitude = simVars->altAltitude;
     }
 
     sprintf(stringAltitude, "%5.5i", (int)altitude);

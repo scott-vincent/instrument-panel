@@ -94,8 +94,7 @@ void asi::render()
 
     // Add outer scale (adjusted airspeed) and rotate
     // 0 = 0 radians
-    angle =  airspeedCal * 0.01f;
-    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, airspeedCal * DegreesToRadians, 0);
 
     if (globals.enableShadows) {
         // Set blender to multiply (shades of grey darken, white has no effect)
@@ -161,7 +160,7 @@ void asi::update()
     // Get latest FlightSim variables
     SimVars* simVars = &globals.simVars->simVars;
 
-    airspeedCal = simVars->asiAirspeedCal;
+    airspeedCal = -35 - (simVars->asiAirspeedCal * 2.5);
 
     // Calculate values - Not a linear scale!
     if (globals.aircraft == globals.SAVAGE_CUB) {
@@ -203,7 +202,7 @@ void asi::addVars()
 void asi::addKnobs()
 {
     // BCM GPIO 27 and 22
-    calKnob = globals.hardwareKnobs->add(27, 22, -500, 500, 0);
+    calKnob = globals.hardwareKnobs->add(27, 22, -1, -1, 0);
 }
 
 void asi::updateKnobs()
@@ -212,11 +211,14 @@ void asi::updateKnobs()
     int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
-        // Convert knob value to adjusted airspeed (adjust for desired sensitivity)
-        double airspeedCal = val / 10;
+        // Change calibration by knob movement amount (adjust for desired sensitivity)
+        int adjust = (int)((prevVal - val) / 2);
+        if (adjust != 0) {
+            double newVal = globals.simVars->simVars.asiAirspeedCal + adjust;
 
-        // Update airspeed calibration
-        //globals.simVars->write("airspeed cal", airspeedCal);
+            globals.simVars->write(KEY_TRUE_AIRSPEED_CAL_SET, newVal);
+            prevVal = val;
+        }
     }
 }
 

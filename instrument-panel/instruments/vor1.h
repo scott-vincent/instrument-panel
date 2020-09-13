@@ -17,6 +17,7 @@ private:
 
     // Hardware knobs
     int obsKnob = -1;
+    int prevVal = 0;
 
 public:
     vor1(int xPos, int yPos, int size);
