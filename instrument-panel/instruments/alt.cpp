@@ -237,7 +237,7 @@ void alt::update()
 /// </summary>
 void alt::addVars()
 {
-    globals.simVars->addVar(name, "Plane Altitude", false, 10, 0);
+    globals.simVars->addVar(name, "Indicated Altitude", false, 10, 0);
     globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92f);
 }
 
@@ -256,9 +256,9 @@ void alt::updateKnobs()
 
     if (val != INT_MIN) {
         // Change calibration by knob movement amount (adjust for desired sensitivity)
-        double adjust = (int)((val - prevVal) / 2) * 0.01;
+        double adjust = (int)((prevVal - val) / 2) * 0.01;
         if (adjust != 0) {
-            double newVal = globals.simVars->simVars.altKollsman + adjust;
+            double newVal = (globals.simVars->simVars.altKollsman + adjust) * 541.82224;
 
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
