@@ -65,6 +65,18 @@ void nav::resize()
     al_draw_scaled_bitmap(orig, 400, 400, 80, 34, 0, 0, 80 * scaleFactor, 34 * scaleFactor, 0);
     addBitmap(bmp);
 
+    // 6 = Transponder state selected
+    bmp = al_create_bitmap(320, 34);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 480, 400, 320, 34, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 7 = Transponder state
+    bmp = al_create_bitmap(320, 34);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 480, 434, 320, 34, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -87,21 +99,33 @@ void nav::render()
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
     // Add selected switch
-    int switchX;
-    int switchY;
     switch (switchSel) {
     case 0:
-        switchX = 460; switchY = 104; break;
+        al_draw_bitmap(bitmaps[5], 460 * scaleFactor, 104 * scaleFactor, 0);
+        break;
     case 1:
-        switchX = 1064; switchY = 104; break;
+        al_draw_bitmap(bitmaps[5], 1064 * scaleFactor, 104 * scaleFactor, 0);
+        break;
     case 2:
-        switchX = 460; switchY = 233; break;
+        al_draw_bitmap(bitmaps[5], 460 * scaleFactor, 233 * scaleFactor, 0);
+        break;
     case 3:
-        switchX = 1064; switchY = 233; break;
-    default:
-        switchX = 649; switchY = 363; break;
+        al_draw_bitmap(bitmaps[5], 1064 * scaleFactor, 233 * scaleFactor, 0);
+        break;
+    case 4:
+        al_draw_bitmap(bitmaps[5], 460 * scaleFactor, 363 * scaleFactor, 0);
+        break;
     }
-    al_draw_bitmap(bitmaps[5], switchX * scaleFactor, switchY * scaleFactor, 0);
+
+    int statePos = 80 * transponderState;
+    if (switchSel == 5) {
+        // Add transponder state selected
+        al_draw_scaled_bitmap(bitmaps[6], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+    }
+    else {
+        // Add transponder state
+        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+    }
 
     // Add panel 1 frequencies
     addFreq3dp(com1Freq, 237, 19);
@@ -116,8 +140,11 @@ void nav::render()
     addFreq2dp(nav2Standby, 1153, 148);
 
     // Add panel 3 frequencies
-    addFreq(adfFreq, 370, 278);
-    addFreq(adfStandby, 790, 278);
+    addFreq(adfFreq, 273, 278);
+    addFreq(adfStandby, 586, 278);
+
+    // Add squawk
+    addSquawk(transponderCode, 968, 278);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -197,6 +224,26 @@ void nav::addFreq3dp(int freq, int x, int y)
 }
 
 /// <summary>
+/// Displays the squawk code
+/// </summary>
+void nav::addSquawk(int code, int x, int y)
+{
+    int digit1 = (code % 10000) / 1000;
+    int digit2 = (code % 1000) / 100;
+    int digit3 = (code % 100) / 10;
+    int digit4 = code % 10;
+
+    int yPos = y * scaleFactor;
+    int width = 38 * scaleFactor;
+    int height = 80 * scaleFactor;
+
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 152) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 228) * scaleFactor, yPos, width, height, 0);
+}
+
+/// <summary>
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
@@ -234,6 +281,7 @@ void nav::update()
     nav2Standby = (simVars->nav2Standby + 0.0000001) * 100.0;
     adfFreq = simVars->adfFreq;
     adfStandby = simVars->adfStandby;
+    transponderCode = simVars->transponderCode;
 }
 
 /// <summary>
@@ -241,16 +289,17 @@ void nav::update()
 /// </summary>
 void nav::addVars()
 {
-    globals.simVars->addVar(name, "Com Active Frequency:1", false, 0.01, 100);
-    globals.simVars->addVar(name, "Com Standby Frequency:1", false, 0.01, 100);
-    globals.simVars->addVar(name, "Nav Active Frequency:1", false, 0.01, 100);
-    globals.simVars->addVar(name, "Nav Standby Frequency:1", false, 0.01, 100);
-    globals.simVars->addVar(name, "Com Active Frequency:2", false, 0.01, 100);
-    globals.simVars->addVar(name, "Com Standby Frequency:2", false, 0.01, 100);
-    globals.simVars->addVar(name, "Nav Active Frequency:2", false, 0.01, 100);
-    globals.simVars->addVar(name, "Nav Standby Frequency:2", false, 0.01, 100);
-    globals.simVars->addVar(name, "Adf Active Frequency:1", false, 0.01, 100);
-    globals.simVars->addVar(name, "Adf Standby Frequency:1", false, 0.01, 100);
+    globals.simVars->addVar(name, "Com Active Frequency:1", false, 0.005, 100);
+    globals.simVars->addVar(name, "Com Standby Frequency:1", false, 0.005, 100);
+    globals.simVars->addVar(name, "Nav Active Frequency:1", false, 0.05, 100);
+    globals.simVars->addVar(name, "Nav Standby Frequency:1", false, 0.05, 100);
+    globals.simVars->addVar(name, "Com Active Frequency:2", false, 0.005, 100);
+    globals.simVars->addVar(name, "Com Standby Frequency:2", false, 0.005, 100);
+    globals.simVars->addVar(name, "Nav Active Frequency:2", false, 0.05, 100);
+    globals.simVars->addVar(name, "Nav Standby Frequency:2", false, 0.05, 100);
+    globals.simVars->addVar(name, "Adf Active Frequency:1", false, 1, 100);
+    globals.simVars->addVar(name, "Adf Standby Frequency:1", false, 1, 100);
+    globals.simVars->addVar(name, "Transponder Code:1", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -260,33 +309,265 @@ void nav::addKnobs()
     // BCM GPIO 8 and 7
     selKnob = globals.hardwareKnobs->add(8, 7, 0, 49, 0);
 
+    // BCM GPIO 12
+    selPush = globals.hardwareKnobs->add(12, 0, 0, 49, 0);
+
     // BCM GPIO 20 and 21
-    freqKnob = globals.hardwareKnobs->add(20, 21, 100, 200, 0);
+    digitsKnob = globals.hardwareKnobs->add(20, 21, 100, 200, 0);
+
+    // BCM GPIO 16
+    digitsPush = globals.hardwareKnobs->add(16, 0, 0, 49, 0);
 }
 
 void nav::updateKnobs()
 {
     // Read knob for switch selection
     int val = globals.hardwareKnobs->read(selKnob);
-
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        switchSel = val / 10;
-
-        // Update new instrument variable
-        //globals.simVars->write("simvar", simVarVal);
+        // Convert knob value to selection (adjust for desired sensitivity)
+        switchSel = (val / 2) % 6;
+        if (switchSel < 0) {
+            switchSel += 6;
+        }
+        digitSetSel = 0;
     }
 
-    // Read knob for frequency set
-    val = globals.hardwareKnobs->read(freqKnob);
-
+    // Read switch push
+    val = globals.hardwareKnobs->read(selPush);
     if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double freqVal = val;
-
-        // Update new instrument variable
-        //globals.simVars->write("simvar", simVarVal);
+        // If previous state was unpressed then must have been pressed
+        if (prevSwitchPush % 2 == 1) {
+            // Swap standby and primary values
+            switch (switchSel) {
+            case 0:
+                globals.simVars->write(KEY_COM_RADIO_SWAP);
+                break;
+            case 1:
+                globals.simVars->write(KEY_NAV1_RADIO_SWAP);
+                break;
+            case 2:
+                globals.simVars->write(KEY_COM2_RADIO_SWAP);
+                break;
+            case 3:
+                globals.simVars->write(KEY_NAV2_RADIO_SWAP);
+                break;
+            case 4:
+                int newFreq = globals.simVars->simVars.adfStandby;
+                globals.simVars->write(KEY_ADF_COMPLETE_SET, globals.simVars->simVars.adfFreq);
+                globals.simVars->write(KEY_ADF1_PRIMARY_SET, newFreq);
+                break;
+            case 5:
+                if (transponderState == 3) {
+                    transponderState == 0;
+                }
+                else {
+                    transponderState++;
+                }
+                break;
+            }
+        }
+        prevSwitchPush = val;
     }
+
+    // Read knob for digits set
+    val = globals.hardwareKnobs->read(digitsKnob);
+    if (val != INT_MIN) {
+        int adjust = (val - prevDigitSetVal) / 2;
+        if (adjust != 0) {
+            switch (switchSel) {
+            case 0:
+                adjustCom(globals.simVars->simVars.com1Standby, KEY_COM_STBY_RADIO_SET, adjust);
+                break;
+            case 1:
+                adjustNav(globals.simVars->simVars.nav1Standby, KEY_NAV1_STBY_SET, adjust);
+                break;
+            case 2:
+                adjustCom(globals.simVars->simVars.com2Standby, KEY_COM2_STBY_RADIO_SET, adjust);
+                break;
+            case 3:
+                adjustNav(globals.simVars->simVars.nav2Standby, KEY_NAV2_STBY_SET, adjust);
+                break;
+            case 4:
+                adjustAdf(globals.simVars->simVars.adfStandby, KEY_ADF_COMPLETE_SET, adjust);
+                break;
+            case 5:
+                adjustSquawk(globals.simVars->simVars.transponderCode, KEY_XPNDR_SET, adjust);
+                break;
+            }
+            prevDigitSetVal = val;
+            time(&lastDigitAdjust);
+        }
+    }
+    else if (lastDigitAdjust != 0) {
+        // Reset digit set selection if more than 1 second since last adjustment
+        time(&now);
+        if (now - lastDigitAdjust > 1) {
+            digitSetSel = 0;
+            lastDigitAdjust = 0;
+        }
+    }
+
+    // Read digits set push
+    val = globals.hardwareKnobs->read(digitsPush);
+    if (val != INT_MIN) {
+        // If previous state was unpressed then must have been pressed
+        if (prevDigitPush % 2 == 1) {
+            int digitSets;
+            if (switchSel == 4) {
+                digitSets = 3;
+            }
+            if (switchSel == 5) {
+                digitSets = 4;
+            }
+            else {
+                digitSets = 2;
+            }
+
+            digitSetSel++;
+            if (digitSetSel >= digitSets) {
+                digitSetSel = 0;
+            }
+        }
+        prevDigitPush = val;
+    }
+}
+
+void nav::adjustCom(double val, EVENT_ID eventId, int adjust)
+{
+    int whole = val;
+    double frac = (val - whole);
+
+    if (digitSetSel == 0) {
+        // Adjust whole - Range 118 to 136
+        whole += adjust;
+        if (whole > 136) {
+            whole -= 19;
+        }
+        else if (whole < 118) {
+            whole += 19;
+        }
+    }
+    else {
+        // Adjust fraction
+        double frac += adjust * 0.005;
+        if (frac >= 1) {
+            frac -= 1;
+        }
+
+        // Skip .020, .045, .070 and .095
+        int last2 = (int)(frac * 1000) % 100;
+        if (last2 == 95) {
+            frac = 0;
+        }
+        else if (last == 20 || last2 == 45 || last2 == 70) {
+            frac += 0.005;
+        }
+    }
+
+    globals.simVars->write(eventId, whole + frac);
+}
+
+void nav::adjustNav(double val, EVENT_ID eventId, int adjust)
+{
+    int whole = val;
+    double frac = (val - whole);
+
+    if (digitSetSel == 0) {
+        // Adjust whole - Range 108 to 117
+        whole += adjust;
+        if (whole > 117) {
+            whole -= 10;
+        }
+        else if (whole < 108) {
+            whole += 10;
+        }
+    }
+    else {
+        // Adjust fraction
+        double frac += adjust * 0.05;
+        if (frac >= 1) {
+            frac -= 1;
+        }
+    }
+
+    globals.simVars->write(eventId, whole + frac);
+}
+
+void nav::adjustAdf(double val, EVENT_ID eventId, int adjust)
+{
+    if (digitSetSel == 0) {
+        // Adjust first 2 digits - Range 1 to 17
+        int setVal = val / 100;
+        setVal += adjust;
+        if (setVal > 17) {
+            setVal -= 17;
+        }
+        else if (setVal < 1) {
+            setVal += 17;
+        }
+        val = setVal * 100 + (val % 100);
+    }
+    else if (digitSetSel == 1) {
+        // Adjust 3rd digit
+        int digit = adjustDigit(((int)val % 100) / 10, adjust);
+        val = (int)(val / 100) * 100 + digit * 10 + (val % 10);
+    }
+    else {
+        // Adjust 4th digit
+        int digit = adjustDigit((int)val % 10, adjust);
+        val = (int)(val / 10) * 10 + digit;
+    }
+
+    globals.simVars->write(eventId, val);
+}
+
+void nav::adjustSquawk(double val, EVENT_ID eventId, int adjust)
+{
+    switch (digitSetSel) {
+    case 0:
+    {
+        // Adjust 1st digit
+        int digit = adjustDigit(val / 1000, adjust);
+        val = digit * 1000 + (val % 1000);
+        break;
+    }
+    case 1:
+    {
+        // Adjust 2nd digit
+        int digit = adjustDigit(((int)val % 1000) / 100, adjust);
+        val = (int)(val / 1000) * 1000 + digit * 100 + (val % 100);
+        break;
+    }
+    case 2:
+    {
+        // Adjust 3rd digit
+        int digit = adjustDigit(((int)val % 100) / 10, adjust);
+        val = (int)(val / 100) * 100 + digit * 10 + (val % 10);
+        break;
+    }
+    case 3:
+    {
+        // Adjust 4th digit
+        int digit = adjustDigit((int)val % 10, adjust);
+        val = (int)(val / 10) * 10 + digit;
+        break;
+    }
+    }
+
+    globals.simVars->write(eventId, preserveVal + adjustVal);
+}
+
+int nav::adjustDigit(int val, int adjust)
+{
+    val += adjust;
+    if (val > 9) {
+        val -= 10;
+    }
+    else if (val < 0) {
+        val += 10;
+    }
+
+    return val;
 }
 
 #endif // !_WIN32

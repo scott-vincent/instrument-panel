@@ -50,6 +50,7 @@ struct SimVars
     double nav2Standby = 113.90;
     double adfFreq = 394;
     double adfStandby = 368;
+    double transponderCode = 1200;
     char atcTailNumber[64] = "\0";
     char atcCallSign[64] = "\0";
     char atcFlightNumber[8] = "\0";
@@ -69,7 +70,17 @@ enum EVENT_ID {
     KEY_FLAPS_INCR,
     KEY_FLAPS_DECR,
     KEY_ADF_CARD_SET,
-    KEY_ADF_SET
+    KEY_COM_STBY_RADIO_SET,
+    KEY_COM_RADIO_SWAP,
+    KEY_COM2_STBY_RADIO_SET,
+    KEY_COM2_RADIO_SWAP,
+    KEY_NAV1_STBY_SET,
+    KEY_NAV1_RADIO_SWAP,
+    KEY_NAV2_STBY_SET,
+    KEY_NAV2_RADIO_SWAP,
+    KEY_ADF_COMPLETE_SET,
+    KEY_ADF1_PRIMARY_SET,
+    KEY_XPNDR_SET
 };
 
 struct WriteEvent {
