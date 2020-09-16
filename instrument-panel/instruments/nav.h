@@ -2,7 +2,6 @@
 #define _NAV_H_
 
 #include "instrument.h"
-#include "simvars.h"
 
 class nav : public instrument
 {
@@ -70,10 +69,10 @@ private:
     void addVars();
     void addKnobs();
     void updateKnobs();
-    void adjustCom(double val, EVENT_ID eventId, int adjust);
-    void adjustNav(double val, EVENT_ID eventId, int adjust);
-    void adjustAdf(int val, EVENT_ID eventId, int adjust);
-    void adjustSquawk(int val, EVENT_ID eventId, int adjust);
+    double adjustCom(double val, int adjust);
+    double adjustNav(double val, int adjust);
+    int adjustAdf(int val, int adjust);
+    int adjustSquawk(int val, int adjust);
     int adjustDigit(int val, int adjust, bool isSquawk = false);
 };
 

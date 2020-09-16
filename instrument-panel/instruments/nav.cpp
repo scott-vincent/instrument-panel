@@ -197,7 +197,7 @@ void nav::renderAutopilot()
 
     // Add autopilot switch selected
     int selPos = 80 * (switchSel - 6);
-    int destPos = 423 + 180 * (switchSel - 6);
+    int destPos = 443 + 160 * (switchSel - 6);
     al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 340 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
 
     int destSizeX = 128 * scaleFactor;
@@ -413,16 +413,16 @@ void nav::updateKnobs()
     int val = globals.hardwareKnobs->read(selKnob);
     if (val != INT_MIN) {
         // Convert knob value to selection (adjust for desired sensitivity)
+        int maxSwitch;
+        if (hasAutopilot) {
+            maxSwitch = 10;
+        }
+        else {
+            maxSwitch = 5;
+        }
+
         int diff = (prevSelVal - val) / 2;
         if (diff > 0) {
-            int maxSwitch;
-            if (hasAutopilot) {
-                maxSwitch = 10;
-            }
-            else {
-                maxSwitch = 5;
-            }
-
             if (switchSel < maxSwitch) {
                 switchSel++;
             }
@@ -437,7 +437,7 @@ void nav::updateKnobs()
                 switchSel--;
             }
             else {
-                switchSel = 5;
+                switchSel = maxSwitch;
             }
             prevSelVal = val;
             adjustSetSel = 0;
@@ -494,26 +494,49 @@ void nav::updateKnobs()
         else if (diff < 0) {
             adjust = -1;
         }
+
         if (adjust != 0) {
             switch (switchSel) {
             case 0:
-                adjustCom(globals.simVars->simVars.com1Standby, KEY_COM_STBY_RADIO_SET, adjust);
+            {
+                double newVal = adjustCom(globals.simVars->simVars.com1Standby, adjust);
+                globals.simVars->simVars.com1Standby = newVal;
+                globals.simVars->write(KEY_COM_STBY_RADIO_SET, newVal);
                 break;
+            }
             case 1:
-                adjustNav(globals.simVars->simVars.nav1Standby, KEY_NAV1_STBY_SET, adjust);
+            {
+                double newVal = adjustNav(globals.simVars->simVars.nav1Standby, adjust);
+                globals.simVars->simVars.nav1Standby = newVal;
+                globals.simVars->write(KEY_NAV1_STBY_SET, newVal);
                 break;
+            }
             case 2:
-                adjustCom(globals.simVars->simVars.com2Standby, KEY_COM2_STBY_RADIO_SET, adjust);
+            {
+                double newVal = adjustCom(globals.simVars->simVars.com2Standby, adjust);
+                globals.simVars->simVars.com2Standby = newVal;
+                globals.simVars->write(KEY_COM2_STBY_RADIO_SET, newVal);
                 break;
+            }
             case 3:
-                adjustNav(globals.simVars->simVars.nav2Standby, KEY_NAV2_STBY_SET, adjust);
+            {
+                double newVal = adjustNav(globals.simVars->simVars.nav2Standby, adjust);
+                globals.simVars->simVars.nav2Standby = newVal;
+                globals.simVars->write(KEY_NAV2_STBY_SET, newVal);
                 break;
+            }
             case 4:
-                adjustAdf(globals.simVars->simVars.adfStandby, KEY_ADF_COMPLETE_SET, adjust);
+            {
+                int newVal = adjustAdf(globals.simVars->simVars.adfStandby, adjust);
+                globals.simVars->simVars.adfStandby = newVal;
+                globals.simVars->write(KEY_ADF_COMPLETE_SET, newVal);
                 break;
+            }
             case 5:
             {
-                adjustSquawk(globals.simVars->simVars.transponderCode, KEY_XPNDR_SET, adjust);
+                int newVal = adjustSquawk(globals.simVars->simVars.transponderCode, adjust);
+                globals.simVars->simVars.transponderCode = newVal;
+                globals.simVars->write(KEY_XPNDR_SET, newVal);
                 break;
             }
             }
@@ -555,7 +578,7 @@ void nav::updateKnobs()
     }
 }
 
-void nav::adjustCom(double val, EVENT_ID eventId, int adjust)
+double nav::adjustCom(double val, int adjust)
 {
     int whole = val;
     double frac = (val - whole);
@@ -587,10 +610,10 @@ void nav::adjustCom(double val, EVENT_ID eventId, int adjust)
         }
     }
 
-    globals.simVars->write(eventId, whole + frac);
+    return whole + frac;
 }
 
-void nav::adjustNav(double val, EVENT_ID eventId, int adjust)
+double nav::adjustNav(double val, int adjust)
 {
     int whole = val;
     double frac = (val - whole);
@@ -613,10 +636,10 @@ void nav::adjustNav(double val, EVENT_ID eventId, int adjust)
         }
     }
 
-    globals.simVars->write(eventId, whole + frac);
+    return whole + frac;
 }
 
-void nav::adjustAdf(int val, EVENT_ID eventId, int adjust)
+int nav::adjustAdf(int val, int adjust)
 {
     if (adjustSetSel == 0) {
         // Adjust first 2 digits - Range 1 to 17
@@ -641,10 +664,10 @@ void nav::adjustAdf(int val, EVENT_ID eventId, int adjust)
         val = (int)(val / 10) * 10 + digit;
     }
 
-    globals.simVars->write(eventId, val);
+    return val;
 }
 
-void nav::adjustSquawk(int val, EVENT_ID eventId, int adjust)
+int nav::adjustSquawk(int val, int adjust)
 {
     // Transponder code is in BCO16
     int digit1 = val / 4096;
@@ -669,7 +692,7 @@ void nav::adjustSquawk(int val, EVENT_ID eventId, int adjust)
         break;
     }
 
-    globals.simVars->write(eventId, digit1 * 4096 + digit2 * 256 + digit3 * 16 + digit4);
+    return digit1 * 4096 + digit2 * 256 + digit3 * 16 + digit4;
 }
 
 int nav::adjustDigit(int val, int adjust, bool isSquawk)
