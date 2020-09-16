@@ -12,7 +12,7 @@ struct SimVars
     double adiBank = 0;
     double asiAirspeed = 0;
     double asiMachSpeed = 0;
-    double asiAirspeedCal = 0;
+    double asiAirspeedCal = -14;
     double hiHeading = 0;
     double vsiVerticalSpeed = 0;
     double tcRate = 0;
@@ -51,6 +51,23 @@ struct SimVars
     double adfFreq = 394;
     double adfStandby = 368;
     double transponderCode = 4608;
+    double autopilotAvailable = 1;
+    double autopilotEngaged = 0;
+    double autopilotHeading = 0;
+    double autopilotHeadingLock = 0;
+    double autopilotLevel = 0;
+    double autopilotAltitude = 0;
+    double autopilotAltLock = 0;
+    double autopilotPitchHold = 0;
+    double autopilotVerticalSpeed = 0;
+    double autopilotVerticalHold = 0;
+    double autopilotAirspeed = 0;
+    double autopilotAirspeedHold = 0;
+    double gearRetractable = 1;
+    double gearLeftPos = 100;
+    double gearCentrePos = 100;
+    double gearRightPos = 100;
+    double parkingBrakeOn = 1;
     char atcTailNumber[64] = "\0";
     char atcCallSign[64] = "\0";
     char atcFlightNumber[8] = "\0";
@@ -80,7 +97,17 @@ enum EVENT_ID {
     KEY_NAV2_RADIO_SWAP,
     KEY_ADF_COMPLETE_SET,
     KEY_ADF1_PRIMARY_SET,
-    KEY_XPNDR_SET
+    KEY_XPNDR_SET,
+    KEY_AP_MASTER,
+    KEY_AP_SPD_VAR_SET,
+    KEY_HEADING_BUG_SET,
+    KEY_AP_ALT_VAR_SET_ENGLISH,
+    KEY_AP_VS_VAR_SET_ENGLISH,
+    KEY_AP_HDG_HOLD_ON,
+    KEY_AP_HDG_HOLD_OFF,
+    KEY_AP_ALT_HOLD_ON,
+    KEY_AP_ALT_HOLD_OFF,
+    KEY_AP_PANEL_ALTITUDE_ON
 };
 
 struct WriteEvent {

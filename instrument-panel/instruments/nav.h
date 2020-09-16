@@ -7,15 +7,16 @@ class nav : public instrument
 {
 private:
     enum AutopilotHdg {
+        NoHdg,
         HdgSet,
         LevelFlight
     };
 
     enum AutopilotAlt {
+        NoAlt,
         AltHold,
         PitchHold,
         VerticalSpeedHold,
-        FlightLevelChange
     };
 
     float scaleFactor;
@@ -37,9 +38,12 @@ private:
     int transponderCode;
     bool hasAutopilot = true;
     bool isAutopilotOn = false;
-    AutopilotHdg autopilotHdg = HdgSet;
-    AutopilotAlt autopilotAlt = AltHold;
-    bool isAltCapture = false;
+    AutopilotHdg autopilotHdg;
+    AutopilotAlt autopilotAlt;
+    int airspeed = 0;
+    int heading = 0;
+    int altitude = 0;
+    int verticalSpeed = 0;
 
     // Hardware knobs
     int selKnob = -1;
@@ -62,17 +66,25 @@ private:
     void resize();
     void renderNav();
     void renderAutopilot();
-    void addFreq(int freq, int x, int y);
+    void addNum(int freq, int x, int y);
     void addFreq2dp(int freq, int x, int y);
     void addFreq3dp(int freq, int x, int y);
     void addSquawk(int code, int x, int y);
     void addVars();
     void addKnobs();
     void updateKnobs();
+    void navSwitchPressed();
+    void autopilotSwitchPressed();
+    void navAdjustDigits(int adjust);
+    void autopilotAdjustDigits(int adjust);
     double adjustCom(double val, int adjust);
     double adjustNav(double val, int adjust);
     int adjustAdf(int val, int adjust);
     int adjustSquawk(int val, int adjust);
+    int adjustSpeed(int val, int adjust);
+    int adjustHeading(int val, int adjust);
+    int adjustAltitude(int val, int adjust);
+    int adjustVerticalSpeed(int val, int adjust);
     int adjustDigit(int val, int adjust, bool isSquawk = false);
 };
 

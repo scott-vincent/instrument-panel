@@ -153,6 +153,12 @@ void trimFlaps::update()
     else {
         flapsOffset = targetFlaps;
     }
+
+    isGearRetractable = (simVars->gearRetractable == 1);
+    gearLeftUnlock = (simVars->gearLeftPos > 0 && simVars->gearLeftPos < 100);
+    gearCentreUnlock = (simVars->gearCentrePos > 0 && simVars->gearCentrePos < 100);
+    gearRightUnlock = (simVars->gearRightPos > 0 && simVars->gearRightPos < 100);
+    parkingBrakeOn = (simVars->parkingBrakeOn == 1);
 }
 
 /// <summary>
@@ -163,6 +169,11 @@ void trimFlaps::addVars()
     globals.simVars->addVar(name, "Elevator Trim Position", false, 1, 0);
     globals.simVars->addVar(name, "Flaps Num Handle Positions", false, 1, 0);
     globals.simVars->addVar(name, "Flaps Handle Index", false, 1, 0);
+    globals.simVars->addVar(name, "Is Gear Retractable", false, 1, 0);
+    globals.simVars->addVar(name, "Gear Left Position", false, 1, 0);
+    globals.simVars->addVar(name, "Gear Center Position", false, 1, 0);
+    globals.simVars->addVar(name, "Gear Right Position", false, 1, 0);
+    globals.simVars->addVar(name, "Brake Parking Position", false, 1, 0);
 }
 
 #ifndef _WIN32

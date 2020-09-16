@@ -66,9 +66,9 @@ void nav::resize()
     addBitmap(bmp);
 
     // 6 = Switch
-    bmp = al_create_bitmap(80 * scaleFactor, 34 * scaleFactor);
+    bmp = al_create_bitmap(80, 34);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 400, 800, 80, 34, 0, 0, 80 * scaleFactor, 34 * scaleFactor, 0);
+    al_draw_bitmap_region(orig, 400, 800, 80, 34, 0, 0, 0);
     addBitmap(bmp);
 
     // 7 = Transponder state selected
@@ -93,6 +93,18 @@ void nav::resize()
     bmp = al_create_bitmap(1024, 50);
     al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 0, 880, 1024, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 11 = Autopilot vertical speed digits
+    bmp = al_create_bitmap(320, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1024, 880, 320, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 12 = Autopilot vertical speed fpm
+    bmp = al_create_bitmap(162, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1344, 880, 162, 50, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -137,36 +149,6 @@ void nav::renderNav()
     // Add main nav
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    // Add selected switch
-    switch (switchSel) {
-    case 0:
-        al_draw_bitmap(bitmaps[6], 460 * scaleFactor, 104 * scaleFactor, 0);
-        break;
-    case 1:
-        al_draw_bitmap(bitmaps[6], 1064 * scaleFactor, 104 * scaleFactor, 0);
-        break;
-    case 2:
-        al_draw_bitmap(bitmaps[6], 460 * scaleFactor, 233 * scaleFactor, 0);
-        break;
-    case 3:
-        al_draw_bitmap(bitmaps[6], 1064 * scaleFactor, 233 * scaleFactor, 0);
-        break;
-    case 4:
-        al_draw_bitmap(bitmaps[6], 460 * scaleFactor, 363 * scaleFactor, 0);
-        break;
-    }
-
-    // Add transponder state
-    int statePos = 80 * transponderState;
-    if (switchSel == 5) {
-        // Add transponder state selected
-        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
-    }
-    else {
-        // Add transponder state
-        al_draw_scaled_bitmap(bitmaps[8], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
-    }
-
     // Add panel 1 frequencies
     addFreq3dp(com1Freq, 237, 19);
     addFreq3dp(com1Standby, 523, 19);
@@ -180,11 +162,41 @@ void nav::renderNav()
     addFreq2dp(nav2Standby, 1153, 148);
 
     // Add panel 3 frequencies
-    addFreq(adfFreq, 273, 278);
-    addFreq(adfStandby, 586, 278);
+    addNum(adfFreq, 273, 278);
+    addNum(adfStandby, 586, 278);
 
     // Add squawk
     addSquawk(transponderCode, 968, 278);
+
+    // Add selected switch
+    switch (switchSel) {
+    case 0:
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        break;
+    case 1:
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        break;
+    case 2:
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        break;
+    case 3:
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        break;
+    case 4:
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        break;
+    }
+
+    // Add transponder state
+    int statePos = 80 * transponderState;
+    if (switchSel == 5) {
+        // Add transponder state selected
+        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+    }
+    else {
+        // Add transponder state
+        al_draw_scaled_bitmap(bitmaps[8], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+    }
 }
 
 /// <summary>
@@ -203,47 +215,57 @@ void nav::renderAutopilot()
     int destSizeX = 128 * scaleFactor;
     int destSizeY = 50 * scaleFactor;
 
+    // Add autopilot set values
+    addNum(airspeed, 403, 82);
+    addNum(heading, 816, 82);
+    addNum(altitude, 1188, 82);
+    
     // Add hdg display
     switch (autopilotHdg) {
     case HdgSet:
-        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 457 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 385 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     case LevelFlight:
-        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 457 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 385 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     }
 
     // Add ap display
     if (isAutopilotOn) {
-        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 602 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 530 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 
     // Add alt display
     switch (autopilotAlt) {
     case AltHold:
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     case PitchHold:
-        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     case VerticalSpeedHold:
-        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
-        break;
-    case FlightLevelChange:
-        al_draw_scaled_bitmap(bitmaps[10], 768, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+    {
+        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        // Add vertical speed digits
+        int digit1 = (verticalSpeed % 10000) / 1000;
+        int digit2 = (verticalSpeed % 1000) / 100;
+        if (digit1 != 0) {
+            al_draw_scaled_bitmap(bitmaps[11], 32 * digit1, 0, 32, 50, 859 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
+        }
+        al_draw_scaled_bitmap(bitmaps[11], 32 * digit2, 0, 32, 50, 891 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
+        // Add vertical speed fpm
+        al_draw_scaled_bitmap(bitmaps[12], 0, 0, 162, 50, 923 * scaleFactor, 252 * scaleFactor, 162 * scaleFactor, destSizeY, 0);
+        // Add alts display
+        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 1115 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     }
-
-    // Add alts display
-    if (isAltCapture) {
-        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 1002 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 }
 
 /// <summary>
-/// Displays the specified frequency to 0 d.p.
+/// Displays a whole number
 /// </summary>
-void nav::addFreq(int freq, int x, int y)
+void nav::addNum(int freq, int x, int y)
 {
     int digit1 = (freq % 10000) / 1000;
     int digit2 = (freq % 1000) / 100;
@@ -370,6 +392,23 @@ void nav::update()
     adfFreq = simVars->adfFreq;
     adfStandby = simVars->adfStandby;
     transponderCode = simVars->transponderCode;
+
+    hasAutopilot = (simVars->autopilotAvailable == 1);
+    isAutopilotOn = (simVars->autopilotEngaged == 1);
+
+    autopilotHdg = NoHdg;
+    if (simVars->autopilotHeadingLock == 1) autopilotHdg = HdgSet;
+    if (simVars->autopilotLevel == 1) autopilotHdg = HdgSet;
+
+    autopilotAlt = NoAlt;
+    if (simVars->autopilotAltLock) autopilotAlt = AltHold;
+    if (simVars->autopilotPitchHold) autopilotAlt = PitchHold;
+    if (simVars->autopilotVerticalHold) autopilotAlt = VerticalSpeedHold;
+
+    airspeed = simVars->autopilotAirspeed;
+    heading = simVars->autopilotHeading;
+    altitude = simVars->autopilotAltitude;
+    verticalSpeed = simVars->autopilotVerticalSpeed;
 }
 
 /// <summary>
@@ -388,6 +427,18 @@ void nav::addVars()
     globals.simVars->addVar(name, "Adf Active Frequency:1", false, 1, 100);
     globals.simVars->addVar(name, "Adf Standby Frequency:1", false, 1, 100);
     globals.simVars->addVar(name, "Transponder Code:1", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Available", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Master", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Heading Lock Dir", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Heading Lock", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Wing Leveler", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Altitude Lock Var", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Altitude Lock", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Pitch Hold", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Vertical Hold Var", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Vertical Hold", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Airspeed Hold Var", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Airspeed Hold", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -449,38 +500,15 @@ void nav::updateKnobs()
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
         if (prevSelPush % 2 == 1) {
-            // Swap standby and primary values
-            switch (switchSel) {
-            case 0:
-                globals.simVars->write(KEY_COM_RADIO_SWAP);
-                break;
-            case 1:
-                globals.simVars->write(KEY_NAV1_RADIO_SWAP);
-                break;
-            case 2:
-                globals.simVars->write(KEY_COM2_RADIO_SWAP);
-                break;
-            case 3:
-                globals.simVars->write(KEY_NAV2_RADIO_SWAP);
-                break;
-            case 4:
-            {
-                int newFreq = globals.simVars->simVars.adfStandby;
-                globals.simVars->write(KEY_ADF_COMPLETE_SET, globals.simVars->simVars.adfFreq);
-                globals.simVars->write(KEY_ADF1_PRIMARY_SET, newFreq);
-                break;
+            if (switchSel < 6) {
+                navSwitchPressed();
             }
-            case 5:
-                if (transponderState == 3) {
-                    transponderState == 0;
-                }
-                else {
-                    transponderState++;
-                }
-                break;
+            else {
+                autopilotSwitchPressed();
             }
         }
         prevSelPush = val;
+        adjustSetSel = 0;
     }
 
     // Read knob for digits set
@@ -496,49 +524,11 @@ void nav::updateKnobs()
         }
 
         if (adjust != 0) {
-            switch (switchSel) {
-            case 0:
-            {
-                double newVal = adjustCom(globals.simVars->simVars.com1Standby, adjust);
-                globals.simVars->simVars.com1Standby = newVal;
-                globals.simVars->write(KEY_COM_STBY_RADIO_SET, newVal);
-                break;
+            if (switchSel < 6) {
+                navAdjustDigits(adjust);
             }
-            case 1:
-            {
-                double newVal = adjustNav(globals.simVars->simVars.nav1Standby, adjust);
-                globals.simVars->simVars.nav1Standby = newVal;
-                globals.simVars->write(KEY_NAV1_STBY_SET, newVal);
-                break;
-            }
-            case 2:
-            {
-                double newVal = adjustCom(globals.simVars->simVars.com2Standby, adjust);
-                globals.simVars->simVars.com2Standby = newVal;
-                globals.simVars->write(KEY_COM2_STBY_RADIO_SET, newVal);
-                break;
-            }
-            case 3:
-            {
-                double newVal = adjustNav(globals.simVars->simVars.nav2Standby, adjust);
-                globals.simVars->simVars.nav2Standby = newVal;
-                globals.simVars->write(KEY_NAV2_STBY_SET, newVal);
-                break;
-            }
-            case 4:
-            {
-                int newVal = adjustAdf(globals.simVars->simVars.adfStandby, adjust);
-                globals.simVars->simVars.adfStandby = newVal;
-                globals.simVars->write(KEY_ADF_COMPLETE_SET, newVal);
-                break;
-            }
-            case 5:
-            {
-                int newVal = adjustSquawk(globals.simVars->simVars.transponderCode, adjust);
-                globals.simVars->simVars.transponderCode = newVal;
-                globals.simVars->write(KEY_XPNDR_SET, newVal);
-                break;
-            }
+            else {
+                autopilotAdjustDigits(adjust);
             }
             prevAdjustVal = val;
         }
@@ -559,7 +549,7 @@ void nav::updateKnobs()
         // If previous state was unpressed then must have been pressed
         if (prevAdjustPush % 2 == 1) {
             int digitSets;
-            if (switchSel == 4) {
+            if (switchSel == 0 || switchSel == 2 || switchSel == 4) {
                 digitSets = 3;
             }
             else if (switchSel == 5) {
@@ -578,10 +568,197 @@ void nav::updateKnobs()
     }
 }
 
+void nav::navSwitchPressed()
+{
+    // Swap standby and primary values
+    switch (switchSel) {
+    case 0:
+    {
+        double prevFreq = globals.simVars->simVars.com1Freq;
+        globals.simVars->simVars.com1Freq = globals.simVars->simVars.com1Standby;
+        globals.simVars->simVars.com1Standby = prevFreq;
+        globals.simVars->write(KEY_COM_RADIO_SWAP);
+        break;
+    }
+    case 1:
+    {
+        double prevFreq = globals.simVars->simVars.nav1Freq;
+        globals.simVars->simVars.nav1Freq = globals.simVars->simVars.nav1Standby;
+        globals.simVars->simVars.nav1Standby = prevFreq;
+        globals.simVars->write(KEY_NAV1_RADIO_SWAP);
+        break;
+    }
+    case 2:
+    {
+        double prevFreq = globals.simVars->simVars.com2Freq;
+        globals.simVars->simVars.com2Freq = globals.simVars->simVars.com2Standby;
+        globals.simVars->simVars.com2Standby = prevFreq;
+        globals.simVars->write(KEY_COM2_RADIO_SWAP);
+        break;
+    }
+    case 3:
+    {
+        double prevFreq = globals.simVars->simVars.nav2Freq;
+        globals.simVars->simVars.nav2Freq = globals.simVars->simVars.nav2Standby;
+        globals.simVars->simVars.nav2Standby = prevFreq;
+        globals.simVars->write(KEY_NAV2_RADIO_SWAP);
+        break;
+    }
+    case 4:
+    {
+        int newFreq = globals.simVars->simVars.adfStandby;
+        globals.simVars->simVars.adfStandby = globals.simVars->simVars.adfFreq;
+        globals.simVars->simVars.adfFreq = newFreq;
+        globals.simVars->write(KEY_ADF_COMPLETE_SET, globals.simVars->simVars.adfFreq);
+        globals.simVars->write(KEY_ADF1_PRIMARY_SET, newFreq);
+        break;
+    }
+    case 5:
+    {
+        if (transponderState == 3) {
+            transponderState = 0;
+        }
+        else {
+            transponderState++;
+        }
+        break;
+    }
+    }
+}
+
+void nav::autopilotSwitchPressed()
+{
+    switch (switchSel) {
+    case 6:
+    {
+        isAutopilotOn = !isAutopilotOn;
+        globals.simVars->simVars.autopilotEngaged = isAutopilotOn;
+        globals.simVars->write(KEY_AP_MASTER);
+        break;
+    }
+    case 8:
+    {
+        if (autopilotHdg == HdgSet) {
+            autopilotHdg = LevelFlight;
+            globals.simVars->simVars.autopilotLevel = 1;
+            globals.simVars->write(KEY_AP_HDG_HOLD_OFF);
+        }
+        else {
+            autopilotHdg = HdgSet;
+            globals.simVars->simVars.autopilotHeadingLock = 1;
+            globals.simVars->write(KEY_AP_HDG_HOLD_ON);
+        }
+        break;
+    }
+    case 9:
+    {
+        if (autopilotAlt == AltHold) {
+            autopilotAlt = PitchHold;
+            globals.simVars->simVars.autopilotPitchHold = 1;
+            globals.simVars->write(KEY_AP_ALT_HOLD_OFF);
+        }
+        else {
+            autopilotAlt = AltHold;
+            globals.simVars->simVars.autopilotAltLock = 1;
+            globals.simVars->write(KEY_AP_ALT_HOLD_ON);
+        }
+        break;
+    }
+    case 10:
+    {
+        autopilotAlt = VerticalSpeedHold;
+        globals.simVars->simVars.autopilotVerticalHold = 1;
+        globals.simVars->write(KEY_AP_PANEL_ALTITUDE_ON);
+        break;
+    }
+    }
+}
+
+void nav::navAdjustDigits(int adjust)
+{
+    switch (switchSel) {
+    case 0:
+    {
+        double newVal = adjustCom(globals.simVars->simVars.com1Standby, adjust);
+        globals.simVars->simVars.com1Standby = newVal;
+        globals.simVars->write(KEY_COM_STBY_RADIO_SET, newVal);
+        break;
+    }
+    case 1:
+    {
+        double newVal = adjustNav(globals.simVars->simVars.nav1Standby, adjust);
+        globals.simVars->simVars.nav1Standby = newVal;
+        globals.simVars->write(KEY_NAV1_STBY_SET, newVal);
+        break;
+    }
+    case 2:
+    {
+        double newVal = adjustCom(globals.simVars->simVars.com2Standby, adjust);
+        globals.simVars->simVars.com2Standby = newVal;
+        globals.simVars->write(KEY_COM2_STBY_RADIO_SET, newVal);
+        break;
+    }
+    case 3:
+    {
+        double newVal = adjustNav(globals.simVars->simVars.nav2Standby, adjust);
+        globals.simVars->simVars.nav2Standby = newVal;
+        globals.simVars->write(KEY_NAV2_STBY_SET, newVal);
+        break;
+    }
+    case 4:
+    {
+        int newVal = adjustAdf(globals.simVars->simVars.adfStandby, adjust);
+        globals.simVars->simVars.adfStandby = newVal;
+        globals.simVars->write(KEY_ADF_COMPLETE_SET, newVal);
+        break;
+    }
+    case 5:
+    {
+        int newVal = adjustSquawk(globals.simVars->simVars.transponderCode, adjust);
+        globals.simVars->simVars.transponderCode = newVal;
+        globals.simVars->write(KEY_XPNDR_SET, newVal);
+        break;
+    }
+    }
+}
+
+void nav::autopilotAdjustDigits(int adjust)
+{
+    switch (switchSel) {
+    case 7:
+    {
+        double newVal = adjustSpeed(globals.simVars->simVars.autopilotAirspeed, adjust);
+        globals.simVars->simVars.autopilotAirspeed = newVal;
+        globals.simVars->write(KEY_AP_SPD_VAR_SET, newVal);
+    }
+    case 8:
+    {
+        double newVal = adjustHeading(globals.simVars->simVars.autopilotHeading, adjust);
+        globals.simVars->simVars.autopilotHeading = newVal;
+        globals.simVars->write(KEY_HEADING_BUG_SET, newVal);
+    }
+    case 9:
+    {
+        double newVal = adjustAltitude(globals.simVars->simVars.autopilotAltitude, adjust);
+        globals.simVars->simVars.autopilotAltitude = newVal;
+        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
+    }
+    case 10:
+    {
+        double newVal = adjustVerticalSpeed(globals.simVars->simVars.autopilotVerticalSpeed, adjust);
+        globals.simVars->simVars.autopilotVerticalSpeed = newVal;
+        globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
+    }
+    }
+}
+
 double nav::adjustCom(double val, int adjust)
 {
     int whole = val;
-    double frac = (val - whole);
+    val -= whole;
+    int thousandths = (val + 0.0001) * 1000;
+    int frac1 = thousandths / 100;
+    int frac2 = thousandths % 100;
 
     if (adjustSetSel == 0) {
         // Adjust whole - Range 118 to 136
@@ -593,30 +770,41 @@ double nav::adjustCom(double val, int adjust)
             whole += 19;
         }
     }
-    else {
-        // Adjust fraction
-        frac += adjust * 0.005;
-        if (frac >= 1) {
-            frac -= 1;
+    else if (adjustSetSel == 1) {
+        // Adjust 10ths
+        frac1 += adjust;
+        if (frac1 > 9) {
+            frac1 -= 10;
         }
+        else if (frac1 < 0) {
+            frac1 += 10;
+        }
+    }
+    else {
+        // Adjust 100ths and 1000ths
+        frac2 += adjust * 5;
 
         // Skip .020, .045, .070 and .095
-        int last2 = (int)(frac * 1000) % 100;
-        if (last2 == 95) {
-            frac = 0;
+        if (frac2 == 20 || frac2 == 45 || frac2 == 70 || frac2 == 95) {
+            frac2 += adjust * 5;
         }
-        else if (last2 == 20 || last2 == 45 || last2 == 70) {
-            frac += 0.005;
+
+        if (frac2 >= 100) {
+            frac2 -= 100;
+        }
+        else if (frac2 < 0) {
+            frac2 += 100;
         }
     }
 
-    return whole + frac;
+    return whole + frac1 * 0.1 + frac2 * 0.001;
 }
 
 double nav::adjustNav(double val, int adjust)
 {
     int whole = val;
-    double frac = (val - whole);
+    val -= whole;
+    int frac = (val + 0.001) * 100;
 
     if (adjustSetSel == 0) {
         // Adjust whole - Range 108 to 117
@@ -630,28 +818,29 @@ double nav::adjustNav(double val, int adjust)
     }
     else {
         // Adjust fraction
-        frac += adjust * 0.05;
-        if (frac >= 1) {
-            frac -= 1;
+        frac += adjust * 5;
+
+        if (frac >= 100) {
+            frac -= 100;
+        }
+        else if (frac < 0) {
+            frac += 100;
         }
     }
 
-    return whole + frac;
+    return whole + frac * 0.01;
 }
 
 int nav::adjustAdf(int val, int adjust)
 {
     if (adjustSetSel == 0) {
-        // Adjust first 2 digits - Range 1 to 17
-        int setVal = val / 100;
-        setVal += adjust;
-        if (setVal > 17) {
-            setVal -= 17;
+        val += adjust * 100;
+        if (val > 1700) {
+            val -= 1700;
         }
-        else if (setVal < 1) {
-            setVal += 17;
+        else if (val < 100) {
+            val += 100;
         }
-        val = setVal * 100 + (val % 100);
     }
     else if (adjustSetSel == 1) {
         // Adjust 3rd digit
@@ -693,6 +882,59 @@ int nav::adjustSquawk(int val, int adjust)
     }
 
     return digit1 * 4096 + digit2 * 256 + digit3 * 16 + digit4;
+}
+
+int nav::adjustSpeed(int val, int adjust)
+{
+    if (adjustSetSel == 0) {
+        // Adjust tens
+        val += adjust * 10;
+    }
+    else {
+        // Adjust units
+        int digit = adjustDigit(val % 10, adjust);
+        val = (int)(val / 10) * 10 + digit;
+    }
+
+    return val;
+}
+
+int nav::adjustHeading(int val, int adjust)
+{
+    val += adjust;
+
+    if (val > 359) {
+        val -= 360;
+    }
+    else if (val < 0) {
+        val += 360;
+    }
+
+    return val;
+}
+
+int nav::adjustAltitude(int val, int adjust)
+{
+    if (adjustSetSel == 0) {
+        // Adjust thousands
+        val += adjust * 1000;
+    }
+    else {
+        // Adjust hundreds
+        int digit = adjustDigit(((int)val % 1000) / 100, adjust);
+        val = (int)(val / 1000) * 1000 + digit * 100 + (val % 100);
+    }
+
+    return val;
+}
+
+int nav::adjustVerticalSpeed(int val, int adjust)
+{
+    val += adjust * 100;
+
+    // Allow vertical speed to go negative
+
+    return val;
 }
 
 int nav::adjustDigit(int val, int adjust, bool isSquawk)
