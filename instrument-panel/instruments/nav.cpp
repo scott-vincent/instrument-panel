@@ -41,40 +41,58 @@ void nav::resize()
     ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size / 4);
     addBitmap(bmp);
 
-    // 2 = Main
+    // 2 = Main Nav
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 0, 1600, 400, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 3 = Digits
+    // 3 = Main Autopilot
+    bmp = al_create_bitmap(size, size / 4);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 400, 1600, 400, 0, 0, size, size / 4, 0);
+    addBitmap(bmp);
+
+    // 4 = Digits
     bmp = al_create_bitmap(380, 80);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 400, 380, 80, 0, 0, 0);
+    al_draw_bitmap_region(orig, 0, 800, 380, 80, 0, 0, 0);
     addBitmap(bmp);
 
-    // 4 = Dot
+    // 5 = Dot
     bmp = al_create_bitmap(20, 80);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 380, 400, 20, 80, 0, 0, 0);
+    al_draw_bitmap_region(orig, 380, 800, 20, 80, 0, 0, 0);
     addBitmap(bmp);
 
-    // 5 = Switch
+    // 6 = Switch
     bmp = al_create_bitmap(80 * scaleFactor, 34 * scaleFactor);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 400, 400, 80, 34, 0, 0, 80 * scaleFactor, 34 * scaleFactor, 0);
+    al_draw_scaled_bitmap(orig, 400, 800, 80, 34, 0, 0, 80 * scaleFactor, 34 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 6 = Transponder state selected
+    // 7 = Transponder state selected
     bmp = al_create_bitmap(320, 34);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 480, 400, 320, 34, 0, 0, 0);
+    al_draw_bitmap_region(orig, 480, 800, 320, 34, 0, 0, 0);
     addBitmap(bmp);
 
-    // 7 = Transponder state
+    // 8 = Transponder state
     bmp = al_create_bitmap(320, 34);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 480, 434, 320, 34, 0, 0, 0);
+    al_draw_bitmap_region(orig, 480, 834, 320, 34, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 9 = Autopilot switches
+    bmp = al_create_bitmap(400, 34);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 800, 800, 400, 34, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 10 = Autopilot display
+    bmp = al_create_bitmap(1024, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 880, 1024, 50, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -95,36 +113,58 @@ void nav::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Add main
+    if (switchSel < 6) {
+        renderNav();
+    }
+    else {
+        renderAutopilot();
+    }
+
+    // Position dest bitmap on screen
+    al_set_target_backbuffer(globals.display);
+    al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+
+    if (!globals.active) {
+        dimInstrument();
+    }
+}
+
+/// <summary>
+/// Draw the Nav Panel at the stored position
+/// </summary>
+void nav::renderNav()
+{
+    // Add main nav
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
     // Add selected switch
     switch (switchSel) {
     case 0:
-        al_draw_bitmap(bitmaps[5], 460 * scaleFactor, 104 * scaleFactor, 0);
+        al_draw_bitmap(bitmaps[6], 460 * scaleFactor, 104 * scaleFactor, 0);
         break;
     case 1:
-        al_draw_bitmap(bitmaps[5], 1064 * scaleFactor, 104 * scaleFactor, 0);
+        al_draw_bitmap(bitmaps[6], 1064 * scaleFactor, 104 * scaleFactor, 0);
         break;
     case 2:
-        al_draw_bitmap(bitmaps[5], 460 * scaleFactor, 233 * scaleFactor, 0);
+        al_draw_bitmap(bitmaps[6], 460 * scaleFactor, 233 * scaleFactor, 0);
         break;
     case 3:
-        al_draw_bitmap(bitmaps[5], 1064 * scaleFactor, 233 * scaleFactor, 0);
+        al_draw_bitmap(bitmaps[6], 1064 * scaleFactor, 233 * scaleFactor, 0);
         break;
     case 4:
-        al_draw_bitmap(bitmaps[5], 460 * scaleFactor, 363 * scaleFactor, 0);
+        al_draw_bitmap(bitmaps[6], 460 * scaleFactor, 363 * scaleFactor, 0);
         break;
     }
 
+    // Add transponder state
     int statePos = 80 * transponderState;
     if (switchSel == 5) {
         // Add transponder state selected
-        al_draw_scaled_bitmap(bitmaps[6], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
     }
     else {
         // Add transponder state
-        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[8], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
     }
 
     // Add panel 1 frequencies
@@ -145,13 +185,58 @@ void nav::render()
 
     // Add squawk
     addSquawk(transponderCode, 968, 278);
+}
 
-    // Position dest bitmap on screen
-    al_set_target_backbuffer(globals.display);
-    al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
+/// <summary>
+/// Draw the Autopilot at the stored position
+/// </summary>
+void nav::renderAutopilot()
+{
+    // Add main autopilot
+    al_draw_bitmap(bitmaps[3], 0, 0, 0);
 
-    if (!globals.active) {
-        dimInstrument();
+    // Add autopilot switch selected
+    int selPos = 80 * (switchSel - 6);
+    int destPos = 423 + 180 * (switchSel - 6);
+    al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 340 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+
+    int destSizeX = 128 * scaleFactor;
+    int destSizeY = 50 * scaleFactor;
+
+    // Add hdg display
+    switch (autopilotHdg) {
+    case HdgSet:
+        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 457 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        break;
+    case LevelFlight:
+        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 457 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        break;
+    }
+
+    // Add ap display
+    if (isAutopilotOn) {
+        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 602 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+    }
+
+    // Add alt display
+    switch (autopilotAlt) {
+    case AltHold:
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        break;
+    case PitchHold:
+        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        break;
+    case VerticalSpeedHold:
+        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        break;
+    case FlightLevelChange:
+        al_draw_scaled_bitmap(bitmaps[10], 768, 0, 128, 50, 752 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        break;
+    }
+
+    // Add alts display
+    if (isAltCapture) {
+        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 1002 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 }
 
@@ -169,10 +254,10 @@ void nav::addFreq(int freq, int x, int y)
     int width = 38 * scaleFactor;
     int height = 80 * scaleFactor;
 
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 114) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 114) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -190,12 +275,12 @@ void nav::addFreq2dp(int freq, int x, int y)
     int width = 38 * scaleFactor;
     int height = 80 * scaleFactor;
 
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -214,13 +299,13 @@ void nav::addFreq3dp(int freq, int x, int y)
     int width = 38 * scaleFactor;
     int height = 80 * scaleFactor;
 
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit6, 0, 38, 80, (x + 210) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit6, 0, 38, 80, (x + 210) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -228,19 +313,22 @@ void nav::addFreq3dp(int freq, int x, int y)
 /// </summary>
 void nav::addSquawk(int code, int x, int y)
 {
-    int digit1 = (code % 10000) / 1000;
-    int digit2 = (code % 1000) / 100;
-    int digit3 = (code % 100) / 10;
-    int digit4 = code % 10;
+    // Transponder code is in BCO16
+    int digit1 = code / 4096;
+    code -= digit1 * 4096;
+    int digit2 = code / 256;
+    code -= digit2 * 256;
+    int digit3 = code / 16;
+    int digit4 = code - digit3 * 16;
 
     int yPos = y * scaleFactor;
     int width = 38 * scaleFactor;
     int height = 80 * scaleFactor;
 
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit2, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit3, 0, 38, 80, (x + 152) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[3], 38 * digit4, 0, 38, 80, (x + 228) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 152) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 228) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -307,16 +395,16 @@ void nav::addVars()
 void nav::addKnobs()
 {
     // BCM GPIO 8 and 7
-    selKnob = globals.hardwareKnobs->add(8, 7, 0, 49, 0);
+    selKnob = globals.hardwareKnobs->add(8, 7, -1, -1, 0);
 
     // BCM GPIO 12
-    selPush = globals.hardwareKnobs->add(12, 0, 0, 49, 0);
+    selPush = globals.hardwareKnobs->add(12, 0, -1, -1, 0);
 
     // BCM GPIO 20 and 21
-    digitsKnob = globals.hardwareKnobs->add(20, 21, 100, 200, 0);
+    adjustKnob = globals.hardwareKnobs->add(20, 21, -1, -1, 0);
 
     // BCM GPIO 16
-    digitsPush = globals.hardwareKnobs->add(16, 0, 0, 49, 0);
+    adjustPush = globals.hardwareKnobs->add(16, 0, -1, -1, 0);
 }
 
 void nav::updateKnobs()
@@ -325,18 +413,42 @@ void nav::updateKnobs()
     int val = globals.hardwareKnobs->read(selKnob);
     if (val != INT_MIN) {
         // Convert knob value to selection (adjust for desired sensitivity)
-        switchSel = (val / 2) % 6;
-        if (switchSel < 0) {
-            switchSel += 6;
+        int diff = (prevSelVal - val) / 2;
+        if (diff > 0) {
+            int maxSwitch;
+            if (hasAutopilot) {
+                maxSwitch = 10;
+            }
+            else {
+                maxSwitch = 5;
+            }
+
+            if (switchSel < maxSwitch) {
+                switchSel++;
+            }
+            else {
+                switchSel = 0;
+            }
+            prevSelVal = val;
+            adjustSetSel = 0;
         }
-        digitSetSel = 0;
+        else if (diff < 0) {
+            if (switchSel > 0) {
+                switchSel--;
+            }
+            else {
+                switchSel = 5;
+            }
+            prevSelVal = val;
+            adjustSetSel = 0;
+        }
     }
 
     // Read switch push
     val = globals.hardwareKnobs->read(selPush);
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
-        if (prevSwitchPush % 2 == 1) {
+        if (prevSelPush % 2 == 1) {
             // Swap standby and primary values
             switch (switchSel) {
             case 0:
@@ -352,10 +464,12 @@ void nav::updateKnobs()
                 globals.simVars->write(KEY_NAV2_RADIO_SWAP);
                 break;
             case 4:
+            {
                 int newFreq = globals.simVars->simVars.adfStandby;
                 globals.simVars->write(KEY_ADF_COMPLETE_SET, globals.simVars->simVars.adfFreq);
                 globals.simVars->write(KEY_ADF1_PRIMARY_SET, newFreq);
                 break;
+            }
             case 5:
                 if (transponderState == 3) {
                     transponderState == 0;
@@ -366,13 +480,20 @@ void nav::updateKnobs()
                 break;
             }
         }
-        prevSwitchPush = val;
+        prevSelPush = val;
     }
 
     // Read knob for digits set
-    val = globals.hardwareKnobs->read(digitsKnob);
+    val = globals.hardwareKnobs->read(adjustKnob);
     if (val != INT_MIN) {
-        int adjust = (val - prevDigitSetVal) / 2;
+        int diff = (val - prevAdjustVal) / 2;
+        int adjust = 0;
+        if (diff > 0) {
+            adjust = 1;
+        }
+        else if (diff < 0) {
+            adjust = -1;
+        }
         if (adjust != 0) {
             switch (switchSel) {
             case 0:
@@ -391,44 +512,46 @@ void nav::updateKnobs()
                 adjustAdf(globals.simVars->simVars.adfStandby, KEY_ADF_COMPLETE_SET, adjust);
                 break;
             case 5:
+            {
                 adjustSquawk(globals.simVars->simVars.transponderCode, KEY_XPNDR_SET, adjust);
                 break;
             }
-            prevDigitSetVal = val;
-            time(&lastDigitAdjust);
+            }
+            prevAdjustVal = val;
         }
+        time(&lastAdjust);
     }
-    else if (lastDigitAdjust != 0) {
-        // Reset digit set selection if more than 1 second since last adjustment
+    else if (lastAdjust != 0) {
+        // Reset digit set selection if more than 5 seconds since last adjustment
         time(&now);
-        if (now - lastDigitAdjust > 1) {
-            digitSetSel = 0;
-            lastDigitAdjust = 0;
+        if (now - lastAdjust > 5) {
+            adjustSetSel = 0;
+            lastAdjust = 0;
         }
     }
 
     // Read digits set push
-    val = globals.hardwareKnobs->read(digitsPush);
+    val = globals.hardwareKnobs->read(adjustPush);
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
-        if (prevDigitPush % 2 == 1) {
+        if (prevAdjustPush % 2 == 1) {
             int digitSets;
             if (switchSel == 4) {
                 digitSets = 3;
             }
-            if (switchSel == 5) {
+            else if (switchSel == 5) {
                 digitSets = 4;
             }
             else {
                 digitSets = 2;
             }
 
-            digitSetSel++;
-            if (digitSetSel >= digitSets) {
-                digitSetSel = 0;
+            adjustSetSel++;
+            if (adjustSetSel >= digitSets) {
+                adjustSetSel = 0;
             }
         }
-        prevDigitPush = val;
+        prevAdjustPush = val;
     }
 }
 
@@ -437,7 +560,7 @@ void nav::adjustCom(double val, EVENT_ID eventId, int adjust)
     int whole = val;
     double frac = (val - whole);
 
-    if (digitSetSel == 0) {
+    if (adjustSetSel == 0) {
         // Adjust whole - Range 118 to 136
         whole += adjust;
         if (whole > 136) {
@@ -449,7 +572,7 @@ void nav::adjustCom(double val, EVENT_ID eventId, int adjust)
     }
     else {
         // Adjust fraction
-        double frac += adjust * 0.005;
+        frac += adjust * 0.005;
         if (frac >= 1) {
             frac -= 1;
         }
@@ -459,7 +582,7 @@ void nav::adjustCom(double val, EVENT_ID eventId, int adjust)
         if (last2 == 95) {
             frac = 0;
         }
-        else if (last == 20 || last2 == 45 || last2 == 70) {
+        else if (last2 == 20 || last2 == 45 || last2 == 70) {
             frac += 0.005;
         }
     }
@@ -472,7 +595,7 @@ void nav::adjustNav(double val, EVENT_ID eventId, int adjust)
     int whole = val;
     double frac = (val - whole);
 
-    if (digitSetSel == 0) {
+    if (adjustSetSel == 0) {
         // Adjust whole - Range 108 to 117
         whole += adjust;
         if (whole > 117) {
@@ -484,7 +607,7 @@ void nav::adjustNav(double val, EVENT_ID eventId, int adjust)
     }
     else {
         // Adjust fraction
-        double frac += adjust * 0.05;
+        frac += adjust * 0.05;
         if (frac >= 1) {
             frac -= 1;
         }
@@ -493,9 +616,9 @@ void nav::adjustNav(double val, EVENT_ID eventId, int adjust)
     globals.simVars->write(eventId, whole + frac);
 }
 
-void nav::adjustAdf(double val, EVENT_ID eventId, int adjust)
+void nav::adjustAdf(int val, EVENT_ID eventId, int adjust)
 {
-    if (digitSetSel == 0) {
+    if (adjustSetSel == 0) {
         // Adjust first 2 digits - Range 1 to 17
         int setVal = val / 100;
         setVal += adjust;
@@ -507,7 +630,7 @@ void nav::adjustAdf(double val, EVENT_ID eventId, int adjust)
         }
         val = setVal * 100 + (val % 100);
     }
-    else if (digitSetSel == 1) {
+    else if (adjustSetSel == 1) {
         // Adjust 3rd digit
         int digit = adjustDigit(((int)val % 100) / 10, adjust);
         val = (int)(val / 100) * 100 + digit * 10 + (val % 10);
@@ -521,50 +644,50 @@ void nav::adjustAdf(double val, EVENT_ID eventId, int adjust)
     globals.simVars->write(eventId, val);
 }
 
-void nav::adjustSquawk(double val, EVENT_ID eventId, int adjust)
+void nav::adjustSquawk(int val, EVENT_ID eventId, int adjust)
 {
-    switch (digitSetSel) {
+    // Transponder code is in BCO16
+    int digit1 = val / 4096;
+    val -= digit1 * 4096;
+    int digit2 = val / 256;
+    val -= digit2 * 256;
+    int digit3 = val / 16;
+    int digit4 = val - digit3 * 16;
+
+    switch (adjustSetSel) {
     case 0:
-    {
-        // Adjust 1st digit
-        int digit = adjustDigit(val / 1000, adjust);
-        val = digit * 1000 + (val % 1000);
+        digit1 = adjustDigit(digit1, adjust, true);
         break;
-    }
     case 1:
-    {
-        // Adjust 2nd digit
-        int digit = adjustDigit(((int)val % 1000) / 100, adjust);
-        val = (int)(val / 1000) * 1000 + digit * 100 + (val % 100);
+        digit2 = adjustDigit(digit2, adjust, true);
         break;
-    }
     case 2:
-    {
-        // Adjust 3rd digit
-        int digit = adjustDigit(((int)val % 100) / 10, adjust);
-        val = (int)(val / 100) * 100 + digit * 10 + (val % 10);
+        digit3 = adjustDigit(digit3, adjust, true);
         break;
-    }
     case 3:
-    {
-        // Adjust 4th digit
-        int digit = adjustDigit((int)val % 10, adjust);
-        val = (int)(val / 10) * 10 + digit;
+        digit4 = adjustDigit(digit4, adjust, true);
         break;
-    }
     }
 
-    globals.simVars->write(eventId, preserveVal + adjustVal);
+    globals.simVars->write(eventId, digit1 * 4096 + digit2 * 256 + digit3 * 16 + digit4);
 }
 
-int nav::adjustDigit(int val, int adjust)
+int nav::adjustDigit(int val, int adjust, bool isSquawk)
 {
+    int maxDigit;
+    if (isSquawk) {
+        maxDigit = 7;
+    }
+    else {
+        maxDigit = 9;
+    }
+
     val += adjust;
-    if (val > 9) {
-        val -= 10;
+    if (val > maxDigit) {
+        val -= maxDigit + 1;
     }
     else if (val < 0) {
-        val += 10;
+        val += maxDigit + 1;
     }
 
     return val;
