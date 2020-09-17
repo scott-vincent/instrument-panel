@@ -66,10 +66,13 @@ private:
     void resize();
     void renderNav();
     void renderAutopilot();
-    void addNum(int freq, int x, int y);
+    void addNum3(int val, int x, int y);
+    void addNum4(int val, int x, int y, bool leading = true);
+    void addNum5(int val, int x, int y, bool leading = true);
     void addFreq2dp(int freq, int x, int y);
     void addFreq3dp(int freq, int x, int y);
     void addSquawk(int code, int x, int y);
+    void addVerticalSpeed(int x, int y);
     void addVars();
     void addKnobs();
     void updateKnobs();

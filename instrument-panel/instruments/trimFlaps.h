@@ -13,9 +13,9 @@ private:
     float flapsOffset = 0;
     float targetFlaps;
     bool isGearRetractable;
-    bool gearLeftUnlock;
-    bool gearCentreUnlock;
-    bool gearRightUnlock;
+    int gearLeftPos;
+    int gearCentrePos;
+    int gearRightPos;
     bool parkingBrakeOn;
 
     // Hardware knobs

@@ -107,6 +107,12 @@ void nav::resize()
     al_draw_bitmap_region(orig, 1344, 880, 162, 50, 0, 0, 0);
     addBitmap(bmp);
 
+    // 13 = Autopilot vertical speed minus
+    bmp = al_create_bitmap(23, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1506, 880, 23, 50, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -162,8 +168,8 @@ void nav::renderNav()
     addFreq2dp(nav2Standby, 1153, 148);
 
     // Add panel 3 frequencies
-    addNum(adfFreq, 273, 278);
-    addNum(adfStandby, 586, 278);
+    addNum4(adfFreq, 273, 278);
+    addNum4(adfStandby, 586, 278);
 
     // Add squawk
     addSquawk(transponderCode, 968, 278);
@@ -216,9 +222,9 @@ void nav::renderAutopilot()
     int destSizeY = 50 * scaleFactor;
 
     // Add autopilot set values
-    addNum(airspeed, 403, 82);
-    addNum(heading, 816, 82);
-    addNum(altitude, 1188, 82);
+    addNum4(airspeed, 403, 82, false);
+    addNum3(heading, 816, 82);
+    addNum5(altitude, 1188, 82, false);
     
     // Add hdg display
     switch (autopilotHdg) {
@@ -246,15 +252,7 @@ void nav::renderAutopilot()
     case VerticalSpeedHold:
     {
         al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
-        // Add vertical speed digits
-        int digit1 = (verticalSpeed % 10000) / 1000;
-        int digit2 = (verticalSpeed % 1000) / 100;
-        if (digit1 != 0) {
-            al_draw_scaled_bitmap(bitmaps[11], 32 * digit1, 0, 32, 50, 859 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
-        }
-        al_draw_scaled_bitmap(bitmaps[11], 32 * digit2, 0, 32, 50, 891 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
-        // Add vertical speed fpm
-        al_draw_scaled_bitmap(bitmaps[12], 0, 0, 162, 50, 923 * scaleFactor, 252 * scaleFactor, 162 * scaleFactor, destSizeY, 0);
+        addVerticalSpeed(836, 252);
         // Add alts display
         al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 1115 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
@@ -263,14 +261,13 @@ void nav::renderAutopilot()
 }
 
 /// <summary>
-/// Displays a whole number
+/// Displays a 3 digit number
 /// </summary>
-void nav::addNum(int freq, int x, int y)
+void nav::addNum3(int val, int x, int y)
 {
-    int digit1 = (freq % 10000) / 1000;
-    int digit2 = (freq % 1000) / 100;
-    int digit3 = (freq % 100) / 10;
-    int digit4 = freq % 10;
+    int digit1 = (val % 1000) / 100;
+    int digit2 = (val % 100) / 10;
+    int digit3 = val % 10;
 
     int yPos = y * scaleFactor;
     int width = 38 * scaleFactor;
@@ -279,7 +276,72 @@ void nav::addNum(int freq, int x, int y)
     al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
     al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
     al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 114) * scaleFactor, yPos, width, height, 0);
+}
+
+/// <summary>
+/// Displays a 4 digit number
+/// </summary>
+void nav::addNum4(int val, int x, int y, bool leading)
+{
+    if (!leading && val == 0) {
+        return;
+    }
+
+    int digit1 = (val % 10000) / 1000;
+    int digit2 = (val % 1000) / 100;
+    int digit3 = (val % 100) / 10;
+    int digit4 = val % 10;
+
+    int yPos = y * scaleFactor;
+    int width = 38 * scaleFactor;
+    int height = 80 * scaleFactor;
+
+    if (leading || digit1 != 0) {
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    }
+    x += 38;
+
+    if (leading || digit1 != 0 || digit2 != 0) {
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    }
+    x += 38;
+
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+}
+
+/// <summary>
+/// Displays a 5 digit number
+/// </summary>
+void nav::addNum5(int val, int x, int y, bool leading)
+{
+    if (!leading && val == 0) {
+        return;
+    }
+
+    int digit1 = (val % 100000) / 10000;
+    int digit2 = (val % 10000) / 1000;
+    int digit3 = (val % 1000) / 100;
+    int digit4 = (val % 100) / 10;
+    int digit5 = val % 10;
+
+    int yPos = y * scaleFactor;
+    int width = 38 * scaleFactor;
+    int height = 80 * scaleFactor;
+
+    if (leading || digit1 != 0) {
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    }
+    x += 38;
+
+    if (leading || digit1 != 0 || digit2 != 0) {
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    }
+    x += 38;
+
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -351,6 +413,44 @@ void nav::addSquawk(int code, int x, int y)
     al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
     al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 152) * scaleFactor, yPos, width, height, 0);
     al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 228) * scaleFactor, yPos, width, height, 0);
+}
+
+void nav::addVerticalSpeed(int x, int y)
+{
+    int yPos = y * scaleFactor;
+    int height = 50 * scaleFactor;
+
+    if (verticalSpeed == 0) {
+        // Add 0fpm
+        x += 87;
+        al_draw_scaled_bitmap(bitmaps[12], 32, 0, 130, 50, x * scaleFactor, yPos, 162 * scaleFactor, height, 0);
+        return;
+    }
+
+    int val = abs(verticalSpeed);
+    int digit1 = (val % 10000) / 1000;
+    int digit2 = (val % 1000) / 100;
+
+    if (digit1 == 0) {
+        x += 32;
+    }
+
+    if (verticalSpeed < 0) {
+        // Add minus
+        al_draw_scaled_bitmap(bitmaps[13], 0, 0, 23, 50, x * scaleFactor, yPos, 23 * scaleFactor, height, 0);
+    }
+    x += 23;
+
+    if (digit1 != 0) {
+        al_draw_scaled_bitmap(bitmaps[11], 32 * digit1, 0, 32, 50, x * scaleFactor, yPos, 32 * scaleFactor, height, 0);
+        x += 32;
+    }
+
+    al_draw_scaled_bitmap(bitmaps[11], 32 * digit2, 0, 32, 50, x * scaleFactor, yPos, 32 * scaleFactor, height, 0);
+    x += 32;
+
+    // Add 00fpm
+    al_draw_scaled_bitmap(bitmaps[12], 0, 0, 162, 50, x * scaleFactor, yPos, 162 * scaleFactor, height, 0);
 }
 
 /// <summary>
@@ -915,6 +1015,10 @@ int nav::adjustHeading(int val, int adjust)
 
 int nav::adjustAltitude(int val, int adjust)
 {
+    if (val < 0) {
+        val = 0;
+    }
+
     if (adjustSetSel == 0) {
         // Adjust thousands
         val += adjust * 1000;
@@ -930,9 +1034,8 @@ int nav::adjustAltitude(int val, int adjust)
 
 int nav::adjustVerticalSpeed(int val, int adjust)
 {
-    val += adjust * 100;
-
     // Allow vertical speed to go negative
+    val += adjust * 100;
 
     return val;
 }

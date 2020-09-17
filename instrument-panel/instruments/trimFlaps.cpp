@@ -65,6 +65,30 @@ void trimFlaps::resize()
     al_draw_scaled_bitmap(orig, 800, 60, 36, 36, 0, 0, 36 * scaleFactor, 36 * scaleFactor, 0);
     addBitmap(bmp);
 
+    // 6 = Landing gear
+    bmp = al_create_bitmap(198, 44);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 800, 198, 44, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 7 = UNLK
+    bmp = al_create_bitmap(104, 37);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 198, 800, 104, 37, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 8 = Gear down
+    bmp = al_create_bitmap(90, 70);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 302, 800, 900, 70, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 9 = Parking brake
+    bmp = al_create_bitmap(251, 44);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 392, 800, 251, 44, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -87,13 +111,50 @@ void trimFlaps::render()
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
     // Add trim
-    al_draw_bitmap(bitmaps[3], 262 * scaleFactor, (388 + trimOffset) * scaleFactor, 0);
+    al_draw_bitmap(bitmaps[3], 262 * scaleFactor, (301 + trimOffset) * scaleFactor, 0);
 
     // Add flaps target
-    al_draw_bitmap(bitmaps[5], 501 * scaleFactor, (211 + targetFlaps) * scaleFactor, 0);
+    al_draw_bitmap(bitmaps[5], 501 * scaleFactor, (161 + targetFlaps) * scaleFactor, 0);
 
     // Add flaps
-    al_draw_bitmap(bitmaps[4], 501 * scaleFactor, (211 + flapsOffset) * scaleFactor, 0);
+    al_draw_bitmap(bitmaps[4], 501 * scaleFactor, (161 + flapsOffset) * scaleFactor, 0);
+
+    if (isGearRetractable) {
+        // Add landing gear
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 198, 44, 227 * scaleFactor, 545 * scaleFactor, 198 * scaleFactor, 44 * scaleFactor, 0);
+
+        if (gearLeftPos == 100) {
+            // Add gear down
+            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 223 * scaleFactor, 600 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
+        }
+        else if (gearLeftPos > 0) {
+            // Add UNLK
+            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 214 * scaleFactor, 612 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
+        }
+
+        if (gearCentrePos == 100) {
+            // Add gear down
+            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 358 * scaleFactor, 600 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
+        }
+        else if (gearCentrePos > 0) {
+            // Add UNLK
+            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 350 * scaleFactor, 612 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
+        }
+
+        if (gearRightPos == 100) {
+            // Add gear down
+            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 493 * scaleFactor, 600 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
+        }
+        else if (gearRightPos > 0) {
+            // Add UNLK
+            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 486 * scaleFactor, 612 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
+        }
+    }
+
+    if (parkingBrakeOn) {
+        // Add parking brake
+        al_draw_scaled_bitmap(bitmaps[9], 0, 0, 251, 44, 277 * scaleFactor, 692 * scaleFactor, 254 * scaleFactor, 44 * scaleFactor, 0);
+    }
 
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
@@ -155,9 +216,9 @@ void trimFlaps::update()
     }
 
     isGearRetractable = (simVars->gearRetractable == 1);
-    gearLeftUnlock = (simVars->gearLeftPos > 0 && simVars->gearLeftPos < 100);
-    gearCentreUnlock = (simVars->gearCentrePos > 0 && simVars->gearCentrePos < 100);
-    gearRightUnlock = (simVars->gearRightPos > 0 && simVars->gearRightPos < 100);
+    gearLeftPos = simVars->gearLeftPos;
+    gearCentrePos = simVars->gearCentrePos;
+    gearRightPos = simVars->gearRightPos;
     parkingBrakeOn = (simVars->parkingBrakeOn == 1);
 }
 
@@ -169,11 +230,11 @@ void trimFlaps::addVars()
     globals.simVars->addVar(name, "Elevator Trim Position", false, 1, 0);
     globals.simVars->addVar(name, "Flaps Num Handle Positions", false, 1, 0);
     globals.simVars->addVar(name, "Flaps Handle Index", false, 1, 0);
-    globals.simVars->addVar(name, "Is Gear Retractable", false, 1, 0);
+    globals.simVars->addVar(name, "Is Gear Retractable", true, 1, 0);
     globals.simVars->addVar(name, "Gear Left Position", false, 1, 0);
     globals.simVars->addVar(name, "Gear Center Position", false, 1, 0);
     globals.simVars->addVar(name, "Gear Right Position", false, 1, 0);
-    globals.simVars->addVar(name, "Brake Parking Position", false, 1, 0);
+    globals.simVars->addVar(name, "Brake Parking Position", true, 1, 0);
 }
 
 #ifndef _WIN32
