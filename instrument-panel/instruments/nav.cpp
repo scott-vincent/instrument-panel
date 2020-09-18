@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "nav.h"
-#include "simvars.h"
 #include "knobs.h"
 
 nav::nav(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Nav");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -168,11 +168,11 @@ void nav::renderNav()
     addFreq2dp(nav2Standby, 1153, 148);
 
     // Add panel 3 frequencies
-    addNum4(adfFreq, 273, 278);
-    addNum4(adfStandby, 586, 278);
+    addNum4(simVars->adfFreq, 273, 278);
+    addNum4(simVars->adfStandby, 586, 278);
 
     // Add squawk
-    addSquawk(transponderCode, 968, 278);
+    addSquawk(simVars->transponderCode, 968, 278);
 
     // Add selected switch
     switch (switchSel) {
@@ -222,16 +222,16 @@ void nav::renderAutopilot()
     int destSizeY = 50 * scaleFactor;
 
     // Add autopilot set values
-    addNum4(airspeed, 403, 82, false);
+    addNum4(simVars->autopilotAirspeed, 403, 82, false);
 
-    if (heading == 0) {
+    if (simVars->autopilotHeading == 0) {
         addNum3(360, 816, 82);
     }
     else {
-        addNum3(heading, 816, 82);
+        addNum3(simVars->autopilotHeading, 816, 82);
     }
 
-    addNum5(altitude, 1188, 82, false);
+    addNum5(simVars->autopilotAltitude, 1188, 82, false);
     
     // Add hdg display
     switch (autopilotHdg) {
@@ -244,7 +244,7 @@ void nav::renderAutopilot()
     }
 
     // Add ap display
-    if (isAutopilotOn) {
+    if (simVars->autopilotEngaged) {
         al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 530 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 
@@ -427,14 +427,14 @@ void nav::addVerticalSpeed(int x, int y)
     int yPos = y * scaleFactor;
     int height = 50 * scaleFactor;
 
-    if (verticalSpeed == 0) {
+    if (simVars->autopilotVerticalSpeed == 0) {
         // Add 0fpm
         x += 87;
         al_draw_scaled_bitmap(bitmaps[12], 32, 0, 130, 50, x * scaleFactor, yPos, 162 * scaleFactor, height, 0);
         return;
     }
 
-    int val = abs(verticalSpeed);
+    int val = abs(simVars->autopilotVerticalSpeed);
     int digit1 = (val % 10000) / 1000;
     int digit2 = (val % 1000) / 100;
 
@@ -442,7 +442,7 @@ void nav::addVerticalSpeed(int x, int y)
         x += 32;
     }
 
-    if (verticalSpeed < 0) {
+    if (simVars->autopilotVerticalSpeed < 0) {
         // Add minus
         al_draw_scaled_bitmap(bitmaps[13], 0, 0, 23, 50, x * scaleFactor, yPos, 23 * scaleFactor, height, 0);
     }
@@ -484,9 +484,6 @@ void nav::update()
     }
 #endif
 
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
     // Calculate values - 3 d.p. for comms, 2 d.p. for nav, 0 d.p. for adf
     com1Freq = (simVars->com1Freq + 0.0000001) * 1000.0;
     com1Standby = (simVars->com1Standby + 0.0000001) * 1000.0;
@@ -496,12 +493,6 @@ void nav::update()
     com2Standby = (simVars->com2Standby + 0.0000001) * 1000.0;
     nav2Freq = (simVars->nav2Freq + 0.0000001) * 100.0;
     nav2Standby = (simVars->nav2Standby + 0.0000001) * 100.0;
-    adfFreq = simVars->adfFreq;
-    adfStandby = simVars->adfStandby;
-    transponderCode = simVars->transponderCode;
-
-    hasAutopilot = (simVars->autopilotAvailable == 1);
-    isAutopilotOn = (simVars->autopilotEngaged == 1);
 
     autopilotHdg = NoHdg;
     if (simVars->autopilotHeadingLock == 1) autopilotHdg = HdgSet;
@@ -511,11 +502,6 @@ void nav::update()
     if (simVars->autopilotAltLock) autopilotAlt = AltHold;
     if (simVars->autopilotPitchHold) autopilotAlt = PitchHold;
     if (simVars->autopilotVerticalHold) autopilotAlt = VerticalSpeedHold;
-
-    airspeed = simVars->autopilotAirspeed;
-    heading = simVars->autopilotHeading;
-    altitude = simVars->autopilotAltitude;
-    verticalSpeed = simVars->autopilotVerticalSpeed;
 }
 
 /// <summary>
@@ -572,7 +558,7 @@ void nav::updateKnobs()
     if (val != INT_MIN) {
         // Convert knob value to selection (adjust for desired sensitivity)
         int maxSwitch;
-        if (hasAutopilot) {
+        if (simVars->autopilotAvailable) {
             maxSwitch = 10;
         }
         else {
@@ -681,42 +667,42 @@ void nav::navSwitchPressed()
     switch (switchSel) {
     case 0:
     {
-        double prevFreq = globals.simVars->simVars.com1Freq;
-        globals.simVars->simVars.com1Freq = globals.simVars->simVars.com1Standby;
-        globals.simVars->simVars.com1Standby = prevFreq;
+        double prevFreq = simVars->com1Freq;
+        simVars->com1Freq = simVars->com1Standby;
+        simVars->com1Standby = prevFreq;
         globals.simVars->write(KEY_COM_RADIO_SWAP);
         break;
     }
     case 1:
     {
-        double prevFreq = globals.simVars->simVars.nav1Freq;
-        globals.simVars->simVars.nav1Freq = globals.simVars->simVars.nav1Standby;
-        globals.simVars->simVars.nav1Standby = prevFreq;
+        double prevFreq = simVars->nav1Freq;
+        //simVars->nav1Freq = simVars->nav1Standby;
+        simVars->nav1Standby = prevFreq;
         globals.simVars->write(KEY_NAV1_RADIO_SWAP);
         break;
     }
     case 2:
     {
-        double prevFreq = globals.simVars->simVars.com2Freq;
-        globals.simVars->simVars.com2Freq = globals.simVars->simVars.com2Standby;
-        globals.simVars->simVars.com2Standby = prevFreq;
+        double prevFreq = simVars->com2Freq;
+        //simVars->com2Freq = simVars->com2Standby;
+        simVars->com2Standby = prevFreq;
         globals.simVars->write(KEY_COM2_RADIO_SWAP);
         break;
     }
     case 3:
     {
-        double prevFreq = globals.simVars->simVars.nav2Freq;
-        globals.simVars->simVars.nav2Freq = globals.simVars->simVars.nav2Standby;
-        globals.simVars->simVars.nav2Standby = prevFreq;
+        double prevFreq = simVars->nav2Freq;
+        //simVars->nav2Freq = simVars->nav2Standby;
+        simVars->nav2Standby = prevFreq;
         globals.simVars->write(KEY_NAV2_RADIO_SWAP);
         break;
     }
     case 4:
     {
-        int newFreq = globals.simVars->simVars.adfStandby;
-        globals.simVars->simVars.adfStandby = globals.simVars->simVars.adfFreq;
-        globals.simVars->simVars.adfFreq = newFreq;
-        globals.simVars->write(KEY_ADF_COMPLETE_SET, globals.simVars->simVars.adfFreq);
+        int newFreq = simVars->adfStandby;
+        //simVars->adfStandby = simVars->adfFreq;
+        simVars->adfFreq = newFreq;
+        globals.simVars->write(KEY_ADF_COMPLETE_SET, simVars->adfFreq);
         globals.simVars->write(KEY_ADF1_PRIMARY_SET, newFreq);
         break;
     }
@@ -738,21 +724,43 @@ void nav::autopilotSwitchPressed()
     switch (switchSel) {
     case 6:
     {
-        isAutopilotOn = !isAutopilotOn;
-        globals.simVars->simVars.autopilotEngaged = isAutopilotOn;
+        //simVars->autopilotEngaged = !simVars->autopilotEngaged
         globals.simVars->write(KEY_AP_MASTER);
+        break;
+    }
+    case 7:
+    {
+        if (simVars->autopilotAirspeedHold) {
+            globals.simVars->write(KEY_AP_SPD_VAR_SET, 0);
+            //simVars->autopilotAirspeedHold = 0;
+            globals.simVars->write(KEY_AP_AIRSPEED_OFF);
+        }
+        else {
+            // Set autopilot speed to within 10 knots of current speed
+            int holdSpeed = simVars->autopilotAirspeed;
+            int tens = holdSpeed % 10;
+            if (tens < 5) {
+                holdSpeed -= tens;
+            }
+            else {
+                holdSpeed += 10 - tens;
+            }
+            globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
+            //simVars->autopilotAirspeedHold = 1;
+            globals.simVars->write(KEY_AP_AIRSPEED_ON);
+        }
         break;
     }
     case 8:
     {
         if (autopilotHdg == HdgSet) {
             autopilotHdg = LevelFlight;
-            globals.simVars->simVars.autopilotLevel = 1;
+            //simVars->autopilotLevel = 1;
             globals.simVars->write(KEY_AP_HDG_HOLD_OFF);
         }
         else {
             autopilotHdg = HdgSet;
-            globals.simVars->simVars.autopilotHeadingLock = 1;
+            //simVars->autopilotHeadingLock = 1;
             globals.simVars->write(KEY_AP_HDG_HOLD_ON);
         }
         break;
@@ -761,12 +769,22 @@ void nav::autopilotSwitchPressed()
     {
         if (autopilotAlt == AltHold) {
             autopilotAlt = PitchHold;
-            globals.simVars->simVars.autopilotPitchHold = 1;
+            //simVars->autopilotPitchHold = 1;
             globals.simVars->write(KEY_AP_ALT_HOLD_OFF);
         }
         else {
             autopilotAlt = AltHold;
-            globals.simVars->simVars.autopilotAltLock = 1;
+            // Set autopilot altitude to within 100ft of current altitude
+            int holdAlt = simVars->altAltitude;
+            int hundreds = holdAlt % 100;
+            if (hundreds < 30) {
+                holdAlt -= hundreds;
+            }
+            else {
+                holdAlt += 100 - hundreds;
+            }
+            globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAlt);
+            //simVars->autopilotAltLock = 1;
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         }
         break;
@@ -774,7 +792,7 @@ void nav::autopilotSwitchPressed()
     case 10:
     {
         autopilotAlt = VerticalSpeedHold;
-        globals.simVars->simVars.autopilotVerticalHold = 1;
+        //simVars->autopilotVerticalHold = 1;
         globals.simVars->write(KEY_AP_PANEL_ALTITUDE_ON);
         break;
     }
@@ -786,43 +804,43 @@ void nav::navAdjustDigits(int adjust)
     switch (switchSel) {
     case 0:
     {
-        double newVal = adjustCom(globals.simVars->simVars.com1Standby, adjust);
-        globals.simVars->simVars.com1Standby = newVal;
+        double newVal = adjustCom(simVars->com1Standby, adjust);
+        //simVars->com1Standby = newVal;
         globals.simVars->write(KEY_COM_STBY_RADIO_SET, newVal);
         break;
     }
     case 1:
     {
-        double newVal = adjustNav(globals.simVars->simVars.nav1Standby, adjust);
-        globals.simVars->simVars.nav1Standby = newVal;
+        double newVal = adjustNav(simVars->nav1Standby, adjust);
+        //simVars->nav1Standby = newVal;
         globals.simVars->write(KEY_NAV1_STBY_SET, newVal);
         break;
     }
     case 2:
     {
-        double newVal = adjustCom(globals.simVars->simVars.com2Standby, adjust);
-        globals.simVars->simVars.com2Standby = newVal;
+        double newVal = adjustCom(simVars->com2Standby, adjust);
+        //simVars->com2Standby = newVal;
         globals.simVars->write(KEY_COM2_STBY_RADIO_SET, newVal);
         break;
     }
     case 3:
     {
-        double newVal = adjustNav(globals.simVars->simVars.nav2Standby, adjust);
-        globals.simVars->simVars.nav2Standby = newVal;
+        double newVal = adjustNav(simVars->nav2Standby, adjust);
+        //simVars->nav2Standby = newVal;
         globals.simVars->write(KEY_NAV2_STBY_SET, newVal);
         break;
     }
     case 4:
     {
-        int newVal = adjustAdf(globals.simVars->simVars.adfStandby, adjust);
-        globals.simVars->simVars.adfStandby = newVal;
+        int newVal = adjustAdf(simVars->adfStandby, adjust);
+        //simVars->adfStandby = newVal;
         globals.simVars->write(KEY_ADF_COMPLETE_SET, newVal);
         break;
     }
     case 5:
     {
-        int newVal = adjustSquawk(globals.simVars->simVars.transponderCode, adjust);
-        globals.simVars->simVars.transponderCode = newVal;
+        int newVal = adjustSquawk(simVars->transponderCode, adjust);
+        //simVars->transponderCode = newVal;
         globals.simVars->write(KEY_XPNDR_SET, newVal);
         break;
     }
@@ -834,29 +852,29 @@ void nav::autopilotAdjustDigits(int adjust)
     switch (switchSel) {
     case 7:
     {
-        double newVal = adjustSpeed(globals.simVars->simVars.autopilotAirspeed, adjust);
-        globals.simVars->simVars.autopilotAirspeed = newVal;
+        double newVal = adjustSpeed(simVars->autopilotAirspeed, adjust);
+        //simVars->autopilotAirspeed = newVal;
         globals.simVars->write(KEY_AP_SPD_VAR_SET, newVal);
         break;
     }
     case 8:
     {
-        double newVal = adjustHeading(globals.simVars->simVars.autopilotHeading, adjust);
-        globals.simVars->simVars.autopilotHeading = newVal;
+        double newVal = adjustHeading(simVars->autopilotHeading, adjust);
+        //simVars->autopilotHeading = newVal;
         globals.simVars->write(KEY_HEADING_BUG_SET, newVal);
         break;
     }
     case 9:
     {
-        double newVal = adjustAltitude(globals.simVars->simVars.autopilotAltitude, adjust);
-        globals.simVars->simVars.autopilotAltitude = newVal;
+        double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
+        //simVars->autopilotAltitude = newVal;
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
         break;
     }
     case 10:
     {
-        double newVal = adjustVerticalSpeed(globals.simVars->simVars.autopilotVerticalSpeed, adjust);
-        globals.simVars->simVars.autopilotVerticalSpeed = newVal;
+        double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
+        //simVars->autopilotVerticalSpeed = newVal;
         globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
         break;
     }

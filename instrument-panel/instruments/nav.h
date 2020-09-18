@@ -2,6 +2,7 @@
 #define _NAV_H_
 
 #include "instrument.h"
+#include "simvars.h"
 
 class nav : public instrument
 {
@@ -22,6 +23,7 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    SimVars* simVars;
     int switchSel = 0;
     int adjustSetSel = 0;
     int com1Freq;
@@ -32,18 +34,9 @@ private:
     int com2Standby;
     int nav2Freq;
     int nav2Standby;
-    int adfFreq;
-    int adfStandby;
     int transponderState = 3;
-    int transponderCode;
-    bool hasAutopilot = true;
-    bool isAutopilotOn = false;
     AutopilotHdg autopilotHdg;
     AutopilotAlt autopilotAlt;
-    int airspeed = 0;
-    int heading = 0;
-    int altitude = 0;
-    int verticalSpeed = 0;
 
     // Hardware knobs
     int selKnob = -1;
