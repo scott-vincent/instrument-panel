@@ -114,19 +114,25 @@ void digitalClock::resize()
     al_draw_scaled_bitmap(orig, 800, 666, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 14 = Letter E
+    // 14 = Minus
+    bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 130, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 15 = Letter E
     bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 800, 264, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 15 = Letter F
+    // 16 = Letter F
     bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 800, 398, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 16 = Letter C
+    // 17 = Letter C
     bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 800, 532, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
@@ -183,7 +189,12 @@ void digitalClock::render()
         break;
 
     case Celsius:
-        drawDisplay(tempCx10 / 100, (tempCx10 / 10) % 10, tempCx10 % 10, 2);
+        if (tempCx10 < 0) {
+            drawDisplay(-tempCx10 / 100, (-tempCx10 / 10) % 10, -tempCx10 % 10, 2, true);
+        }
+        else {
+            drawDisplay(tempCx10 / 100, (tempCx10 / 10) % 10, tempCx10 % 10, 2);
+        }
         break;
     }
 
@@ -216,20 +227,33 @@ void digitalClock::render()
 /// <summary>
 /// Draw top row of digits + letter
 /// </summary>
-void digitalClock::drawDisplay(int digit1, int digit2, int digit3, int letter)
+void digitalClock::drawDisplay(int digit1, int digit2, int digit3, int letter, bool isMinus)
 {
     int y = 255 * scaleFactor;
+
+    // Celsius can be negative
+    if (isMinus) {
+        if (digit1 > 0) {
+            al_draw_bitmap(bitmaps[14], 85 * scaleFactor, y, 0);
+        }
+        else {
+            al_draw_bitmap(bitmaps[14], 187 * scaleFactor, y, 0);
+        }
+    }
 
     // Farenheit can be > 99
     if (digit1 > 9) {
         al_draw_bitmap(bitmaps[5], 85 * scaleFactor, y, 0);
         digit1 = digit1 % 10;
+        al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
+    }
+    else if (digit1 > 0) {
+        al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
     }
 
-    al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
     al_draw_bitmap(bitmaps[4 + digit2], 289 * scaleFactor, y, 0);
     al_draw_bitmap(bitmaps[4 + digit3], 417 * scaleFactor, y, 0);
-    al_draw_bitmap(bitmaps[14 + letter], 519 * scaleFactor, y, 0);
+    al_draw_bitmap(bitmaps[15 + letter], 519 * scaleFactor, y, 0);
 }
 
 /// <summary>

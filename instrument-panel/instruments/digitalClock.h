@@ -56,7 +56,7 @@ public:
     void update();
 
 private:
-    void drawDisplay(int digit1, int digit2, int digit3, int letter);
+    void drawDisplay(int digit1, int digit2, int digit3, int letter, bool isMinus = false);
     void drawClock(int digit1, int digit2, int digit3, int digit4);
     void resize();
     void addVars();
