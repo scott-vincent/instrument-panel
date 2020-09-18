@@ -223,7 +223,14 @@ void nav::renderAutopilot()
 
     // Add autopilot set values
     addNum4(airspeed, 403, 82, false);
-    addNum3(heading, 816, 82);
+
+    if (heading == 0) {
+        addNum3(360, 816, 82);
+    }
+    else {
+        addNum3(heading, 816, 82);
+    }
+
     addNum5(altitude, 1188, 82, false);
     
     // Add hdg display
@@ -830,24 +837,28 @@ void nav::autopilotAdjustDigits(int adjust)
         double newVal = adjustSpeed(globals.simVars->simVars.autopilotAirspeed, adjust);
         globals.simVars->simVars.autopilotAirspeed = newVal;
         globals.simVars->write(KEY_AP_SPD_VAR_SET, newVal);
+        break;
     }
     case 8:
     {
         double newVal = adjustHeading(globals.simVars->simVars.autopilotHeading, adjust);
         globals.simVars->simVars.autopilotHeading = newVal;
         globals.simVars->write(KEY_HEADING_BUG_SET, newVal);
+        break;
     }
     case 9:
     {
         double newVal = adjustAltitude(globals.simVars->simVars.autopilotAltitude, adjust);
         globals.simVars->simVars.autopilotAltitude = newVal;
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
+        break;
     }
     case 10:
     {
         double newVal = adjustVerticalSpeed(globals.simVars->simVars.autopilotVerticalSpeed, adjust);
         globals.simVars->simVars.autopilotVerticalSpeed = newVal;
         globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
+        break;
     }
     }
 }
@@ -935,11 +946,11 @@ int nav::adjustAdf(int val, int adjust)
 {
     if (adjustSetSel == 0) {
         val += adjust * 100;
-        if (val > 1700) {
+        if (val >= 1800) {
             val -= 1700;
         }
         else if (val < 100) {
-            val += 100;
+            val += 1700;
         }
     }
     else if (adjustSetSel == 1) {
@@ -1015,18 +1026,22 @@ int nav::adjustHeading(int val, int adjust)
 
 int nav::adjustAltitude(int val, int adjust)
 {
-    if (val < 0) {
-        val = 0;
-    }
-
     if (adjustSetSel == 0) {
         // Adjust thousands
         val += adjust * 1000;
+
+        if (val < 0) {
+            val += 1000;
+        }
     }
     else {
         // Adjust hundreds
         int digit = adjustDigit(((int)val % 1000) / 100, adjust);
         val = (int)(val / 1000) * 1000 + digit * 100 + (val % 100);
+
+        if (val < 0) {
+            val += 100;
+        }
     }
 
     return val;
