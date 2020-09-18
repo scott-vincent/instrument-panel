@@ -84,8 +84,11 @@ If you find this project useful, would like to see it developed further or would
 
 # ADDITIONAL PHOTOS
 
+Panel Front
 ![Panel Front](Panel_Front.jpg)
 
+Panel Back
 ![Panel Back](Panel_Back.jpg)
 
+Panel Wiring
 ![Panel Wiring](Panel_Wiring.jpg)
