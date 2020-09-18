@@ -121,33 +121,33 @@ void trimFlaps::render()
 
     if (isGearRetractable) {
         // Add landing gear
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 198, 44, 227 * scaleFactor, 545 * scaleFactor, 198 * scaleFactor, 44 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 198, 44, 227 * scaleFactor, 535 * scaleFactor, 198 * scaleFactor, 44 * scaleFactor, 0);
 
         if (gearLeftPos == 100) {
             // Add gear down
-            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 223 * scaleFactor, 600 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
+            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 223 * scaleFactor, 590 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
         }
         else if (gearLeftPos > 0) {
             // Add UNLK
-            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 214 * scaleFactor, 612 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
+            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 214 * scaleFactor, 602 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
 
         if (gearCentrePos == 100) {
             // Add gear down
-            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 358 * scaleFactor, 600 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
+            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 358 * scaleFactor, 590 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
         }
         else if (gearCentrePos > 0) {
             // Add UNLK
-            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 350 * scaleFactor, 612 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
+            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 350 * scaleFactor, 602 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
 
         if (gearRightPos == 100) {
             // Add gear down
-            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 493 * scaleFactor, 600 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
+            al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 493 * scaleFactor, 590 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
         }
         else if (gearRightPos > 0) {
             // Add UNLK
-            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 486 * scaleFactor, 612 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
+            al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 486 * scaleFactor, 602 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
     }
 

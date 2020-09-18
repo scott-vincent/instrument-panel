@@ -18,6 +18,7 @@ private:
         AltHold,
         PitchHold,
         VerticalSpeedHold,
+        AltChange
     };
 
     float scaleFactor;
@@ -36,7 +37,7 @@ private:
     int nav2Standby;
     int transponderState = 3;
     AutopilotHdg autopilotHdg;
-    AutopilotAlt autopilotAlt;
+    AutopilotAlt autopilotAlt = AltHold;
 
     // Hardware knobs
     int selKnob = -1;

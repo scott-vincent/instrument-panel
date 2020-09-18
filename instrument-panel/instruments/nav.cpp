@@ -260,10 +260,18 @@ void nav::renderAutopilot()
     {
         al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         addVerticalSpeed(836, 252);
-        // Add alts display
+        // Add white alts display
         al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 1115 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     }
+    case AltChange:
+        // ALT
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        // + S = ALTS
+        al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 788 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
+        // Add white alt display
+        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 94, 50, 1115 * scaleFactor, 252 * scaleFactor, 94 * scaleFactor, destSizeY, 0);
+        break;
     }
 }
 
@@ -494,14 +502,37 @@ void nav::update()
     nav2Freq = (simVars->nav2Freq + 0.0000001) * 100.0;
     nav2Standby = (simVars->nav2Standby + 0.0000001) * 100.0;
 
-    autopilotHdg = NoHdg;
-    if (simVars->autopilotHeadingLock == 1) autopilotHdg = HdgSet;
-    if (simVars->autopilotLevel == 1) autopilotHdg = HdgSet;
+    if (simVars->autopilotHeadingLock == 1) {
+        autopilotHdg = HdgSet;
+    }
+    else if (simVars->autopilotLevel == 1) {
+        autopilotHdg = LevelFlight;
+    }
+    else {
+        autopilotHdg = NoHdg;
+    }
 
-    autopilotAlt = NoAlt;
-    if (simVars->autopilotAltLock) autopilotAlt = AltHold;
-    if (simVars->autopilotPitchHold) autopilotAlt = PitchHold;
-    if (simVars->autopilotVerticalHold) autopilotAlt = VerticalSpeedHold;
+    if (simVars->autopilotAltLock == 1) {
+        if (autopilotAlt == AltChange) {
+            // Revert to alt hold when within range of target altitude
+            int diff = abs(simVars->altAltitude - simVars->autopilotAltitude);
+            if (diff < 210) {
+                autopilotAlt = AltHold;
+            }
+        }
+        else {
+            autopilotAlt = AltHold;
+        }
+    }
+    else if (simVars->autopilotVerticalHold == 1) {
+        autopilotAlt = VerticalSpeedHold;
+    }
+    else if (simVars->autopilotPitchHold == 1) {
+        autopilotAlt = PitchHold;
+    }
+    else {
+        autopilotAlt = NoAlt;
+    }
 }
 
 /// <summary>
@@ -737,7 +768,7 @@ void nav::autopilotSwitchPressed()
         }
         else {
             // Set autopilot speed to within 10 knots of current speed
-            int holdSpeed = simVars->autopilotAirspeed;
+            int holdSpeed = simVars->asiAirspeed;
             int tens = holdSpeed % 10;
             if (tens < 5) {
                 holdSpeed -= tens;
@@ -791,9 +822,10 @@ void nav::autopilotSwitchPressed()
     }
     case 10:
     {
-        autopilotAlt = VerticalSpeedHold;
-        //simVars->autopilotVerticalHold = 1;
-        globals.simVars->write(KEY_AP_PANEL_ALTITUDE_ON);
+        // Vertical speed hold not working so set target altitude instead
+        autopilotAlt = AltChange;
+        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, simVars->autopilotAltitude);
+        globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         break;
     }
     }
@@ -873,9 +905,13 @@ void nav::autopilotAdjustDigits(int adjust)
     }
     case 10:
     {
-        double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
+        //double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
         //simVars->autopilotVerticalSpeed = newVal;
-        globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
+        //globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
+
+        // Adjust altitude instead of vertical speed for now
+        double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
+        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
         break;
     }
     }
@@ -1030,13 +1066,21 @@ int nav::adjustSpeed(int val, int adjust)
 
 int nav::adjustHeading(int val, int adjust)
 {
-    val += adjust;
+    if (adjustSetSel == 0) {
+        // Adjust tens
+        val += adjust * 10;
 
-    if (val > 359) {
-        val -= 360;
+        if (val > 359) {
+            val -= 360;
+        }
+        else if (val < 0) {
+            val += 360;
+        }
     }
-    else if (val < 0) {
-        val += 360;
+    else {
+        // Adjust units
+        int digit = adjustDigit(val % 10, adjust);
+        val = (int)(val / 10) * 10 + digit;
     }
 
     return val;
@@ -1044,6 +1088,8 @@ int nav::adjustHeading(int val, int adjust)
 
 int nav::adjustAltitude(int val, int adjust)
 {
+    int prevVal = val;
+
     if (adjustSetSel == 0) {
         // Adjust thousands
         val += adjust * 1000;
@@ -1059,6 +1105,15 @@ int nav::adjustAltitude(int val, int adjust)
 
         if (val < 0) {
             val += 100;
+        }
+    }
+
+    if (autopilotAlt == AltChange) {
+        // Check for cancel alt change
+        int diff = abs(val - simVars->altAltitude);
+        if (diff < 210 || (val < simVars->altAltitude && prevVal > simVars->altAltitude)
+            || (val > simVars->altAltitude && prevVal < simVars->altAltitude)) {
+            autopilotAlt = AltHold;
         }
     }
 
