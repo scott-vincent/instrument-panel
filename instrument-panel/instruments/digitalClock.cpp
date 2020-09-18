@@ -185,7 +185,12 @@ void digitalClock::render()
         break;
 
     case Farenheit:
-        drawDisplay(tempFx10 / 100, (tempFx10 / 10) % 10, tempFx10 % 10, 1);
+        if (tempFx10 < 0) {
+            drawDisplay(-tempFx10 / 100, (-tempFx10 / 10) % 10, -tempFx10 % 10, 1, true);
+        }
+        else {
+            drawDisplay(tempFx10 / 100, (tempFx10 / 10) % 10, tempFx10 % 10, 1);
+        }
         break;
 
     case Celsius:
@@ -231,7 +236,7 @@ void digitalClock::drawDisplay(int digit1, int digit2, int digit3, int letter, b
 {
     int y = 255 * scaleFactor;
 
-    // Celsius can be negative
+    // Temps can be negative
     if (isMinus) {
         if (digit1 > 0) {
             al_draw_bitmap(bitmaps[14], 85 * scaleFactor, y, 0);
@@ -244,11 +249,10 @@ void digitalClock::drawDisplay(int digit1, int digit2, int digit3, int letter, b
     // Farenheit can be > 99
     if (digit1 > 9) {
         al_draw_bitmap(bitmaps[5], 85 * scaleFactor, y, 0);
-        digit1 = digit1 % 10;
-        al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
     }
-    else if (digit1 > 0) {
-        al_draw_bitmap(bitmaps[4 + digit1], 187 * scaleFactor, y, 0);
+
+    if (digit1 > 0) {
+        al_draw_bitmap(bitmaps[4 + (digit1 % 10)], 187 * scaleFactor, y, 0);
     }
 
     al_draw_bitmap(bitmaps[4 + digit2], 289 * scaleFactor, y, 0);
