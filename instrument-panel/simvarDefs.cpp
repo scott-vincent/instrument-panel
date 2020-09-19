@@ -64,6 +64,7 @@ const char* SimVarDefs[][2] = {
     { "Gear Center Position", "percent" },
     { "Gear Right Position", "percent" },
     { "Brake Parking Position", "bool" },
+    { "Estimated Cruise Speed", "knots" },
     { "Atc Id", "string64" },
     { "Atc Airline", "string64" },
     { "Atc Flight Number", "string8" },

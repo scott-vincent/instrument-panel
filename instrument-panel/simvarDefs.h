@@ -68,6 +68,7 @@ struct SimVars
     double gearCentrePos = 100;
     double gearRightPos = 100;
     double parkingBrakeOn = 1;
+    double cruiseSpeed = 120;
     char atcTailNumber[64] = "\0";
     char atcCallSign[64] = "\0";
     char atcFlightNumber[8] = "\0";
