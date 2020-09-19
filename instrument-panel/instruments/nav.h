@@ -9,8 +9,7 @@ class nav : public instrument
 private:
     enum AutopilotSpd {
         NoSpd,
-        SpdHold,
-        MachHold
+        SpdHold
     };
 
     enum AutopilotHdg {
@@ -91,7 +90,7 @@ private:
     double adjustNav(double val, int adjust);
     int adjustAdf(int val, int adjust);
     int adjustSquawk(int val, int adjust);
-    int adjustMach(int val, int adjust);
+    double adjustMach(double val, int adjust);
     int adjustSpeed(int val, int adjust);
     int adjustHeading(int val, int adjust);
     int adjustAltitude(int val, int adjust);

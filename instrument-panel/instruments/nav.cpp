@@ -223,10 +223,12 @@ void nav::renderAutopilot()
 
     // Add autopilot set values
     if (autopilotSpd == SpdHold) {
-        addNum4(airspeed, 403, 82, false);
-    }
-    else if (autopilotSpd == MachHold) {
-        addNum2dp(machX100, 403, 82);
+        if (showMach) {
+            addNum2dp(machX100, 421, 82);
+        }
+        else {
+            addNum4(airspeed, 403, 82, false);
+        }
     }
     addNum3(heading, 816, 82);
     addNum5(altitude, 1188, 82, false);
@@ -527,9 +529,6 @@ void nav::update()
     if (simVars->autopilotAirspeedHold == 1) {
         autopilotSpd = SpdHold;
     }
-    else if (simVars->autopilotMachHold == 1) {
-        autopilotSpd = MachHold;
-    }
     else {
         autopilotSpd = NoSpd;
     }
@@ -594,9 +593,8 @@ void nav::addVars()
     globals.simVars->addVar(name, "Autopilot Vertical Hold Var", false, 1, 0);
     globals.simVars->addVar(name, "Autopilot Vertical Hold", false, 1, 0);
     globals.simVars->addVar(name, "Autopilot Airspeed Hold Var", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Airspeed Hold", false, 1, 0);
     globals.simVars->addVar(name, "Autopilot Mach Hold Var", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Mach Hold", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Airspeed Hold", false, 1, 0);
 }
 
 #ifndef _WIN32
@@ -781,9 +779,8 @@ void nav::autopilotSwitchPressed()
     case 7:
     {
         if (autopilotSpd == SpdHold) {
-            // Switch to Mach hold
-            globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->asiMachSpeed);
-            globals.simVars->write(KEY_AP_MACH_ON);
+            // Switch between knots and mach display
+            showMach = !showMach;
         }
         else {
             // Switch to Airspeed hold.
@@ -798,6 +795,7 @@ void nav::autopilotSwitchPressed()
             }
             globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
             globals.simVars->write(KEY_AP_AIRSPEED_ON);
+            showMach = false;
         }
         break;
     }
@@ -894,12 +892,14 @@ void nav::autopilotAdjustDigits(int adjust)
     case 7:
     {
         if (autopilotSpd == SpdHold) {
-            double newVal = adjustSpeed(simVars->autopilotAirspeed, adjust);
-            globals.simVars->write(KEY_AP_SPD_VAR_SET, newVal);
-        }
-        else if (autopilotSpd == MachHold) {
-            double newVal = adjustMach(simVars->autopilotMach, adjust);
-            globals.simVars->write(KEY_AP_MACH_VAR_SET, newVal);
+            if (showMach) {
+                double newVal = adjustMach(simVars->autopilotMach, adjust);
+                globals.simVars->write(KEY_AP_MACH_VAR_SET, newVal);
+            }
+            else {
+                double newVal = adjustSpeed(simVars->autopilotAirspeed, adjust);
+                globals.simVars->write(KEY_AP_SPD_VAR_SET, newVal);
+            }
         }
         break;
     }
@@ -1075,7 +1075,7 @@ int nav::adjustSpeed(int val, int adjust)
     return val;
 }
 
-int nav::adjustMach(int val, int adjust)
+double nav::adjustMach(double val, int adjust)
 {
     int whole = val;
     val -= whole;
@@ -1095,10 +1095,17 @@ int nav::adjustMach(int val, int adjust)
     }
     else {
         // Adjust whole
-        whole = adjustDigit(whole % 10, adjust);
+        whole += adjust;
+        if (whole > 2) {
+            whole -= 3;
+        }
+        else if (whole < 0) {
+            whole += 3;
+        }
     }
 
-    return whole + frac * 0.01;
+    // For some weird reason you have to set mach * 100 !
+    return whole * 100 + frac;
 }
 
 int nav::adjustHeading(int val, int adjust)
