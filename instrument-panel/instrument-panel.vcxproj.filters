@@ -8,9 +8,6 @@
     <ClCompile Include="instruments\adiLearjet.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
-    <ClCompile Include="instruments\altLearjet.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
     <ClCompile Include="instruments\adi.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
@@ -73,9 +70,6 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="knobs.h" />
     <ClInclude Include="instruments\adiLearjet.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
-    <ClInclude Include="instruments\altLearjet.h">
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\adi.h">

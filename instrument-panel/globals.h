@@ -21,6 +21,8 @@ struct globalVars
     const char* Cessna_172_Text = "Cessna Skyhawk G1000 Asobo";
     const char* Savage_Cub_Text = "Asobo Savage Cub";
 
+    const int FastPlaneSpeed = 180;
+
     enum Aircraft {
         CESSNA_152,
         CESSNA_172,

@@ -27,7 +27,7 @@ void asi::resize()
 {
     destroyBitmaps();
 
-    if (globals.simVars->simVars.cruiseSpeed >= FastPlaneSpeed) {
+    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
         resizeFast();
         return;
     }
@@ -153,7 +153,7 @@ void asi::render()
         return;
     }
 
-    if (globals.simVars->simVars.cruiseSpeed >= FastPlaneSpeed) {
+    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
         renderFast();
         return;
     }
@@ -292,7 +292,7 @@ void asi::update()
     }
 #endif
 
-    if (globals.simVars->simVars.cruiseSpeed >= FastPlaneSpeed) {
+    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
         updateFast();
         return;
     }

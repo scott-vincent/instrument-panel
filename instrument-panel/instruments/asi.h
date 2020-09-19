@@ -6,7 +6,6 @@
 class asi : public instrument
 {
 private:
-    const int FastPlaneSpeed = 180;
     const double FastPlaneSizeFactor = 1.075;
 
     float scaleFactor;

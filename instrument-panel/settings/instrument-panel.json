@@ -12,12 +12,6 @@
     "Position Y": 10,
     "Size": 300
   },
-  "ALT Learjet": {
-    "Enabled": false,
-    "Position X": 1222,
-    "Position Y": 20,
-    "Size": 280
-  },
   "ASI": {
     "Enabled": true,
     "Position X": 566,

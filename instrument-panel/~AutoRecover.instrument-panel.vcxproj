@@ -165,7 +165,6 @@
     <ClCompile Include="instruments\adi.cpp" />
     <ClCompile Include="instruments\adiLearjet.cpp" />
     <ClCompile Include="instruments\alt.cpp" />
-    <ClCompile Include="instruments\altLearjet.cpp" />
     <ClCompile Include="instruments\annunciator.cpp" />
     <ClCompile Include="instruments\asi.cpp" />
     <ClCompile Include="instruments\digitalClock.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="instruments\adi.h" />
     <ClInclude Include="instruments\adiLearjet.h" />
     <ClInclude Include="instruments\alt.h" />
-    <ClInclude Include="instruments\altLearjet.h" />
     <ClInclude Include="instruments\annunciator.h" />
     <ClInclude Include="instruments\asi.h" />
     <ClInclude Include="instruments\digitalClock.h" />

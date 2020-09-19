@@ -80,7 +80,6 @@
 
 // Instruments
 #include "adiLearjet.h"
-#include "altLearjet.h"
 #include "asi.h"
 #include "adi.h"
 #include "alt.h"
@@ -469,10 +468,6 @@ void addInstruments()
     // Add instruments
     if (globals.simVars->isEnabled("ADI Learjet")) {
         instruments.push_back(new adiLearjet(700, 50, 300));
-    }
-
-    if (globals.simVars->isEnabled("ALT Learjet")) {
-        instruments.push_back(new altLearjet(1100, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ASI")) {

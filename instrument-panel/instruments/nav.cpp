@@ -779,8 +779,18 @@ void nav::autopilotSwitchPressed()
     case 7:
     {
         if (autopilotSpd == SpdHold) {
-            // Switch between knots and mach display
-            showMach = !showMach;
+            // Switch between knots and mach display.
+            // Sets currently displayed value before switching to
+            // set correctly converted value for current altitude.
+            if (showMach) {
+                // For some weird reason you have to set mach * 100 !
+                globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->autopilotMach * 100);
+                showMach = false;
+            }
+            else {
+                globals.simVars->write(KEY_AP_SPD_VAR_SET, simVars->autopilotAirspeed);
+                showMach = true;
+            }
         }
         else {
             // Switch to Airspeed hold.
