@@ -26,6 +26,7 @@ asi::asi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 void asi::resize()
 {
     destroyBitmaps();
+    loadedAircraft = globals.aircraft;
 
     if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
         resizeFast();
@@ -40,8 +41,6 @@ void asi::resize()
     if (globals.aircraft == globals.SAVAGE_CUB) {
         strcpy(origName, "asi-savage-cub.bmp");
     }
-
-    loadedAircraft = globals.aircraft;
 
     // 0 = Original (loaded) bitmap
     ALLEGRO_BITMAP* orig = loadBitmap(origName);
@@ -92,8 +91,6 @@ void asi::resizeFast()
 
     // Create bitmaps scaled to correct size (original size is 800)
     scaleFactor = fsize / 800.0f;
-
-    loadedAircraft = globals.aircraft;
 
     // 0 = Original (loaded) bitmap
     ALLEGRO_BITMAP* orig = loadBitmap("asi-fast.bmp");

@@ -25,6 +25,7 @@ alt::alt(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 void alt::resize()
 {
     destroyBitmaps();
+    loadedAircraft = globals.aircraft;
 
     if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
         resizeFast();
@@ -399,7 +400,7 @@ void alt::update()
     xPos = settings[0];
     yPos = settings[1];
 
-    if (size != settings[2]) {
+    if (size != settings[2] || loadedAircraft != globals.aircraft) {
         size = settings[2];
         resize();
     }
