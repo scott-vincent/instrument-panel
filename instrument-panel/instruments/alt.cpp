@@ -275,7 +275,7 @@ void alt::renderFast()
 
     // Draw Altitude reels
     int offset = (int)(10 * altitude) % 100;
-    val = altitude / 10;
+    val = (altitude + 2) / 10;
 
     int digit = val / 1000;
     int yPos1 = 262 + 131 * (8 - digit);
