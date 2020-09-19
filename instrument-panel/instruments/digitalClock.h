@@ -33,6 +33,7 @@ private:
     int voltsx10;
     int tempFx10;
     int tempCx10;
+    time_t lastTempChange = 0;
     int utcHours;
     int utcMins;
     int localHours;

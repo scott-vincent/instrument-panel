@@ -63,6 +63,8 @@ struct SimVars
     double autopilotVerticalHold = 0;
     double autopilotAirspeed = 0;
     double autopilotAirspeedHold = 0;
+    double autopilotMach = 0;
+    double autopilotMachHold = 0;
     double gearRetractable = 1;
     double gearLeftPos = 100;
     double gearCentrePos = 100;
@@ -101,11 +103,13 @@ enum EVENT_ID {
     KEY_XPNDR_SET,
     KEY_AP_MASTER,
     KEY_AP_SPD_VAR_SET,
+    KEY_AP_MACH_VAR_SET,
     KEY_HEADING_BUG_SET,
     KEY_AP_ALT_VAR_SET_ENGLISH,
     KEY_AP_VS_VAR_SET_ENGLISH,
     KEY_AP_AIRSPEED_ON,
     KEY_AP_AIRSPEED_OFF,
+    KEY_AP_MACH_ON,
     KEY_AP_HDG_HOLD_ON,
     KEY_AP_HDG_HOLD_OFF,
     KEY_AP_ALT_HOLD_ON,

@@ -337,9 +337,9 @@ void asi::updateFast()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate airspeed angle
-    double speed = simVars->asiAirspeed / 1280.0f;
+    double speed = simVars->asiAirspeed / 10.0f;
 
-    if (speed > 40) {
+    if (speed > 400) {
         targetAirspeedAngle = 233.65;
     }
     else if (speed > 0) {
@@ -367,7 +367,7 @@ void asi::updateFast()
     }
 
     // Calculate mach angle
-    speed = simVars->asiMachSpeed / 20480.0;
+    speed = simVars->asiMachSpeed;
 
     if (speed > 0.3) {
         machAngle = 256 - ((((251.3 * log(speed) + 446.1) + 4.02) * 0.71111111111111) - airspeedAngle);

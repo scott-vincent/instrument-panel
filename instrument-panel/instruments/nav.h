@@ -7,6 +7,12 @@
 class nav : public instrument
 {
 private:
+    enum AutopilotSpd {
+        NoSpd,
+        SpdHold,
+        MachHold
+    };
+
     enum AutopilotHdg {
         NoHdg,
         HdgSet,
@@ -23,7 +29,7 @@ private:
 
     float scaleFactor;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     SimVars* simVars;
     int switchSel = 0;
     int adjustSetSel = 0;
@@ -36,8 +42,14 @@ private:
     int nav2Freq;
     int nav2Standby;
     int transponderState = 3;
+    AutopilotSpd autopilotSpd;
     AutopilotHdg autopilotHdg;
     AutopilotAlt autopilotAlt = AltHold;
+    int airspeed;
+    int machX100;
+    int heading;
+    int altitude;
+    bool showMach = false;
 
     // Hardware knobs
     int selKnob = -1;
@@ -63,6 +75,7 @@ private:
     void addNum3(int val, int x, int y);
     void addNum4(int val, int x, int y, bool leading = true);
     void addNum5(int val, int x, int y, bool leading = true);
+    void addNum2dp(int val, int x, int y);
     void addFreq2dp(int freq, int x, int y);
     void addFreq3dp(int freq, int x, int y);
     void addSquawk(int code, int x, int y);
@@ -78,6 +91,7 @@ private:
     double adjustNav(double val, int adjust);
     int adjustAdf(int val, int adjust);
     int adjustSquawk(int val, int adjust);
+    int adjustMach(int val, int adjust);
     int adjustSpeed(int val, int adjust);
     int adjustHeading(int val, int adjust);
     int adjustAltitude(int val, int adjust);

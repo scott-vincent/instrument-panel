@@ -301,15 +301,21 @@ void digitalClock::update()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
-    voltsx10 = (simVars->dcVolts + .05) * 10;
-    tempCx10 = (simVars->dcTempC + .05) * 10;
-    tempFx10 = (tempCx10 * 9) / 5 + 320;
+    voltsx10 = simVars->dcVolts * 10 + 0.5;
 
-    int mins = (simVars->dcUtcSeconds + .05) / 60;
+    // Smooth out temp change display
+    time(&now);
+    if (now - lastTempChange > 4) {
+        lastTempChange = now;
+        tempCx10 = simVars->dcTempC * 10 + .5;
+        tempFx10 = 320 + tempCx10 * 1.8;
+    }
+
+    int mins = simVars->dcUtcSeconds / 60 + .5;
     utcHours = (mins / 60) % 24;
     utcMins = mins % 60;
 
-    mins = (simVars->dcLocalSeconds + .05) / 60;
+    mins = simVars->dcLocalSeconds / 60 + .5;
     localHours = (mins / 60) % 24;
     localMins = mins % 60;
 
