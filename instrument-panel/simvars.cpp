@@ -435,7 +435,7 @@ char *simvars::view()
         getNextVar();
     }
 
-    if (globals.dataLinked) {
+    if (globals.dataLinked && !globals.arranging) {
         // Update with real value
         double *pVar = (double *)&simVars + varOffset[idx];
         varVal[idx] = *pVar;
