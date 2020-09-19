@@ -163,12 +163,12 @@ void alt::resizeFast()
 /// </summary>
 void alt::render()
 {
-    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
-        renderFast();
+    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
         return;
     }
 
-    if (bitmaps[0] == NULL) {
+    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
+        renderFast();
         return;
     }
 

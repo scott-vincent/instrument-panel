@@ -698,8 +698,8 @@ void dataLink(simvars* t)
 
     // Detect current aircraft and convert to an int.
     // We do this here to save having to do it for each instrument.
-    globals.aircraft = globals.CESSNA_152;
-    strcpy(globals.lastAircraft, globals.Cessna_152_Text);
+    globals.aircraft = globals.NO_AIRCRAFT;
+    strcpy(globals.lastAircraft, "");
 
     int loop = 0;
     while (!globals.quit) {
@@ -765,6 +765,9 @@ void dataLink(simvars* t)
         if (bytes == SOCKET_ERROR && globals.dataLinked) {
             globals.dataLinked = false;
             globals.active = false;
+            globals.aircraft = globals.NO_AIRCRAFT;
+            strcpy(globals.lastAircraft, "");
+            globals.simVars->simVars.cruiseSpeed = 0;
         }
 
 #ifdef _WIN32

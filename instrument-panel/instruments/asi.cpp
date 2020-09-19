@@ -146,7 +146,7 @@ void asi::resizeFast()
 /// </summary>
 void asi::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
         return;
     }
 

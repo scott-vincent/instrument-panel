@@ -24,6 +24,7 @@ struct globalVars
     const int FastPlaneSpeed = 180;
 
     enum Aircraft {
+        NO_AIRCRAFT,
         CESSNA_152,
         CESSNA_172,
         SAVAGE_CUB,
