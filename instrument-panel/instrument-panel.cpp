@@ -49,7 +49,7 @@
  *   |  |  |  |  |  |  |  |  |  |  |  |  |  |
  *   2  3  4 17 27 22 10  9 11  5  6 13 19 26
  *
- *  Physical Pin to BCM GPIO (avoid 8=14, 10=15 and 12=18)
+ *  Physical Pin to BCM GPIO
  *   8 10 12 16 18 22 24 26 32 36 38
  *   |  |  |  |  |  |  |  |  |  |  |
  *  14 15 18 23 24 25  8  7 12 16 20
@@ -79,7 +79,6 @@
 #include "simvars.h"
 
 // Instruments
-#include "asiLearjet.h"
 #include "adiLearjet.h"
 #include "altLearjet.h"
 #include "asi.h"
@@ -468,10 +467,6 @@ void doKeypress(ALLEGRO_EVENT *event)
 void addInstruments()
 {
     // Add instruments
-    if (globals.simVars->isEnabled("ASI Learjet")) {
-        instruments.push_back(new asiLearjet(300, 50, 300));
-    }
-
     if (globals.simVars->isEnabled("ADI Learjet")) {
         instruments.push_back(new adiLearjet(700, 50, 300));
     }

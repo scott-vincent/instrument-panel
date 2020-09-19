@@ -8,7 +8,7 @@ class adiLearjet : public instrument
 private:
     float scaleFactor;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     double bankAngle = 0;
     double pitchAngle = 0;
     int adiCal = 0;

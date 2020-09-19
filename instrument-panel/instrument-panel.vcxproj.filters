@@ -11,9 +11,6 @@
     <ClCompile Include="instruments\altLearjet.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
-    <ClCompile Include="instruments\asiLearjet.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
     <ClCompile Include="instruments\adi.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
@@ -79,9 +76,6 @@
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\altLearjet.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
-    <ClInclude Include="instruments\asiLearjet.h">
       <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\adi.h">

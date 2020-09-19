@@ -15,7 +15,6 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/altLearjet.cpp \
     instruments/annunciator.cpp \
     instruments/asi.cpp \
-    instruments/asiLearjet.cpp \
     instruments/digitalClock.cpp \
     instruments/egt.cpp \
     instruments/fuel.cpp \

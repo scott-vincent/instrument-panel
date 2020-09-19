@@ -6,12 +6,6 @@
   "Monitor": {
     "StartOn": 1
   },
-  "ASI Learjet": {
-    "Enabled": false,
-    "Position X": 562,
-    "Position Y": 20,
-    "Size": 280
-  },
   "ADI Learjet": {
     "Enabled": false,
     "Position X": 882,

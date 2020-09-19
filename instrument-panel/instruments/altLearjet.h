@@ -8,7 +8,7 @@ class altLearjet : public instrument
 private:
     float scaleFactor;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     char hpa[5];
     char inhg[5];
     char stringAltitude[6];

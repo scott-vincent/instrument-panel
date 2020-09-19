@@ -8,7 +8,7 @@ class trimFlaps : public instrument
 private:
     float scaleFactor;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     float trimOffset;
     float flapsOffset = 0;
     float targetFlaps;

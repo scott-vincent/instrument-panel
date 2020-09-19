@@ -21,7 +21,7 @@ class digitalClock : public instrument
 private:
     float scaleFactor;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     DisplayView displayView = Celsius;
     ClockView clockView = LocalTime;
     bool stopWatchRunning = false;

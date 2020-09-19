@@ -6,14 +6,21 @@
 class asi : public instrument
 {
 private:
+    const int FastPlaneSpeed = 180;
+    const double FastPlaneSizeFactor = 1.075;
+
     float scaleFactor;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     int loadedAircraft;
     double airspeedCal;
     double airspeedKnots;
-    double airspeedAngle;
+    double airspeedAngle = 0;
     double angle;
+
+    double targetAirspeedAngle;
+    double machAngle;
+    double prevMachAngle = 248.14444;
 
     // Hardware knobs
     int calKnob = -1;
@@ -25,7 +32,10 @@ public:
     void update();
 
 private:
+    void renderFast();
     void resize();
+    void resizeFast();
+    void updateFast();
     void addVars();
     void addKnobs();
     void updateKnobs();
