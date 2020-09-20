@@ -730,7 +730,7 @@ void nav::navSwitchPressed()
     switch (switchSel) {
     case 0:
     {
-        globals.simVars->write(KEY_COM_RADIO_SWAP);
+        globals.simVars->write(KEY_COM1_RADIO_SWAP);
         break;
     }
     case 1:
@@ -860,7 +860,7 @@ void nav::navAdjustDigits(int adjust)
     case 0:
     {
         double newVal = adjustCom(simVars->com1Standby, adjust);
-        globals.simVars->write(KEY_COM_STBY_RADIO_SET, newVal);
+        globals.simVars->write(KEY_COM1_STBY_RADIO_SET, newVal);
         break;
     }
     case 1:
@@ -983,7 +983,8 @@ double nav::adjustCom(double val, int adjust)
         }
     }
 
-    return whole + frac1 * 0.1 + frac2 * 0.001;
+    // Convert to Hz
+    return whole * 1000 + frac1 * 100 + frac2;
 }
 
 double nav::adjustNav(double val, int adjust)
@@ -1014,7 +1015,13 @@ double nav::adjustNav(double val, int adjust)
         }
     }
 
-    return whole + frac * 0.01;
+    // Convert to BCD (100 + last 4 digits)
+    int digit1 = (whole % 100) / 10;
+    int digit2 = whole % 10;
+    int digit3 = frac / 10;
+    int digit4 = frac % 10;
+
+    return 4096 * digit1 + 256 * digit2 + 16 * digit3 + digit4;
 }
 
 int nav::adjustAdf(int val, int adjust)
@@ -1039,12 +1046,18 @@ int nav::adjustAdf(int val, int adjust)
         val = (int)(val / 10) * 10 + digit;
     }
 
-    return val;
+    // Convert to BCD
+    int digit1 = val / 1000;
+    int digit2 = (val % 1000) / 100;
+    int digit3 = (val % 100) / 10;
+    int digit4 = val % 10;
+
+    return 4096 * digit1 + 256 * digit2 + 16 * digit3 + digit4;
 }
 
 int nav::adjustSquawk(int val, int adjust)
 {
-    // Transponder code is in BCO16
+    // Transponder code is in BCD
     int digit1 = val / 4096;
     val -= digit1 * 4096;
     int digit2 = val / 256;
@@ -1067,6 +1080,7 @@ int nav::adjustSquawk(int val, int adjust)
         break;
     }
 
+    // Convert to BCD
     return digit1 * 4096 + digit2 * 256 + digit3 * 16 + digit4;
 }
 
