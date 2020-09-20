@@ -21,7 +21,7 @@ void oil::resize()
     scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("oil.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("oil.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

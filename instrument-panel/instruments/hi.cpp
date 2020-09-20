@@ -32,7 +32,7 @@ void hi::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("hi.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("hi.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

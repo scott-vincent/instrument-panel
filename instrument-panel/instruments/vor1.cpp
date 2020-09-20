@@ -30,7 +30,7 @@ void vor1::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("vor1.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("vor1.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

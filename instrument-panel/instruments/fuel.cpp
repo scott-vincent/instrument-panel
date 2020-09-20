@@ -22,7 +22,7 @@ void fuel::resize()
     scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("fuel.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("fuel.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

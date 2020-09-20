@@ -36,10 +36,10 @@ void asi::resize()
     // Create bitmaps scaled to correct size (original size is 800)
     scaleFactor = size / 800.0f;
 
-    char origName[256] = "asi.bmp";
+    char origName[256] = "asi.png";
 
     if (globals.aircraft == globals.SAVAGE_CUB) {
-        strcpy(origName, "asi-savage-cub.bmp");
+        strcpy(origName, "asi-savage-cub.png");
     }
 
     // 0 = Original (loaded) bitmap
@@ -93,7 +93,7 @@ void asi::resizeFast()
     scaleFactor = fsize / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("asi-fast.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("asi-fast.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

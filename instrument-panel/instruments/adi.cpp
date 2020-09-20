@@ -30,7 +30,7 @@ void adi::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("adi.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("adi.png");
     addBitmap(orig);
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)

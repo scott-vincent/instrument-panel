@@ -30,7 +30,7 @@ void adf::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("adf.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("adf.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
