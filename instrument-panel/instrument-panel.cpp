@@ -1,8 +1,6 @@
 /*
- * FLIGHT SIMULATOR INSTRUMENT PANEL
- * 
- * Scott Vincent
- * August 2020
+ * Flight Simulator Instrument Panel
+ * Copyright (c) 2020 Scott Vincent
  * 
  * This program was heavily inspired by Dave Ault and contains original artwork
  * by him.
@@ -10,8 +8,7 @@
  *    http://www.learjet45chimera.co.uk/
  *    https://hangar45.net/hangar-45-forum/topic/standby-gauge-software-by-dave-ault
  *
- * It has been completely rewritten and updated to use Allegro5. Hopefully,
- * Allegro5 will support hardware acceleration on the Raspberry Pi 4 soon!
+ * It has been completely rewritten and updated to use Allegro5.
  *
  * NOTE: Allegro5 must be built on RasPi4 as a standard Linux build, not the
  * specific Raspberry Pi build, i.e.:
@@ -42,24 +39,9 @@
  *   settings/instrument-panel.json
  * 
  * On Raspberry Pi you can configure hardware Rotary Encoders for each
- * instrument.
- * 
- *  Physical Pin to BCM GPIO
- *   3  5  7 11 13 15 19 21 23 29 31 33 35 37
- *   |  |  |  |  |  |  |  |  |  |  |  |  |  |
- *   2  3  4 17 27 22 10  9 11  5  6 13 19 26
- *
- *  Physical Pin to BCM GPIO
- *   8 10 12 16 18 22 24 26 32 36 38
- *   |  |  |  |  |  |  |  |  |  |  |
- *  14 15 18 23 24 25  8  7 12 16 20
- * 
- * Each rotary encoder is connected to two BCM GPIO pins (+ ground centre pin).
- * See individual instruments for pins used. Not all instruments have manual
- * controls.
- * 
- * Note: pullUpDnControl does not work on RasPi4 so have to use raspi-gpio
- * command-line to pull up resistors.
+ * instrument. Each rotary encoder is connected to two BCM GPIO pins
+ * (+ ground centre pin). See individual instruments for pins used. Not
+ * all instruments have manual controls.
  */
 
 #include <stdio.h>
@@ -110,6 +92,8 @@ ALLEGRO_EVENT_QUEUE* eventQueue = NULL;
 std::list<instrument*> instruments;
 char lastError[256] = "\0";
 int errorPersist;
+extern const char* versionString;
+int versionPersist = 500;
 
 /// <summary>
 /// Display an error message
@@ -413,6 +397,13 @@ void doRender()
     else if (globals.arranging || globals.simulating) {
         char* text = globals.simVars->view();
         showMessage(al_map_rgb(0x10, 0x10, 0x50), text);
+    }
+
+    if (versionPersist > 0) {
+        int x, y, width;
+        getMessagePos(&x, &y, &width);
+        al_draw_text(globals.font, al_map_rgb(0xa0, 0xa0, 0xa0), x + 15, y + 60, 0, versionString);
+        versionPersist--;
     }
 }
 
