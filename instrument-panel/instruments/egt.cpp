@@ -136,6 +136,11 @@ void egt::update()
     egtRefAngle = 101.718*pow(tmp,3) - 104.843 * pow(tmp, 2) - 96.894 * tmp + 49.022;
     tmp = simVars->engineFuelFlow;
     flowAngle = -.02 * pow(tmp, 3) + .6759 * pow(tmp, 2) - 1.6837 * tmp - 41.4675;
+
+    // Gauge not working so just zero out for now
+    egtAngle = 52;
+    egtRefAngle = 49;
+    flowAngle = -43;
 }
 
 /// <summary>
