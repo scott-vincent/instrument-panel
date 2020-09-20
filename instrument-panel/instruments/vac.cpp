@@ -21,7 +21,7 @@ void vac::resize()
     scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("vac.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("vac.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

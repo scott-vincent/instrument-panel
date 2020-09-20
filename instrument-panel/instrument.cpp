@@ -91,7 +91,7 @@ void instrument::destroyBitmaps()
 void instrument::dimInstrument()
 {
     if (dim == NULL) {
-        dim = loadBitmap("dim.bmp");
+        dim = loadBitmap("dim.png");
     }
 
     // Set blender to multiply (shades of grey darken, white has no effect)

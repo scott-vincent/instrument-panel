@@ -30,7 +30,7 @@ void nav::resize()
     scaleFactor = size / 1600.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("nav.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("nav.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

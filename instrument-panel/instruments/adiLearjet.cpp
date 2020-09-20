@@ -31,7 +31,7 @@ void adiLearjet::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("adi-learjet.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("adi-learjet.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

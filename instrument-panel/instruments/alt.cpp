@@ -36,7 +36,7 @@ void alt::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("alt.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("alt.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -114,7 +114,7 @@ void alt::resizeFast()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("alt-fast.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("alt-fast.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {

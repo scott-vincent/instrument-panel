@@ -31,7 +31,7 @@ void digitalClock::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("digital-clock.bmp");
+    ALLEGRO_BITMAP* orig = loadBitmap("digital-clock.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
