@@ -866,7 +866,6 @@ void nav::navAdjustDigits(int adjust)
     case 1:
     {
         double newVal = adjustNav(simVars->nav1Standby, adjust);
-        newVal = 111.60;
         globals.simVars->write(KEY_NAV1_STBY_SET, newVal);
         break;
     }
