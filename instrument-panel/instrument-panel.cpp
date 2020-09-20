@@ -402,7 +402,7 @@ void doRender()
     if (versionPersist > 0) {
         int x, y, width;
         getMessagePos(&x, &y, &width);
-        al_draw_text(globals.font, al_map_rgb(0xa0, 0xa0, 0xa0), x + 15, y + 60, 0, versionString);
+        al_draw_text(globals.font, al_map_rgb(0xa0, 0xa0, 0xa0), x + width - 80, y + 45, 0, versionString);
         versionPersist--;
     }
 }
