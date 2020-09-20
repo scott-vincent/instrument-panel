@@ -9,7 +9,9 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    double angle;
+    double egtAngle;
+    double egtRefAngle;
+    double flowAngle;
 
 public:
     egt(int xPos, int yPos, int size);
