@@ -17,7 +17,8 @@ enum Aircraft {
     CESSNA_152,
     CESSNA_172,
     SAVAGE_CUB,
-    OTHER_AIRCRAFT
+    OTHER_AIRCRAFT,
+    OTHER_AIRCRAFT2
 };
 
 struct globalVars
@@ -25,7 +26,7 @@ struct globalVars
     const char* Cessna_152_Text = "Cessna 152 Asobo";
     const char* Cessna_172_Text = "Cessna Skyhawk G1000 Asobo";
     const char* Savage_Cub_Text = "Asobo Savage Cub";
-    const int FastAircraftSpeed = 180;
+    const int FastAircraftSpeed = 195;
 
     const char* BitmapDir = "bitmaps/";
     const char* SettingsFile = "settings/instrument-panel.json";

@@ -743,9 +743,15 @@ void dataLink(simvars* t)
                             globals.aircraft = SAVAGE_CUB;
                         }
                         else {
-                            globals.aircraft = OTHER_AIRCRAFT;
+                            // Need to flip between other aircraft so that instruments
+                            // can detect the aircraft has changed.
+                            if (globals.aircraft == OTHER_AIRCRAFT) {
+                                globals.aircraft = OTHER_AIRCRAFT2;
+                            }
+                            else {
+                                globals.aircraft = OTHER_AIRCRAFT;
+                            }
                         }
-
                         strcpy(lastAircraft, t->simVars.aircraft);
                     }
                 }

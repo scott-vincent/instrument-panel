@@ -229,6 +229,10 @@ void nav::renderAutopilot()
     int destSizeX = 128 * scaleFactor;
     int destSizeY = 50 * scaleFactor;
 
+    if (!simVars->autopilotEngaged) {
+        return;
+    }
+
     // Add autopilot set values
     if (airspeed > 0) {
         if (showMach) {
@@ -240,7 +244,7 @@ void nav::renderAutopilot()
     }
     addNum3(heading, 816, 82);
     addNum5(altitude, 1188, 82, false);
-    
+
     // Add spd hold display
     if (autopilotSpd == SpdHold) {
         al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 255 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);

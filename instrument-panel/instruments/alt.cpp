@@ -274,7 +274,7 @@ void alt::renderFast()
     addSmallNumber(465 * scaleFactor, val / 1000, (val % 1000) / 100, (val % 100) / 10, val % 10);
 
     // Draw Altitude reels
-    int offset = (int)(10 * altitude) % 100;
+    int offset = (int)(10 * (altitude + 3)) % 100;
     val = (altitude + 3) / 10;
 
     int digit = val / 1000;
