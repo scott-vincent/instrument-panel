@@ -1,15 +1,18 @@
 #ifndef _ALT_H_
 #define _ALT_H_
 
+#include "simvarDefs.h"
 #include "instrument.h"
 
 class alt : public instrument
 {
 private:
+    SimVars* simVars;
+    Aircraft loadedAircraft = NO_AIRCRAFT;
+    bool fastAircraft = false;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    int loadedAircraft;
     double mb;            // millibars
     double inhg;          // inches of mercury
     double angle;

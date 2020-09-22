@@ -14,6 +14,7 @@ const char *MonitorGroup = "Monitor";
 const char *MonitorStartOn = "StartOn";
 
 extern const char* SimVarDefs[][2];
+char lastAircraft[256] = "\0";
 
 void dataLink(simvars*);
 void showError(const char* msg);
@@ -698,8 +699,8 @@ void dataLink(simvars* t)
 
     // Detect current aircraft and convert to an int.
     // We do this here to save having to do it for each instrument.
-    globals.aircraft = globals.NO_AIRCRAFT;
-    strcpy(globals.lastAircraft, "");
+    globals.aircraft = NO_AIRCRAFT;
+    strcpy(lastAircraft, "");
 
     int loop = 0;
     while (!globals.quit) {
@@ -731,18 +732,21 @@ void dataLink(simvars* t)
                     globals.active = (rpmMatch < 3000);
 
                     // Identify aircraft
-                    if (strcmp(t->simVars.aircraft, globals.lastAircraft) != 0) {
-                        if (strcmp(t->simVars.aircraft, globals.Cessna_172_Text) == 0) {
-                            globals.aircraft = globals.CESSNA_172;
+                    if (strcmp(t->simVars.aircraft, lastAircraft) != 0) {
+                        if (strcmp(t->simVars.aircraft, globals.Cessna_152_Text) == 0) {
+                            globals.aircraft = CESSNA_152;
+                        }
+                        else if (strcmp(t->simVars.aircraft, globals.Cessna_172_Text) == 0) {
+                            globals.aircraft = CESSNA_172;
                         }
                         else if (strcmp(t->simVars.aircraft, globals.Savage_Cub_Text) == 0) {
-                            globals.aircraft = globals.SAVAGE_CUB;
+                            globals.aircraft = SAVAGE_CUB;
                         }
                         else {
-                            globals.aircraft = globals.CESSNA_152;
+                            globals.aircraft = OTHER_AIRCRAFT;
                         }
 
-                        strcpy(globals.lastAircraft, t->simVars.aircraft);
+                        strcpy(lastAircraft, t->simVars.aircraft);
                     }
                 }
                 else if (bytes > 0) {
@@ -765,9 +769,8 @@ void dataLink(simvars* t)
         if (bytes == SOCKET_ERROR && globals.dataLinked) {
             globals.dataLinked = false;
             globals.active = false;
-            globals.aircraft = globals.NO_AIRCRAFT;
-            strcpy(globals.lastAircraft, "");
-            globals.simVars->simVars.cruiseSpeed = 0;
+            globals.aircraft = NO_AIRCRAFT;
+            strcpy(lastAircraft, "");
         }
 
 #ifdef _WIN32

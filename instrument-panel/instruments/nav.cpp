@@ -169,7 +169,9 @@ void nav::renderNav()
 
     // Add panel 3 frequencies
     addNum4(simVars->adfFreq, 273, 278);
-    addNum4(simVars->adfStandby, 586, 278);
+    if (hasAdfStandby) {
+        addNum4(simVars->adfStandby, 586, 278);
+    }
 
     // Add squawk
     addSquawk(simVars->transponderCode, 968, 278);
@@ -222,13 +224,11 @@ void nav::renderAutopilot()
     int destSizeY = 50 * scaleFactor;
 
     // Add autopilot set values
-    if (autopilotSpd == SpdHold) {
-        if (showMach) {
-            addNum2dp(machX100, 421, 82);
-        }
-        else {
-            addNum4(airspeed, 403, 82, false);
-        }
+    if (showMach) {
+        addNum2dp(machX100, 421, 82);
+    }
+    else {
+        addNum4(airspeed, 403, 82, false);
     }
     addNum3(heading, 816, 82);
     addNum5(altitude, 1188, 82, false);
@@ -521,6 +521,18 @@ void nav::update()
     nav2Freq = (simVars->nav2Freq + 0.0000001) * 100.0;
     nav2Standby = (simVars->nav2Standby + 0.0000001) * 100.0;
 
+    if (adfChanged) {
+        // See which adf changes
+        if (simVars->adfStandby != prevAdfStandby) {
+            hasAdfStandby = true;
+            adfChanged = false;
+        }
+        else if (simVars->adfFreq != prevAdf) {
+            hasAdfStandby = false;
+            adfChanged = false;
+        }
+    }
+
     airspeed = simVars->autopilotAirspeed + 0.5;
     machX100 = simVars->autopilotMach * 100 + 0.5;
     heading = simVars->autopilotHeading + 0.5;
@@ -750,9 +762,13 @@ void nav::navSwitchPressed()
     }
     case 4:
     {
-        int newFreq = simVars->adfStandby;
-        globals.simVars->write(KEY_ADF_COMPLETE_SET, simVars->adfFreq);
-        globals.simVars->write(KEY_ADF1_PRIMARY_SET, newFreq);
+        if (hasAdfStandby) {
+            int freq = adjustAdf(simVars->adfFreq, 0);
+            int standby = adjustAdf(simVars->adfStandby, 0);
+            globals.simVars->write(KEY_ADF_COMPLETE_SET, freq);
+            // This isn't working, looks like an SDK bug!
+            globals.simVars->write(KEY_ADF1_PRIMARY_SET, standby);
+        }
         break;
     }
     case 5:
@@ -883,8 +899,18 @@ void nav::navAdjustDigits(int adjust)
     }
     case 4:
     {
-        int newVal = adjustAdf(simVars->adfStandby, adjust);
+        int oldVal;
+        if (hasAdfStandby) {
+            oldVal = simVars->adfStandby;
+        }
+        else {
+            oldVal = simVars->adfFreq;
+        }
+        int newVal = adjustAdf(oldVal, adjust);
+        prevAdf = simVars->adfFreq;
+        prevAdfStandby = simVars->adfStandby;
         globals.simVars->write(KEY_ADF_COMPLETE_SET, newVal);
+        adfChanged = true;
         break;
     }
     case 5:
@@ -970,21 +996,40 @@ double nav::adjustCom(double val, int adjust)
         // Adjust 100ths and 1000ths
         frac2 += adjust * 5;
 
-        // Skip .020, .045, .070 and .095
-        if (frac2 == 20 || frac2 == 45 || frac2 == 70 || frac2 == 95) {
-            frac2 += adjust * 5;
-        }
-
         if (frac2 >= 100) {
             frac2 -= 100;
         }
         else if (frac2 < 0) {
             frac2 += 100;
         }
+
+        // Skip .020, .045, .070 and .095
+        if (frac2 == 95) {
+            frac2 += adjust * 5;
+            if (frac2 >= 100) {
+                frac2 -= 100;
+            }
+        }
+        else if (frac2 == 20 || frac2 == 45 || frac2 == 70) {
+            frac2 += adjust * 5;
+        }
+
+        // .020 shows as .025 and .070 shows as .075
+        if (frac2 == 25 || frac2 == 75) {
+            frac2 -= 5;
+        }
     }
 
-    // Convert to Hz
-    return whole * 1000 + frac1 * 100 + frac2;
+    // Convert to BCD
+    int digit1 = whole / 100;
+    int digit2 = (whole % 100) / 10;
+    int digit3 = whole % 10;
+    int digit4 = frac1;
+    int digit5 = frac2 / 10;
+    int digit6 = frac2 % 10;
+
+    // Return digit6 as fraction
+    return 65536 * digit1 + 4096 * digit2 + 256 * digit3 + 16 * digit4 + digit5 + digit6 * 0.1;
 }
 
 double nav::adjustNav(double val, int adjust)
@@ -1015,44 +1060,45 @@ double nav::adjustNav(double val, int adjust)
         }
     }
 
-    // Convert to BCD (100 + last 4 digits)
-    int digit1 = (whole % 100) / 10;
-    int digit2 = whole % 10;
-    int digit3 = frac / 10;
-    int digit4 = frac % 10;
+    // Convert to BCD
+    int digit1 = whole / 100;
+    int digit2 = (whole % 100) / 10;
+    int digit3 = whole % 10;
+    int digit4 = frac / 10;
+    int digit5 = frac % 10;
 
-    return 4096 * digit1 + 256 * digit2 + 16 * digit3 + digit4;
+    return 65536 * digit1 + 4096 * digit2 + 256 * digit3 + 16 * digit4 + digit5;
 }
 
 int nav::adjustAdf(int val, int adjust)
 {
+    int highDigits = (val % 10000) / 100;
+    int digit3 = (val % 100) / 10;
+    int digit4 = val % 10;
+
     if (adjustSetSel == 0) {
-        val += adjust * 100;
-        if (val >= 1800) {
-            val -= 1700;
+        highDigits += adjust;
+        if (highDigits >= 18) {
+            highDigits -= 17;
         }
-        else if (val < 100) {
-            val += 1700;
+        else if (highDigits < 1) {
+            highDigits += 17;
         }
     }
     else if (adjustSetSel == 1) {
         // Adjust 3rd digit
-        int digit = adjustDigit(((int)val % 100) / 10, adjust);
-        val = (int)(val / 100) * 100 + digit * 10 + (val % 10);
+        digit3 = adjustDigit(digit3, adjust);
     }
     else {
         // Adjust 4th digit
-        int digit = adjustDigit((int)val % 10, adjust);
-        val = (int)(val / 10) * 10 + digit;
+        digit4 = adjustDigit(digit4, adjust);
     }
 
     // Convert to BCD
-    int digit1 = val / 1000;
-    int digit2 = (val % 1000) / 100;
-    int digit3 = (val % 100) / 10;
-    int digit4 = val % 10;
+    int digit1 = highDigits / 10;
+    int digit2 = highDigits % 10;
 
-    return 4096 * digit1 + 256 * digit2 + 16 * digit3 + digit4;
+    return 268435456.0 * digit1 + 16777216.0 * digit2 + 1048576.0 * digit3 + 65536 * digit4;
 }
 
 int nav::adjustSquawk(int val, int adjust)

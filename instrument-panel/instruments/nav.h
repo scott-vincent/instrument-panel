@@ -41,6 +41,10 @@ private:
     int nav2Freq;
     int nav2Standby;
     int transponderState = 3;
+    int prevAdf;
+    int prevAdfStandby;
+    bool adfChanged = false;
+    bool hasAdfStandby = true;
     AutopilotSpd autopilotSpd;
     AutopilotHdg autopilotHdg;
     AutopilotAlt autopilotAlt = AltHold;

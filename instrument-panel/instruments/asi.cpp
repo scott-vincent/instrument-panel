@@ -17,6 +17,7 @@ asi::asi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
     }
 #endif
 
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -26,9 +27,8 @@ asi::asi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 void asi::resize()
 {
     destroyBitmaps();
-    loadedAircraft = globals.aircraft;
 
-    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
+    if (fastAircraft) {
         resizeFast();
         return;
     }
@@ -36,10 +36,12 @@ void asi::resize()
     // Create bitmaps scaled to correct size (original size is 800)
     scaleFactor = size / 800.0f;
 
-    char origName[256] = "asi.png";
-
-    if (globals.aircraft == globals.SAVAGE_CUB) {
+    char origName[256];
+    if (loadedAircraft == SAVAGE_CUB) {
         strcpy(origName, "asi-savage-cub.png");
+    }
+    else {
+        strcpy(origName, "asi.png");
     }
 
     // 0 = Original (loaded) bitmap
@@ -150,7 +152,7 @@ void asi::render()
         return;
     }
 
-    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
+    if (fastAircraft) {
         renderFast();
         return;
     }
@@ -271,13 +273,19 @@ void asi::renderFast()
 /// </summary>
 void asi::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+    }
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];
 
-    if (size != settings[2] || loadedAircraft != globals.aircraft) {
+    if (size != settings[2] || aircraftChanged) {
         size = settings[2];
         resize();
     }
@@ -289,18 +297,16 @@ void asi::update()
     }
 #endif
 
-    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
+    if (fastAircraft) {
         updateFast();
         return;
     }
 
     // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
     airspeedCal = -35 - (simVars->asiAirspeedCal * 2.5);
 
     // Calculate values - Not a linear scale!
-    if (globals.aircraft == globals.SAVAGE_CUB) {
+    if (loadedAircraft == SAVAGE_CUB) {
         airspeedKnots = simVars->asiAirspeed * 2;
     }
     else {
@@ -330,9 +336,6 @@ void asi::update()
 /// </summary>
 void asi::updateFast()
 {
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
     // Calculate airspeed angle
     double speed = simVars->asiAirspeed / 10.0f;
 
@@ -409,7 +412,7 @@ void asi::updateKnobs()
         // Change calibration by knob movement amount (adjust for desired sensitivity)
         int adjust = (int)((prevVal - val) / 2);
         if (adjust != 0) {
-            double newVal = globals.simVars->simVars.asiAirspeedCal + adjust;
+            double newVal = simVars->asiAirspeedCal + adjust;
 
             globals.simVars->write(KEY_TRUE_AIRSPEED_CAL_SET, newVal);
             prevVal = val;

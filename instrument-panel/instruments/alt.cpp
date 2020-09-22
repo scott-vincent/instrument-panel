@@ -16,6 +16,7 @@ alt::alt(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
     }
 #endif
 
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -25,9 +26,8 @@ alt::alt(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 void alt::resize()
 {
     destroyBitmaps();
-    loadedAircraft = globals.aircraft;
 
-    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
+    if (fastAircraft) {
         resizeFast();
         return;
     }
@@ -167,7 +167,7 @@ void alt::render()
         return;
     }
 
-    if (globals.simVars->simVars.cruiseSpeed >= globals.FastPlaneSpeed) {
+    if (fastAircraft) {
         renderFast();
         return;
     }
@@ -394,13 +394,20 @@ void alt::addLargeShadow()
 /// </summary>
 void alt::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];
 
-    if (size != settings[2] || loadedAircraft != globals.aircraft) {
+    if (size != settings[2] || aircraftChanged) {
         size = settings[2];
         resize();
     }
@@ -412,12 +419,7 @@ void alt::update()
     }
 #endif
 
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
     // Calculate values
-
-    // Add altitude correction
     mb = simVars->altKollsman * 33.86389;
     inhg = simVars->altKollsman;
 
@@ -472,7 +474,7 @@ void alt::updateKnobs()
         // Change calibration by knob movement amount (adjust for desired sensitivity)
         double adjust = (int)((prevVal - val) / 2) * 0.01;
         if (adjust != 0) {
-            double newVal = (globals.simVars->simVars.altKollsman + adjust) * 541.82224;
+            double newVal = (simVars->altKollsman + adjust) * 541.82224;
 
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;

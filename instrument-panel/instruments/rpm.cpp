@@ -153,7 +153,7 @@ void rpm::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    if (globals.aircraft == globals.SAVAGE_CUB) {
+    if (globals.aircraft == SAVAGE_CUB) {
         if (simVars->rpmPercent > 10) {
             angle = (simVars->rpmPercent - 10) * 2 + 25.0 - 123;
         }

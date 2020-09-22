@@ -1,6 +1,7 @@
 #ifndef _ASI_H_
 #define _ASI_H_
 
+#include "simvarDefs.h"
 #include "instrument.h"
 
 class asi : public instrument
@@ -8,10 +9,12 @@ class asi : public instrument
 private:
     const double FastPlaneSizeFactor = 1.075;
 
+    SimVars* simVars;
+    Aircraft loadedAircraft = NO_AIRCRAFT;
+    bool fastAircraft = false;
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
-    int loadedAircraft;
     double airspeedCal;
     double airspeedKnots;
     double airspeedAngle = 0;
