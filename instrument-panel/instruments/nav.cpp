@@ -113,6 +113,12 @@ void nav::resize()
     al_draw_bitmap_region(orig, 1506, 880, 23, 50, 0, 0, 0);
     addBitmap(bmp);
 
+    // 14 = Autopilot ALTS display
+    bmp = al_create_bitmap(128, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 896, 830, 128, 50, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -224,15 +230,22 @@ void nav::renderAutopilot()
     int destSizeY = 50 * scaleFactor;
 
     // Add autopilot set values
-    if (showMach) {
-        addNum2dp(machX100, 421, 82);
-    }
-    else {
-        addNum4(airspeed, 403, 82, false);
+    if (airspeed > 0) {
+        if (showMach) {
+            addNum2dp(machX100, 421, 82);
+        }
+        else {
+            addNum4(airspeed, 403, 82, false);
+        }
     }
     addNum3(heading, 816, 82);
     addNum5(altitude, 1188, 82, false);
     
+    // Add spd hold display
+    if (autopilotSpd == SpdHold) {
+        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 255 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+    }
+
     // Add hdg display
     switch (autopilotHdg) {
     case HdgSet:
@@ -261,7 +274,7 @@ void nav::renderAutopilot()
         al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         addVerticalSpeed(836, 252);
         // Add white alts display
-        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 1115 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1115 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     }
     case AltChange:
@@ -270,7 +283,7 @@ void nav::renderAutopilot()
         // + S = ALTS
         al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 788 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
         // Add white alt display
-        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 94, 50, 1115 * scaleFactor, 252 * scaleFactor, 94 * scaleFactor, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 94, 50, 1115 * scaleFactor, 252 * scaleFactor, 94 * scaleFactor, destSizeY, 0);
         break;
     }
 }
@@ -789,6 +802,8 @@ void nav::autopilotSwitchPressed()
     switch (switchSel) {
     case 6:
     {
+        // Capture current values when autopilot enabled
+        captureCurrentValues();
         globals.simVars->write(KEY_AP_MASTER);
         break;
     }
@@ -810,16 +825,6 @@ void nav::autopilotSwitchPressed()
         }
         else {
             // Switch to Airspeed hold.
-            // Set autopilot speed to within 10 knots of current speed
-            int holdSpeed = simVars->asiAirspeed;
-            int tens = holdSpeed % 10;
-            if (tens < 5) {
-                holdSpeed -= tens;
-            }
-            else {
-                holdSpeed += 10 - tens;
-            }
-            globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
             globals.simVars->write(KEY_AP_AIRSPEED_ON);
             showMach = false;
         }
@@ -845,16 +850,6 @@ void nav::autopilotSwitchPressed()
         }
         else {
             autopilotAlt = AltHold;
-            // Set autopilot altitude to within 100ft of current altitude
-            int holdAlt = simVars->altAltitude;
-            int hundreds = holdAlt % 100;
-            if (hundreds < 30) {
-                holdAlt -= hundreds;
-            }
-            else {
-                holdAlt += 100 - hundreds;
-            }
-            globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAlt);
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         }
         break;
@@ -868,6 +863,45 @@ void nav::autopilotSwitchPressed()
         break;
     }
     }
+}
+
+void nav::captureCurrentValues()
+{
+    // Set autopilot speed to within 10 knots of current speed
+    int holdSpeed = simVars->asiAirspeed;
+    int tens = holdSpeed % 10;
+    if (tens < 5) {
+        holdSpeed -= tens;
+    }
+    else {
+        holdSpeed += 10 - tens;
+    }
+    globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
+
+    // Set autopilot heading to within 10 degrees of current heading
+    int holdHeading = simVars->hiHeading;
+    int lastDigit = holdHeading % 10;
+    if (lastDigit < 5) {
+        holdHeading -= lastDigit;
+    }
+    else {
+        holdHeading += 10 - lastDigit;
+        if (holdHeading > 359) {
+            holdHeading -= 360;
+        }
+    }
+    globals.simVars->write(KEY_HEADING_BUG_SET, holdHeading);
+
+    // Set autopilot altitude to within 100ft of current altitude
+    int holdAlt = simVars->altAltitude;
+    int hundreds = holdAlt % 100;
+    if (hundreds < 30) {
+        holdAlt -= hundreds;
+    }
+    else {
+        holdAlt += 100 - hundreds;
+    }
+    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAlt);
 }
 
 void nav::navAdjustDigits(int adjust)

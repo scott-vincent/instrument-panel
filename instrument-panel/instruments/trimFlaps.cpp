@@ -8,6 +8,7 @@ trimFlaps::trimFlaps(int xPos, int yPos, int size) : instrument(xPos, yPos, size
 {
     setName("Trim Flaps");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -170,6 +171,13 @@ void trimFlaps::render()
 /// </summary>
 void trimFlaps::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -187,9 +195,6 @@ void trimFlaps::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     trimOffset = simVars->tfElevatorTrim * 20.0;
@@ -255,9 +260,15 @@ void trimFlaps::updateKnobs()
     if (val != INT_MIN) {
         if (val > lastTrimVal) {
             globals.simVars->write(KEY_ELEV_TRIM_DN);
+            if (fastAircraft) {
+                globals.simVars->write(KEY_ELEV_TRIM_DN);
+            }
         }
         else if (val < lastTrimVal) {
             globals.simVars->write(KEY_ELEV_TRIM_UP);
+            if (fastAircraft) {
+                globals.simVars->write(KEY_ELEV_TRIM_UP);
+            }
         }
         lastTrimVal = val;
     }
@@ -272,12 +283,12 @@ void trimFlaps::updateKnobs()
         }
         else {
             // Value large enough to trigger yet?
-            if (lastFlapsVal - val > 6) {
+            if (lastFlapsVal - val > 5) {
                 // Flaps down one notch
                 globals.simVars->write(KEY_FLAPS_INCR);
                 lastFlapsVal = val;
             }
-            else if (val - lastFlapsVal > 6) {
+            else if (val - lastFlapsVal > 5) {
                 // Flaps up one notch
                 globals.simVars->write(KEY_FLAPS_DECR);
                 lastFlapsVal = val;

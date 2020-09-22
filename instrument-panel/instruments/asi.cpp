@@ -9,6 +9,7 @@ asi::asi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("ASI");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -17,7 +18,6 @@ asi::asi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
     }
 #endif
 
-    simVars = &globals.simVars->simVars;
     resize();
 }
 

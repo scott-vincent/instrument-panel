@@ -1,11 +1,15 @@
 #ifndef _TRIM_FLAPS_H_
 #define _TRIM_FLAPS_H_
 
+#include "simvarDefs.h"
 #include "instrument.h"
 
 class trimFlaps : public instrument
 {
 private:
+    SimVars* simVars;
+    Aircraft loadedAircraft = NO_AIRCRAFT;
+    bool fastAircraft = false;
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)

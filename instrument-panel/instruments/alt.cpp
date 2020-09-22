@@ -8,6 +8,7 @@ alt::alt(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("ALT");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -16,7 +17,6 @@ alt::alt(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
     }
 #endif
 
-    simVars = &globals.simVars->simVars;
     resize();
 }
 

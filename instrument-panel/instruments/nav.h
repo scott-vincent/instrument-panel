@@ -26,10 +26,10 @@ private:
         AltChange
     };
 
+    SimVars* simVars;
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
-    SimVars* simVars;
     int switchSel = 0;
     int adjustSetSel = 0;
     int com1Freq;
@@ -88,6 +88,7 @@ private:
     void updateKnobs();
     void navSwitchPressed();
     void autopilotSwitchPressed();
+    void captureCurrentValues();
     void navAdjustDigits(int adjust);
     void autopilotAdjustDigits(int adjust);
     double adjustCom(double val, int adjust);
