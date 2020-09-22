@@ -62,6 +62,7 @@ const char* SimVarDefs[][2] = {
     { "Autopilot Airspeed Hold Var", "knots" },
     { "Autopilot Mach Hold Var", "number" },
     { "Autopilot Airspeed Hold", "bool" },
+    { "Autothrottle Active", "bool" },
     { "Is Gear Retractable", "bool" },
     { "Gear Left Position", "percent" },
     { "Gear Center Position", "percent" },
@@ -118,5 +119,6 @@ WriteEvent WriteEvents[] = {
     { KEY_AP_ALT_HOLD_ON, "AP_ALT_HOLD_ON" },
     { KEY_AP_ALT_HOLD_OFF, "AP_ALT_HOLD_OFF" },
     { KEY_AP_PANEL_ALTITUDE_ON, "AP_PANEL_ALTITUDE_ON" },
+    { KEY_AUTO_THROTTLE_ARM, "AUTO_THROTTLE_ARM" },
     { SIM_STOP, NULL }
 };

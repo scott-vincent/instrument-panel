@@ -64,6 +64,7 @@ struct SimVars
     double autopilotAirspeed = 0;
     double autopilotMach = 0;
     double autopilotAirspeedHold = 0;
+    double autothrottleActive = 0;
     double gearRetractable = 1;
     double gearLeftPos = 100;
     double gearCentrePos = 100;
@@ -120,7 +121,8 @@ enum EVENT_ID {
     KEY_AP_HDG_HOLD_OFF,
     KEY_AP_ALT_HOLD_ON,
     KEY_AP_ALT_HOLD_OFF,
-    KEY_AP_PANEL_ALTITUDE_ON
+    KEY_AP_PANEL_ALTITUDE_ON,
+    KEY_AUTO_THROTTLE_ARM
 };
 
 struct WriteEvent {

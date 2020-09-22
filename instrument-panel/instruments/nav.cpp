@@ -84,39 +84,39 @@ void nav::resize()
     addBitmap(bmp);
 
     // 9 = Autopilot switches
-    bmp = al_create_bitmap(400, 34);
+    bmp = al_create_bitmap(480, 34);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 800, 800, 400, 34, 0, 0, 0);
+    al_draw_bitmap_region(orig, 800, 800, 480, 34, 0, 0, 0);
     addBitmap(bmp);
 
     // 10 = Autopilot display
-    bmp = al_create_bitmap(1024, 50);
+    bmp = al_create_bitmap(1152, 50);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 880, 1024, 50, 0, 0, 0);
+    al_draw_bitmap_region(orig, 0, 880, 1152, 50, 0, 0, 0);
     addBitmap(bmp);
 
     // 11 = Autopilot vertical speed digits
     bmp = al_create_bitmap(320, 50);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1024, 880, 320, 50, 0, 0, 0);
+    al_draw_bitmap_region(orig, 1152, 880, 320, 50, 0, 0, 0);
     addBitmap(bmp);
 
-    // 12 = Autopilot vertical speed fpm
+    // 12 = Autopilot vertical speed 00fpm
     bmp = al_create_bitmap(162, 50);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1344, 880, 162, 50, 0, 0, 0);
+    al_draw_bitmap_region(orig, 1414, 830, 162, 50, 0, 0, 0);
     addBitmap(bmp);
 
     // 13 = Autopilot vertical speed minus
     bmp = al_create_bitmap(23, 50);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1506, 880, 23, 50, 0, 0, 0);
+    al_draw_bitmap_region(orig, 1576, 830, 23, 50, 0, 0, 0);
     addBitmap(bmp);
 
     // 14 = Autopilot ALTS display
     bmp = al_create_bitmap(128, 50);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 896, 830, 128, 50, 0, 0, 0);
+    al_draw_bitmap_region(orig, 1286, 830, 128, 50, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -223,11 +223,16 @@ void nav::renderAutopilot()
 
     // Add autopilot switch selected
     int selPos = 80 * (switchSel - 6);
-    int destPos = 443 + 160 * (switchSel - 6);
-    al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 340 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+    int destPos = 363 + 160 * (switchSel - 6);
+    al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 339 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
 
     int destSizeX = 128 * scaleFactor;
     int destSizeY = 50 * scaleFactor;
+
+    // Add auto throttle display
+    if (simVars->autothrottleActive) {
+        al_draw_scaled_bitmap(bitmaps[10], 1024, 0, 128, 50, 234 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+    }
 
     if (!simVars->autopilotEngaged) {
         return;
@@ -247,47 +252,47 @@ void nav::renderAutopilot()
 
     // Add spd hold display
     if (autopilotSpd == SpdHold) {
-        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 255 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 353 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 
     // Add hdg display
     switch (autopilotHdg) {
     case HdgSet:
-        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 385 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 483 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     case LevelFlight:
-        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 385 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 483 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     }
 
     // Add ap display
     if (simVars->autopilotEngaged) {
-        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 530 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 628 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 
     // Add alt display
     switch (autopilotAlt) {
     case AltHold:
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     case PitchHold:
-        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     case VerticalSpeedHold:
     {
-        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         addVerticalSpeed(836, 252);
         // Add white alts display
-        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1115 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1213 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         break;
     }
     case AltChange:
         // ALT
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 680 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
         // + S = ALTS
-        al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 788 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 886 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
         // Add white alt display
-        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 94, 50, 1115 * scaleFactor, 252 * scaleFactor, 94 * scaleFactor, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 94, 50, 1213 * scaleFactor, 252 * scaleFactor, 94 * scaleFactor, destSizeY, 0);
         break;
     }
 }
@@ -611,19 +616,20 @@ void nav::addVars()
     globals.simVars->addVar(name, "Adf Active Frequency:1", false, 1, 100);
     globals.simVars->addVar(name, "Adf Standby Frequency:1", false, 1, 100);
     globals.simVars->addVar(name, "Transponder Code:1", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Available", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Master", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Available", true, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Master", true, 1, 0);
     globals.simVars->addVar(name, "Autopilot Heading Lock Dir", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Heading Lock", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Wing Leveler", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Heading Lock", true, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Wing Leveler", true, 1, 0);
     globals.simVars->addVar(name, "Autopilot Altitude Lock Var", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Altitude Lock", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Pitch Hold", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Altitude Lock", true, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Pitch Hold", true, 1, 0);
     globals.simVars->addVar(name, "Autopilot Vertical Hold Var", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Vertical Hold", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Vertical Hold", true, 1, 0);
     globals.simVars->addVar(name, "Autopilot Airspeed Hold Var", false, 1, 0);
     globals.simVars->addVar(name, "Autopilot Mach Hold Var", false, 1, 0);
-    globals.simVars->addVar(name, "Autopilot Airspeed Hold", false, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Airspeed Hold", true, 1, 0);
+    globals.simVars->addVar(name, "Autothrottle Active", true, 1, 0);
 }
 
 #ifndef _WIN32
@@ -651,7 +657,7 @@ void nav::updateKnobs()
         // Convert knob value to selection (adjust for desired sensitivity)
         int maxSwitch;
         if (simVars->autopilotAvailable) {
-            maxSwitch = 10;
+            maxSwitch = 11;
         }
         else {
             maxSwitch = 5;
@@ -813,6 +819,12 @@ void nav::autopilotSwitchPressed()
     }
     case 7:
     {
+        // Toggle auto throttle
+        globals.simVars->write(KEY_AUTO_THROTTLE_ARM);
+        break;
+    }
+    case 8:
+    {
         if (autopilotSpd == SpdHold) {
             // Switch between knots and mach display.
             // Sets currently displayed value before switching to
@@ -834,7 +846,7 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
-    case 8:
+    case 9:
     {
         if (autopilotHdg == HdgSet) {
             autopilotHdg = LevelFlight;
@@ -846,7 +858,7 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
-    case 9:
+    case 10:
     {
         if (autopilotAlt == AltHold) {
             autopilotAlt = PitchHold;
@@ -858,7 +870,7 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
-    case 10:
+    case 11:
     {
         // Vertical speed hold not working so set target altitude instead
         autopilotAlt = AltChange;
@@ -963,7 +975,7 @@ void nav::navAdjustDigits(int adjust)
 void nav::autopilotAdjustDigits(int adjust)
 {
     switch (switchSel) {
-    case 7:
+    case 8:
     {
         if (autopilotSpd == SpdHold) {
             if (showMach) {
@@ -977,19 +989,19 @@ void nav::autopilotAdjustDigits(int adjust)
         }
         break;
     }
-    case 8:
+    case 9:
     {
         double newVal = adjustHeading(simVars->autopilotHeading, adjust);
         globals.simVars->write(KEY_HEADING_BUG_SET, newVal);
         break;
     }
-    case 9:
+    case 10:
     {
         double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
         break;
     }
-    case 10:
+    case 11:
     {
         //double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
         //globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
