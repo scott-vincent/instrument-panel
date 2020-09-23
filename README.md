@@ -6,6 +6,8 @@ An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020. It can run on either a PC or a
 Raspberry Pi.
 
+You can see it running on a Raspberry Pi 4 here: https://www.youtube.com/watch?v=vA6rveEP_9o&t=4s
+
 It requires the companion program from here
 
   https://github.com/scott-vincent/instrument-data-link
