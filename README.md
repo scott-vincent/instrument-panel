@@ -16,6 +16,8 @@ Unzip instrument-panel into its own folder. If you are running it on the same PC
 
 To run instrument-panel on a different PC, unzip instrument-panel to a folder on the new PC. Edit settings/instrument-panel.json and in the "Data Link" section change the IP address of the "Host" to the address where FS2020 is running on your local network, e.g. 192.168.0.1 - You can find the correct address of your host by running a command prompt on the host machine and running ipconfig, then scroll back and look for the first "IPv4 Address" line. Now double-click instrument-panel.exe to run it.
 
+Note: There is a screensaver feature so the instrument panel will appear dim until you run FS2020 and select where you are flying from. It will also dim when you are flying and enter the pause menu.
+
 # RELEASES
 
 Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking on the Releases section on the right of this readme.
