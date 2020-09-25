@@ -14,7 +14,7 @@ Unzip instrument-data-link into its own folder and double-click instrument-data-
 
 Unzip instrument-panel into its own folder. If you are running it on the same PC as FS2020 the default settings are correct so just double-click instrument-panel.exe to run it. Press M to switch the display to a different monitor so it's not on the same monitor as FS2020. If you then press Escape to exit the program the settings will be saved and it will run on the same monitor next time.
 
-To run instrument-panel on a different PC, unzip instrument-panel to a folder on the new PC. Edit settings/instrument-panel.json and in the "Data Link" section change the IP address of the "Host" to the address where FS2020 is running on your local network, e.g. 192.168.0.1 - You can find the correct address of your host by running a command prompt on the host machine and running ipconfig, then scroll back and look for the first "IPv4 Address" line.
+To run instrument-panel on a different PC, unzip instrument-panel to a folder on the new PC. Edit settings/instrument-panel.json and in the "Data Link" section change the IP address of the "Host" to the address where FS2020 is running on your local network, e.g. 192.168.0.1 - You can find the correct address of your host by running a command prompt on the host machine and running ipconfig, then scroll back and look for the first "IPv4 Address" line. Now double-click instrument-panel.exe to run it.
 
 # RELEASES
 
