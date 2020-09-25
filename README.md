@@ -2,6 +2,10 @@
 
 ![Screenshot](Screenshot.jpg)
 
+[Latest release for Windows](https://github.com/scott-vincent/instrument-panel/releases/download/v1.3.0/instrument-panel-v1.3.0-Windows-x64.zip)
+
+For other releases, click on the Releases section on the right of this readme.
+
 An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020 but you can just run it on
 a different monitor if you wish. It can run on either a PC or a Raspberry Pi.
