@@ -2,11 +2,25 @@
 
 ![Screenshot](Screenshot.jpg)
 
+# QUICK START
+
+Download the following two zip files.
+
 Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/download/v1.3.0/instrument-panel-v1.3.0-Windows-x64.zip)
 
 Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/download/v1.3.0/instrument-data-link-v1.3.0-windows-x64.zip)
 
-For other releases, click on the Releases section on the right of this readme.
+Unzip instrument-data-link into its own folder and double-click instrument-data-link.exe to run it.
+
+Unzip instrument-panel into its own folder. If you are running it on the same PC as FS2020 the default settings are correct so just double-click instrument-panel.exe to run it. Press M to switch the display to a different monitor so it's not on the same monitor as FS2020. If you then press Escape to exit the program the settings will be saved and it will run on the same monitor next time.
+
+To run instrument-panel on a different PC, unzip instrument-panel to a folder on the new PC. Edit settings/instrument-panel.json and in the "Data Link" section change the IP address of the "Host" to the address where FS2020 is running on your local network, e.g. 192.168.0.1 - You can find the correct address of your host by running a command prompt on the host machine and running ipconfig, then scroll back and look for the first "IPv4 Address" line.
+
+# RELEASES
+
+Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking on the Releases section on the right of this readme.
+
+# INTRODUCTION
 
 An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020 but you can just run it on
