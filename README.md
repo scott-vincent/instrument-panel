@@ -2,7 +2,8 @@
 
 ![Screenshot](Screenshot.jpg)
 
-[Latest release for Windows](https://github.com/scott-vincent/instrument-panel/releases/download/v1.3.0/instrument-panel-v1.3.0-Windows-x64.zip)
+[Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/download/v1.3.0/instrument-panel-v1.3.0-Windows-x64.zip)
+[Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/download/v1.3.0/instrument-data-link-v1.3.0-windows-x64.zip)
 
 For other releases, click on the Releases section on the right of this readme.
 
