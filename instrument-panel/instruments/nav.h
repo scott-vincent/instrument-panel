@@ -88,7 +88,8 @@ private:
     void updateKnobs();
     void navSwitchPressed();
     void autopilotSwitchPressed();
-    void captureCurrentValues();
+    void captureSpeedHeading();
+    void captureAltitude();
     void navAdjustDigits(int adjust);
     void autopilotAdjustDigits(int adjust);
     double adjustCom(double val, int adjust);

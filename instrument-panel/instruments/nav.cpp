@@ -234,6 +234,9 @@ void nav::renderAutopilot()
         al_draw_scaled_bitmap(bitmaps[10], 1024, 0, 128, 50, 234 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
     }
 
+    // Always show altitude
+    addNum5(altitude, 1188, 82, false);
+
     if (!simVars->autopilotEngaged) {
         return;
     }
@@ -248,7 +251,6 @@ void nav::renderAutopilot()
         }
     }
     addNum3(heading, 816, 82);
-    addNum5(altitude, 1188, 82, false);
 
     // Add spd hold display
     if (autopilotSpd == SpdHold) {
@@ -813,7 +815,7 @@ void nav::autopilotSwitchPressed()
     case 6:
     {
         // Capture current values when autopilot enabled
-        captureCurrentValues();
+        captureSpeedHeading();
         globals.simVars->write(KEY_AP_MASTER);
         break;
     }
@@ -865,6 +867,10 @@ void nav::autopilotSwitchPressed()
             globals.simVars->write(KEY_AP_ALT_HOLD_OFF);
         }
         else {
+            if (globals.aircraft == CESSNA_172) {
+                // Cessna only changes altitude when you use autopilot VS
+                captureAltitude();
+            }
             autopilotAlt = AltHold;
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         }
@@ -881,7 +887,7 @@ void nav::autopilotSwitchPressed()
     }
 }
 
-void nav::captureCurrentValues()
+void nav::captureSpeedHeading()
 {
     // Set autopilot speed to within 10 knots of current speed
     int holdSpeed = simVars->asiAirspeed;
@@ -907,7 +913,10 @@ void nav::captureCurrentValues()
         }
     }
     globals.simVars->write(KEY_HEADING_BUG_SET, holdHeading);
+}
 
+void nav::captureAltitude()
+{
     // Set autopilot altitude to within 100ft of current altitude
     int holdAlt = simVars->altAltitude;
     int hundreds = holdAlt % 100;
