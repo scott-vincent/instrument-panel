@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.3.0";
+const char* versionString = "v1.3.1";
 
 const char* SimVarDefs[][2] = {
     { "Indicated Altitude", "feet" },
@@ -38,10 +38,12 @@ const char* SimVarDefs[][2] = {
     { "Nav ToFrom:2", "enum" },
     { "Adf Radial:1", "degrees" },
     { "Adf Card", "degrees" },
+    { "Com Transmit:1", "bool" },
     { "Com Active Frequency:1", "mhz" },
     { "Com Standby Frequency:1", "mhz" },
     { "Nav Active Frequency:1", "mhz" },
     { "Nav Standby Frequency:1", "mhz" },
+    { "Com Transmit:2", "bool" },
     { "Com Active Frequency:2", "mhz" },
     { "Com Standby Frequency:2", "mhz" },
     { "Nav Active Frequency:2", "mhz" },
@@ -93,9 +95,11 @@ WriteEvent WriteEvents[] = {
     { KEY_FLAPS_INCR, "FLAPS_INCR" },
     { KEY_FLAPS_DECR, "FLAPS_DECR" },
     { KEY_ADF_CARD_SET, "ADF_CARD_SET" },
+    { KEY_COM1_TRANSMIT_SELECT, "COM1_TRANSMIT_SELECT" },
     { KEY_COM1_STBY_RADIO_SET, "COM_STBY_RADIO_SET" },
     { KEY_COM1_RADIO_FRACT_INC, "COM_RADIO_FRACT_INC" },
     { KEY_COM1_RADIO_SWAP, "COM1_RADIO_SWAP" },
+    { KEY_COM2_TRANSMIT_SELECT, "COM2_TRANSMIT_SELECT" },
     { KEY_COM2_STBY_RADIO_SET, "COM2_STBY_RADIO_SET" },
     { KEY_COM2_RADIO_FRACT_INC, "COM2_RADIO_FRACT_INC" },
     { KEY_COM2_RADIO_SWAP, "COM2_RADIO_SWAP" },

@@ -119,6 +119,12 @@ void nav::resize()
     al_draw_bitmap_region(orig, 1286, 830, 128, 50, 0, 0, 0);
     addBitmap(bmp);
 
+    // 15 = TX
+    bmp = al_create_bitmap(160, 24);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 800, 839, 160, 24, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -137,7 +143,7 @@ void nav::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    if (switchSel < 6) {
+    if (switchSel < 7) {
         renderNav();
     }
     else {
@@ -182,28 +188,45 @@ void nav::renderNav()
     // Add squawk
     addSquawk(simVars->transponderCode, 968, 278);
 
+    // Add transmit state active
+    if (simVars->com1Transmit) {
+        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactor, 106 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+    }
+    else {
+        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactor, 235 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+    }
+
     // Add selected switch
     switch (switchSel) {
     case 0:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        // Add transmit state selected
+        if (simVars->com1Transmit) {
+            al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactor, 235 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+        }
+        else {
+            al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactor, 106 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+        }
         break;
     case 1:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
         break;
     case 2:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
         break;
     case 3:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
         break;
     case 4:
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        break;
+    case 5:
         al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
         break;
     }
 
     // Add transponder state
     int statePos = 80 * transponderState;
-    if (switchSel == 5) {
+    if (switchSel == 6) {
         // Add transponder state selected
         al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
     }
@@ -222,8 +245,8 @@ void nav::renderAutopilot()
     al_draw_bitmap(bitmaps[3], 0, 0, 0);
 
     // Add autopilot switch selected
-    int selPos = 80 * (switchSel - 6);
-    int destPos = 363 + 160 * (switchSel - 6);
+    int selPos = 80 * (switchSel - 7);
+    int destPos = 363 + 160 * (switchSel - 7);
     al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 339 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
 
     int destSizeX = 128 * scaleFactor;
@@ -607,10 +630,12 @@ void nav::update()
 /// </summary>
 void nav::addVars()
 {
+    globals.simVars->addVar(name, "Com Transmit:1", true, 1, 1);
     globals.simVars->addVar(name, "Com Active Frequency:1", false, 0.005, 100);
     globals.simVars->addVar(name, "Com Standby Frequency:1", false, 0.005, 100);
     globals.simVars->addVar(name, "Nav Active Frequency:1", false, 0.05, 100);
     globals.simVars->addVar(name, "Nav Standby Frequency:1", false, 0.05, 100);
+    globals.simVars->addVar(name, "Com Transmit:2", true, 1, 0);
     globals.simVars->addVar(name, "Com Active Frequency:2", false, 0.005, 100);
     globals.simVars->addVar(name, "Com Standby Frequency:2", false, 0.005, 100);
     globals.simVars->addVar(name, "Nav Active Frequency:2", false, 0.05, 100);
@@ -659,10 +684,10 @@ void nav::updateKnobs()
         // Convert knob value to selection (adjust for desired sensitivity)
         int maxSwitch;
         if (simVars->autopilotAvailable) {
-            maxSwitch = 11;
+            maxSwitch = 12;
         }
         else {
-            maxSwitch = 5;
+            maxSwitch = 6;
         }
 
         int diff = (prevSelVal - val) / 2;
@@ -693,7 +718,7 @@ void nav::updateKnobs()
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
         if (prevSelPush % 2 == 1) {
-            if (switchSel < 6) {
+            if (switchSel < 7) {
                 navSwitchPressed();
             }
             else {
@@ -717,7 +742,7 @@ void nav::updateKnobs()
         }
 
         if (adjust != 0) {
-            if (switchSel < 6) {
+            if (switchSel < 7) {
                 navAdjustDigits(adjust);
             }
             else {
@@ -742,10 +767,10 @@ void nav::updateKnobs()
         // If previous state was unpressed then must have been pressed
         if (prevAdjustPush % 2 == 1) {
             int digitSets;
-            if (switchSel == 0 || switchSel == 2 || switchSel == 4) {
+            if (switchSel == 1 || switchSel == 3 || switchSel == 5) {
                 digitSets = 3;
             }
-            else if (switchSel == 5) {
+            else if (switchSel == 6) {
                 digitSets = 4;
             }
             else {
@@ -767,25 +792,35 @@ void nav::navSwitchPressed()
     switch (switchSel) {
     case 0:
     {
-        globals.simVars->write(KEY_COM1_RADIO_SWAP);
+        if (simVars->com1Transmit) {
+            globals.simVars->write(KEY_COM2_TRANSMIT_SELECT);
+        }
+        else {
+            globals.simVars->write(KEY_COM1_TRANSMIT_SELECT);
+        }
         break;
     }
     case 1:
     {
-        globals.simVars->write(KEY_NAV1_RADIO_SWAP);
+        globals.simVars->write(KEY_COM1_RADIO_SWAP);
         break;
     }
     case 2:
     {
-        globals.simVars->write(KEY_COM2_RADIO_SWAP);
+        globals.simVars->write(KEY_NAV1_RADIO_SWAP);
         break;
     }
     case 3:
     {
-        globals.simVars->write(KEY_NAV2_RADIO_SWAP);
+        globals.simVars->write(KEY_COM2_RADIO_SWAP);
         break;
     }
     case 4:
+    {
+        globals.simVars->write(KEY_NAV2_RADIO_SWAP);
+        break;
+    }
+    case 5:
     {
         if (hasAdfStandby) {
             int freq = adjustAdf(simVars->adfFreq, 0);
@@ -796,7 +831,7 @@ void nav::navSwitchPressed()
         }
         break;
     }
-    case 5:
+    case 6:
     {
         if (transponderState == 3) {
             transponderState = 0;
@@ -812,20 +847,20 @@ void nav::navSwitchPressed()
 void nav::autopilotSwitchPressed()
 {
     switch (switchSel) {
-    case 6:
+    case 7:
     {
         // Capture current values when autopilot enabled
         captureSpeedHeading();
         globals.simVars->write(KEY_AP_MASTER);
         break;
     }
-    case 7:
+    case 8:
     {
         // Toggle auto throttle
         globals.simVars->write(KEY_AUTO_THROTTLE_ARM);
         break;
     }
-    case 8:
+    case 9:
     {
         if (autopilotSpd == SpdHold) {
             // Switch between knots and mach display.
@@ -848,7 +883,7 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
-    case 9:
+    case 10:
     {
         if (autopilotHdg == HdgSet) {
             autopilotHdg = LevelFlight;
@@ -860,7 +895,7 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
-    case 10:
+    case 11:
     {
         if (autopilotAlt == AltHold) {
             autopilotAlt = PitchHold;
@@ -876,7 +911,7 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
-    case 11:
+    case 12:
     {
         // Vertical speed hold not working so set target altitude instead
         autopilotAlt = AltChange;
@@ -932,31 +967,31 @@ void nav::captureAltitude()
 void nav::navAdjustDigits(int adjust)
 {
     switch (switchSel) {
-    case 0:
+    case 1:
     {
         double newVal = adjustCom(simVars->com1Standby, adjust);
         globals.simVars->write(KEY_COM1_STBY_RADIO_SET, newVal);
         break;
     }
-    case 1:
+    case 2:
     {
         double newVal = adjustNav(simVars->nav1Standby, adjust);
         globals.simVars->write(KEY_NAV1_STBY_SET, newVal);
         break;
     }
-    case 2:
+    case 3:
     {
         double newVal = adjustCom(simVars->com2Standby, adjust);
         globals.simVars->write(KEY_COM2_STBY_RADIO_SET, newVal);
         break;
     }
-    case 3:
+    case 4:
     {
         double newVal = adjustNav(simVars->nav2Standby, adjust);
         globals.simVars->write(KEY_NAV2_STBY_SET, newVal);
         break;
     }
-    case 4:
+    case 5:
     {
         int oldVal;
         if (hasAdfStandby) {
@@ -972,7 +1007,7 @@ void nav::navAdjustDigits(int adjust)
         adfChanged = true;
         break;
     }
-    case 5:
+    case 6:
     {
         int newVal = adjustSquawk(simVars->transponderCode, adjust);
         globals.simVars->write(KEY_XPNDR_SET, newVal);
@@ -984,7 +1019,7 @@ void nav::navAdjustDigits(int adjust)
 void nav::autopilotAdjustDigits(int adjust)
 {
     switch (switchSel) {
-    case 8:
+    case 9:
     {
         if (autopilotSpd == SpdHold) {
             if (showMach) {
@@ -998,19 +1033,19 @@ void nav::autopilotAdjustDigits(int adjust)
         }
         break;
     }
-    case 9:
+    case 10:
     {
         double newVal = adjustHeading(simVars->autopilotHeading, adjust);
         globals.simVars->write(KEY_HEADING_BUG_SET, newVal);
         break;
     }
-    case 10:
+    case 11:
     {
         double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
         break;
     }
-    case 11:
+    case 12:
     {
         //double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
         //globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);

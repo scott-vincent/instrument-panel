@@ -40,10 +40,12 @@ struct SimVars
     double vor2ToFrom = 0;
     double adfRadial = 0;
     double adfCard = 0;
+    double com1Transmit = 1;
     double com1Freq = 119.225;
     double com1Standby = 124.850;
     double nav1Freq = 110.50;
     double nav1Standby = 113.90;
+    double com2Transmit = 0;
     double com2Freq = 124.850;
     double com2Standby = 124.850;
     double nav2Freq = 110.50;
@@ -96,9 +98,11 @@ enum EVENT_ID {
     KEY_FLAPS_INCR,
     KEY_FLAPS_DECR,
     KEY_ADF_CARD_SET,
+    KEY_COM1_TRANSMIT_SELECT,
     KEY_COM1_STBY_RADIO_SET,
     KEY_COM1_RADIO_FRACT_INC,
     KEY_COM1_RADIO_SWAP,
+    KEY_COM2_TRANSMIT_SELECT,
     KEY_COM2_STBY_RADIO_SET,
     KEY_COM2_RADIO_FRACT_INC,
     KEY_COM2_RADIO_SWAP,
