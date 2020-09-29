@@ -225,7 +225,7 @@ void nav::renderNav()
 
     // Add transponder state
     int statePos = 80 * transponderState;
-    if (switchSel == 6) {
+    if (switchSel == Transponder) {
         // Add transponder state selected
         al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
     }
@@ -244,8 +244,8 @@ void nav::renderAutopilot()
     al_draw_bitmap(bitmaps[3], 0, 0, 0);
 
     // Add autopilot switch selected
-    int selPos = 80 * (switchSel - 7);
-    int destPos = 363 + 160 * (switchSel - 7);
+    int selPos = 80 * (switchSel - (int)Autopilot);
+    int destPos = 363 + 160 * (switchSel - (int)Autopilot);
     al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 339 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
 
     int destSizeX = 128 * scaleFactor;

@@ -1,0 +1,120 @@
+{
+  "Data Link": {
+    "Host": "127.0.0.1",
+    "Port": 52020
+  },
+  "ADI Learjet": {
+    "Enabled": false,
+    "Position X": 882,
+    "Position Y": 10,
+    "Size": 300
+  },
+  "ASI": {
+    "Enabled": true,
+    "Position X": 566,
+    "Position Y": 18,
+    "Size": 277
+  },
+  "ADI": {
+    "Enabled": true,
+    "Position X": 882,
+    "Position Y": 7,
+    "Size": 290
+  },
+  "ALT": {
+    "Enabled": true,
+    "Position X": 1223,
+    "Position Y": 14,
+    "Size": 272
+  },
+  "VOR1": {
+    "Enabled": true,
+    "Position X": 1548,
+    "Position Y": 12,
+    "Size": 274
+  },
+  "TC": {
+    "Enabled": true,
+    "Position X": 562,
+    "Position Y": 342,
+    "Size": 280
+  },
+  "HI": {
+    "Enabled": true,
+    "Position X": 892,
+    "Position Y": 345,
+    "Size": 274
+  },
+  "VSI": {
+    "Enabled": true,
+    "Position X": 1219,
+    "Position Y": 342,
+    "Size": 284
+  },
+  "VOR2": {
+    "Enabled": true,
+    "Position X": 1553,
+    "Position Y": 348,
+    "Size": 276
+  },
+  "Trim Flaps": {
+    "Enabled": true,
+    "Position X": 885,
+    "Position Y": 676,
+    "Size": 280
+  },
+  "RPM": {
+    "Enabled": true,
+    "Position X": 1222,
+    "Position Y": 669,
+    "Size": 284
+  },
+  "ADF": {
+    "Enabled": true,
+    "Position X": 1556,
+    "Position Y": 672,
+    "Size": 266
+  },
+  "Annunciator": {
+    "Enabled": true,
+    "Position X": 135,
+    "Position Y": 20,
+    "Size": 300
+  },
+  "Digital Clock": {
+    "Enabled": true,
+    "Position X": 320,
+    "Position Y": 124,
+    "Size": 200
+  },
+  "Fuel": {
+    "Enabled": true,
+    "Position X": 83,
+    "Position Y": 360,
+    "Size": 200
+  },
+  "EGT": {
+    "Enabled": true,
+    "Position X": 323,
+    "Position Y": 367,
+    "Size": 193
+  },
+  "Oil": {
+    "Enabled": true,
+    "Position X": 95,
+    "Position Y": 618,
+    "Size": 182
+  },
+  "VAC": {
+    "Enabled": true,
+    "Position X": 334,
+    "Position Y": 618,
+    "Size": 182
+  },
+  "Nav": {
+    "Enabled": true,
+    "Position X": 88,
+    "Position Y": 882,
+    "Size": 562
+  }
+}
