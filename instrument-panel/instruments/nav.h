@@ -44,7 +44,8 @@ private:
     };
 
     SimVars* simVars;
-    float scaleFactor;
+    float scaleFactorX;
+    float scaleFactorY;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     Switch switchSel = Com1;

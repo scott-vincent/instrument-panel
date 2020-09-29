@@ -59,7 +59,7 @@
   },
   "Trim Flaps": {
     "Enabled": true,
-    "Position X": 885,
+    "Position X": 888,
     "Position Y": 676,
     "Size": 280
   },
@@ -113,8 +113,8 @@
   },
   "Nav": {
     "Enabled": true,
-    "Position X": 88,
-    "Position Y": 882,
-    "Size": 562
+    "Position X": 77,
+    "Position Y": 900,
+    "Size": 589
   }
 }

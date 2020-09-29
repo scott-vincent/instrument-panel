@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.3.1";
+const char* versionString = "v1.3.2";
 
 const char* SimVarDefs[][2] = {
     { "Indicated Altitude", "feet" },
@@ -108,7 +108,7 @@ WriteEvent WriteEvents[] = {
     { KEY_NAV2_STBY_SET, "NAV2_STBY_SET" },
     { KEY_NAV2_RADIO_SWAP, "NAV2_RADIO_SWAP" },
     { KEY_ADF_COMPLETE_SET, "ADF_COMPLETE_SET" },
-    { KEY_ADF1_PRIMARY_SET, "ADF1_PRIMARY_SET" },
+    { KEY_ADF1_PRIMARY_SET, "ADF1_PRIMARY_SET" },       // ADF1_PRIMARY_SET not working (SDK bug)
     { KEY_XPNDR_SET, "XPNDR_SET" },
     { KEY_AP_MASTER, "AP_MASTER" },
     { KEY_AP_SPD_VAR_SET, "AP_SPD_VAR_SET" },

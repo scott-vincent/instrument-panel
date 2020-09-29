@@ -26,8 +26,9 @@ void nav::resize()
 {
     destroyBitmaps();
 
-    // Create bitmaps scaled to correct size (original size is 800)
-    scaleFactor = size / 1600.0f;
+    // Create bitmaps scaled to correct size
+    scaleFactorX = size / 1600.0f;
+    scaleFactorY = size / 2000.0f;
 
     // 0 = Original (loaded) bitmap
     ALLEGRO_BITMAP* orig = loadBitmap("nav.png");
@@ -38,19 +39,19 @@ void nav::resize()
     }
 
     // 1 = Destination bitmap (all other bitmaps get assembled to here)
-    ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size / 4);
+    ALLEGRO_BITMAP* bmp = al_create_bitmap(size, 400 * scaleFactorY);
     addBitmap(bmp);
 
     // 2 = Main Nav
-    bmp = al_create_bitmap(size, size / 4);
+    bmp = al_create_bitmap(size, 400 * scaleFactorY);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 0, 1600, 400, 0, 0, size, size / 4, 0);
+    al_draw_scaled_bitmap(orig, 0, 0, 1600, 400, 0, 0, size, 400 * scaleFactorY, 0);
     addBitmap(bmp);
 
     // 3 = Main Autopilot
-    bmp = al_create_bitmap(size, size / 4);
+    bmp = al_create_bitmap(size, 400 * scaleFactorY);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 400, 1600, 400, 0, 0, size, size / 4, 0);
+    al_draw_scaled_bitmap(orig, 0, 400, 1600, 400, 0, 0, size, 400 * scaleFactorY, 0);
     addBitmap(bmp);
 
     // 4 = Digits
@@ -191,47 +192,47 @@ void nav::renderNav()
     // Add selected switch
     switch (switchSel) {
     case Com1:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactorX, 104 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
         break;
     case Nav1:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 104 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactorX, 104 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
         break;
     case Com2:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactorX, 233 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
         break;
     case Nav2:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactor, 233 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 1064 * scaleFactorX, 233 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
         break;
     case Adf:
-        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[6], 0, 0, 80, 34, 460 * scaleFactorX, 363 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
         break;
     }
 
     // Add transmit1 selected or state
     if (switchSel == Transmit1) {
-        al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactor, 106 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactorX, 106 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
     else if (simVars->com1Transmit) {
-        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactor, 106 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactorX, 106 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
 
     // Add transmit2 selected or state
     if (switchSel == Transmit2) {
-        al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactor, 235 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactorX, 235 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
     else if (simVars->com2Transmit) {
-        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactor, 235 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactorX, 235 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
 
     // Add transponder state
     int statePos = 80 * transponderState;
     if (switchSel == Transponder) {
         // Add transponder state selected
-        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[7], statePos, 0, 80, 34, 1064 * scaleFactorX, 363 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
     }
     else {
         // Add transponder state
-        al_draw_scaled_bitmap(bitmaps[8], statePos, 0, 80, 34, 1064 * scaleFactor, 363 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+        al_draw_scaled_bitmap(bitmaps[8], statePos, 0, 80, 34, 1064 * scaleFactorX, 363 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
     }
 }
 
@@ -246,14 +247,14 @@ void nav::renderAutopilot()
     // Add autopilot switch selected
     int selPos = 80 * (switchSel - (int)Autopilot);
     int destPos = 363 + 160 * (switchSel - (int)Autopilot);
-    al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactor, 339 * scaleFactor, 80 * scaleFactor, 34 * scaleFactor, 0);
+    al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactorX, 339 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
 
-    int destSizeX = 128 * scaleFactor;
-    int destSizeY = 50 * scaleFactor;
+    int destSizeX = 128 * scaleFactorX;
+    int destSizeY = 50 * scaleFactorY;
 
     // Add auto throttle display
     if (simVars->autothrottleActive) {
-        al_draw_scaled_bitmap(bitmaps[10], 1024, 0, 128, 50, 234 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 1024, 0, 128, 50, 234 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
     }
 
     // Always show altitude
@@ -276,47 +277,47 @@ void nav::renderAutopilot()
 
     // Add spd hold display
     if (autopilotSpd == SpdHold) {
-        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 353 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 353 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
     }
 
     // Add hdg display
     switch (autopilotHdg) {
     case HdgSet:
-        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 483 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 483 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     case LevelFlight:
-        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 483 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 483 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     }
 
     // Add ap display
     if (simVars->autopilotEngaged) {
-        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 628 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 628 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
     }
 
     // Add alt display
     switch (autopilotAlt) {
     case AltHold:
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     case PitchHold:
-        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     case VerticalSpeedHold:
     {
-        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         addVerticalSpeed(836, 252);
         // Add white alts display
-        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1213 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1213 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     }
     case AltChange:
         // ALT
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactor, 252 * scaleFactor, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         // + S = ALTS
-        al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 886 * scaleFactor, 252 * scaleFactor, 32 * scaleFactor, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 886 * scaleFactorX, 252 * scaleFactorY, 32 * scaleFactorX, destSizeY, 0);
         // Add white alt display
-        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 94, 50, 1213 * scaleFactor, 252 * scaleFactor, 94 * scaleFactor, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 94, 50, 1213 * scaleFactorX, 252 * scaleFactorY, 94 * scaleFactorX, destSizeY, 0);
         break;
     }
 }
@@ -330,13 +331,13 @@ void nav::addNum3(int val, int x, int y)
     int digit2 = (val % 100) / 10;
     int digit3 = val % 10;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -353,22 +354,22 @@ void nav::addNum4(int val, int x, int y, bool leading)
     int digit3 = (val % 100) / 10;
     int digit4 = val % 10;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
     if (leading || digit1 != 0) {
-        al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
     }
     x += 38;
 
     if (leading || digit1 != 0 || digit2 != 0) {
-        al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
     }
     x += 38;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -386,23 +387,23 @@ void nav::addNum5(int val, int x, int y, bool leading)
     int digit4 = (val % 100) / 10;
     int digit5 = val % 10;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
     if (leading || digit1 != 0) {
-        al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
     }
     x += 38;
 
     if (leading || digit1 != 0 || digit2 != 0) {
-        al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
     }
     x += 38;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -414,14 +415,14 @@ void nav::addNum2dp(int val, int x, int y)
     int digit2 = (val % 100) / 10;
     int digit3 = val % 10;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 38) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 58) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 96) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 38) * scaleFactorX, yPos, 20 * scaleFactorX, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 58) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 96) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -435,16 +436,16 @@ void nav::addFreq2dp(int freq, int x, int y)
     int digit4 = (freq % 100) / 10;
     int digit5 = freq % 10;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 114) * scaleFactorX, yPos, 20 * scaleFactorX, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -459,17 +460,17 @@ void nav::addFreq3dp(int freq, int x, int y)
     int digit5 = (freq % 100) / 10;
     int digit6 = freq % 10;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 114) * scaleFactor, yPos, 20 * scaleFactor, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit6, 0, 38, 80, (x + 210) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[5], 0, 0, 20, 80, (x + 114) * scaleFactorX, yPos, 20 * scaleFactorX, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 134) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 172) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit6, 0, 38, 80, (x + 210) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -485,25 +486,25 @@ void nav::addSquawk(int code, int x, int y)
     int digit3 = code / 16;
     int digit4 = code - digit3 * 16;
 
-    int yPos = y * scaleFactor;
-    int width = 38 * scaleFactor;
-    int height = 80 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int width = 38 * scaleFactorX;
+    int height = 80 * scaleFactorY;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 76) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 152) * scaleFactor, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 228) * scaleFactor, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 152) * scaleFactorX, yPos, width, height, 0);
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 228) * scaleFactorX, yPos, width, height, 0);
 }
 
 void nav::addVerticalSpeed(int x, int y)
 {
-    int yPos = y * scaleFactor;
-    int height = 50 * scaleFactor;
+    int yPos = y * scaleFactorY;
+    int height = 50 * scaleFactorY;
 
     if (simVars->autopilotVerticalSpeed == 0) {
         // Add 0fpm
         x += 87;
-        al_draw_scaled_bitmap(bitmaps[12], 32, 0, 130, 50, x * scaleFactor, yPos, 162 * scaleFactor, height, 0);
+        al_draw_scaled_bitmap(bitmaps[12], 32, 0, 130, 50, x * scaleFactorX, yPos, 162 * scaleFactorX, height, 0);
         return;
     }
 
@@ -517,20 +518,20 @@ void nav::addVerticalSpeed(int x, int y)
 
     if (simVars->autopilotVerticalSpeed < 0) {
         // Add minus
-        al_draw_scaled_bitmap(bitmaps[13], 0, 0, 23, 50, x * scaleFactor, yPos, 23 * scaleFactor, height, 0);
+        al_draw_scaled_bitmap(bitmaps[13], 0, 0, 23, 50, x * scaleFactorX, yPos, 23 * scaleFactorX, height, 0);
     }
     x += 23;
 
     if (digit1 != 0) {
-        al_draw_scaled_bitmap(bitmaps[11], 32 * digit1, 0, 32, 50, x * scaleFactor, yPos, 32 * scaleFactor, height, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 32 * digit1, 0, 32, 50, x * scaleFactorX, yPos, 32 * scaleFactorX, height, 0);
         x += 32;
     }
 
-    al_draw_scaled_bitmap(bitmaps[11], 32 * digit2, 0, 32, 50, x * scaleFactor, yPos, 32 * scaleFactor, height, 0);
+    al_draw_scaled_bitmap(bitmaps[11], 32 * digit2, 0, 32, 50, x * scaleFactorX, yPos, 32 * scaleFactorX, height, 0);
     x += 32;
 
     // Add 00fpm
-    al_draw_scaled_bitmap(bitmaps[12], 0, 0, 162, 50, x * scaleFactor, yPos, 162 * scaleFactor, height, 0);
+    al_draw_scaled_bitmap(bitmaps[12], 0, 0, 162, 50, x * scaleFactorX, yPos, 162 * scaleFactorX, height, 0);
 }
 
 /// <summary>
