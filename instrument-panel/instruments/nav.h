@@ -7,6 +7,23 @@
 class nav : public instrument
 {
 private:
+    enum Switch {
+        Transmit1,
+        Com1,
+        Nav1,
+        Transmit2,
+        Com2,
+        Nav2,
+        Adf,
+        Transponder,
+        Autopilot,
+        Autothrottle,
+        Speed,
+        Heading,
+        Altitude,
+        VerticalSpeed
+    };
+
     enum AutopilotSpd {
         NoSpd,
         SpdHold
@@ -30,7 +47,7 @@ private:
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
-    int switchSel = 0;
+    Switch switchSel = Com1;
     int adjustSetSel = 0;
     int com1Freq;
     int com1Standby;
