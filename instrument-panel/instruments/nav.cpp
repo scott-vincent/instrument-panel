@@ -219,7 +219,7 @@ void nav::renderNav()
     if (switchSel == Transmit2) {
         al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactor, 235 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
     }
-    else if (simVars->com1Transmit) {
+    else if (simVars->com2Transmit) {
         al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactor, 235 * scaleFactor, 80 * scaleFactor, 24 * scaleFactor, 0);
     }
 
