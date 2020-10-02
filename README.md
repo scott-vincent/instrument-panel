@@ -18,6 +18,8 @@ To run instrument-panel on a different PC, unzip instrument-panel to a folder on
 
 Note: There is a screensaver feature so the instrument panel will appear dim until you run FS2020 and select where you are flying from. It will also dim when you are flying and enter the pause menu.
 
+If you want to use the Savage Cub panel instead of the default Cessna panel or you want to define multiple panel layouts see section "Custom Panels" below.
+
 # RELEASES
 
 Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking on the Releases section on the right of this readme.
@@ -85,7 +87,27 @@ On Raspberry Pi you can configure hardware Rotary Encoders for each instrument.
 Each rotary encoder is connected to two BCM GPIO pins (+ ground on centre pin).
 See individual instruments for pins used. Not all instruments have manual controls.
 
-# Donate
+# CUSTOM PANELS
+
+Instrument Panel now supports multiple panels in case you decide to build a Savage Cub panel for example instead of a Cessna panel. You need to create a settings file for each custom panel and you will find a Savage Cub one already in the settings folder.
+
+To use it, on Windows you need to right click on instrument-panel.exe and create a shortcut to it, then add the settings file name to the Target, e.g.
+
+Target: C:\instrument-panel\instrument-panel.exe savage-cub.json
+  
+On Raspberry Pi just supply the settings file name on the command line when you call instrument-panel.exe.
+
+If no settings file is supplied, "instrument-panel.json" will be used and the default Cessna panel will be displayed. 
+
+# INTELLIGENT INSTRUMENTS
+
+Some of the instruments are 'intelligent' and will adapt to whatever aircraft you are currently flying. For example, adding ASI to your panel will allow it to switch to the Savage Cub version when you are flying that particular aircraft and ALT will switch to a version with a digital readout when you are flying a fast aircraft, e.g. one of the airliners.
+
+Use a specific instrument in your panel if you don't want it to auto switch, for example, use "ASI Savage Cub" instead of "ASI" to always display the Savage Cub version of the instrument.
+
+Note that only a few specific instruments have been created so far as this project is a work in progress.  
+
+# DONATE
 
 If you find this project useful, would like to see it developed further or would just like to buy the author a beer, please consider a small donation.
 
