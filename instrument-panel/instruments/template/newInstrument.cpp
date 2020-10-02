@@ -16,6 +16,7 @@ newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yP
     }
 #endif
 
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -126,9 +127,6 @@ void newInstrument::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     angle = simVars->adiBank / 100.0;

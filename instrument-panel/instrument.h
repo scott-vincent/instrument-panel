@@ -20,6 +20,7 @@ protected:
     int bitmapCount = 0;
     ALLEGRO_BITMAP* bitmaps[MaxBitmaps] = { NULL };
     ALLEGRO_BITMAP* dim = NULL;
+    instrument* customInstrument = NULL;
 
 public:
     char name[256];

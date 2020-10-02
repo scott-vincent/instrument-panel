@@ -5,9 +5,6 @@
     <ClCompile Include="instrument.cpp" />
     <ClCompile Include="simvars.cpp" />
     <ClCompile Include="knobs.cpp" />
-    <ClCompile Include="instruments\adiLearjet.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
     <ClCompile Include="instruments\adi.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
@@ -63,15 +60,21 @@
     <ClCompile Include="instruments\nav.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\learjet\adiLearjet.cpp">
+      <Filter>instruments\learjet</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\savageCub\asiSavageCub.cpp">
+      <Filter>instruments\savageCub</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\savageCub\rpmSavageCub.cpp">
+      <Filter>instruments\savageCub</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
     <ClInclude Include="simvars.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="knobs.h" />
-    <ClInclude Include="instruments\adiLearjet.h">
-      <Filter>instruments</Filter>
-    </ClInclude>
     <ClInclude Include="instruments\adi.h">
       <Filter>instruments</Filter>
     </ClInclude>
@@ -127,6 +130,15 @@
     <ClInclude Include="instruments\nav.h">
       <Filter>instruments</Filter>
     </ClInclude>
+    <ClInclude Include="instruments\learjet\adiLearjet.h">
+      <Filter>instruments\learjet</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\savageCub\asiSavageCub.h">
+      <Filter>instruments\savageCub</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\savageCub\rpmSavageCub.h">
+      <Filter>instruments\savageCub</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -146,6 +158,12 @@
     </Filter>
     <Filter Include="settings">
       <UniqueIdentifier>{094dab80-5399-4ed2-b45a-ef31f3d42e13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instruments\savageCub">
+      <UniqueIdentifier>{8df7b54e-b26e-4440-ac37-ebd58f69b5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instruments\learjet">
+      <UniqueIdentifier>{56d939fd-718b-4ddf-9a02-17369d136bb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -10,7 +10,6 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instrument.cpp \
     instruments/adf.cpp \
     instruments/adi.cpp \
-    instruments/adiLearjet.cpp \
     instruments/alt.cpp \
     instruments/annunciator.cpp \
     instruments/asi.cpp \
@@ -28,6 +27,9 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/vor2.cpp \
     instruments/vsi.cpp \
     instrument-panel.cpp \
+    instruments/learjet/adiLearjet.cpp \
+    instruments/savageCub/asiSavageCub.cpp \
+    instruments/savageCub/rpmSavageCub.cpp \
     || exit
 echo Done
 echo Run with: ./run.sh

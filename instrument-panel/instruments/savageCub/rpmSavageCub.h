@@ -1,14 +1,13 @@
-#ifndef _RPM_H_
-#define _RPM_H_
+#ifndef _RPM_SAVAGE_CUB_H_
+#define _RPM_SAVAGE_CUB_H_
 
 #include "simvarDefs.h"
 #include "instrument.h"
 
-class rpm : public instrument
+class rpmSavageCub : public instrument
 {
 private:
     SimVars* simVars;
-    Aircraft loadedAircraft = NO_AIRCRAFT;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
@@ -20,7 +19,7 @@ private:
     double angle;
 
 public:
-    rpm(int xPos, int yPos, int size);
+    rpmSavageCub(int xPos, int yPos, int size, const char* parentName = NULL);
     void render();
     void update();
 
@@ -29,4 +28,4 @@ private:
     void addVars();
 };
 
-#endif // _RPM_H
+#endif // _RPM_SAVAGE_CUB_H

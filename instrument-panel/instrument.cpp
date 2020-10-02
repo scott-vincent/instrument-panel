@@ -26,6 +26,10 @@ instrument::instrument(int xPos, int yPos, int size)
 /// </summary>
 instrument::~instrument()
 {
+    if (customInstrument != NULL) {
+        delete customInstrument;
+    }
+
     destroyBitmaps();
 }
 

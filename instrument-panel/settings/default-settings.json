@@ -113,5 +113,8 @@
   },
   "ADI Learjet": {
     "Enabled": false
+  },
+  "ASI Savage Cub": {
+    "Enabled": false
   }
 }

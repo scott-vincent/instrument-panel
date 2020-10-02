@@ -15,13 +15,13 @@
     "Position Y": 45,
     "Size": 280
   },
-  "ASI": {
+  "ASI Savage Cub": {
     "Enabled": true,
     "Position X": 730,
     "Position Y": 10,
     "Size": 280
   },
-  "RPM": {
+  "RPM Savage Cub": {
     "Enabled": true,
     "Position X": 1100,
     "Position Y": 45,
@@ -63,7 +63,10 @@
     "Position Y": 365,
     "Size": 180
   },
-  "ADI Learjet": {
+  "ASI": {
+    "Enabled": false
+  },
+  "RPM": {
     "Enabled": false
   },
   "ADI": {
@@ -88,6 +91,9 @@
     "Enabled": false
   },
   "Nav": {
+    "Enabled": false
+  },
+  "ADI Learjet": {
     "Enabled": false
   }
 }

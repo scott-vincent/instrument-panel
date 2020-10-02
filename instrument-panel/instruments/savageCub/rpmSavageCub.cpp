@@ -1,15 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "rpm.h"
-#include "savageCub/rpmSavageCub.h"
+#include "rpmSavageCub.h"
 #include "simvars.h"
-#include "knobs.h"
 
-rpm::rpm(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+rpmSavageCub::rpmSavageCub(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
 {
-    setName("RPM");
-    addVars();
+    if (parentName != NULL) {
+        // Use position, size and vars from parent
+        setName(parentName);
+    }
+    else {
+        setName("RPM Savage Cub");
+        addVars();
+    }
+
     simVars = &globals.simVars->simVars;
     resize();
 }
@@ -17,7 +22,7 @@ rpm::rpm(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void rpm::resize()
+void rpmSavageCub::resize()
 {
     destroyBitmaps();
 
@@ -25,7 +30,7 @@ void rpm::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("rpm.png");
+    ALLEGRO_BITMAP* orig = loadBitmap("rpm-savage-cub.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -78,14 +83,9 @@ void rpm::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void rpm::render()
+void rpmSavageCub::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
-        return;
-    }
-
-    if (customInstrument != NULL) {
-        customInstrument->render();
+    if (bitmaps[0] == NULL) {
         return;
     }
 
@@ -137,29 +137,8 @@ void rpm::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void rpm::update()
+void rpmSavageCub::update()
 {
-    // Check for aircraft change
-    bool aircraftChanged = (loadedAircraft != globals.aircraft);
-    if (aircraftChanged) {
-        loadedAircraft = globals.aircraft;
-
-        // Load custom instrument for this aircraft if we have one
-        if (customInstrument != NULL) {
-            delete customInstrument;
-            customInstrument = NULL;
-        }
-
-        if (loadedAircraft == SAVAGE_CUB) {
-            customInstrument = new rpmSavageCub(xPos, yPos, size, name);
-        }
-    }
-
-    if (customInstrument != NULL) {
-        customInstrument->update();
-        return;
-    }
-
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -178,29 +157,13 @@ void rpm::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    if (globals.aircraft == SAVAGE_CUB) {
-        if (simVars->rpmPercent > 10) {
-            angle = (simVars->rpmPercent - 10) * 2 + 25.0 - 123;
-        }
-        else {
-            angle = (simVars->rpmPercent / 10) * 25.0 - 123;
-        }
-    }
-    else {
-        // Cessna
-        if (simVars->rpmPercent > 10) {
-            angle = (simVars->rpmPercent - 10) * 1.98 + 6.0 - 123;
-        }
-        else {
-            angle = (simVars->rpmPercent / 10) * 6.0 - 123;
-        }
-    }
+    angle = pow(simVars->rpmPercent, 0.998) * 2.45 - 145;
 }
 
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void rpm::addVars()
+void rpmSavageCub::addVars()
 {
     globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
     globals.simVars->addVar(name, "Eng Rpm Animation Percent:1", false, 1, 0);

@@ -61,7 +61,6 @@
 #include "simvars.h"
 
 // Instruments
-#include "adiLearjet.h"
 #include "asi.h"
 #include "adi.h"
 #include "alt.h"
@@ -80,6 +79,10 @@
 #include "oil.h"
 #include "vac.h"
 #include "nav.h"
+
+#include "learjet/adiLearjet.h"
+#include "savageCub/asiSavageCub.h"
+#include "savageCub/rpmSavageCub.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -457,10 +460,6 @@ void doKeypress(ALLEGRO_EVENT *event)
 void addInstruments()
 {
     // Add instruments
-    if (globals.simVars->isEnabled("ADI Learjet")) {
-        instruments.push_back(new adiLearjet(700, 50, 300));
-    }
-
     if (globals.simVars->isEnabled("ASI")) {
         instruments.push_back(new asi(300, 50, 300));
     }
@@ -531,6 +530,18 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("Nav")) {
         instruments.push_back(new nav(50, 1000, 600));
+    }
+
+    if (globals.simVars->isEnabled("ADI Learjet")) {
+        instruments.push_back(new adiLearjet(50, 50, 300));
+    }
+
+    if (globals.simVars->isEnabled("ASI Savage Cub")) {
+        instruments.push_back(new asiSavageCub(50, 50, 300));
+    }
+
+    if (globals.simVars->isEnabled("RPM Savage Cub")) {
+        instruments.push_back(new rpmSavageCub(350, 50, 300));
     }
 }
 

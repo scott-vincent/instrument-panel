@@ -163,7 +163,6 @@
     <ClCompile Include="instrument.cpp" />
     <ClCompile Include="instruments\adf.cpp" />
     <ClCompile Include="instruments\adi.cpp" />
-    <ClCompile Include="instruments\adiLearjet.cpp" />
     <ClCompile Include="instruments\alt.cpp" />
     <ClCompile Include="instruments\annunciator.cpp" />
     <ClCompile Include="instruments\asi.cpp" />
@@ -171,9 +170,12 @@
     <ClCompile Include="instruments\egt.cpp" />
     <ClCompile Include="instruments\fuel.cpp" />
     <ClCompile Include="instruments\hi.cpp" />
+    <ClCompile Include="instruments\learjet\adiLearjet.cpp" />
     <ClCompile Include="instruments\oil.cpp" />
     <ClCompile Include="instruments\nav.cpp" />
     <ClCompile Include="instruments\rpm.cpp" />
+    <ClCompile Include="instruments\savageCub\asiSavageCub.cpp" />
+    <ClCompile Include="instruments\savageCub\rpmSavageCub.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\trimFlaps.cpp" />
     <ClCompile Include="instruments\vac.cpp" />
@@ -189,7 +191,6 @@
     <ClInclude Include="instrument.h" />
     <ClInclude Include="instruments\adf.h" />
     <ClInclude Include="instruments\adi.h" />
-    <ClInclude Include="instruments\adiLearjet.h" />
     <ClInclude Include="instruments\alt.h" />
     <ClInclude Include="instruments\annunciator.h" />
     <ClInclude Include="instruments\asi.h" />
@@ -197,9 +198,12 @@
     <ClInclude Include="instruments\egt.h" />
     <ClInclude Include="instruments\fuel.h" />
     <ClInclude Include="instruments\hi.h" />
+    <ClInclude Include="instruments\learjet\adiLearjet.h" />
     <ClInclude Include="instruments\oil.h" />
     <ClInclude Include="instruments\nav.h" />
     <ClInclude Include="instruments\rpm.h" />
+    <ClInclude Include="instruments\savageCub\asiSavageCub.h" />
+    <ClInclude Include="instruments\savageCub\rpmSavageCub.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\trimFlaps.h" />
     <ClInclude Include="instruments\vac.h" />

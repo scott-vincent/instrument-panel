@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "asi.h"
+#include "savageCub/asiSavageCub.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -36,16 +37,8 @@ void asi::resize()
     // Create bitmaps scaled to correct size (original size is 800)
     scaleFactor = size / 800.0f;
 
-    char origName[256];
-    if (loadedAircraft == SAVAGE_CUB) {
-        strcpy(origName, "asi-savage-cub.png");
-    }
-    else {
-        strcpy(origName, "asi.png");
-    }
-
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap(origName);
+    ALLEGRO_BITMAP* orig = loadBitmap("asi.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -149,6 +142,11 @@ void asi::resizeFast()
 void asi::render()
 {
     if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+        return;
+    }
+
+    if (customInstrument != NULL) {
+        customInstrument->render();
         return;
     }
 
@@ -278,7 +276,30 @@ void asi::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+
+        // Load custom instrument for this aircraft if we have one
+        if (customInstrument != NULL) {
+            delete customInstrument;
+            customInstrument = NULL;
+        }
+
+        if (loadedAircraft == SAVAGE_CUB) {
+            customInstrument = new asiSavageCub(xPos, yPos, size, name);
+        }
     }
+
+#ifndef _WIN32
+    // Only have hardware knobs on Raspberry Pi
+    if (globals.hardwareKnobs) {
+        updateKnobs();
+    }
+#endif
+
+    if (customInstrument != NULL) {
+        customInstrument->update();
+        return;
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -290,28 +311,14 @@ void asi::update()
         resize();
     }
 
-#ifndef _WIN32
-    // Only have hardware knobs on Raspberry Pi
-    if (globals.hardwareKnobs) {
-        updateKnobs();
-    }
-#endif
-
     if (fastAircraft) {
         updateFast();
         return;
     }
 
-    // Get latest FlightSim variables
+    // Calculate values
     airspeedCal = -35 - (simVars->asiAirspeedCal * 2.5);
-
-    // Calculate values - Not a linear scale!
-    if (loadedAircraft == SAVAGE_CUB) {
-        airspeedKnots = simVars->asiAirspeed * 2;
-    }
-    else {
-        airspeedKnots = simVars->asiAirspeed;
-    }
+    airspeedKnots = simVars->asiAirspeed;
 
     // Not a linear scale!
     if (airspeedKnots < 40) {
