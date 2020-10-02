@@ -20,8 +20,18 @@ void dataLink(simvars*);
 void showError(const char* msg);
 void fatalError(const char* msg);
 
-simvars::simvars()
+simvars::simvars(const char *customSettings)
 {
+    if (customSettings == NULL) {
+        strcpy(settingsFile, globals.SettingsFile);
+    }
+    else if (strchr(customSettings, '/') == NULL && strchr(customSettings, '\\') == NULL) {
+        sprintf(settingsFile, "%s%s", globals.SettingsDir, customSettings);
+    }
+    else {
+        strcpy(settingsFile, customSettings);
+    }
+
     loadSettings();
 
     // Start data link thread
@@ -46,14 +56,14 @@ void simvars::loadSettings()
     static char buf[16384] = { '\0' };
 
     // Read file in a single chunk
-    FILE* infile = fopen(globals.SettingsFile, "r");
+    FILE* infile = fopen(settingsFile, "r");
     if (infile) {
         int bytes = (int)fread(buf, 1, 16384, infile);
         buf[bytes] = '\0';
         fclose(infile);
     }
     else {
-        printf("Settings file %s not found\n", globals.SettingsFile);
+        printf("Settings file %s not found\n", settingsFile);
     }
 
     groupCount = 0;
@@ -160,7 +170,7 @@ void simvars::loadSettings()
 void simvars::saveSettings()
 {
     // Save settings to JSON file
-    FILE* outfile = fopen(globals.SettingsFile, "w");
+    FILE* outfile = fopen(settingsFile, "w");
     if (outfile)
     {
         fprintf(outfile, "{\n");

@@ -3,12 +3,6 @@
     "Host": "127.0.0.1",
     "Port": 52020
   },
-  "ADI Learjet": {
-    "Enabled": false,
-    "Position X": 882,
-    "Position Y": 10,
-    "Size": 300
-  },
   "ASI": {
     "Enabled": true,
     "Position X": 566,
@@ -116,5 +110,8 @@
     "Position X": 77,
     "Position Y": 900,
     "Size": 589
+  },
+  "ADI Learjet": {
+    "Enabled": false
   }
 }

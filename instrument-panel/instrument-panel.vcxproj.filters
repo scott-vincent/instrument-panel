@@ -136,6 +136,9 @@
     <None Include="settings\default-settings.json">
       <Filter>settings</Filter>
     </None>
+    <None Include="settings\savage-cub.json">
+      <Filter>settings</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="instruments">

@@ -29,6 +29,7 @@ struct globalVars
     const int FastAircraftSpeed = 195;
 
     const char* BitmapDir = "bitmaps/";
+    const char* SettingsDir = "settings/";
     const char* SettingsFile = "settings/instrument-panel.json";
 
     simvars* simVars = NULL;

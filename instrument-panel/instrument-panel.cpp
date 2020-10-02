@@ -129,7 +129,7 @@ void fatalError(const char* msg)
 /// <summary>
 /// Initialise Allegro etc.
 /// </summary>
-void init()
+void init(const char *settingsFile = NULL)
 {
     if (!al_init()) {
         fatalError("Failed to initialise Allegro");
@@ -194,7 +194,7 @@ void init()
     al_register_event_source(eventQueue, al_get_timer_event_source(timer));
     al_register_event_source(eventQueue, al_get_display_event_source(globals.display));
 
-    globals.simVars = new simvars();
+    globals.simVars = new simvars(settingsFile);
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -537,9 +537,14 @@ void addInstruments()
 ///
 /// main
 ///
-int main()
+int main(int argc, char **argv)
 {
-    init();
+    if (argc > 1) {
+        init(argv[1]);
+    }
+    else {
+        init();
+    }
 
     for (int i = 0; i < globals.startOnMonitor; i++) {
         switchMonitor();

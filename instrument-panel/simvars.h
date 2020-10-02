@@ -25,6 +25,7 @@ public:
 
 private:
     std::thread* dataLinkThread = NULL;
+    char settingsFile[256];
 
     SOCKET writeSockfd = INVALID_SOCKET;
     sockaddr_in writeAddr;
@@ -55,7 +56,7 @@ private:
     struct SettingsGroup groups[64] = {};
     
 public:
-    simvars();
+    simvars(const char *settingsFile);
     ~simvars();
     char *view();
     void doKeypress(int keycode);
