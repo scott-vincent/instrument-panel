@@ -2,7 +2,7 @@
 
 ![Screenshot](Screenshot.jpg)
 
-# QUICK START
+# Quick Start
 
 Download the following two zip files.
 
@@ -20,11 +20,11 @@ Note: There is a screensaver feature so the instrument panel will appear dim unt
 
 If you want to use the Savage Cub panel instead of the default Cessna panel or you want to define multiple panel layouts see section "Custom Panels" below.
 
-# RELEASES
+# Releases
 
 Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking on the Releases section on the right of this readme.
 
-# INTRODUCTION
+# Introduction
 
 An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020 but you can just run it on
@@ -87,7 +87,7 @@ On Raspberry Pi you can configure hardware Rotary Encoders for each instrument.
 Each rotary encoder is connected to two BCM GPIO pins (+ ground on centre pin).
 See individual instruments for pins used. Not all instruments have manual controls.
 
-# CUSTOM PANELS
+# Custom Panels
 
 Instrument Panel now supports multiple panels in case you decide to build a Savage Cub panel for example instead of a Cessna panel. You need to create a settings file for each custom panel and you will find a Savage Cub one already in the settings folder.
 
@@ -99,7 +99,7 @@ On Raspberry Pi just supply the settings file name on the command line when you 
 
 If no settings file is supplied, "instrument-panel.json" will be used and the default Cessna panel will be displayed. 
 
-# INTELLIGENT INSTRUMENTS
+# Intelligent Instruments
 
 Some of the instruments are 'intelligent' and will adapt to whatever aircraft you are currently flying. For example, adding ASI to your panel will allow it to switch to the Savage Cub version when you are flying that particular aircraft and ALT will switch to a version with a digital readout when you are flying a fast aircraft, e.g. one of the airliners.
 
@@ -107,13 +107,13 @@ Use a specific instrument in your panel if you don't want it to auto switch, for
 
 Note that only a few specific instruments have been created so far as this project is a work in progress.  
 
-# DONATE
+# Donate
 
 If you find this project useful, would like to see it developed further or would just like to buy the author a beer, please consider a small donation.
 
 [<img src="donate.svg" width="210" height="40">](https://paypal.me/scottvincent2020)
 
-# ADDITIONAL PHOTOS
+# Additional Photos
 
 Panel Front
 ![Panel Front](Panel_Front.jpg)

@@ -1,10 +1,7 @@
 {
   "Data Link": {
-    "Host": "192.168.1.143",
+    "Host": "127.0.0.1",
     "Port": 52020
-  },
-  "Monitor": {
-    "StartOn": 1
   },
   "ASI": {
     "Enabled": true,
@@ -118,9 +115,6 @@
     "Enabled": false
   },
   "ASI Savage Cub": {
-    "Enabled": false
-  },
-  "RPM Savage Cub": {
     "Enabled": false
   }
 }
