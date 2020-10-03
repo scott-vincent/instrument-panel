@@ -116,5 +116,14 @@
   },
   "ASI Savage Cub": {
     "Enabled": false
+  },
+  "RPM Savage Cub": {
+    "Enabled": false
+  },
+  "COM Savage Cub": {
+    "Enabled": false
+  },
+  "XPDR Savage Cub": {
+    "Enabled": false
   }
 }

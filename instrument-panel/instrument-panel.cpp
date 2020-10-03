@@ -83,6 +83,8 @@
 #include "learjet/adiLearjet.h"
 #include "savageCub/asiSavageCub.h"
 #include "savageCub/rpmSavageCub.h"
+#include "savageCub/comSavageCub.h"
+#include "savageCub/xpdrSavageCub.h"
 
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
@@ -542,6 +544,14 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("RPM Savage Cub")) {
         instruments.push_back(new rpmSavageCub(350, 50, 300));
+    }
+
+    if (globals.simVars->isEnabled("COM Savage Cub")) {
+        instruments.push_back(new comSavageCub(350, 50, 300));
+    }
+
+    if (globals.simVars->isEnabled("XPDR Savage Cub")) {
+        instruments.push_back(new xpdrSavageCub(350, 50, 300));
     }
 }
 

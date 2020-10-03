@@ -1,16 +1,15 @@
-#ifndef _ALT_H_
-#define _ALT_H_
+#ifndef _ALT_FAST_H_
+#define _ALT_FAST_H_
 
 #include "simvarDefs.h"
 #include "instrument.h"
 
-class alt : public instrument
+class altFast : public instrument
 {
 private:
     SimVars* simVars;
-    Aircraft loadedAircraft = NO_AIRCRAFT;
-    bool fastAircraft = false;
     float scaleFactor;
+    bool hasParent;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
     double mb;            // millibars
@@ -23,15 +22,20 @@ private:
     int prevVal = 0;
 
 public:
-    alt(int xPos, int yPos, int size);
+    altFast(int xPos, int yPos, int size, const char* parentName = NULL);
     void render();
     void update();
 
 private:
     void resize();
+    void addSmallNumber(int yPos, int digit1, int digit2, int digit3, int digit4);
+    void addSmallShadow(int yPos);
+    void addLargeNumber(int yPos1, int yPos2, int yPos3);
+    void addLargeShadow();
     void addVars();
     void addKnobs();
     void updateKnobs();
+
 };
 
-#endif // _ALT_H
+#endif // _ALT_FAST_H

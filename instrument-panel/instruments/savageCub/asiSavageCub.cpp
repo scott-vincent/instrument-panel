@@ -6,7 +6,7 @@
 
 asiSavageCub::asiSavageCub(int xPos, int yPos, int size, const char *parentName) : instrument(xPos, yPos, size)
 {
-    if (parentName != NULL) {
+    if (parentName) {
         // Use position, size and vars from parent
         setName(parentName);
     }

@@ -69,6 +69,18 @@
     <ClCompile Include="instruments\savageCub\rpmSavageCub.cpp">
       <Filter>instruments\savageCub</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\savageCub\comSavageCub.cpp">
+      <Filter>instruments\savageCub</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\genericFast\altFast.cpp">
+      <Filter>instruments\genericFast</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\genericFast\asiFast.cpp">
+      <Filter>instruments\genericFast</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\savageCub\xpdrSavageCub.cpp">
+      <Filter>instruments\savageCub</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -139,6 +151,18 @@
     <ClInclude Include="instruments\savageCub\rpmSavageCub.h">
       <Filter>instruments\savageCub</Filter>
     </ClInclude>
+    <ClInclude Include="instruments\savageCub\comSavageCub.h">
+      <Filter>instruments\savageCub</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\genericFast\altFast.h">
+      <Filter>instruments\genericFast</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\genericFast\asiFast.h">
+      <Filter>instruments\genericFast</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\savageCub\xpdrSavageCub.h">
+      <Filter>instruments\savageCub</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -164,6 +188,9 @@
     </Filter>
     <Filter Include="instruments\learjet">
       <UniqueIdentifier>{56d939fd-718b-4ddf-9a02-17369d136bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instruments\genericFast">
+      <UniqueIdentifier>{47c92d55-ae1e-4c17-8c25-c286ebb2fe3f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

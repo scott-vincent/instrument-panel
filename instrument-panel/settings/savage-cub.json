@@ -39,7 +39,7 @@
     "Position Y": 230,
     "Size": 180
   },
-  "Digital Clock": {
+  "COM Savage Cub": {
     "Enabled": true,
     "Position X": 410,
     "Position Y": 365,
@@ -51,13 +51,13 @@
     "Position Y": 365,
     "Size": 180
   },
-  "Fuel": {
+  "XPDR Savage Cub": {
     "Enabled": true,
     "Position X": 1150,
     "Position Y": 365,
     "Size": 180
   },
-  "EGT": {
+  "Fuel": {
     "Enabled": true,
     "Position X": 1440,
     "Position Y": 365,
@@ -94,6 +94,12 @@
     "Enabled": false
   },
   "ADI Learjet": {
+    "Enabled": false
+  },
+  "Digital Clock": {
+    "Enabled": false
+  },
+  "EGT": {
     "Enabled": false
   }
 }

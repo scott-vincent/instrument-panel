@@ -1,18 +1,17 @@
-#ifndef _ASI_H_
-#define _ASI_H_
+#ifndef _ASI_FAST_H_
+#define _ASI_FAST_H_
 
 #include "simvarDefs.h"
 #include "instrument.h"
 
-class asi : public instrument
+class asiFast : public instrument
 {
 private:
     const double FastPlaneSizeFactor = 1.075;
 
     SimVars* simVars;
-    Aircraft loadedAircraft = NO_AIRCRAFT;
-    bool fastAircraft = false;
     float scaleFactor;
+    bool hasParent;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     double airspeedCal;
@@ -20,12 +19,16 @@ private:
     double airspeedAngle = 0;
     double angle;
 
+    double targetAirspeedAngle;
+    double machAngle;
+    double prevMachAngle = 248.14444;
+
     // Hardware knobs
     int calKnob = -1;
     int prevVal = 0;
 
 public:
-    asi(int xPos, int yPos, int size);
+    asiFast(int xPos, int yPos, int size, const char* parentName = NULL);
     void render();
     void update();
 
@@ -34,6 +37,7 @@ private:
     void addVars();
     void addKnobs();
     void updateKnobs();
+
 };
 
-#endif // _ASI_H
+#endif // _ASI_FAST_H

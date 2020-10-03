@@ -84,7 +84,7 @@ void rpm::render()
         return;
     }
 
-    if (customInstrument != NULL) {
+    if (customInstrument) {
         customInstrument->render();
         return;
     }
@@ -145,7 +145,7 @@ void rpm::update()
         loadedAircraft = globals.aircraft;
 
         // Load custom instrument for this aircraft if we have one
-        if (customInstrument != NULL) {
+        if (customInstrument) {
             delete customInstrument;
             customInstrument = NULL;
         }
@@ -155,7 +155,7 @@ void rpm::update()
         }
     }
 
-    if (customInstrument != NULL) {
+    if (customInstrument) {
         customInstrument->update();
         return;
     }
