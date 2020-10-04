@@ -25,6 +25,8 @@ struct SimVars
     double dcFlightSeconds = 0;
     double dcVolts = 23.7;
     double dcTempC = 26.2;
+    double oilPressureGeneral = 0;
+    double oilPressure = 0;
     double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
@@ -40,11 +42,13 @@ struct SimVars
     double vor2ToFrom = 0;
     double adfRadial = 0;
     double adfCard = 0;
+    double com1Status = 0;
     double com1Transmit = 1;
     double com1Freq = 119.225;
     double com1Standby = 124.850;
     double nav1Freq = 110.50;
     double nav1Standby = 113.90;
+    double com2Status = 0;
     double com2Transmit = 0;
     double com2Freq = 124.850;
     double com2Standby = 124.850;

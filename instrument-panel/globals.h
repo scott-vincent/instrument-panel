@@ -57,7 +57,7 @@ struct globalVars
     bool connected = false;
     bool active = true;
     bool electrics = false;
-    bool externalControls = false;
+    bool avionics = false;
     bool enableShadows = true;
 };
 

@@ -155,7 +155,7 @@ void nav::render()
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
-    if (!globals.active) {
+    if (!globals.avionics) {
         dimInstrument();
     }
 }
@@ -630,11 +630,13 @@ void nav::update()
 /// </summary>
 void nav::addVars()
 {
+    globals.simVars->addVar(name, "Com Status:1", true, 1, 0);
     globals.simVars->addVar(name, "Com Transmit:1", true, 1, 1);
     globals.simVars->addVar(name, "Com Active Frequency:1", false, 0.005, 100);
     globals.simVars->addVar(name, "Com Standby Frequency:1", false, 0.005, 100);
     globals.simVars->addVar(name, "Nav Active Frequency:1", false, 0.05, 100);
     globals.simVars->addVar(name, "Nav Standby Frequency:1", false, 0.05, 100);
+    globals.simVars->addVar(name, "Com Status:2", true, 1, 0);
     globals.simVars->addVar(name, "Com Transmit:2", true, 1, 0);
     globals.simVars->addVar(name, "Com Active Frequency:2", false, 0.005, 100);
     globals.simVars->addVar(name, "Com Standby Frequency:2", false, 0.005, 100);

@@ -244,8 +244,8 @@ void cleanup()
 /// </summary>
 void addCommon()
 {
-    // globals.simVars->addVar("Common", "Electrics", true, 1, 0);
-    // globals.simVars->addVar("Common", "External Controls", true, 1, 1);
+    // globals.simVars->addVar("Common", "Electrics", true, 1, 1);
+    // globals.simVars->addVar("Common", "Avionics", true, 1, 1);
 }
 
 /// <summary>
@@ -253,11 +253,13 @@ void addCommon()
 /// </summary>
 void updateCommon()
 {
-    // Electrics check
-    globals.electrics = true;
+    SimVars* simVars = &globals.simVars->simVars;
 
-    // Check if FS or external controls
-    globals.externalControls = true;
+    // Electrics check
+    globals.electrics = (simVars->dcVolts > 0);
+
+    // Avionics check
+    globals.avionics = (simVars->com1Status == 0 || simVars->com2Status == 0);
 }
 
 /// <summary>

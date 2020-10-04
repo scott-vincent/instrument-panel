@@ -739,7 +739,7 @@ void dataLink(simvars* t)
                         rpmMatch = 0;
                         lastRpm = t->simVars.rpmEngine;
                     }
-                    globals.active = (rpmMatch < 3000);
+                    globals.active = (rpmMatch < 3000 && globals.electrics);
 
                     // Identify aircraft
                     if (strcmp(t->simVars.aircraft, lastAircraft) != 0) {

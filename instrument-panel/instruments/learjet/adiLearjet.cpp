@@ -313,11 +313,7 @@ void adiLearjet::update()
             bankAngle = targetBank;
         }
 
-        if (!globals.externalControls)
-        {
-            currentAdiCal = 0;
-        }
-        else if (currentAdiCal > adiCal && currentAdiCal > -10)
+        if (currentAdiCal > adiCal && currentAdiCal > -10)
         {
             currentAdiCal -= 1;
         }
