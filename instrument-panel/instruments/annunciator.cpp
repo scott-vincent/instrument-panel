@@ -10,6 +10,7 @@
 annunciator::annunciator(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Annunciator");
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -50,24 +51,36 @@ void annunciator::resize()
     addBitmap(bmp);
 
     // 3 = Low fuel
-    bmp = al_create_bitmap(size, size / 4);
+    bmp = al_create_bitmap(280 * scaleFactor, 50 * scaleFactor);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 200, 800, 200, 0, 0, size, size / 4, 0);
+    al_draw_scaled_bitmap(orig, 88, 237, 280, 50, 0, 0, 280 * scaleFactor, 50 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 4 = No data link
+    // 4 = Oil pressure
+    bmp = al_create_bitmap(257 * scaleFactor, 64 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 35, 289, 257, 64, 0, 0, 257 * scaleFactor, 64 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 5 = Volts
+    bmp = al_create_bitmap(167 * scaleFactor, 62 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 610, 290, 167, 62, 0, 0, 167 * scaleFactor, 62 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 6 = No data link
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 400, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 5 = Not connected
+    // 7 = Not connected
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 600, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 6 = ATC info background
+    // 8 = ATC info background
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 600, 1, 1, 0, 0, size, size / 4, 0);
@@ -95,28 +108,38 @@ void annunciator::render()
     if (!globals.dataLinked)
     {
         // 'No Data Link' message
-        al_draw_bitmap(bitmaps[4], 0, 0, 0);
+        al_draw_bitmap(bitmaps[6], 0, 0, 0);
         state = 0;
     }
     else if (!globals.connected)
     {
         // 'Not Connected' message
-        al_draw_bitmap(bitmaps[5], 0, 0, 0);
+        al_draw_bitmap(bitmaps[7], 0, 0, 0);
         state = 1;
     }
     else {
         state = 2;
 
-        if (fuelWarning) {
-            al_draw_bitmap(bitmaps[3], 0, 0, 0);
+        if (selection == 0) {
+            showAtcInfo();
         }
         else {
-            // No warnings
-            if (selection == 0) {
-                showAtcInfo();
-            }
-            else {
-                al_draw_bitmap(bitmaps[2], 0, 0, 0);
+            // Draw no warnings (warnings get overlayed)
+            al_draw_bitmap(bitmaps[2], 0, 0, 0);
+
+            // No warnings if no electrics
+            if (globals.electrics) {
+                if (fuelWarning) {
+                    al_draw_bitmap(bitmaps[3], 88 * scaleFactor, 37 * scaleFactor, 0);
+                }
+
+                if (oilWarning) {
+                    al_draw_bitmap(bitmaps[4], 35 * scaleFactor, 89 * scaleFactor, 0);
+                }
+
+                if (voltsWarning) {
+                    al_draw_bitmap(bitmaps[5], 610 * scaleFactor, 90 * scaleFactor, 0);
+                }
             }
         }
     }
@@ -139,7 +162,6 @@ void annunciator::render()
 
 void annunciator::showAtcInfo()
 {
-    SimVars* simVars = &globals.simVars->simVars;
     char callSign[256];
 
     if (simVars->atcFlightNumber[0] == '\0') {
@@ -153,9 +175,9 @@ void annunciator::showAtcInfo()
         strcat(callSign, "Heavy");
     }
 
-    al_draw_bitmap(bitmaps[6], 0, 0, 0);
+    al_draw_bitmap(bitmaps[8], 0, 0, 0);
     al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 20, 0, simVars->atcTailNumber);
-    // Temp hack - Comment next line out
+    // Debug - Uncomment to show aircraft name
     //strcpy(callSign, simVars->aircraft);
     al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 40, 0, callSign);
 }
@@ -183,9 +205,6 @@ void annunciator::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     double fuelLevel = (simVars->fuelLeft + simVars->fuelRight) / 2;
@@ -226,6 +245,12 @@ void annunciator::update()
         // Steady fuel warning
         fuelWarning = true;
     }
+
+    // Oil warning if pressure < 20 PSI
+    oilWarning = (simVars->oilPressure < 20);
+
+    // Volts warning if battery not charging, i.e. load is greater than zero
+    voltsWarning = (simVars->batteryLoad > 0);
 }
 
 #ifndef _WIN32

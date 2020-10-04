@@ -25,8 +25,7 @@ struct SimVars
     double dcFlightSeconds = 0;
     double dcVolts = 23.7;
     double dcTempC = 26.2;
-    double oilPressureGeneral = 0;
-    double oilPressure = 0;
+    double batteryLoad = 0;
     double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
@@ -78,7 +77,7 @@ struct SimVars
     double parkingBrakeOn = 1;
     double cruiseSpeed = 120;
     double oilTemp = 75;
-    double oilPress = 0;
+    double oilPressure = 50;
     double exhaustGasTemp = 0;
     double exhaustGasTempGES = 0;
     double engineFuelFlow = 0;

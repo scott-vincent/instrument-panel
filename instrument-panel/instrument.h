@@ -20,6 +20,7 @@ protected:
     int bitmapCount = 0;
     ALLEGRO_BITMAP* bitmaps[MaxBitmaps] = { NULL };
     ALLEGRO_BITMAP* dim = NULL;
+    ALLEGRO_BITMAP* semiDim = NULL;
     instrument* customInstrument = NULL;
 
 public:
@@ -32,7 +33,7 @@ public:
     instrument(int xPos, int yPos, int size);
     ~instrument();
     void setName(const char* name);
-    void dimInstrument();
+    void dimInstrument(bool fullDim = true);
     virtual void resize() = 0;
     virtual void render() = 0;
     virtual void update() = 0;

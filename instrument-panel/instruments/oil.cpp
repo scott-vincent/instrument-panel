@@ -97,5 +97,6 @@ void oil::update()
 /// </summary>
 void oil::addVars()
 {
-    // globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "General Eng Oil Temperature:1", false, 1, 75);
+    globals.simVars->addVar(name, "General Eng Oil Pressure:1", false, 1, 50);
 }

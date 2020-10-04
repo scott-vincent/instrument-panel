@@ -1,6 +1,7 @@
 #ifndef _ANNUNCIATOR_H_
 #define _ANNUNCIATOR_H_
 
+#include "simvarDefs.h"
 #include "instrument.h"
 #ifndef _WIN32
 #include <time.h>
@@ -9,12 +10,15 @@
 class annunciator : public instrument
 {
 private:
+    SimVars* simVars;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
     int selection = 1;
     int prevState = -1;
     bool fuelWarning;
+    bool voltsWarning;
+    bool oilWarning;
     double prevFuel = 100;
     int flashCount;
 #ifdef _WIN32

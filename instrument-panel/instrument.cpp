@@ -87,22 +87,43 @@ void instrument::destroyBitmaps()
         al_destroy_bitmap(dim);
         dim = NULL;
     }
+
+    if (semiDim) {
+        al_destroy_bitmap(semiDim);
+        semiDim = NULL;
+    }
 }
 
 /// <summary>
 /// Will dim the instrument when not connected, i.e. screensaver
 /// </summary>
-void instrument::dimInstrument()
+void instrument::dimInstrument(bool fullDim)
 {
-    if (dim == NULL) {
+    if (fullDim && dim == NULL) {
         dim = loadBitmap("dim.png");
+    }
+
+    if (!fullDim && semiDim == NULL) {
+        semiDim = loadBitmap("semi-dim.png");
+    }
+
+    ALLEGRO_BITMAP* bmp;
+    if (fullDim) {
+        bmp = dim;
+    }
+    else {
+        bmp = semiDim;
+    }
+
+    if (!bmp) {
+        return;
     }
 
     // Set blender to multiply (shades of grey darken, white has no effect)
     al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
     // Add pointer shadow
-    al_draw_scaled_bitmap(dim, 0, 0, 8, 8, xPos, yPos, size, size, 0);
+    al_draw_scaled_bitmap(bmp, 0, 0, 8, 8, xPos, yPos, size, size, 0);
 
     // Restore normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);

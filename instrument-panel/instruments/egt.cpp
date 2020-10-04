@@ -84,8 +84,6 @@ void egt::render()
     // Add dials
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-   
-
     // Add Flow pointer
     al_draw_scaled_rotated_bitmap(bitmaps[4], 186, 20, 386 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, flowAngle * DegreesToRadians, 0);
 

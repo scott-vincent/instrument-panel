@@ -97,5 +97,6 @@ void vac::update()
 /// </summary>
 void vac::addVars()
 {
-    // globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "Suction Pressure", false, 1, 0);
+    globals.simVars->addVar(name, "Electrical Battery Load", false, 1, 0);
 }
