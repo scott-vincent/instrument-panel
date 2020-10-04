@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include "comSavageCub.h"
 #include "simvars.h"
+#include "knobs.h"
 
 comSavageCub::comSavageCub(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
@@ -153,7 +153,7 @@ void comSavageCub::addKnobs()
 void comSavageCub::updateKnobs()
 {
     // Read switch push
-    val = globals.hardwareKnobs->read(selPush);
+    int val = globals.hardwareKnobs->read(selPush);
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
         if (prevSelPush % 2 == 1) {

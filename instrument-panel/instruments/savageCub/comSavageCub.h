@@ -34,9 +34,10 @@ public:
 private:
     void resize();
     void addFreq3dp(int freq, int x, int y);
-    double adjustCom(double val, int adjust);
     void addVars();
-
+    void addKnobs();
+    void updateKnobs();
+    double adjustCom(double val, int adjust);
 };
 
 #endif // _COM_SAVAGE_CUB_H

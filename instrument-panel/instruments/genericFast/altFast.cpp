@@ -300,13 +300,13 @@ void altFast::addVars()
 
 #ifndef _WIN32
 
-void alt::addKnobs()
+void altFast::addKnobs()
 {
     // BCM GPIO 10 and 9
     calKnob = globals.hardwareKnobs->add(10, 9, -1, -1, 0);
 }
 
-void alt::updateKnobs()
+void altFast::updateKnobs()
 {
     // Read knob for pressure calibration
     int val = globals.hardwareKnobs->read(calKnob);

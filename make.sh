@@ -27,9 +27,13 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/vor2.cpp \
     instruments/vsi.cpp \
     instrument-panel.cpp \
+    instruments/genericFast/altFast.cpp \
+    instruments/genericFast/asiFast.cpp \
     instruments/learjet/adiLearjet.cpp \
     instruments/savageCub/asiSavageCub.cpp \
     instruments/savageCub/rpmSavageCub.cpp \
+    instruments/savageCub/comSavageCub.cpp \
+    instruments/savageCub/xpdrSavageCub.cpp \
     || exit
 echo Done
 echo Run with: ./run.sh

@@ -3,6 +3,7 @@
 #include <math.h>
 #include "xpdrSavageCub.h"
 #include "simvars.h"
+#include "knobs.h"
 
 xpdrSavageCub::xpdrSavageCub(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
@@ -142,7 +143,7 @@ void xpdrSavageCub::addKnobs()
 void xpdrSavageCub::updateKnobs()
 {
     // Read knob for digits set
-    val = globals.hardwareKnobs->read(adjustKnob);
+    int val = globals.hardwareKnobs->read(adjustKnob);
     if (val != INT_MIN) {
         int diff = (val - prevAdjustVal) / 2;
         int adjust = 0;
@@ -195,21 +196,36 @@ int xpdrSavageCub::adjustSquawk(int val, int adjust)
 
     switch (adjustSetSel) {
     case 0:
-        digit1 = adjustDigit(digit1, adjust, true);
+        digit1 = adjustDigit(digit1, adjust);
         break;
     case 1:
-        digit2 = adjustDigit(digit2, adjust, true);
+        digit2 = adjustDigit(digit2, adjust);
         break;
     case 2:
-        digit3 = adjustDigit(digit3, adjust, true);
+        digit3 = adjustDigit(digit3, adjust);
         break;
     case 3:
-        digit4 = adjustDigit(digit4, adjust, true);
+        digit4 = adjustDigit(digit4, adjust);
         break;
     }
 
     // Convert to BCD
     return digit1 * 4096 + digit2 * 256 + digit3 * 16 + digit4;
+}
+
+int xpdrSavageCub::adjustDigit(int val, int adjust)
+{
+    int maxDigit = 7;
+
+    val += adjust;
+    if (val > maxDigit) {
+        val -= maxDigit + 1;
+    }
+    else if (val < 0) {
+        val += maxDigit + 1;
+    }
+
+    return val;
 }
 
 #endif // !_WIN32

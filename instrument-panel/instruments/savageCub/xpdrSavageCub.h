@@ -32,9 +32,11 @@ public:
 private:
     void resize();
     void addSquawk(int freq, int x, int y);
-    double adjustSquawk(double val, int adjust);
     void addVars();
-
+    void addKnobs();
+    void updateKnobs();
+    int adjustSquawk(int val, int adjust);
+    int adjustDigit(int val, int adjust);
 };
 
 #endif // _XPDR_SAVAGE_CUB_H
