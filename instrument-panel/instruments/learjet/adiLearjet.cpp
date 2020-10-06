@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "adiLearjet.h"
-#include "simvars.h"
 #include "knobs.h"
 
 adiLearjet::adiLearjet(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("ADI Learjet");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -211,11 +211,6 @@ void adiLearjet::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
-    // Calculate values
 
     // If power is off for a random amount of time (between 5 - 7 mins) then simulate gyro stopping
     double timeDifference = 0;

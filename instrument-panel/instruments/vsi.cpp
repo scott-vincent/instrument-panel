@@ -8,6 +8,7 @@ vsi::vsi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("VSI");
     addVars();
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -77,14 +78,14 @@ void vsi::render()
         al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
         // Add pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[4], 400,50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * AngleFactor, 0);
+        al_draw_scaled_rotated_bitmap(bitmaps[4], 400,50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
 
         // Restore normal blender
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
 
     // Add pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * AngleFactor, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -112,22 +113,23 @@ void vsi::update()
         resize();
     }
 
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
     // Calculate values
-    if (simVars->vsiVerticalSpeed < 0) {
-        targetAngle = -2.65 * pow(-simVars->vsiVerticalSpeed, 1.1);
+    vertSpeed = abs(simVars->vsiVerticalSpeed);
+
+    // Different scale after 10
+    if (vertSpeed > 10) {
+        targetAngle = 79.5 + (96.0 * (vertSpeed - 10.0)) / 20.0;
+
+        if (targetAngle > 175.5) {
+            targetAngle = 175.5;
+        }
     }
     else {
-        targetAngle = 2.65 * pow(simVars->vsiVerticalSpeed, 1.1);
+        targetAngle = (79.5 * vertSpeed) / 10.0;
     }
 
-    if (targetAngle > 123) {
-        targetAngle = 123;
-    }
-    else if (targetAngle < -123) {
-        targetAngle = -123;
+    if (simVars->vsiVerticalSpeed < 0) {
+        targetAngle = -targetAngle;
     }
 
     double diff = abs(targetAngle - angle);
@@ -144,8 +146,11 @@ void vsi::update()
     else if (diff > 5.0) {
         if (angle < targetAngle) angle += 2.5; else angle -= 2.5;
     }
-    else if (diff > 1.25) {
+    else if (diff > 2.5) {
         if (angle < targetAngle) angle += 1.25; else angle -= 1.25;
+    }
+    else if (diff > 0.625) {
+        if (angle < targetAngle) angle += 0.625; else angle -= 0.625;
     }
     else {
         angle = targetAngle;

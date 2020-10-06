@@ -1,7 +1,7 @@
 #ifndef _XPDR_SAVAGE_CUB_H_
 #define _XPDR_SAVAGE_CUB_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class xpdrSavageCub : public instrument

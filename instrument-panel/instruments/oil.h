@@ -1,11 +1,13 @@
 #ifndef _OIL_H_
 #define _OIL_H_
 
+#include "simvars.h"
 #include "instrument.h"
 
 class oil : public instrument
 {
 private:
+    SimVars* simVars;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)

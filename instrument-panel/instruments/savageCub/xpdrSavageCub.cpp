@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "xpdrSavageCub.h"
-#include "simvars.h"
 #include "knobs.h"
 
 xpdrSavageCub::xpdrSavageCub(int xPos, int yPos, int size) : instrument(xPos, yPos, size)

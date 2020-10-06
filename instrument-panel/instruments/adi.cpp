@@ -8,6 +8,7 @@ adi::adi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("ADI");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -189,9 +190,6 @@ void adi::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars *simVars = &globals.simVars->simVars;
 
     // Calculate values
     double targetPitch = simVars->adiPitch;

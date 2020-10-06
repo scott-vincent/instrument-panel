@@ -10,6 +10,7 @@ hi::hi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("HI");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -136,9 +137,6 @@ void hi::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     angle = -simVars->hiHeading * DegreesToRadians;

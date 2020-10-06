@@ -1,7 +1,7 @@
 #ifndef _ASI_FAST_H_
 #define _ASI_FAST_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class asiFast : public instrument

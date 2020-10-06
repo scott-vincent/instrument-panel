@@ -8,6 +8,7 @@ vor1::vor1(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("VOR1");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -176,9 +177,6 @@ void vor1::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     compassAngle = -simVars->vor1Obs;

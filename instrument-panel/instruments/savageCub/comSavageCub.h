@@ -1,7 +1,7 @@
 #ifndef _COM_SAVAGE_CUB_H_
 #define _COM_SAVAGE_CUB_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class comSavageCub : public instrument

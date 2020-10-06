@@ -7,6 +7,7 @@ tc::tc(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("TC");
     addVars();
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -128,9 +129,6 @@ void tc::update()
         size = settings[2];
         resize();
     }
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     planeAngle = simVars->tcRate * 200;

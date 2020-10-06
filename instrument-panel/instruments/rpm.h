@@ -1,7 +1,7 @@
 #ifndef _RPM_H_
 #define _RPM_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class rpm : public instrument

@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "digitalClock.h"
-#include "simvars.h"
 #include "knobs.h"
 
 digitalClock::digitalClock(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Digital Clock");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -301,9 +301,6 @@ void digitalClock::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     voltsx10 = simVars->dcVolts * 10 + 0.5;

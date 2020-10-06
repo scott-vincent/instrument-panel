@@ -1,8 +1,8 @@
 #ifndef _NAV_H_
 #define _NAV_H_
 
-#include "instrument.h"
 #include "simvars.h"
+#include "instrument.h"
 
 class nav : public instrument
 {

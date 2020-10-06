@@ -1,6 +1,7 @@
 #ifndef _VAC_H_
 #define _VAC_H_
 
+#include "simvarDefs.h"
 #include "instrument.h"
 
 class vac : public instrument

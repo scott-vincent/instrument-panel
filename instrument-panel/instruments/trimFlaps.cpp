@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "trimFlaps.h"
-#include "simvars.h"
 #include "knobs.h"
 
 trimFlaps::trimFlaps(int xPos, int yPos, int size) : instrument(xPos, yPos, size)

@@ -8,6 +8,7 @@ fuel::fuel(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Fuel");
     addVars();
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -126,9 +127,6 @@ void fuel::update()
         size = settings[2];
         resize();
     }
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     angleLeft = 51 - simVars->fuelLeft * 1.02;

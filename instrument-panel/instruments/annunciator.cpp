@@ -50,37 +50,43 @@ void annunciator::resize()
     al_draw_scaled_bitmap(orig, 0, 0, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 3 = Low fuel
-    bmp = al_create_bitmap(280 * scaleFactor, 50 * scaleFactor);
+    // 3 = L VAC R
+    bmp = al_create_bitmap(245, 62);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 88, 237, 280, 50, 0, 0, 280 * scaleFactor, 50 * scaleFactor, 0);
+    al_draw_bitmap_region(orig, 34, 230, 245, 62, 0, 0, 0);
     addBitmap(bmp);
 
-    // 4 = Oil pressure
-    bmp = al_create_bitmap(257 * scaleFactor, 64 * scaleFactor);
+    // 4 = L LOWFUEL R
+    bmp = al_create_bitmap(374, 62);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 35, 289, 257, 64, 0, 0, 257 * scaleFactor, 64 * scaleFactor, 0);
+    al_draw_bitmap_region(orig, 34, 290, 374, 62, 0, 0, 0);
     addBitmap(bmp);
 
-    // 5 = Volts
-    bmp = al_create_bitmap(167 * scaleFactor, 62 * scaleFactor);
+    // 5 = OIL PRESS
+    bmp = al_create_bitmap(260 * scaleFactor, 64 * scaleFactor);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 610, 290, 167, 62, 0, 0, 167 * scaleFactor, 62 * scaleFactor, 0);
+    al_draw_scaled_bitmap(orig, 496, 229, 260, 64, 0, 0, 260 * scaleFactor, 64 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 6 = No data link
+    // 6 = VOLTS
+    bmp = al_create_bitmap(170 * scaleFactor, 62 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 590, 290, 170, 62, 0, 0, 170 * scaleFactor, 62 * scaleFactor, 0);
+    addBitmap(bmp);
+
+    // 7 = No data link
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 400, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 7 = Not connected
+    // 8 = Not connected
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 600, 800, 200, 0, 0, size, size / 4, 0);
     addBitmap(bmp);
 
-    // 8 = ATC info background
+    // 9 = ATC info background
     bmp = al_create_bitmap(size, size / 4);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 600, 1, 1, 0, 0, size, size / 4, 0);
@@ -108,13 +114,13 @@ void annunciator::render()
     if (!globals.dataLinked)
     {
         // 'No Data Link' message
-        al_draw_bitmap(bitmaps[6], 0, 0, 0);
+        al_draw_bitmap(bitmaps[7], 0, 0, 0);
         state = 0;
     }
     else if (!globals.connected)
     {
         // 'Not Connected' message
-        al_draw_bitmap(bitmaps[7], 0, 0, 0);
+        al_draw_bitmap(bitmaps[8], 0, 0, 0);
         state = 1;
     }
     else {
@@ -129,16 +135,35 @@ void annunciator::render()
 
             // No warnings if no electrics
             if (globals.electrics) {
-                if (fuelWarning) {
-                    al_draw_bitmap(bitmaps[3], 88 * scaleFactor, 37 * scaleFactor, 0);
+                if (vacWarningL || vacWarningR) {
+
+                    if (vacWarningL) {
+                        al_draw_scaled_bitmap(bitmaps[3], 0, 0, 46, 62, 34 * scaleFactor, 30 * scaleFactor, 46 * scaleFactor, 62 * scaleFactor, 0);
+                    }
+                    al_draw_scaled_bitmap(bitmaps[3], 46, 0, 153, 62, 80 * scaleFactor, 30 * scaleFactor, 153 * scaleFactor, 62 * scaleFactor, 0);
+                    if (vacWarningR) {
+                        al_draw_scaled_bitmap(bitmaps[3], 199, 0, 46, 62, 233 * scaleFactor, 30 * scaleFactor, 46 * scaleFactor, 62 * scaleFactor, 0);
+                    }
+                }
+
+                if (fuelWarningL || fuelWarningR) {
+                    if (flashCount % 2 == 0) {
+                        if (fuelWarningL) {
+                            al_draw_scaled_bitmap(bitmaps[4], 0, 0, 46, 62, 34 * scaleFactor, 90 * scaleFactor, 46 * scaleFactor, 62 * scaleFactor, 0);
+                        }
+                        al_draw_scaled_bitmap(bitmaps[4], 46, 0, 282, 62, 80 * scaleFactor, 90 * scaleFactor, 282 * scaleFactor, 62 * scaleFactor, 0);
+                        if (fuelWarningR) {
+                            al_draw_scaled_bitmap(bitmaps[4], 328, 0, 46, 62, 362 * scaleFactor, 90 * scaleFactor, 46 * scaleFactor, 62 * scaleFactor, 0);
+                        }
+                    }
                 }
 
                 if (oilWarning) {
-                    al_draw_bitmap(bitmaps[4], 35 * scaleFactor, 89 * scaleFactor, 0);
+                    al_draw_bitmap(bitmaps[5], 496 * scaleFactor, 29 * scaleFactor, 0);
                 }
 
                 if (voltsWarning) {
-                    al_draw_bitmap(bitmaps[5], 610 * scaleFactor, 90 * scaleFactor, 0);
+                    al_draw_bitmap(bitmaps[6], 590 * scaleFactor, 90 * scaleFactor, 0);
                 }
             }
         }
@@ -175,7 +200,7 @@ void annunciator::showAtcInfo()
         strcat(callSign, "Heavy");
     }
 
-    al_draw_bitmap(bitmaps[8], 0, 0, 0);
+    al_draw_bitmap(bitmaps[9], 0, 0, 0);
     al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 20, 0, simVars->atcTailNumber);
     // Debug - Uncomment to show aircraft name
     //strcpy(callSign, simVars->aircraft);
@@ -206,26 +231,16 @@ void annunciator::update()
     }
 #endif
 
-    // Calculate values
-    double fuelLevel = (simVars->fuelLeft + simVars->fuelRight) / 2;
+    // VAC warning if < 1 inHG
+    vacWarningL = (simVars->suctionPressure < 1);
+    vacWarningR = (simVars->suctionPressure < 1);
 
-    // Warning at 5 gallons = 19%
-    if (fuelLevel == 0 || fuelLevel > 19) {
-        fuelWarning = false;
-    }
-    else if (prevFuel > 19) {
-        // Start flashing for 10 seconds
-        prevFuel = fuelLevel;
-        flashCount = 20;
-        fuelWarning = true;
-#ifdef _WIN32
-        lastFlash = GetTickCount64();
-#else
-        clock_gettime(CLOCK_MONOTONIC, &lastFlash);
-#endif
-    }
-    else if (flashCount > 0) {
-        // Alternate on/off every 1 second
+    checkFuel(simVars->fuelLeft, &fuelWarningL, &prevFuelL);
+    checkFuel(simVars->fuelRight, &fuelWarningR, &prevFuelR);
+
+    // Fuel warning flashes for 10 seconds
+    if (flashCount > 0) {
+        // Alternate on/off every 500 ms
         long timeDiff;
 #ifdef _WIN32
         long now = GetTickCount64();
@@ -236,21 +251,40 @@ void annunciator::update()
         timeDiff = (now.tv_sec - lastFlash.tv_sec) * 1000 + (now.tv_nsec - lastFlash.tv_nsec) / 1000000;
 #endif
         if (timeDiff >= 500) {
-            fuelWarning = !fuelWarning;
             flashCount--;
             lastFlash = now;
         }
-    }
-    else {
-        // Steady fuel warning
-        fuelWarning = true;
     }
 
     // Oil warning if pressure < 20 PSI
     oilWarning = (simVars->oilPressure < 20);
 
     // Volts warning if battery not charging, i.e. load is greater than zero
-    voltsWarning = (simVars->batteryLoad > 0);
+    voltsWarning = (simVars->batteryLoad > 0.001);
+}
+
+void annunciator::checkFuel(double fuelLevel, bool *fuelWarning, double *prevFuel)
+{
+    // Fuel warning at 5 gallons = 18%
+    if (fuelLevel == 0 || fuelLevel > 18) {
+        *fuelWarning = false;
+    }
+    else {
+        *fuelWarning = true;
+        if (*prevFuel > 18) {
+            // Flash for 10 seconds
+            if (flashCount == 0) {
+#ifdef _WIN32
+                lastFlash = GetTickCount64();
+#else
+                clock_gettime(CLOCK_MONOTONIC, &lastFlash);
+#endif
+            }
+            flashCount = 20;
+        }
+    }
+
+    *prevFuel = fuelLevel;
 }
 
 #ifndef _WIN32

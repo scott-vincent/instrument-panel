@@ -23,6 +23,7 @@ public:
     int value[MaxKnobs];
     int lastValue[MaxKnobs];
     int lastState[MaxKnobs];
+    bool clockwise[MaxKnobs];
 
     knobs();
     ~knobs();

@@ -1,7 +1,7 @@
 #ifndef _ASI_SAVAGE_CUB_H_
 #define _ASI_SAVAGE_CUB_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class asiSavageCub : public instrument

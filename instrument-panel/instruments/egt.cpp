@@ -8,6 +8,7 @@ egt::egt(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("EGT");
     addVars();
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -121,9 +122,6 @@ void egt::update()
         size = settings[2];
         resize();
     }
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     if (simVars->exhaustGasTemp < 680)

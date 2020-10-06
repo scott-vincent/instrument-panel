@@ -8,6 +8,7 @@ adf::adf(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("ADF");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -118,9 +119,6 @@ void adf::update()
         updateKnobs();
     }
 #endif
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     locAngle = simVars->adfRadial;

@@ -1,7 +1,7 @@
 #ifndef _ALT_FAST_H_
 #define _ALT_FAST_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class altFast : public instrument
@@ -11,7 +11,7 @@ private:
     float scaleFactor;
     bool hasParent;
 
-    // Instrument values (caclulated from variables and needed to draw the instrument)
+    // Instrument values (calculated from variables and needed to draw the instrument)
     double mb;            // millibars
     double inhg;          // inches of mercury
     double angle;

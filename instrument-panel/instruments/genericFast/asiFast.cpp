@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "asiFast.h"
-#include "simvars.h"
 #include "knobs.h"
 
 asiFast::asiFast(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)

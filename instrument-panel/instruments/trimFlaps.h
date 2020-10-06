@@ -1,7 +1,7 @@
 #ifndef _TRIM_FLAPS_H_
 #define _TRIM_FLAPS_H_
 
-#include "simvarDefs.h"
+#include "simvars.h"
 #include "instrument.h"
 
 class trimFlaps : public instrument

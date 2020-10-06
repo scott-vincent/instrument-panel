@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "rpmSavageCub.h"
-#include "simvars.h"
 
 rpmSavageCub::rpmSavageCub(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
 {

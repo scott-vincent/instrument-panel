@@ -1,6 +1,7 @@
 #ifndef _DIGITAL_CLOCK_H_
 #define _DIGITAL_CLOCK_H_
 
+#include "simvars.h"
 #include "instrument.h"
 
 class digitalClock : public instrument
@@ -19,6 +20,7 @@ class digitalClock : public instrument
     };
 
 private:
+    SimVars* simVars;
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)

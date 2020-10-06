@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "comSavageCub.h"
-#include "simvars.h"
 #include "knobs.h"
 
 comSavageCub::comSavageCub(int xPos, int yPos, int size) : instrument(xPos, yPos, size)

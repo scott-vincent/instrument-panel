@@ -1,11 +1,13 @@
 #ifndef _VOR1_H_
 #define _VOR1_H_
 
+#include "simvarDefs.h"
 #include "instrument.h"
 
 class vor1 : public instrument
 {
 private:
+    SimVars* simVars;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "altFast.h"
-#include "simvars.h"
 #include "knobs.h"
 
 altFast::altFast(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)

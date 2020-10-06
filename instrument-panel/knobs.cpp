@@ -64,6 +64,7 @@ int knobs::add(int gpio1, int gpio2, int minVal, int maxVal, int startVal)
     value[knobCount] = startVal;
     lastValue[knobCount] = -1;
     lastState[knobCount] = -1;
+    clockwise[knobCount] = true;
 
     knobCount++;
     return knobCount - 1;
@@ -127,6 +128,7 @@ void watcher(knobs *t)
                     (t->lastState[num] == 1 && state == 0))
                 {
                     // Rotating clockwise
+                    t->clockwise[num] = true;
                     if (!t->limited[num] || t->value[num] < t->maxValue[num]) t->value[num]++;
                 }
                 else if ((t->lastState[num] == 0 && state == 1) ||
@@ -135,7 +137,17 @@ void watcher(knobs *t)
                     (t->lastState[num] == 2 && state == 0))
                 {
                     // Rotating anti-clockwise
+                    t->clockwise[num] = false;
                     if (!t->limited[num] || t->value[num] > t->minValue[num]) t->value[num]--;
+                }
+                else if (t->lastState[num] != -1) {
+                    // Missed rotation so assume same direction as previous
+                    if (t->clockwise[num]) {
+                        if (!t->limited[num] || t->value[num] < t->maxValue[num]) t->value[num]++;
+                    }
+                    else {
+                        if (!t->limited[num] || t->value[num] > t->minValue[num]) t->value[num]--;
+                    }
                 }
 
                 t->lastState[num] = state;

@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "newInstrument.h"
-#include "simvars.h"
 #include "knobs.h"
 
 newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("New Instrument");
     addVars();
+    simVars = &globals.simVars->simVars;
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
@@ -16,7 +16,6 @@ newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yP
     }
 #endif
 
-    simVars = &globals.simVars->simVars;
     resize();
 }
 

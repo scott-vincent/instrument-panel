@@ -7,6 +7,7 @@ oil::oil(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("Oil");
     addVars();
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -84,9 +85,6 @@ void oil::update()
         size = settings[2];
         resize();
     }
-
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
 
     // Calculate values
     angle = simVars->adiBank / 100.0f;
