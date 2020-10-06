@@ -306,24 +306,16 @@ void nav::renderAutopilot()
     case AltHold:
         al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
+
     case PitchHold:
         al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
+
     case VerticalSpeedHold:
-    {
         al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
-        addVerticalSpeed(836, 252);
+        addVerticalSpeed(900, 252);
         // Add white alts display
         al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1213 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
-        break;
-    }
-    case AltChange:
-        // ALT
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
-        // + S = ALTS
-        al_draw_scaled_bitmap(bitmaps[10], 692, 0, 32, 50, 886 * scaleFactorX, 252 * scaleFactorY, 32 * scaleFactorX, destSizeY, 0);
-        // Add white alt display
-        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 94, 50, 1213 * scaleFactorX, 252 * scaleFactorY, 94 * scaleFactorX, destSizeY, 0);
         break;
     }
 }
@@ -609,7 +601,7 @@ void nav::update()
     }
 
     if (simVars->autopilotAltLock == 1) {
-        if (autopilotAlt == AltChange) {
+        if (autopilotAlt == VerticalSpeedHold) {
             // Revert to alt hold when within range of target altitude
             int diff = abs(simVars->altAltitude - simVars->autopilotAltitude);
             if (diff < 210) {
@@ -921,10 +913,20 @@ void nav::autopilotSwitchPressed()
     }
     case VerticalSpeed:
     {
-        // Vertical speed hold not working so set target altitude instead
-        autopilotAlt = AltChange;
+        autopilotAlt = VerticalSpeedHold;
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, simVars->autopilotAltitude);
         globals.simVars->write(KEY_AP_ALT_HOLD_ON);
+
+        // Make sure VS is in correct direction when engaged
+        double setVerticalSpeed = simVars->autopilotVerticalSpeed;
+        if (setVerticalSpeed <= 0 && simVars->altAltitude < simVars->autopilotAltitude) {
+            setVerticalSpeed = 1000;
+        }
+        else if (setVerticalSpeed >= 0 && simVars->altAltitude > simVars->autopilotAltitude) {
+            setVerticalSpeed = -1000;
+        }
+
+        globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
         break;
     }
     }
@@ -1055,12 +1057,11 @@ void nav::autopilotAdjustDigits(int adjust)
     }
     case VerticalSpeed:
     {
-        //double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
-        //globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
-
-        // Adjust altitude instead of vertical speed for now
-        double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
-        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
+        // Only adjust vertical speed if vertical speed hold is enabled
+        if (autopilotAlt == VerticalSpeedHold) {
+            double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
+            globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
+        }
         break;
     }
     }
@@ -1324,8 +1325,8 @@ int nav::adjustAltitude(int val, int adjust)
         }
     }
 
-    if (autopilotAlt == AltChange) {
-        // Check for cancel alt change
+    if (autopilotAlt == VerticalSpeedHold) {
+        // Cancel vertical speed hold when target altitude reached
         int diff = abs(val - simVars->altAltitude);
         if (diff < 210 || (val < simVars->altAltitude && prevVal > simVars->altAltitude)
             || (val > simVars->altAltitude && prevVal < simVars->altAltitude)) {

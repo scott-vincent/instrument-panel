@@ -39,8 +39,7 @@ private:
         NoAlt,
         AltHold,
         PitchHold,
-        VerticalSpeedHold,
-        AltChange
+        VerticalSpeedHold
     };
 
     SimVars* simVars;

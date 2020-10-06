@@ -233,7 +233,10 @@ void alt::update()
 
     double diff = abs(simVars->altAltitude - altitude);
 
-    if (diff > 500.0) {
+    if (diff > 4000.0) {
+        altitude = simVars->altAltitude;
+    }
+    else if (diff > 500.0) {
         if (altitude < simVars->altAltitude) altitude += 200.0; else altitude -= 200.0;
     }
     else if (diff > 100.0) {

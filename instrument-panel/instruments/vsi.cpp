@@ -113,8 +113,8 @@ void vsi::update()
         resize();
     }
 
-    // Calculate values
-    vertSpeed = abs(simVars->vsiVerticalSpeed);
+    // Convert feet per second to 100 feet per minute
+    vertSpeed = abs(simVars->vsiVerticalSpeed * 0.6);
 
     // Different scale after 10
     if (vertSpeed > 10) {
