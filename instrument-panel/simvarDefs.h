@@ -81,7 +81,7 @@ struct SimVars
     double exhaustGasTemp = 0;
     double exhaustGasTempGES = 0;
     double engineFuelFlow = 0;
-    double suctionPressure = 0;
+    double suctionPressure = 1;
     char atcTailNumber[64] = "\0";
     char atcCallSign[64] = "\0";
     char atcFlightNumber[8] = "\0";

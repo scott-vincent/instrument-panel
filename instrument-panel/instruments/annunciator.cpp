@@ -259,8 +259,8 @@ void annunciator::update()
     // Oil warning if pressure < 20 PSI
     oilWarning = (simVars->oilPressure < 20);
 
-    // Volts warning if battery not charging, i.e. load is greater than zero
-    voltsWarning = (simVars->batteryLoad > 0.001);
+    // Volts warning if battery load too high, i.e. alternator off or not charging quick enough
+    voltsWarning = (simVars->batteryLoad > 18);
 }
 
 void annunciator::checkFuel(double fuelLevel, bool *fuelWarning, double *prevFuel)
