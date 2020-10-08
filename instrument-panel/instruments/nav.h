@@ -70,6 +70,9 @@ private:
     int heading;
     int altitude;
     bool showMach = false;
+    bool showHeading = false;
+    bool showSpeed = false;
+    bool showVerticalSpeed = false;
 
     // Hardware knobs
     int selKnob = -1;
@@ -107,6 +110,7 @@ private:
     void autopilotSwitchPressed();
     void captureSpeedHeading();
     void captureAltitude();
+    void captureVerticalSpeed();
     void navAdjustDigits(int adjust);
     void autopilotAdjustDigits(int adjust);
     double adjustCom(double val, int adjust);
