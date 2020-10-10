@@ -138,6 +138,18 @@ void nav::resize()
     al_draw_bitmap_region(orig, 1346, 834, 66, 34, 0, 0, 0);
     addBitmap(bmp);
 
+    // 18 = Autopilot MAN TOGA display
+    bmp = al_create_bitmap(172, 32);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1427, 834, 172, 32, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 19 = Autopilot MAN MCT display
+    bmp = al_create_bitmap(148, 32);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1451, 800, 148, 32, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -333,14 +345,23 @@ void nav::renderAutopilot()
         break;
     }
 
-    // Add cyan LOC display
     if (simVars->autopilotApproachHold) {
-        al_draw_scaled_bitmap(bitmaps[16], 0, 0, 66, 34, 1317 * scaleFactorX, 227 * scaleFactorY, 66 * scaleFactorX, 34 * scaleFactorX, 0);
+        // Add cyan LOC display
+        al_draw_scaled_bitmap(bitmaps[16], 0, 0, 66, 34, 1317 * scaleFactorX, 227 * scaleFactorY, 66 * scaleFactorX, 34 * scaleFactorY, 0);
     }
 
-    // Add cyan G/S display
     if (simVars->autopilotGlideslopeHold) {
-        al_draw_scaled_bitmap(bitmaps[17], 0, 0, 66, 34, 1317 * scaleFactorX, 270 * scaleFactorY, 66 * scaleFactorX, 34 * scaleFactorX, 0);
+        // Add cyan G/S display
+        al_draw_scaled_bitmap(bitmaps[17], 0, 0, 66, 34, 1317 * scaleFactorX, 270 * scaleFactorY, 66 * scaleFactorX, 34 * scaleFactorY, 0);
+    }
+
+    if (simVars->autothrottleActive && simVars->throttlePosition > 95) {
+        // Add MAN TOGA display
+        al_draw_scaled_bitmap(bitmaps[18], 0, 0, 172, 32, 391 * scaleFactorX, 187 * scaleFactorY, 172 * scaleFactorX, 32 * scaleFactorY, 0);
+    }
+    else if (simVars->autothrottleActive && simVars->throttlePosition > 90) {
+        // Add MAN MCT display
+        al_draw_scaled_bitmap(bitmaps[19], 0, 0, 148, 32, 403 * scaleFactorX, 187 * scaleFactorY, 148 * scaleFactorX, 32 * scaleFactorY, 0);
     }
 }
 
@@ -525,8 +546,8 @@ void nav::addVerticalSpeed(int x, int y)
 
     if (simVars->autopilotVerticalSpeed == 0) {
         // Add 0fpm
-        x += 87;
-        al_draw_scaled_bitmap(bitmaps[12], 32, 0, 130, 50, x * scaleFactorX, yPos, 162 * scaleFactorX, height, 0);
+        x += 119;
+        al_draw_scaled_bitmap(bitmaps[13], 32, 0, 130, 50, x * scaleFactorX, yPos, 130 * scaleFactorX, height, 0);
         return;
     }
 
@@ -682,6 +703,7 @@ void nav::addVars()
     globals.simVars->addVar(name, "Autopilot Airspeed Hold", true, 1, 0);
     globals.simVars->addVar(name, "Autopilot Approach Hold", true, 1, 0);
     globals.simVars->addVar(name, "Autopilot Glideslope Hold", true, 1, 0);
+    globals.simVars->addVar(name, "General Eng Throttle Lever Position:1", false, 1, 0);
     globals.simVars->addVar(name, "Autothrottle Active", true, 1, 0);
 }
 
@@ -947,12 +969,20 @@ void nav::autopilotSwitchPressed()
     }
     case LocatorHold:
     {
+        if (simVars->autopilotGlideslopeHold) {
+            globals.simVars->write(KEY_AP_APR_HOLD_OFF);
+        }
         globals.simVars->write(KEY_AP_LOC_HOLD);
         break;
     }
     case ApproachHold:
     {
-        globals.simVars->write(KEY_AP_APR_HOLD);
+        if (simVars->autopilotGlideslopeHold) {
+            globals.simVars->write(KEY_AP_APR_HOLD_OFF);
+        }
+        else {
+            globals.simVars->write(KEY_AP_APR_HOLD_ON);
+        }
         break;
     }
     }

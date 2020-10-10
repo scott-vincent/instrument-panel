@@ -8,7 +8,7 @@
 extern globalVars globals;
 
 // Set maximum number of bitmaps per instrument
-const int MaxBitmaps = 18;
+const int MaxBitmaps = 20;
 
 // Convert Allegro4 angle (256 = full circle) into radians
 const double AngleFactor = 2.0f * ALLEGRO_PI / 256.0f;
