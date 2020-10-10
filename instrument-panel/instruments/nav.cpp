@@ -84,46 +84,58 @@ void nav::resize()
     al_draw_bitmap_region(orig, 480, 834, 320, 34, 0, 0, 0);
     addBitmap(bmp);
 
-    // 9 = Autopilot switches
-    bmp = al_create_bitmap(480, 34);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 800, 800, 480, 34, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 10 = Autopilot display
-    bmp = al_create_bitmap(1152, 50);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 880, 1152, 50, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 11 = Autopilot vertical speed digits
-    bmp = al_create_bitmap(320, 50);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1152, 880, 320, 50, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 12 = Autopilot vertical speed 00fpm
-    bmp = al_create_bitmap(162, 50);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1414, 830, 162, 50, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 13 = Autopilot vertical speed minus
-    bmp = al_create_bitmap(23, 50);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1576, 830, 23, 50, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 14 = Autopilot ALTS display
-    bmp = al_create_bitmap(128, 50);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 1286, 830, 128, 50, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 15 = TX
+    // 9 = TX
     bmp = al_create_bitmap(160, 24);
     al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 800, 839, 160, 24, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 10 = Autopilot switches
+    bmp = al_create_bitmap(640, 34);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 800, 800, 640, 34, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 11 = Autopilot display
+    bmp = al_create_bitmap(1152, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 884, 1152, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 12 = Autopilot vertical speed digits
+    bmp = al_create_bitmap(320, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1152, 884, 320, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 13 = Autopilot vertical speed 00fpm
+    bmp = al_create_bitmap(162, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 966, 834, 162, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 14 = Autopilot vertical speed minus
+    bmp = al_create_bitmap(23, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1128, 834, 23, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 15 = Autopilot ALTS display
+    bmp = al_create_bitmap(128, 50);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1151, 834, 128, 50, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 16 = Autopilot LOC display
+    bmp = al_create_bitmap(66, 34);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1280, 834, 66, 34, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 17 = Autopilot G/S display
+    bmp = al_create_bitmap(66, 34);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 1346, 834, 66, 34, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -216,18 +228,18 @@ void nav::renderNav()
 
     // Add transmit1 selected or state
     if (switchSel == Transmit1) {
-        al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactorX, 106 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
+        al_draw_scaled_bitmap(bitmaps[9], 80, 0, 80, 24, 377 * scaleFactorX, 106 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
     else if (simVars->com1Transmit) {
-        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactorX, 106 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
+        al_draw_scaled_bitmap(bitmaps[9], 0, 0, 80, 24, 377 * scaleFactorX, 106 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
 
     // Add transmit2 selected or state
     if (switchSel == Transmit2) {
-        al_draw_scaled_bitmap(bitmaps[15], 80, 0, 80, 24, 377 * scaleFactorX, 235 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
+        al_draw_scaled_bitmap(bitmaps[9], 80, 0, 80, 24, 377 * scaleFactorX, 235 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
     else if (simVars->com2Transmit) {
-        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 80, 24, 377 * scaleFactorX, 235 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
+        al_draw_scaled_bitmap(bitmaps[9], 0, 0, 80, 24, 377 * scaleFactorX, 235 * scaleFactorY, 80 * scaleFactorX, 24 * scaleFactorY, 0);
     }
 
     // Add transponder state
@@ -252,16 +264,11 @@ void nav::renderAutopilot()
 
     // Add autopilot switch selected
     int selPos = 80 * (switchSel - (int)Autopilot);
-    int destPos = 363 + 160 * (switchSel - (int)Autopilot);
-    al_draw_scaled_bitmap(bitmaps[9], selPos, 0, 80, 34, destPos * scaleFactorX, 339 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
+    int destPos = 203 + 160 * (switchSel - (int)Autopilot);
+    al_draw_scaled_bitmap(bitmaps[10], selPos, 0, 80, 34, destPos * scaleFactorX, 339 * scaleFactorY, 80 * scaleFactorX, 34 * scaleFactorY, 0);
 
     int destSizeX = 128 * scaleFactorX;
     int destSizeY = 50 * scaleFactorY;
-
-    // Add auto throttle display
-    if (simVars->autothrottleActive) {
-        al_draw_scaled_bitmap(bitmaps[10], 1024, 0, 128, 50, 234 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
-    }
 
     // Add autopilot set values
     if (showSpeed) {
@@ -281,44 +288,59 @@ void nav::renderAutopilot()
     addNum5(altitude, 1188, 82, false);
 
     if (showVerticalSpeed) {
-        addVerticalSpeed(900, 252);
+        addVerticalSpeed(878, 252);
+    }
+
+    // Add auto throttle display
+    if (simVars->autothrottleActive) {
+        al_draw_scaled_bitmap(bitmaps[11], 1024, 0, 128, 50, 212 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
     }
 
     // Add spd hold display
     if (autopilotSpd == SpdHold) {
-        al_draw_scaled_bitmap(bitmaps[10], 896, 0, 128, 50, 353 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 896, 0, 128, 50, 331 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
     }
 
     // Add hdg display
     switch (autopilotHdg) {
     case HdgSet:
-        al_draw_scaled_bitmap(bitmaps[10], 0, 0, 128, 50, 483 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 0, 0, 128, 50, 461 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     case LevelFlight:
-        al_draw_scaled_bitmap(bitmaps[10], 128, 0, 128, 50, 483 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 128, 0, 128, 50, 461 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
     }
 
     // Add ap display
     if (simVars->autopilotEngaged) {
-        al_draw_scaled_bitmap(bitmaps[10], 256, 0, 128, 50, 628 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 256, 0, 128, 50, 606 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
     }
 
     // Add alt display
     switch (autopilotAlt) {
     case AltHold:
-        al_draw_scaled_bitmap(bitmaps[10], 384, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 384, 0, 128, 50, 756 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
 
     case PitchHold:
-        al_draw_scaled_bitmap(bitmaps[10], 512, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 512, 0, 128, 50, 756 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
 
     case VerticalSpeedHold:
-        al_draw_scaled_bitmap(bitmaps[10], 640, 0, 128, 50, 778 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 640, 0, 128, 50, 756 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         // Add white alts display
-        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 128, 50, 1213 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[15], 0, 0, 128, 50, 1160 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
         break;
+    }
+
+    // Add cyan LOC display
+    if (simVars->autopilotApproachHold) {
+        al_draw_scaled_bitmap(bitmaps[16], 0, 0, 66, 34, 1317 * scaleFactorX, 227 * scaleFactorY, 66 * scaleFactorX, 34 * scaleFactorX, 0);
+    }
+
+    // Add cyan G/S display
+    if (simVars->autopilotGlideslopeHold) {
+        al_draw_scaled_bitmap(bitmaps[17], 0, 0, 66, 34, 1317 * scaleFactorX, 270 * scaleFactorY, 66 * scaleFactorX, 34 * scaleFactorX, 0);
     }
 }
 
@@ -518,20 +540,20 @@ void nav::addVerticalSpeed(int x, int y)
 
     if (simVars->autopilotVerticalSpeed < 0) {
         // Add minus
-        al_draw_scaled_bitmap(bitmaps[13], 0, 0, 23, 50, x * scaleFactorX, yPos, 23 * scaleFactorX, height, 0);
+        al_draw_scaled_bitmap(bitmaps[14], 0, 0, 23, 50, x * scaleFactorX, yPos, 23 * scaleFactorX, height, 0);
     }
     x += 23;
 
     if (digit1 != 0) {
-        al_draw_scaled_bitmap(bitmaps[11], 32 * digit1, 0, 32, 50, x * scaleFactorX, yPos, 32 * scaleFactorX, height, 0);
+        al_draw_scaled_bitmap(bitmaps[12], 32 * digit1, 0, 32, 50, x * scaleFactorX, yPos, 32 * scaleFactorX, height, 0);
         x += 32;
     }
 
-    al_draw_scaled_bitmap(bitmaps[11], 32 * digit2, 0, 32, 50, x * scaleFactorX, yPos, 32 * scaleFactorX, height, 0);
+    al_draw_scaled_bitmap(bitmaps[12], 32 * digit2, 0, 32, 50, x * scaleFactorX, yPos, 32 * scaleFactorX, height, 0);
     x += 32;
 
     // Add 00fpm
-    al_draw_scaled_bitmap(bitmaps[12], 0, 0, 162, 50, x * scaleFactorX, yPos, 162 * scaleFactorX, height, 0);
+    al_draw_scaled_bitmap(bitmaps[13], 0, 0, 162, 50, x * scaleFactorX, yPos, 162 * scaleFactorX, height, 0);
 }
 
 /// <summary>
@@ -658,6 +680,8 @@ void nav::addVars()
     globals.simVars->addVar(name, "Autopilot Airspeed Hold Var", false, 1, 0);
     globals.simVars->addVar(name, "Autopilot Mach Hold Var", false, 1, 0);
     globals.simVars->addVar(name, "Autopilot Airspeed Hold", true, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Approach Hold", true, 1, 0);
+    globals.simVars->addVar(name, "Autopilot Glideslope Hold", true, 1, 0);
     globals.simVars->addVar(name, "Autothrottle Active", true, 1, 0);
 }
 
@@ -686,7 +710,7 @@ void nav::updateKnobs()
         // Convert knob value to selection (adjust for desired sensitivity)
         int maxSwitch;
         if (simVars->autopilotAvailable) {
-            maxSwitch = (int)VerticalSpeed;
+            maxSwitch = (int)ApproachHold;
         }
         else {
             maxSwitch = (int)Transponder;
@@ -919,6 +943,16 @@ void nav::autopilotSwitchPressed()
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, simVars->autopilotAltitude);
         globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         captureVerticalSpeed();
+        break;
+    }
+    case LocatorHold:
+    {
+        globals.simVars->write(KEY_AP_LOC_HOLD);
+        break;
+    }
+    case ApproachHold:
+    {
+        globals.simVars->write(KEY_AP_APR_HOLD);
         break;
     }
     }
