@@ -16,11 +16,6 @@ private:
     float trimOffset;
     float flapsOffset = 0;
     float targetFlaps;
-    bool isGearRetractable;
-    int gearLeftPos;
-    int gearCentrePos;
-    int gearRightPos;
-    bool parkingBrakeOn;
 
     // Hardware knobs
     int trimKnob = -1;

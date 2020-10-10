@@ -20,6 +20,8 @@ struct SimVars
     double tfElevatorTrim = 0;
     double tfFlapsCount = 1;
     double tfFlapsIndex = 0;
+    double tfSpoilersPosition = 0;
+    double tfAutoBrake = 0;
     double dcUtcSeconds = 43200;
     double dcLocalSeconds = 46800;
     double dcFlightSeconds = 0;
@@ -71,6 +73,7 @@ struct SimVars
     double autopilotAirspeedHold = 0;
     double autopilotApproachHold = 0;
     double autopilotGlideslopeHold = 0;
+    double throttlePosition = 0;
     double autothrottleActive = 0;
     double gearRetractable = 1;
     double gearLeftPos = 100;
@@ -131,7 +134,8 @@ enum EVENT_ID {
     KEY_AP_ALT_HOLD_ON,
     KEY_AP_ALT_HOLD_OFF,
     KEY_AP_LOC_HOLD,
-    KEY_AP_APR_HOLD,
+    KEY_AP_APR_HOLD_ON,
+    KEY_AP_APR_HOLD_OFF,
     KEY_AP_PANEL_ALTITUDE_ON,
     KEY_AUTO_THROTTLE_ARM
 };
