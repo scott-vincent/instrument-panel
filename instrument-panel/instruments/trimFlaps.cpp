@@ -282,12 +282,12 @@ void trimFlaps::updateKnobs()
         }
         else {
             // Value large enough to trigger yet?
-            if (lastFlapsVal - val > 5) {
+            if (lastFlapsVal - val > 2) {
                 // Flaps down one notch
                 globals.simVars->write(KEY_FLAPS_INCR);
                 lastFlapsVal = val;
             }
-            else if (val - lastFlapsVal > 5) {
+            else if (val - lastFlapsVal > 2) {
                 // Flaps up one notch
                 globals.simVars->write(KEY_FLAPS_DECR);
                 lastFlapsVal = val;

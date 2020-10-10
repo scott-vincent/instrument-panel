@@ -21,7 +21,9 @@ private:
         Speed,
         Heading,
         Altitude,
-        VerticalSpeed
+        VerticalSpeed,
+        LocatorHold,
+        ApproachHold
     };
 
     enum AutopilotSpd {
