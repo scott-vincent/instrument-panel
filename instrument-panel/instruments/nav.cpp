@@ -150,6 +150,12 @@ void nav::resize()
     al_draw_bitmap_region(orig, 1451, 800, 148, 32, 0, 0, 0);
     addBitmap(bmp);
 
+    // 20 = Managed or selected indicator
+    bmp = al_create_bitmap(21, 21);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 428, 844, 21, 21, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -362,6 +368,21 @@ void nav::renderAutopilot()
     else if (simVars->autothrottleActive && simVars->throttlePosition > 90) {
         // Add MAN MCT display
         al_draw_scaled_bitmap(bitmaps[19], 0, 0, 148, 32, 403 * scaleFactorX, 187 * scaleFactorY, 148 * scaleFactorX, 32 * scaleFactorY, 0);
+    }
+
+    if (managedSpeed) {
+        // Add managed speed indicator
+        al_draw_scaled_bitmap(bitmaps[20], 0, 0, 21, 21, 384 * scaleFactorX, 220 * scaleFactorY, 21 * scaleFactorX, 21 * scaleFactorY, 0);
+    }
+
+    if (managedHeading) {
+        // Add managed heading indicator
+        al_draw_scaled_bitmap(bitmaps[20], 0, 0, 21, 21, 518 * scaleFactorX, 220 * scaleFactorY, 21 * scaleFactorX, 21 * scaleFactorY, 0);
+    }
+
+    if (managedAltitude) {
+        // Add managed altitude indicator
+        al_draw_scaled_bitmap(bitmaps[20], 0, 0, 21, 21, 806 * scaleFactorX, 220 * scaleFactorY, 21 * scaleFactorX, 21 * scaleFactorY, 0);
     }
 }
 
@@ -918,6 +939,7 @@ void nav::autopilotSwitchPressed()
                 // For some weird reason you have to set mach * 100 !
                 globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->autopilotMach * 100);
                 showMach = false;
+                manSelSpeed();
             }
             else {
                 globals.simVars->write(KEY_AP_SPD_VAR_SET, simVars->autopilotAirspeed);
@@ -936,6 +958,7 @@ void nav::autopilotSwitchPressed()
         if (autopilotHdg == HdgSet) {
             autopilotHdg = LevelFlight;
             globals.simVars->write(KEY_AP_HDG_HOLD_OFF);
+            manSelHeading();
         }
         else {
             autopilotHdg = HdgSet;
@@ -948,14 +971,16 @@ void nav::autopilotSwitchPressed()
         if (autopilotAlt == AltHold) {
             autopilotAlt = PitchHold;
             globals.simVars->write(KEY_AP_ALT_HOLD_OFF);
+            manSelAltitude();
         }
         else {
-            if (globals.aircraft == CESSNA_172) {
-                // Cessna only changes altitude when you use autopilot VS
-                captureAltitude();
-            }
+            //if (globals.aircraft == CESSNA_172) {
+            //    // Cessna only changes altitude when you use autopilot VS
+            //    captureAltitude();
+            //}
             autopilotAlt = AltHold;
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
+            manSelAltitude();
         }
         break;
     }
@@ -965,6 +990,7 @@ void nav::autopilotSwitchPressed()
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, simVars->autopilotAltitude);
         globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         captureVerticalSpeed();
+        manSelAltitude();
         break;
     }
     case LocatorHold:
@@ -985,6 +1011,51 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
+    }
+}
+
+/// <summary>
+/// Switch between managed and selected speed.
+/// This is undocumented but works for the Airbus A320 neo.
+/// </summary>
+void nav::manSelSpeed()
+{
+    managedSpeed = !managedSpeed;
+    if (managedSpeed) {
+        globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 2);
+    }
+    else {
+        globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
+    }
+}
+
+/// <summary>
+/// Switch between managed and selected heading.
+/// This is undocumented but works for the Airbus A320 neo.
+/// </summary>
+void nav::manSelHeading()
+{
+    managedHeading = !managedHeading;
+    if (managedHeading) {
+        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 2);
+    }
+    else {
+        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 1);
+    }
+}
+
+/// <summary>
+/// Switch between managed and selected altitude.
+/// This is undocumented but works for the Airbus A320 neo.
+/// </summary>
+void nav::manSelAltitude()
+{
+    managedAltitude = !managedAltitude;
+    if (managedAltitude) {
+        globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 2);
+    }
+    else {
+        globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 1);
     }
 }
 
