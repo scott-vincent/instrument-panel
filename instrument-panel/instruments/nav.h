@@ -75,6 +75,9 @@ private:
     bool showHeading = false;
     bool showSpeed = false;
     bool showVerticalSpeed = false;
+    bool managedHeading = true;
+    bool managedSpeed = true;
+    bool managedAltitude = true;
 
     // Hardware knobs
     int selKnob = -1;
@@ -110,6 +113,9 @@ private:
     void updateKnobs();
     void navSwitchPressed();
     void autopilotSwitchPressed();
+    void manSelSpeed();
+    void manSelHeading();
+    void manSelAltitude();
     void captureSpeedHeading();
     void captureAltitude();
     void captureVerticalSpeed();
