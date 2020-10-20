@@ -104,7 +104,13 @@ void trimFlaps::resize()
     // 12 = Spoilers
     bmp = al_create_bitmap(28, 260);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 804, 605, 28, 260, 0, 0, 0);
+    al_draw_bitmap_region(orig, 804, 545, 28, 260, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 13 = Pushback
+    bmp = al_create_bitmap(192, 33);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 644, 807, 192, 33, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -172,6 +178,10 @@ void trimFlaps::render()
     if (simVars->parkingBrakeOn) {
         // Add parking brake
         al_draw_scaled_bitmap(bitmaps[9], 0, 0, 252, 33, 277 * scaleFactor, 703 * scaleFactor, 252 * scaleFactor, 33 * scaleFactor, 0);
+    }
+    else if (simVars->pushbackState < 3) {
+        // Add pushback
+        al_draw_scaled_bitmap(bitmaps[13], 0, 0, 192, 33, 307 * scaleFactor, 703 * scaleFactor, 192 * scaleFactor, 33 * scaleFactor, 0);
     }
     else if (simVars->tfAutoBrake > 1) {
         // Add auto brake
