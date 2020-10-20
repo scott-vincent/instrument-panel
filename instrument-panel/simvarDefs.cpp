@@ -78,6 +78,7 @@ const char* SimVarDefs[][2] = {
     { "Gear Center Position", "percent" },
     { "Gear Right Position", "percent" },
     { "Brake Parking Position", "bool" },
+    { "Pushback State", "enum" },
     { "Estimated Cruise Speed", "knots" },
     { "General Eng Oil Temperature:1", "fahrenheit" },
     { "General Eng Oil Pressure:1", "psi" },
