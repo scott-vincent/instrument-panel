@@ -107,6 +107,13 @@ Use a specific instrument in your panel if you don't want it to auto switch, for
 
 Note that only a few specific instruments have been created so far as this project is a work in progress.  
 
+# Known Issues
+
+If you get a black screen when running on a Raspberry Pi try setting UseOpenGL_ES3 to false in instrument-panel.cpp, i.e.
+```
+const bool UseOpenGL_ES3 = false;
+```
+
 # Donate
 
 If you find this project useful, would like to see it developed further or would just like to buy the author a beer, please consider a small donation.

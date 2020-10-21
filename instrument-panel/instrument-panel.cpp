@@ -89,6 +89,7 @@
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
 const bool Debug = false;
+const bool UseOpenGL_ES3 = true;
 
 struct globalVars globals;
 
@@ -176,7 +177,14 @@ void init(const char *settingsFile = NULL)
         flags = ALLEGRO_FULLSCREEN_WINDOW | ALLEGRO_FRAMELESS;
     }
 
-    al_set_new_display_flags(flags | ALLEGRO_OPENGL_3_0 | ALLEGRO_OPENGL_ES_PROFILE);
+    if (UseOpenGL_ES3) {
+        // If the Raspberry Pi 4 is not configured correctly for hardware OpenGL
+        // this line may give a black screen.
+        al_set_new_display_flags(flags | ALLEGRO_OPENGL_3_0 | ALLEGRO_OPENGL_ES_PROFILE);
+    }
+    else {
+        al_set_new_display_flags(flags);
+    }
 
 #ifdef _WIN32
     // Turn on vsync (fails on Raspberry Pi)
