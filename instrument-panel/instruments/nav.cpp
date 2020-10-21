@@ -302,8 +302,9 @@ void nav::renderAutopilot()
         addNum3(heading, 816, 82);
     }
 
-    // Always show altitude
-    addNum5(altitude, 1188, 82, false);
+    if (showAltitude) {
+        addNum5(altitude, 1188, 82, false);
+    }
 
     if (showVerticalSpeed) {
         addVerticalSpeed(878, 252);
@@ -918,8 +919,8 @@ void nav::autopilotSwitchPressed()
     switch (switchSel) {
     case Autopilot:
     {
-        // Capture current values when autopilot enabled
-        captureSpeedHeading();
+        // Capture current values when autopilot enabled (only if not set)
+        captureCurrent();
         globals.simVars->write(KEY_AP_MASTER);
         break;
     }
@@ -974,10 +975,6 @@ void nav::autopilotSwitchPressed()
             manSelAltitude();
         }
         else {
-            //if (globals.aircraft == CESSNA_172) {
-            //    // Cessna only changes altitude when you use autopilot VS
-            //    captureAltitude();
-            //}
             autopilotAlt = AltHold;
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
             manSelAltitude();
@@ -1059,7 +1056,7 @@ void nav::manSelAltitude()
     }
 }
 
-void nav::captureSpeedHeading()
+void nav::captureCurrent()
 {
     if (!showSpeed) {
         showSpeed = true;
@@ -1093,20 +1090,21 @@ void nav::captureSpeedHeading()
         }
         globals.simVars->write(KEY_HEADING_BUG_SET, holdHeading);
     }
-}
 
-void nav::captureAltitude()
-{
-    // Set autopilot altitude to within 100ft of current altitude
-    int holdAlt = simVars->altAltitude;
-    int hundreds = holdAlt % 100;
-    if (hundreds < 30) {
-        holdAlt -= hundreds;
+    if (!showAltitude) {
+        showAltitude = true;
+
+        // Set autopilot altitude to within 100ft of current altitude
+        int holdAlt = simVars->altAltitude;
+        int hundreds = holdAlt % 100;
+        if (hundreds < 30) {
+            holdAlt -= hundreds;
+        }
+        else {
+            holdAlt += 100 - hundreds;
+        }
+        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAlt);
     }
-    else {
-        holdAlt += 100 - hundreds;
-    }
-    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAlt);
 }
 
 void nav::captureVerticalSpeed()
@@ -1205,6 +1203,7 @@ void nav::autopilotAdjustDigits(int adjust)
     }
     case Altitude:
     {
+        showAltitude = true;
         double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
         break;
@@ -1392,9 +1391,15 @@ int nav::adjustSpeed(int val, int adjust)
         val += adjust * 10;
     }
     else {
-        // Adjust units
-        int digit = adjustDigit(val % 10, adjust);
-        val = (int)(val / 10) * 10 + digit;
+        // Adjust tens and units
+        val += adjust;
+    }
+
+    if (val < 0) {
+        val = 0;
+    }
+    else if (val > 990) {
+        val = 990;
     }
 
     return val;
@@ -1436,20 +1441,19 @@ double nav::adjustMach(double val, int adjust)
 int nav::adjustHeading(int val, int adjust)
 {
     if (adjustSetSel == 0) {
-        // Adjust tens
+        // Adjust tens only
         val += adjust * 10;
-
-        if (val > 359) {
-            val -= 360;
-        }
-        else if (val < 0) {
-            val += 360;
-        }
     }
     else {
-        // Adjust units
-        int digit = adjustDigit(val % 10, adjust);
-        val = (int)(val / 10) * 10 + digit;
+        // Adjust tens and units
+        val += adjust;
+    }
+
+    if (val > 359) {
+        val -= 360;
+    }
+    else if (val < 0) {
+        val += 360;
     }
 
     return val;
@@ -1468,9 +1472,8 @@ int nav::adjustAltitude(int val, int adjust)
         }
     }
     else {
-        // Adjust hundreds
-        int digit = adjustDigit(((int)val % 1000) / 100, adjust);
-        val = (int)(val / 1000) * 1000 + digit * 100 + (val % 100);
+        // Adjust thousands and hundreds
+        val += adjust * 100;
 
         if (val < 0) {
             val += 100;

@@ -74,6 +74,7 @@ private:
     bool showMach = false;
     bool showHeading = false;
     bool showSpeed = false;
+    bool showAltitude = false;
     bool showVerticalSpeed = false;
     bool managedHeading = true;
     bool managedSpeed = true;
@@ -116,8 +117,7 @@ private:
     void manSelSpeed();
     void manSelHeading();
     void manSelAltitude();
-    void captureSpeedHeading();
-    void captureAltitude();
+    void captureCurrent();
     void captureVerticalSpeed();
     void navAdjustDigits(int adjust);
     void autopilotAdjustDigits(int adjust);
