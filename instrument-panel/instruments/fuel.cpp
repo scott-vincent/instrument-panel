@@ -52,12 +52,6 @@ void fuel::resize()
     al_draw_bitmap_region(orig, 0, 800, 200, 40, 0, 0, 0);
     addBitmap(bmp);
 
-    // 5 = Pointer shadow
-    bmp = al_create_bitmap(200, 40);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 200, 800, 200, 40, 0, 0, 0);
-    addBitmap(bmp);
-
     al_set_target_backbuffer(globals.display);
 }
 
@@ -79,25 +73,11 @@ void fuel::render()
     // Add dials
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    if (globals.enableShadows) {
-        // Set blender to multiply (shades of grey darken, white has no effect)
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
-
-        // Add left pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[5], 72, 20, 82 * scaleFactor, 210 * scaleFactor, scaleFactor, scaleFactor, angleLeft * DegreesToRadians, 0);
-
-        // Add right pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[5], 72, 20, 338 * scaleFactor, 210 * scaleFactor, scaleFactor, scaleFactor, angleRight * DegreesToRadians, 0);
-
-        // Restore normal blender
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    }
-
     // Add left pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[4], 72, 20, 72 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, angleLeft * DegreesToRadians, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 60, 20, 60 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, angleLeft * DegreesToRadians, 0);
 
     // Add right pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[4], 72, 20, 328 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, angleRight * DegreesToRadians, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 60, 20, 340 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, angleRight * DegreesToRadians, 0);
 
     // Add top layer
     al_draw_bitmap(bitmaps[3], 0, 0, 0);
@@ -129,8 +109,8 @@ void fuel::update()
     }
 
     // Calculate values
-    angleLeft = 51 - simVars->fuelLeft * 1.02;
-    angleRight = 127 + simVars->fuelRight * 1.04;
+    angleLeft = 55 - simVars->fuelLeft * 1.144;
+    angleRight = 124 + simVars->fuelRight * 1.144;
 }
 
 /// <summary>

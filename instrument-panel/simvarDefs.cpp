@@ -84,7 +84,6 @@ const char* SimVarDefs[][2] = {
     { "General Eng Oil Temperature:1", "fahrenheit" },
     { "General Eng Oil Pressure:1", "psi" },
     { "General Eng Exhaust Gas Temperature:1", "celsius" },
-    { "Eng Exhaust Gas Temperature GES:1", "percent scaler 16k" },
     { "Eng Fuel Flow GPH:1", "gallon per hour" },
     { "Suction Pressure", "inch of mercury" },
     { "Atc Id", "string64" },

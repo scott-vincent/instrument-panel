@@ -86,7 +86,6 @@ struct SimVars
     double oilTemp = 75;
     double oilPressure = 50;
     double exhaustGasTemp = 0;
-    double exhaustGasTempGES = 0;
     double engineFuelFlow = 0;
     double suctionPressure = 1;
     char atcTailNumber[64] = "\0";

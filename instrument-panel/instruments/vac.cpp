@@ -7,6 +7,7 @@ vac::vac(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("VAC");
     addVars();
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
@@ -17,7 +18,7 @@ void vac::resize()
 {
     destroyBitmaps();
 
-    // Create bitmaps scaled to correct size (original size is 800)
+    // Create bitmaps scaled to correct size (original size is 400)
     scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
@@ -32,10 +33,22 @@ void vac::resize()
     ALLEGRO_BITMAP* bmp = al_create_bitmap(size, size);
     addBitmap(bmp);
 
-    // 2 = Main dial
+    // 2 = Dials
     bmp = al_create_bitmap(size, size);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 0, 0, 400, 400, 0, 0, size, size, 0);
+    addBitmap(bmp);
+
+    // 3 = Top layer
+    bmp = al_create_bitmap(size, size);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 0, 400, 400, 400, 0, 0, size, size, 0);
+    addBitmap(bmp);
+
+    // 4 = Pointer
+    bmp = al_create_bitmap(200, 40);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 0, 800, 200, 40, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -56,8 +69,17 @@ void vac::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Add main dial
+    // Add dials
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
+
+    // Add left pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 60, 20, 60 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, vacAngle * DegreesToRadians, 0);
+
+    // Add right pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 60, 20, 340 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, ampAngle * DegreesToRadians, 0);
+
+    // Add top layer
+    al_draw_bitmap(bitmaps[3], 0, 0, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -85,11 +107,22 @@ void vac::update()
         resize();
     }
 
-    // Get latest FlightSim variables
-    SimVars* simVars = &globals.simVars->simVars;
-
     // Calculate values
-    angle = simVars->adiBank / 100.0f;
+    vacAngle = 60 - (simVars->suctionPressure - 3) * 30;
+    if (vacAngle < -60) {
+        vacAngle = -60;
+    }
+    else if (vacAngle > 60) {
+        vacAngle = 60;
+    }
+
+    ampAngle = 119 + (simVars->batteryLoad + 60);
+    if (ampAngle < 119) {
+        ampAngle = 119;
+    }
+    else if (ampAngle > 239) {
+        ampAngle = 239;
+    }
 }
 
 /// <summary>

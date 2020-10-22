@@ -11,7 +11,8 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    double angle;
+    double tempAngle;
+    double pressureAngle;
 
 public:
     oil(int xPos, int yPos, int size);
