@@ -60,6 +60,7 @@ struct SimVars
     double transponderCode = 4608;
     double autopilotAvailable = 1;
     double autopilotEngaged = 0;
+    double flightDirectorActive = 0;
     double autopilotHeading = 0;
     double autopilotHeadingLock = 0;
     double autopilotLevel = 0;
@@ -123,6 +124,7 @@ enum EVENT_ID {
     KEY_ADF1_PRIMARY_SET,
     KEY_XPNDR_SET,
     KEY_AP_MASTER,
+    KEY_TOGGLE_FLIGHT_DIRECTOR,
     KEY_AP_SPD_VAR_SET,
     KEY_AP_MACH_VAR_SET,
     KEY_HEADING_BUG_SET,

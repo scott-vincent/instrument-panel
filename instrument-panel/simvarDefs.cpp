@@ -58,6 +58,7 @@ const char* SimVarDefs[][2] = {
     { "Transponder Code:1", "bco16" },
     { "Autopilot Available", "bool" },
     { "Autopilot Master", "bool" },
+    { "Autopilot Flight Director Active", "bool" },
     { "Autopilot Heading Lock Dir", "degrees" },
     { "Autopilot Heading Lock", "bool" },
     { "Autopilot Wing Leveler", "bool" },
@@ -120,6 +121,7 @@ WriteEvent WriteEvents[] = {
     { KEY_ADF1_PRIMARY_SET, "ADF1_PRIMARY_SET" },       // ADF1_PRIMARY_SET not working (SDK bug)
     { KEY_XPNDR_SET, "XPNDR_SET" },
     { KEY_AP_MASTER, "AP_MASTER" },
+    { KEY_TOGGLE_FLIGHT_DIRECTOR, "TOGGLE_FLIGHT_DIRECTOR" },
     { KEY_AP_SPD_VAR_SET, "AP_SPD_VAR_SET" },
     { KEY_AP_MACH_VAR_SET, "AP_MACH_VAR_SET" },
     { KEY_HEADING_BUG_SET, "HEADING_BUG_SET" },
