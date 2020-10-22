@@ -753,7 +753,7 @@ void nav::addKnobs()
 
 void nav::updateKnobs()
 {
-    // Read knob for switch selection
+    // Read left knob rotate for switch select
     int val = globals.hardwareKnobs->read(selKnob);
     if (val != INT_MIN) {
         // Convert knob value to selection (adjust for desired sensitivity)
@@ -788,7 +788,7 @@ void nav::updateKnobs()
         }
     }
 
-    // Read switch push
+    // Read left knob push for switch activate
     val = globals.hardwareKnobs->read(selPush);
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
@@ -804,7 +804,7 @@ void nav::updateKnobs()
         adjustSetSel = 0;
     }
 
-    // Read knob for digits set
+    // Read right knob rotate for digits set
     val = globals.hardwareKnobs->read(adjustKnob);
     if (val != INT_MIN) {
         int diff = (val - prevAdjustVal) / 2;
@@ -836,25 +836,32 @@ void nav::updateKnobs()
         }
     }
 
-    // Read digits set push
+    // Read right knob push for digits set selection
     val = globals.hardwareKnobs->read(adjustPush);
     if (val != INT_MIN) {
         // If previous state was unpressed then must have been pressed
         if (prevAdjustPush % 2 == 1) {
-            int digitSets;
-            if (switchSel == Com1 || switchSel == Com2 || switchSel == Adf) {
-                digitSets = 3;
-            }
-            else if (switchSel == Transponder) {
-                digitSets = 4;
+            if (switchSel == Autopilot) {
+                // Right knob push on autopilot toggles flight director
+                globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
             }
             else {
-                digitSets = 2;
-            }
+                // Select which set of digits to adjust
+                int digitSets;
+                if (switchSel == Com1 || switchSel == Com2 || switchSel == Adf) {
+                    digitSets = 3;
+                }
+                else if (switchSel == Transponder) {
+                    digitSets = 4;
+                }
+                else {
+                    digitSets = 2;
+                }
 
-            adjustSetSel++;
-            if (adjustSetSel >= digitSets) {
-                adjustSetSel = 0;
+                adjustSetSel++;
+                if (adjustSetSel >= digitSets) {
+                    adjustSetSel = 0;
+                }
             }
         }
         prevAdjustPush = val;
@@ -1186,12 +1193,6 @@ void nav::navAdjustDigits(int adjust)
 void nav::autopilotAdjustDigits(int adjust)
 {
     switch (switchSel) {
-    case Autopilot:
-    {
-        // If right button pressed on autopilot, toggle flight director
-        globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
-        break;
-    }
     case Speed:
     {
         showSpeed = true;
