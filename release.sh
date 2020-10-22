@@ -1,4 +1,4 @@
-rel=v1.3.3
+rel=v1.3.4
 mkdir release >/dev/null 2>&1
 rm -rf release/$rel >/dev/null 2>&1
 mkdir release/$rel
