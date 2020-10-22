@@ -19,7 +19,7 @@ void egt::resize()
 {
     destroyBitmaps();
 
-    // Create bitmaps scaled to correct size (original size is 800)
+    // Create bitmaps scaled to correct size (original size is 400)
     scaleFactor = size / 400.0f;
 
     // 0 = Original (loaded) bitmap
@@ -46,24 +46,18 @@ void egt::resize()
     al_draw_scaled_bitmap(orig, 0, 400, 400, 400, 0, 0, size, size, 0);
     addBitmap(bmp);
 
-    // 4 = Flow Pointer
+    // 4 = Pointer
     bmp = al_create_bitmap(200, 40);
     al_set_target_bitmap(bmp);
     al_draw_bitmap_region(orig, 0, 800, 200, 40, 0, 0, 0);
     addBitmap(bmp);
 
-    // 5 = EGT Pointer
-    bmp = al_create_bitmap(200, 40);
+    // 5 = Ref pointer
+    bmp = al_create_bitmap(200, 12);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 14, 840, 139, 40, 0, 0, 0);
+    al_draw_bitmap_region(orig, 0, 840, 200, 12, 0, 0, 0);
     addBitmap(bmp);
 
-    // 6 = EGT Ref Pointer
-    bmp = al_create_bitmap(200, 40);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 7, 880, 155, 40, 0, 0, 0);
-    addBitmap(bmp);
-    
     al_set_target_backbuffer(globals.display);
 }
 
@@ -85,14 +79,14 @@ void egt::render()
     // Add dials
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    // Add Flow pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[4], 186, 20, 386 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, flowAngle * DegreesToRadians, 0);
+    // Add ref pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[5], 60, 6, 60 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, egtRefAngle * DegreesToRadians, 0);
 
-    // Add EGT pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[5], 0, 20, 38 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, egtAngle * DegreesToRadians, 0);
+    // Add left pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 60, 20, 60 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, egtAngle * DegreesToRadians, 0);
 
-    // Add EGT Ref pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[6], 0, 20, 38 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, egtRefAngle * DegreesToRadians, 0);
+    // Add right pointer
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 60, 20, 340 * scaleFactor, 200 * scaleFactor, scaleFactor, scaleFactor, flowAngle * DegreesToRadians, 0);
 
     // Add top layer
     al_draw_bitmap(bitmaps[3], 0, 0, 0);
@@ -112,6 +106,13 @@ void egt::render()
 /// </summary>
 void egt::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        egtRefAngle = 62;
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -124,19 +125,31 @@ void egt::update()
     }
 
     // Calculate values
-    if (simVars->exhaustGasTemp < 680)
-        egtAngle = 52;
-    else
-        egtAngle = -0.4496*simVars->exhaustGasTemp+357.74;
-    float tmp = simVars->exhaustGasTempGES/16384;
-    egtRefAngle = 101.718*pow(tmp,3) - 104.843 * pow(tmp, 2) - 96.894 * tmp + 49.022;
-    tmp = simVars->engineFuelFlow;
-    flowAngle = -.02 * pow(tmp, 3) + .6759 * pow(tmp, 2) - 1.6837 * tmp - 41.4675;
+    egtAngle = 62 - (simVars->exhaustGasTemp - 680) * 0.527885;
+    if (egtAngle < -60) {
+        egtAngle = -60;
+    }
+    else if (egtAngle > 62) {
+        egtAngle = 62;
+    }
 
-    // Gauge not working so just zero out for now
-    egtAngle = 52;
-    egtRefAngle = 49;
-    flowAngle = -43;
+    if (egtAngle < egtRefAngle) {
+        egtRefAngle = egtAngle;
+    }
+
+    if (simVars->engineFuelFlow > 5) {
+        flowAngle = 126 + (simVars->engineFuelFlow - 5) * 8;
+    }
+    else {
+        flowAngle = 118 + simVars->engineFuelFlow * 1.6;
+    }
+
+    if (flowAngle < 118) {
+        flowAngle = 118;
+    }
+    else if (flowAngle >238) {
+        flowAngle = 238;
+    }
 }
 
 /// <summary>
@@ -145,7 +158,5 @@ void egt::update()
 void egt::addVars()
 {
     globals.simVars->addVar(name, "General Eng Exhaust Gas Temperature:1", false, 1, 0);
-    globals.simVars->addVar(name, "Eng Exhaust Gas Temperature GES:1", false, 1, 0);
     globals.simVars->addVar(name, "Eng Fuel Flow GPH:1", false, 1, 0);
-
 }
