@@ -45,6 +45,7 @@ private:
     };
 
     SimVars* simVars;
+    Aircraft loadedAircraft = NO_AIRCRAFT;
     float scaleFactorX;
     float scaleFactorY;
 

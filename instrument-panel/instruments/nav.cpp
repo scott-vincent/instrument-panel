@@ -610,6 +610,20 @@ void nav::addVerticalSpeed(int x, int y)
 /// </summary>
 void nav::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        showMach = false;
+        showHeading = false;
+        showSpeed = false;
+        showAltitude = false;
+        showVerticalSpeed = false;
+        managedHeading = true;
+        managedSpeed = true;
+        managedAltitude = true;
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
