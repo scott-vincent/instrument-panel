@@ -5,7 +5,7 @@ mkdir release/$rel
 cp instrument-panel/instrument-panel release/$rel
 cp -rp instrument-panel/bitmaps release/$rel
 cp -rp instrument-panel/settings release/$rel
-sudo chown pi:pi instrument-panel/settings/*.json
-dos2unix instrument-panel/settings/*.json
-cp instrument-panel/settings/default-settings.json instrument-panel/settings/instrument-panel.json
+sudo chown pi:pi release/$rel/settings/*.json
+dos2unix release/$rel/settings/*.json
+cp release/$rel/settings/default-settings.json release/$rel/settings/instrument-panel.json
 tar -zcvf release/instrument-panel-$rel-raspi4.tar.gz release/$rel
