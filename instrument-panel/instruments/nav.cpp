@@ -332,7 +332,12 @@ void nav::renderAutopilot()
 
     // Add ap display
     if (simVars->autopilotEngaged) {
-        al_draw_scaled_bitmap(bitmaps[11], 256, 0, 128, 50, 606 * scaleFactorX, 252 * scaleFactorY, destSizeX, destSizeY, 0);
+        al_draw_scaled_bitmap(bitmaps[11], 256, 0, 64, 50, 612 * scaleFactorX, 252 * scaleFactorY, 64 * scaleFactorX, destSizeY, 0);
+    }
+
+    // Add fd display
+    if (simVars->flightDirectorActive) {
+        al_draw_scaled_bitmap(bitmaps[11], 320, 0, 63, 50, 688 * scaleFactorX, 252 * scaleFactorY, 63 * scaleFactorX, destSizeY, 0);
     }
 
     // Add alt display
@@ -1181,6 +1186,12 @@ void nav::navAdjustDigits(int adjust)
 void nav::autopilotAdjustDigits(int adjust)
 {
     switch (switchSel) {
+    case Autopilot:
+    {
+        // If right button pressed on autopilot, toggle flight director
+        globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
+        break;
+    }
     case Speed:
     {
         showSpeed = true;

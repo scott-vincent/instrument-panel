@@ -30,7 +30,8 @@ An instrument panel for MS FlightSim 2020. This program is designed to run
 on a separate computer to the one running FS2020 but you can just run it on
 a different monitor if you wish. It can run on either a PC or a Raspberry Pi.
 
-You can see it running on a Raspberry Pi 4 here: https://www.youtube.com/watch?v=vA6rveEP_9o&t=4s
+You can see it running on a Raspberry Pi 4 here: https://www.youtube.com/watch?v=vA6rveEP_9o
+and in action on a VFR flight with VATSIM from Gatwick to London City Airport here: https://www.youtube.com/watch?v=dC_PvOM0fI8
 
 It requires the companion program from here
 
