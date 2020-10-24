@@ -68,10 +68,6 @@ private:
     AutopilotSpd autopilotSpd;
     AutopilotHdg autopilotHdg;
     AutopilotAlt autopilotAlt = AltHold;
-    int airspeed;
-    int machX100;
-    int heading;
-    int altitude;
     bool showMach = false;
     bool showHeading = false;
     bool showSpeed = false;

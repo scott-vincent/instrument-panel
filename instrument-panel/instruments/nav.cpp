@@ -153,7 +153,13 @@ void nav::resize()
     // 20 = Managed or selected indicator
     bmp = al_create_bitmap(21, 21);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 428, 844, 21, 21, 0, 0, 0);
+    al_draw_bitmap_region(orig, 448, 844, 21, 21, 0, 0, 0);
+    addBitmap(bmp);
+
+    // 21 = Altitude minus
+    bmp = al_create_bitmap(38, 48);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 400, 832, 38, 48, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -291,19 +297,19 @@ void nav::renderAutopilot()
     // Add autopilot set values
     if (showSpeed) {
         if (showMach) {
-            addNum2dp(machX100, 421, 82);
+            addNum2dp(simVars->autopilotMach * 100, 421, 82);
         }
         else {
-            addNum4(airspeed, 403, 82, false);
+            addNum4(simVars->autopilotAirspeed, 403, 82, false);
         }
     }
 
     if (showHeading) {
-        addNum3(heading, 816, 82);
+        addNum3(simVars->autopilotHeading, 816, 82);
     }
 
     if (showAltitude) {
-        addNum5(altitude, 1188, 82, false);
+        addNum5(simVars->autopilotAltitude, 1188, 82, false);
     }
 
     if (showVerticalSpeed) {
@@ -415,10 +421,6 @@ void nav::addNum3(int val, int x, int y)
 /// </summary>
 void nav::addNum4(int val, int x, int y, bool leading)
 {
-    if (!leading && val == 0) {
-        return;
-    }
-
     int digit1 = (val % 10000) / 1000;
     int digit2 = (val % 1000) / 100;
     int digit3 = (val % 100) / 10;
@@ -443,12 +445,14 @@ void nav::addNum4(int val, int x, int y, bool leading)
 }
 
 /// <summary>
-/// Displays a 5 digit number
+/// Displays a 5 digit number.
+/// Altitude will be max 4 digits if negative
 /// </summary>
 void nav::addNum5(int val, int x, int y, bool leading)
 {
-    if (!leading && val == 0) {
-        return;
+    bool isNegative = (val < 0);
+    if (isNegative) {
+        val = -val;
     }
 
     int digit1 = (val % 100000) / 10000;
@@ -461,19 +465,32 @@ void nav::addNum5(int val, int x, int y, bool leading)
     int width = 38 * scaleFactorX;
     int height = 80 * scaleFactorY;
 
-    if (leading || digit1 != 0) {
+    if (isNegative && digit2 != 0) {
+        // Add minus
+        al_draw_scaled_bitmap(bitmaps[21], 0, 0, 38, 48, x * scaleFactorX, (y + 32) * scaleFactorY, width, 48 * scaleFactorY, 0);
+    }
+    else if (leading || digit1 != 0) {
         al_draw_scaled_bitmap(bitmaps[4], 38 * digit1, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
     }
     x += 38;
 
-    if (leading || digit1 != 0 || digit2 != 0) {
+    if (isNegative && digit2 == 0) {
+        // Add minus
+        al_draw_scaled_bitmap(bitmaps[21], 0, 0, 38, 48, x * scaleFactorX, (y + 32) * scaleFactorY, width, 48 * scaleFactorY, 0);
+    }
+    else if (leading || digit1 != 0 || digit2 != 0) {
         al_draw_scaled_bitmap(bitmaps[4], 38 * digit2, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
     }
-    x += 38;
 
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, x * scaleFactorX, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
-    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
+    if (leading || digit1 != 0 || digit2 != 0 || digit3 != 0) {
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit3, 0, 38, 80, (x + 38) * scaleFactorX, yPos, width, height, 0);
+    }
+
+    if (leading || digit1 != 0 || digit2 != 0 || digit3 != 0 || digit4 != 0) {
+        al_draw_scaled_bitmap(bitmaps[4], 38 * digit4, 0, 38, 80, (x + 76) * scaleFactorX, yPos, width, height, 0);
+    }
+
+    al_draw_scaled_bitmap(bitmaps[4], 38 * digit5, 0, 38, 80, (x + 114) * scaleFactorX, yPos, width, height, 0);
 }
 
 /// <summary>
@@ -684,11 +701,6 @@ void nav::update()
     if (showVerticalSpeed == false && simVars->autopilotVerticalSpeed != prevVerticalSpeed) {
         showVerticalSpeed = true;
     }
-
-    airspeed = simVars->autopilotAirspeed + 0.5;
-    machX100 = simVars->autopilotMach * 100 + 0.5;
-    heading = simVars->autopilotHeading + 0.5;
-    altitude = simVars->autopilotAltitude + 0.5;
 
     if (simVars->autopilotAirspeedHold == 1) {
         autopilotSpd = SpdHold;
@@ -1514,7 +1526,7 @@ int nav::adjustAltitude(int val, int adjust)
         // Adjust thousands
         val += adjust * 1000;
 
-        if (val < 0) {
+        if (val < -9900) {
             val += 1000;
         }
     }
@@ -1522,7 +1534,7 @@ int nav::adjustAltitude(int val, int adjust)
         // Adjust thousands and hundreds
         val += adjust * 100;
 
-        if (val < 0) {
+        if (val < -9900) {
             val += 100;
         }
     }
