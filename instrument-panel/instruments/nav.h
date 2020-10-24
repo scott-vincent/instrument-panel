@@ -77,6 +77,10 @@ private:
     bool showSpeed = false;
     bool showAltitude = false;
     bool showVerticalSpeed = false;
+    double prevHeading;
+    double prevSpeed;
+    double prevAltitude;
+    double prevVerticalSpeed;
     bool managedHeading = true;
     bool managedSpeed = true;
     bool managedAltitude = true;

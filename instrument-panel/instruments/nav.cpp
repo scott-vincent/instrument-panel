@@ -619,6 +619,10 @@ void nav::update()
         showSpeed = false;
         showAltitude = false;
         showVerticalSpeed = false;
+        prevHeading = simVars->autopilotHeading;
+        prevSpeed = simVars->autopilotAirspeed;
+        prevAltitude = simVars->autopilotAltitude;
+        prevVerticalSpeed = simVars->autopilotVerticalSpeed;
         managedHeading = true;
         managedSpeed = true;
         managedAltitude = true;
@@ -662,6 +666,23 @@ void nav::update()
             hasAdfStandby = false;
             adfChanged = false;
         }
+    }
+
+    // Show values if they get adjusted in sim
+    if (showHeading == false && simVars->autopilotHeading != prevHeading) {
+        showHeading = true;
+    }
+
+    if (showSpeed == false && simVars->autopilotAirspeed != prevSpeed) {
+        showSpeed = true;
+    }
+
+    if (showAltitude == false && simVars->autopilotAltitude != prevAltitude) {
+        showAltitude = true;
+    }
+
+    if (showVerticalSpeed == false && simVars->autopilotVerticalSpeed != prevVerticalSpeed) {
+        showVerticalSpeed = true;
     }
 
     airspeed = simVars->autopilotAirspeed + 0.5;

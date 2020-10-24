@@ -17,6 +17,7 @@ private:
 
     // Hardware knobs
     int hdgKnob = -1;
+    int prevVal = 0;
 
 public:
     hi(int xPos, int yPos, int size);

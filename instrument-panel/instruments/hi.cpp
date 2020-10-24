@@ -87,7 +87,7 @@ void hi::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Add dial
-    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
 
     // Add plane
     al_draw_bitmap(bitmaps[3], 0, 0, 0);
@@ -97,14 +97,14 @@ void hi::render()
         al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
         // Add heading bug shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[5], 40, 400, 410 * scaleFactor, 408 * scaleFactor, scaleFactor, scaleFactor, bugAngle, 0);
+        al_draw_scaled_rotated_bitmap(bitmaps[5], 40, 400, 410 * scaleFactor, 408 * scaleFactor, scaleFactor, scaleFactor, bugAngle * DegreesToRadians, 0);
 
         // Restore normal blender
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
     }
 
     // Add heading bug
-    al_draw_scaled_rotated_bitmap(bitmaps[4], 40, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, bugAngle, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[4], 40, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, bugAngle * DegreesToRadians, 0);
 
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
@@ -139,8 +139,11 @@ void hi::update()
 #endif
 
     // Calculate values
-    angle = -simVars->hiHeading * DegreesToRadians;
-    bugAngle = (headingBug - simVars->hiHeading) * DegreesToRadians;
+    angle = -simVars->hiHeading;
+
+    // Show bug setting to nearest 5 degrees
+    int bugSetting = (int)((simVars->autopilotHeading + 2.5) / 5) * 5;
+    bugAngle = bugSetting - simVars->hiHeading;
 }
 
 /// <summary>
@@ -166,7 +169,18 @@ void hi::updateKnobs()
 
     if (val != INT_MIN) {
         // Convert knob value to heading (adjust for desired sensitivity)
-        headingBug = ((int)(val / 2) * 5) % 360;
+        int adjust = ((int)(val - prevVal) / 2) * 5;
+        if (adjust != 0) {
+            int newHeading = simVars->autopilotHeading += adjust;
+            if (newHeading > 359) {
+                newHeading -= 360;
+            }
+            else if (newHeading < 0) {
+                newHeading += 360;
+            }
+            globals.simVars->write(KEY_HEADING_BUG_SET, newHeading);
+            prevVal = val;
+        }
     }
 }
 
