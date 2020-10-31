@@ -115,6 +115,7 @@ private:
     void updateKnobs();
     void navSwitchPressed();
     void autopilotSwitchPressed();
+    void toggleFlightDirector();
     void manSelSpeed();
     void manSelHeading();
     void manSelAltitude();

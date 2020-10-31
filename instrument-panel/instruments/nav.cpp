@@ -890,7 +890,7 @@ void nav::updateKnobs()
         if (prevAdjustPush % 2 == 1) {
             if (switchSel == Autopilot) {
                 // Right knob push on autopilot toggles flight director
-                globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
+                toggleFlightDirector();
             }
             else {
                 // Select which set of digits to adjust
@@ -1071,12 +1071,52 @@ void nav::autopilotSwitchPressed()
 }
 
 /// <summary>
+/// If flight director is disabled just after take off
+/// initialise manual autopilot (A320).
+/// </summary>
+void nav::toggleFlightDirector()
+{
+    bool turnedOff = (simVars->flightDirectorActive);
+    globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
+
+    if (turnedOff && simVars->altAltitude < 2000) {
+        int holdSpeed = 190;
+        int holdHeading = simVars->hiHeading;
+        int holdAltitude = 4000;
+        int holdVerticalSpeed = 1500;
+
+        managedSpeed = false;
+        globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
+        managedHeading = false;
+        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 1);
+        managedAltitude = true;
+        globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 2);
+        showSpeed = true;
+        globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
+        showHeading = true;
+        globals.simVars->write(KEY_HEADING_BUG_SET, holdHeading);
+        showAltitude = true;
+        globals.simVars->write(KEY_AP_ALT_HOLD_ON);
+        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAltitude);
+        showVerticalSpeed = true;
+        globals.simVars->write(KEY_AP_AIRSPEED_ON);
+        globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, holdVerticalSpeed);
+    }
+}
+
+/// <summary>
 /// Switch between managed and selected speed.
 /// This is undocumented but works for the Airbus A320 neo.
 /// </summary>
 void nav::manSelSpeed()
 {
-    managedSpeed = !managedSpeed;
+    if (!simVars->flightDirectorActive) {
+        managedSpeed = false;
+    }
+    else {
+        managedSpeed = !managedSpeed;
+    }
+
     if (managedSpeed) {
         globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 2);
     }
@@ -1091,7 +1131,13 @@ void nav::manSelSpeed()
 /// </summary>
 void nav::manSelHeading()
 {
-    managedHeading = !managedHeading;
+    if (!simVars->flightDirectorActive) {
+        managedHeading = false;
+    }
+    else {
+        managedHeading = !managedHeading;
+    }
+
     if (managedHeading) {
         globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 2);
     }
