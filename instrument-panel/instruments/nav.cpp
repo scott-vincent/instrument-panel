@@ -1079,7 +1079,7 @@ void nav::toggleFlightDirector()
     bool turnedOff = (simVars->flightDirectorActive);
     globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
 
-    if (turnedOff && simVars->altAltitude < 2000) {
+    if (turnedOff && simVars->altAltitude < 1500) {
         int holdSpeed = 190;
         int holdHeading = simVars->hiHeading;
         int holdAltitude = 4000;
@@ -1180,20 +1180,7 @@ void nav::captureCurrent()
 
     if (!showHeading) {
         showHeading = true;
-
-        // Set autopilot heading to within 10 degrees of current heading
-        int holdHeading = simVars->hiHeading;
-        int lastDigit = holdHeading % 10;
-        if (lastDigit < 5) {
-            holdHeading -= lastDigit;
-        }
-        else {
-            holdHeading += 10 - lastDigit;
-            if (holdHeading > 359) {
-                holdHeading -= 360;
-            }
-        }
-        globals.simVars->write(KEY_HEADING_BUG_SET, holdHeading);
+        globals.simVars->write(KEY_HEADING_BUG_SET, simVars->hiHeading);
     }
 
     if (!showAltitude) {
@@ -1512,35 +1499,15 @@ int nav::adjustSpeed(int val, int adjust)
 
 double nav::adjustMach(double val, int adjust)
 {
-    int whole = val;
-    val -= whole;
-    int frac = val * 100 + 0.5;
+    // For some reason you have to set mach * 100
+    int machX100 = val * 100 + 0.5;
+    machX100 += adjust;
 
-    // Default to adjusting fraction first on mach
-    if (adjustSetSel == 0) {
-        // Adjust fraction
-        frac += adjust;
-
-        if (frac >= 100) {
-            frac -= 100;
-        }
-        else if (frac < 0) {
-            frac += 100;
-        }
-    }
-    else {
-        // Adjust whole
-        whole += adjust;
-        if (whole > 2) {
-            whole -= 3;
-        }
-        else if (whole < 0) {
-            whole += 3;
-        }
+    if (machX100 < 0) {
+        machX100 = 0;
     }
 
-    // For some weird reason you have to set mach * 100 !
-    return whole * 100 + frac;
+    return machX100;
 }
 
 int nav::adjustHeading(int val, int adjust)
