@@ -643,6 +643,8 @@ void nav::update()
         managedHeading = true;
         managedSpeed = true;
         managedAltitude = true;
+        autopilotMaxBank = simVars->autopilotMaxBank + 0.1;
+        bankAssist = false;
     }
 
     // Check for position or size change
@@ -739,6 +741,70 @@ void nav::update()
     }
     else {
         autopilotAlt = NoAlt;
+    }
+
+    if (globals.aircraft == AIRBUS_A320NEO) {
+        if (simVars->autopilotEngaged && simVars->asiAirspeed < 240 && abs(simVars->autopilotBank) > 10) {
+            bankingAssist();
+        }
+        else if (bankAssist) {
+            // Stop assistance
+            globals.simVars->write(KEY_AILERON_SET, 0);
+            globals.simVars->write(KEY_ELEVATOR_SET, 0);
+            bankAssist = false;
+        }
+    }
+}
+
+/// <summary>
+/// Fix autopilot max bank angle for A320neo at low speed.
+/// Snaps back to 20 degrees if no bank assist so maintain small but
+/// steady pressure on aileron for gradual roll increase up to 25 degrees.
+/// Needs elevator pressure also to maintain altitude in steeper bank.
+/// </summary>
+void nav::bankingAssist()
+{
+    int autopilotBank = abs(simVars->autopilotBank) + 0.1;
+
+    if (!bankAssist && autopilotBank == autopilotMaxBank) {
+        // Start assistance at current max bank angle (20 degrees)
+        bankAssist = true;
+    }
+
+    if (bankAssist) {
+        if (autopilotBank < autopilotMaxBank) {
+            // Stop assistance when autopilot tries to reduce bank angle
+            bankAssist = false;
+        }
+        else {
+            int bankAssistAmount = 0;
+            int pitchAssistAmount = 0;
+            if (simVars->autopilotBank > 0 && simVars->adiBank > 0 && simVars->adiBank < 25) {
+                bankAssistAmount = 250;
+                if (simVars->adiBank > 19) {
+                    pitchAssistAmount = -4000;
+                }
+                else if (simVars->adiBank > 22) {
+                    pitchAssistAmount = -12000;
+                }
+            }
+            else if (simVars->autopilotBank < 0 && simVars->adiBank < 0 && simVars->adiBank > -25) {
+                bankAssistAmount = -250;
+                if (simVars->adiBank < -19) {
+                    pitchAssistAmount = -4000;
+                }
+                else if (simVars->adiBank < -22) {
+                    pitchAssistAmount = -12000;
+                }
+            }
+            globals.simVars->write(KEY_AILERON_SET, bankAssistAmount);
+            globals.simVars->write(KEY_ELEVATOR_SET, pitchAssistAmount);
+        }
+    }
+
+    if (!bankAssist) {
+        globals.simVars->write(KEY_AILERON_SET, 0);
+        globals.simVars->write(KEY_ELEVATOR_SET, 0);
     }
 }
 
@@ -1080,7 +1146,7 @@ void nav::toggleFlightDirector()
     globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
 
     if (turnedOff && simVars->altAltitude < 1500) {
-        int holdSpeed = 190;
+        int holdSpeed = 200;
         int holdHeading = simVars->hiHeading;
         int holdAltitude = 4000;
         int holdVerticalSpeed = 1500;

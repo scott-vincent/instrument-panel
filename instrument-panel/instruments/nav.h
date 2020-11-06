@@ -48,6 +48,8 @@ private:
     Aircraft loadedAircraft = NO_AIRCRAFT;
     float scaleFactorX;
     float scaleFactorY;
+    int autopilotMaxBank;
+    bool bankAssist;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     Switch switchSel = Com1;
@@ -110,6 +112,7 @@ private:
     void addFreq3dp(int freq, int x, int y);
     void addSquawk(int code, int x, int y);
     void addVerticalSpeed(int x, int y);
+    void bankingAssist();
     void addVars();
     void addKnobs();
     void updateKnobs();
