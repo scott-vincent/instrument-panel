@@ -780,21 +780,21 @@ void nav::bankingAssist()
             int bankAssistAmount = 0;
             int pitchAssistAmount = 0;
             if (simVars->autopilotBank > 0 && simVars->adiBank > 0 && simVars->adiBank < 25) {
-                bankAssistAmount = 250;
-                if (simVars->adiBank > 19) {
-                    pitchAssistAmount = -4000;
+                bankAssistAmount = 500;
+                if (simVars->adiBank > 23) {
+                    pitchAssistAmount = -8000;
                 }
-                else if (simVars->adiBank > 22) {
-                    pitchAssistAmount = -12000;
+                else if (simVars->adiBank > 19) {
+                    pitchAssistAmount = -4000;
                 }
             }
             else if (simVars->autopilotBank < 0 && simVars->adiBank < 0 && simVars->adiBank > -25) {
-                bankAssistAmount = -250;
-                if (simVars->adiBank < -19) {
-                    pitchAssistAmount = -4000;
+                bankAssistAmount = -500;
+                if (simVars->adiBank < -23) {
+                    pitchAssistAmount = -8000;
                 }
-                else if (simVars->adiBank < -22) {
-                    pitchAssistAmount = -12000;
+                else if (simVars->adiBank < -19) {
+                    pitchAssistAmount = -4000;
                 }
             }
             globals.simVars->write(KEY_AILERON_SET, bankAssistAmount);
