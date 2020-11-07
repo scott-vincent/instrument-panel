@@ -1232,14 +1232,14 @@ void nav::captureCurrent()
     if (!showSpeed) {
         showSpeed = true;
 
-        // Set autopilot speed to within 10 knots of current speed
+        // Set autopilot speed to within 5 knots of current speed
         int holdSpeed = simVars->asiAirspeed;
-        int tens = holdSpeed % 10;
-        if (tens < 5) {
-            holdSpeed -= tens;
+        int fives = holdSpeed % 5;
+        if (fives < 3) {
+            holdSpeed -= fives;
         }
         else {
-            holdSpeed += 10 - tens;
+            holdSpeed += 5 - fives;
         }
         globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
     }
@@ -1545,11 +1545,10 @@ int nav::adjustSquawk(int val, int adjust)
 int nav::adjustSpeed(int val, int adjust)
 {
     if (adjustSetSel == 0) {
-        // Adjust tens
-        val += adjust * 10;
+        // Adjust fives
+        val += adjust * 5;
     }
     else {
-        // Adjust tens and units
         val += adjust;
     }
 
@@ -1578,15 +1577,7 @@ double nav::adjustMach(double val, int adjust)
 
 int nav::adjustHeading(int val, int adjust)
 {
-    if (adjustSetSel == 0) {
-        // Adjust tens only
-        val += adjust * 10;
-    }
-    else {
-        // Adjust tens and units
-        val += adjust;
-    }
-
+    val += adjust;
     if (val > 359) {
         val -= 360;
     }
