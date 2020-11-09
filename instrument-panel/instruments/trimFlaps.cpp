@@ -147,7 +147,7 @@ void trimFlaps::render()
         // Add landing gear
         al_draw_scaled_bitmap(bitmaps[6], 0, 0, 198, 44, 227 * scaleFactor, 535 * scaleFactor, 198 * scaleFactor, 44 * scaleFactor, 0);
 
-        if (simVars->gearLeftPos == 100) {
+        if (simVars->gearLeftPos > 99.99) {
             // Add gear down
             al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 223 * scaleFactor, 590 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
         }
@@ -156,7 +156,7 @@ void trimFlaps::render()
             al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 214 * scaleFactor, 602 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
 
-        if (simVars->gearCentrePos == 100) {
+        if (simVars->gearCentrePos > 99.99) {
             // Add gear down
             al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 358 * scaleFactor, 590 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
         }
@@ -165,7 +165,7 @@ void trimFlaps::render()
             al_draw_scaled_bitmap(bitmaps[7], 0, 0, 104, 37, 350 * scaleFactor, 602 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
 
-        if (simVars->gearRightPos == 100) {
+        if (simVars->gearRightPos > 99.99) {
             // Add gear down
             al_draw_scaled_bitmap(bitmaps[8], 0, 0, 90, 70, 493 * scaleFactor, 590 * scaleFactor, 90 * scaleFactor, 70 * scaleFactor, 0);
         }
