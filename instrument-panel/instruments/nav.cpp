@@ -1044,7 +1044,7 @@ void nav::autopilotSwitchPressed()
     switch (switchSel) {
     case Autopilot:
     {
-        // Capture current values when autopilot enabled (only if not set)
+        // Capture current values when autopilot enabled
         captureCurrent();
         globals.simVars->write(KEY_AP_MASTER);
         break;
@@ -1229,11 +1229,12 @@ void nav::manSelAltitude()
 
 void nav::captureCurrent()
 {
+    int holdSpeed = simVars->asiAirspeed;
+
     if (!showSpeed) {
         showSpeed = true;
 
         // Set autopilot speed to within 5 knots of current speed
-        int holdSpeed = simVars->asiAirspeed;
         int fives = holdSpeed % 5;
         if (fives < 3) {
             holdSpeed -= fives;
@@ -1241,13 +1242,15 @@ void nav::captureCurrent()
         else {
             holdSpeed += 5 - fives;
         }
-        globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
     }
+
+    globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
 
     if (!showHeading) {
         showHeading = true;
-        globals.simVars->write(KEY_HEADING_BUG_SET, simVars->hiHeading);
     }
+
+    globals.simVars->write(KEY_HEADING_BUG_SET, simVars->hiHeading);
 
     if (!showAltitude) {
         showAltitude = true;
