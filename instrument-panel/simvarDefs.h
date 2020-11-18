@@ -14,6 +14,7 @@ struct SimVars
     double asiMachSpeed = 0;
     double asiAirspeedCal = -14;
     double hiHeading = 0;
+    double hiHeadingTrue = 0;
     double vsiVerticalSpeed = 0;
     double tcRate = 0;
     double tcBall = 0;
@@ -146,7 +147,8 @@ enum EVENT_ID {
     KEY_SPEED_SLOT_INDEX_SET,
     KEY_ALTITUDE_SLOT_INDEX_SET,
     KEY_AILERON_SET,
-    KEY_ELEVATOR_SET
+    KEY_ELEVATOR_SET,
+    KEY_TUG_HEADING
 };
 
 struct WriteEvent {

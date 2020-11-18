@@ -12,6 +12,7 @@ const char* SimVarDefs[][2] = {
     { "Airspeed Mach", "mach" },
     { "Airspeed True Calibrate", "degrees" },
     { "Plane Heading Degrees Magnetic", "degrees" },
+    { "Plane Heading Degrees True", "degrees" },
     { "Vertical Speed", "feet per second" },
     { "Turn Indicator Rate", "radians per second" },
     { "Turn Coordinator Ball", "position" },
@@ -144,5 +145,6 @@ WriteEvent WriteEvents[] = {
     { KEY_ALTITUDE_SLOT_INDEX_SET, "ALTITUDE_SLOT_INDEX_SET" },
     { KEY_AILERON_SET, "AILERON_SET" },
     { KEY_ELEVATOR_SET, "ELEVATOR_SET" },
+    { KEY_TUG_HEADING, "KEY_TUG_HEADING" },
     { SIM_STOP, NULL }
 };

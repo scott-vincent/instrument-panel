@@ -179,7 +179,7 @@ void trimFlaps::render()
         // Add parking brake
         al_draw_scaled_bitmap(bitmaps[9], 0, 0, 252, 33, 277 * scaleFactor, 703 * scaleFactor, 252 * scaleFactor, 33 * scaleFactor, 0);
     }
-    else if (simVars->pushbackState < 3) {
+    else if (pushback) {
         // Add pushback
         al_draw_scaled_bitmap(bitmaps[13], 0, 0, 192, 33, 307 * scaleFactor, 703 * scaleFactor, 192 * scaleFactor, 33 * scaleFactor, 0);
     }
@@ -215,6 +215,7 @@ void trimFlaps::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+        pushback = false;
     }
 
     // Check for position or size change
@@ -257,6 +258,26 @@ void trimFlaps::update()
     }
     else {
         flapsOffset = targetFlaps;
+    }
+
+    // If pushing back use heading bug to steer
+    if (simVars->pushbackState < 3) {
+        double tugHeading;
+        if (pushback) {
+            tugHeading = simVars->autopilotHeading;
+        }
+        else {
+            pushback = true;
+            tugHeading = simVars->hiHeading;
+            globals.simVars->write(KEY_HEADING_BUG_SET, tugHeading);
+        }
+
+        // Convert from magnetic to true
+        tugHeading += simVars->hiHeadingTrue - simVars->hiHeading;
+        globals.simVars->write(KEY_TUG_HEADING, tugHeading * 11930464);
+    }
+    else {
+        pushback = false;
     }
 }
 

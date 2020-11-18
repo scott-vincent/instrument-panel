@@ -16,6 +16,7 @@ private:
     float trimOffset;
     float flapsOffset = 0;
     float targetFlaps;
+    bool pushback = false;
 
     // Hardware knobs
     int trimKnob = -1;
