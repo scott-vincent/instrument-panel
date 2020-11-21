@@ -6,9 +6,9 @@
 
 Download the following two zip files.
 
-Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/download/v1.3.6/instrument-panel-v1.3.6-Windows-x64.zip)
+Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v1.3.6-Windows-x64.zip)
 
-Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/download/v1.3.6/instrument-data-link-v1.3.6-windows-x64.zip)
+Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v1.3.6-windows-x64.zip)
 
 Unzip instrument-data-link into its own folder and double-click instrument-data-link.exe to run it.
 
