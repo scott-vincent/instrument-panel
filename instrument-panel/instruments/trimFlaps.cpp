@@ -332,32 +332,15 @@ void trimFlaps::updateKnobs()
     // Read knob for flaps
     val = globals.hardwareKnobs->read(flapsKnob);
     if (val != INT_MIN) {
-        // Need a minimum number of turns to move flaps
-        if (lastTurn == 0) {
-            // Start monitoring value
+        if (val - lastFlapsVal > 1) {
+            // Flaps up one notch
+            globals.simVars->write(KEY_FLAPS_DECR);
             lastFlapsVal = val;
         }
-        else {
-            // Value large enough to trigger yet?
-            if (lastFlapsVal - val > 2) {
-                // Flaps down one notch
-                globals.simVars->write(KEY_FLAPS_INCR);
-                lastFlapsVal = val;
-            }
-            else if (val - lastFlapsVal > 2) {
-                // Flaps up one notch
-                globals.simVars->write(KEY_FLAPS_DECR);
-                lastFlapsVal = val;
-            }
-        }
-        time(&lastTurn);
-    }
-    else if (lastTurn != 0) {
-        // Reset if not turned for 1 sec
-        time_t now;
-        time(&now);
-        if (now > lastTurn) {
-            lastTurn = 0;
+        else if (lastFlapsVal - val > 1 ) {
+            // Flaps down one notch
+            globals.simVars->write(KEY_FLAPS_INCR);
+            lastFlapsVal = val;
         }
     }
 }
