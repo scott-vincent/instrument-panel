@@ -764,9 +764,9 @@ void nav::update()
 /// </summary>
 void nav::bankingAssist()
 {
-    int autopilotBank = abs(simVars->autopilotBank) + 0.1;
+    int autopilotBank = abs(simVars->autopilotBank) + 0.5;
 
-    if (!bankAssist && autopilotBank == autopilotMaxBank) {
+    if (!bankAssist && autopilotBank >= autopilotMaxBank) {
         // Start assistance at current max bank angle (20 degrees)
         bankAssist = true;
     }

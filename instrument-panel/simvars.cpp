@@ -743,16 +743,16 @@ void dataLink(simvars* t)
 
                     // Identify aircraft
                     if (strcmp(t->simVars.aircraft, lastAircraft) != 0) {
-                        if (strcmp(t->simVars.aircraft, globals.Cessna_152_Text) == 0) {
+                        if (strncmp(t->simVars.aircraft, globals.Cessna_152_Text, globals.Cessna_152_Len) == 0) {
                             globals.aircraft = CESSNA_152;
                         }
-                        else if (strcmp(t->simVars.aircraft, globals.Cessna_172_Text) == 0) {
+                        else if (strncmp(t->simVars.aircraft, globals.Cessna_172_Text, globals.Cessna_172_Len) == 0) {
                             globals.aircraft = CESSNA_172;
                         }
-                        else if (strcmp(t->simVars.aircraft, globals.Savage_Cub_Text) == 0) {
+                        else if (strncmp(t->simVars.aircraft, globals.Savage_Cub_Text, globals.Savage_Cub_Len) == 0) {
                             globals.aircraft = SAVAGE_CUB;
                         }
-                        else if (strcmp(t->simVars.aircraft, globals.Airbus_A320neo_Text) == 0) {
+                        else if (strncmp(t->simVars.aircraft, globals.Airbus_A320neo_Text, globals.Airbus_A320neo_Len) == 0) {
                             globals.aircraft = AIRBUS_A320NEO;
                         }
                         else {
