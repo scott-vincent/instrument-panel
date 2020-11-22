@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.3.7";
+const char* versionString = "v1.3.6";
 
 const char* SimVarDefs[][2] = {
     { "Indicated Altitude", "feet" },
@@ -83,6 +83,7 @@ const char* SimVarDefs[][2] = {
     { "Gear Right Position", "percent" },
     { "Brake Parking Position", "bool" },
     { "Pushback State", "enum" },
+    { "Rudder Position", "position" },
     { "Estimated Cruise Speed", "knots" },
     { "General Eng Oil Temperature:1", "fahrenheit" },
     { "General Eng Oil Pressure:1", "psi" },

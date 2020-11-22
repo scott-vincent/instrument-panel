@@ -85,6 +85,7 @@ struct SimVars
     double gearRightPos = 100;
     double parkingBrakeOn = 1;
     double pushbackState = 3;
+    double rudderPosition = 0;
     double cruiseSpeed = 120;
     double oilTemp = 75;
     double oilPressure = 50;
