@@ -1137,37 +1137,51 @@ void nav::autopilotSwitchPressed()
 }
 
 /// <summary>
-/// If flight director is disabled just after take off
-/// initialise manual autopilot (A320).
+/// If flight director is enabled/disabled just after
+/// take off initialise autopilot settings.
 /// </summary>
 void nav::toggleFlightDirector()
 {
-    bool turnedOff = (simVars->flightDirectorActive);
+    bool turnedOn = !(simVars->flightDirectorActive);
     globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
 
-    if (turnedOff && simVars->altAltitude < 1500) {
-        int holdSpeed = 200;
-        int holdHeading = simVars->hiHeading;
-        int holdAltitude = 4000;
-        int holdVerticalSpeed = 1500;
+    // Adjust autopilot settings if just after take off
+    if (simVars->altAltitude > 1500) {
+        return;
+    }
 
-        managedSpeed = false;
-        globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
+    // Initial settings
+    int holdSpeed = 200;
+    int holdAltitude = 4000;
+    int holdVerticalSpeed = 1500;
+
+    managedSpeed = false;
+    globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
+    managedAltitude = true;
+    globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 2);
+
+    if (turnedOn) {
+        // Use managed heading if FD turned on
+        managedHeading = true;
+        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 2);
+    }
+    else {
+        // Use current heading if FD turned off
         managedHeading = false;
         globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 1);
-        managedAltitude = true;
-        globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 2);
-        showSpeed = true;
-        globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
-        showHeading = true;
-        globals.simVars->write(KEY_HEADING_BUG_SET, holdHeading);
-        showAltitude = true;
-        globals.simVars->write(KEY_AP_ALT_HOLD_ON);
-        globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAltitude);
-        showVerticalSpeed = true;
-        globals.simVars->write(KEY_AP_AIRSPEED_ON);
-        globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, holdVerticalSpeed);
+        globals.simVars->write(KEY_HEADING_BUG_SET, simVars->hiHeading);
     }
+
+    globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
+    globals.simVars->write(KEY_AP_ALT_HOLD_ON);
+    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAltitude);
+    globals.simVars->write(KEY_AP_AIRSPEED_ON);
+    globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, holdVerticalSpeed);
+
+    showHeading = true;
+    showSpeed = true;
+    showAltitude = true;
+    showVerticalSpeed = true;
 }
 
 /// <summary>
