@@ -141,7 +141,7 @@ void trimFlaps::render()
     // Add main panel
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    if (gearUpWarning > 0 && gearUpWarning < 120 && gearUpWarning % 10 < 5) {
+    if (gearUpWarning > 0 && gearUpWarning % 10 < 5) {
         // Add warning flash
         al_draw_bitmap(bitmaps[14], 0, 0, 0);
     }
@@ -286,10 +286,20 @@ void trimFlaps::update()
     }
 
     // Warn if low altitude and gear is up
-    if (simVars->altAboveGround < 200 && simVars->gearRetractable && simVars->gearCentrePos < 20
-        && simVars->altAboveGround > 30 && simVars->vsiVerticalSpeed < 0)
+    if (simVars->altAboveGround < 400 && simVars->altAboveGround > 30 && simVars->gearRetractable
+        && simVars->gearCentrePos < 20 && simVars->vsiVerticalSpeed < 0)
     {
-        gearUpWarning++;
+        if (simVars->altAboveGround > 300) {
+            // Warning 1
+            gearUpWarning++;
+        }
+        else if (simVars->altAboveGround < 100) {
+            // Warning 2
+            gearUpWarning++;
+        }
+        else {
+            gearUpWarning = 0;
+        }
     }
     else {
         gearUpWarning = 0;
