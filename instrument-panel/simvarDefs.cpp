@@ -14,6 +14,7 @@ const char* SimVarDefs[][2] = {
     { "Plane Heading Degrees Magnetic", "degrees" },
     { "Plane Heading Degrees True", "degrees" },
     { "Vertical Speed", "feet per second" },
+    { "Plane Alt Above Ground", "feet" },
     { "Turn Indicator Rate", "radians per second" },
     { "Turn Coordinator Ball", "position" },
     { "Elevator Trim Position", "degrees" },

@@ -16,6 +16,7 @@ struct SimVars
     double hiHeading = 0;
     double hiHeadingTrue = 0;
     double vsiVerticalSpeed = 0;
+    double altAboveGround = 0;
     double tcRate = 0;
     double tcBall = 0;
     double tfElevatorTrim = 0;

@@ -113,6 +113,13 @@ void trimFlaps::resize()
     al_draw_bitmap_region(orig, 644, 807, 192, 33, 0, 0, 0);
     addBitmap(bmp);
 
+    // 14 = Red warning
+    ALLEGRO_BITMAP* warn = loadBitmap("warn.png");
+    bmp = al_create_bitmap(size, size);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(warn, 0, 0, 1, 1, 0, 0, size, size, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -133,6 +140,11 @@ void trimFlaps::render()
 
     // Add main panel
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
+
+    if (gearUpWarning > 0 && gearUpWarning < 120 && gearUpWarning % 10 < 5) {
+        // Add warning flash
+        al_draw_bitmap(bitmaps[14], 0, 0, 0);
+    }
 
     // Add trim
     al_draw_bitmap(bitmaps[3], 262 * scaleFactor, (301 + trimOffset) * scaleFactor, 0);
@@ -272,6 +284,16 @@ void trimFlaps::update()
 
         globals.simVars->write(KEY_TUG_HEADING, tugHeading * 11930464);
     }
+
+    // Warn if low altitude and gear is up
+    if (simVars->altAboveGround < 200 && simVars->gearRetractable && simVars->gearCentrePos < 20
+        && simVars->altAboveGround > 30 && simVars->vsiVerticalSpeed < 0)
+    {
+        gearUpWarning++;
+    }
+    else {
+        gearUpWarning = 0;
+    }
 }
 
 /// <summary>
@@ -289,6 +311,7 @@ void trimFlaps::addVars()
     globals.simVars->addVar(name, "Brake Parking Position", true, 1, 0);
     globals.simVars->addVar(name, "Spoilers Handle Position", false, 1, 0);
     globals.simVars->addVar(name, "Auto Brake Switch Cb", false, 1, 0);
+    globals.simVars->addVar(name, "Plane Alt Above Ground", false, 1, 0);
 }
 
 #ifndef _WIN32

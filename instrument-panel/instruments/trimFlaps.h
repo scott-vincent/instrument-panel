@@ -16,6 +16,7 @@ private:
     float trimOffset;
     float flapsOffset = 0;
     float targetFlaps;
+    int gearUpWarning = 0;
 
     // Hardware knobs
     int trimKnob = -1;
