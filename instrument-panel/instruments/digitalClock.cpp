@@ -120,7 +120,7 @@ void digitalClock::resize()
     al_draw_scaled_bitmap(orig, 800, 130, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
     addBitmap(bmp);
 
-    // 15 = Letter E
+    // 15 = Letter V
     bmp = al_create_bitmap(94 * scaleFactor, 134 * scaleFactor);
     al_set_target_bitmap(bmp);
     al_draw_scaled_bitmap(orig, 800, 264, 94, 134, 0, 0, 94 * scaleFactor, 134 * scaleFactor, 0);
@@ -244,10 +244,10 @@ void digitalClock::drawDisplay(int digit1, int digit2, int digit3, int letter, b
     // Temps can be negative
     if (isMinus) {
         if (digit1 > 0) {
-            al_draw_bitmap(bitmaps[14], 85 * scaleFactor, y, 0);
+            al_draw_bitmap(bitmaps[14], 110 * scaleFactor, y, 0);
         }
         else {
-            al_draw_bitmap(bitmaps[14], 187 * scaleFactor, y, 0);
+            al_draw_bitmap(bitmaps[14], 212 * scaleFactor, y, 0);
         }
     }
 
