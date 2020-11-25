@@ -48,7 +48,7 @@
     "Position Y": 342,
     "Size": 284
   },
-  "VOR2": {
+  "Rad Com": {
     "Enabled": true,
     "Position X": 1553,
     "Position Y": 348,
@@ -66,7 +66,7 @@
     "Position Y": 669,
     "Size": 284
   },
-  "ADF": {
+  "Rad Nav": {
     "Enabled": true,
     "Position X": 1556,
     "Position Y": 672,
@@ -117,10 +117,10 @@
   "ADI Learjet": {
     "Enabled": false
   },
-  "Rad Com": {
+  "VOR2": {
     "Enabled": false
   },
-  "Rad Nav": {
+  "ADF": {
     "Enabled": false
   },
   "ASI Savage Cub": {
