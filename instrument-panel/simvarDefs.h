@@ -11,8 +11,10 @@ struct SimVars
     double adiPitch = 0;
     double adiBank = 0;
     double asiAirspeed = 0;
+    double asiTrueSpeed = 0;
     double asiMachSpeed = 0;
     double asiAirspeedCal = -14;
+    double asiMaxMach = 0;
     double hiHeading = 0;
     double hiHeadingTrue = 0;
     double vsiVerticalSpeed = 0;
@@ -136,6 +138,8 @@ enum EVENT_ID {
     KEY_AP_VS_VAR_SET_ENGLISH,
     KEY_AP_AIRSPEED_ON,
     KEY_AP_AIRSPEED_OFF,
+    KEY_AP_MACH_ON,
+    KEY_AP_MACH_OFF,
     KEY_AP_HDG_HOLD_ON,
     KEY_AP_HDG_HOLD_OFF,
     KEY_AP_ALT_HOLD_ON,

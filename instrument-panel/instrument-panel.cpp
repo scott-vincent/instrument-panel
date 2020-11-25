@@ -69,9 +69,11 @@
 #include "hi.h"
 #include "vsi.h"
 #include "vor2.h"
+#include "radNav.h"
 #include "trimFlaps.h"
 #include "rpm.h"
 #include "adf.h"
+#include "radCom.h"
 #include "annunciator.h"
 #include "digitalClock.h"
 #include "fuel.h"
@@ -504,6 +506,10 @@ void addInstruments()
         instruments.push_back(new vor2(1500, 400, 300));
     }
 
+    if (globals.simVars->isEnabled("Rad Nav")) {
+        instruments.push_back(new radNav(1500, 400, 300));
+    }
+
     if (globals.simVars->isEnabled("Trim Flaps")) {
         instruments.push_back(new trimFlaps(700, 750, 300));
     }
@@ -514,6 +520,10 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("ADF")) {
         instruments.push_back(new adf(1500, 750, 300));
+    }
+
+    if (globals.simVars->isEnabled("Rad Com")) {
+        instruments.push_back(new radCom(1500, 750, 300));
     }
 
     if (globals.simVars->isEnabled("Annunciator")) {

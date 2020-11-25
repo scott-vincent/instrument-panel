@@ -711,6 +711,11 @@ void nav::update()
         autopilotSpd = NoSpd;
     }
 
+    // Don't overspeed when in mach mode
+    if (showMach && simVars->asiMachSpeed > simVars->asiMaxMach) {
+        globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->asiMaxMach * 100);
+    }
+
     if (simVars->autopilotHeadingLock == 1) {
         autopilotHdg = HdgSet;
     }
@@ -912,9 +917,25 @@ void nav::updateKnobs()
             else {
                 autopilotSwitchPressed();
             }
+            time(&lastPush);
+        }
+        else {
+            // Released
+            lastPush = 0;
         }
         prevSelPush = val;
         adjustSetSel = 0;
+    }
+
+    // Check for long press (over 1 sec)
+    if (lastPush > 0) {
+        time(&now);
+        if (now - lastPush > 1) {
+            if (switchSel == Speed) {
+                autopilotMachSwap();
+            }
+            lastPush = 0;
+        }
     }
 
     // Read right knob rotate for digits set
@@ -1058,25 +1079,18 @@ void nav::autopilotSwitchPressed()
     case Speed:
     {
         if (autopilotSpd == SpdHold) {
-            // Switch between knots and mach display.
-            // Sets currently displayed value before switching to
-            // set correctly converted value for current altitude.
-            if (showMach) {
-                // For some weird reason you have to set mach * 100 !
-                globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->autopilotMach * 100);
-                showMach = false;
-                manSelSpeed();
-            }
-            else {
-                globals.simVars->write(KEY_AP_SPD_VAR_SET, simVars->autopilotAirspeed);
-                showMach = true;
-            }
+            globals.simVars->write(KEY_AP_MACH_OFF);
+            globals.simVars->write(KEY_AP_AIRSPEED_OFF);
         }
         else {
-            // Switch to Airspeed hold.
-            globals.simVars->write(KEY_AP_AIRSPEED_ON);
-            showMach = false;
+            if (showMach) {
+                globals.simVars->write(KEY_AP_MACH_ON);
+            }
+            else {
+                globals.simVars->write(KEY_AP_AIRSPEED_ON);
+            }
         }
+        manSelSpeed();
         break;
     }
     case Heading:
@@ -1097,13 +1111,12 @@ void nav::autopilotSwitchPressed()
         if (autopilotAlt == AltHold) {
             autopilotAlt = PitchHold;
             globals.simVars->write(KEY_AP_ALT_HOLD_OFF);
-            manSelAltitude();
         }
         else {
             autopilotAlt = AltHold;
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
-            manSelAltitude();
         }
+        manSelAltitude();
         break;
     }
     case VerticalSpeed:
@@ -1133,6 +1146,23 @@ void nav::autopilotSwitchPressed()
         }
         break;
     }
+    }
+}
+
+/// <summary>
+/// Switch speed display between knots and mach
+/// </summary>
+void nav::autopilotMachSwap()
+{
+    // Set to current speed before switching
+    if (showMach) {
+        globals.simVars->write(KEY_AP_SPD_VAR_SET, simVars->asiAirspeed);
+        showMach = false;
+    }
+    else {
+        // For some weird reason you have to set mach * 100 !
+        globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->asiMachSpeed * 100);
+        showMach = true;
     }
 }
 

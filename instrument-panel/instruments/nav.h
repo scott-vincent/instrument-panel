@@ -93,6 +93,7 @@ private:
     int prevAdjustVal = 0;
     int prevAdjustPush = 0;
     time_t lastAdjust = 0;
+    time_t lastPush = 0;
     time_t now;
 
 public:
@@ -118,6 +119,7 @@ private:
     void updateKnobs();
     void navSwitchPressed();
     void autopilotSwitchPressed();
+    void autopilotMachSwap();
     void toggleFlightDirector();
     void manSelSpeed();
     void manSelHeading();
