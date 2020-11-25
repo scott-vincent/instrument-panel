@@ -114,10 +114,10 @@
   "ADI Learjet": {
     "Enabled": false
   },
-  "Rad Nav": {
+  "Rad Com": {
     "Enabled": false
   },
-  "Rad Com": {
+  "Rad Nav": {
     "Enabled": false
   },
   "ASI Savage Cub": {
