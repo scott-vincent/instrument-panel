@@ -932,7 +932,20 @@ void nav::updateKnobs()
         time(&now);
         if (now - lastPush > 1) {
             if (switchSel == Speed) {
-                autopilotMachSwap();
+                // Long press on speed switches between managed and selected
+                if (autopilotSpd == SpdHold) {
+                    globals.simVars->write(KEY_AP_MACH_OFF);
+                    globals.simVars->write(KEY_AP_AIRSPEED_OFF);
+                }
+                else {
+                    if (showMach) {
+                        globals.simVars->write(KEY_AP_MACH_ON);
+                    }
+                    else {
+                        globals.simVars->write(KEY_AP_AIRSPEED_ON);
+                    }
+                }
+                manSelSpeed();
             }
             lastPush = 0;
         }
@@ -1078,19 +1091,8 @@ void nav::autopilotSwitchPressed()
     }
     case Speed:
     {
-        if (autopilotSpd == SpdHold) {
-            globals.simVars->write(KEY_AP_MACH_OFF);
-            globals.simVars->write(KEY_AP_AIRSPEED_OFF);
-        }
-        else {
-            if (showMach) {
-                globals.simVars->write(KEY_AP_MACH_ON);
-            }
-            else {
-                globals.simVars->write(KEY_AP_AIRSPEED_ON);
-            }
-        }
-        manSelSpeed();
+        // Short press on speed just swaps between knots and mach
+        autopilotMachSwap();
         break;
     }
     case Heading:
@@ -1617,6 +1619,11 @@ double nav::adjustMach(double val, int adjust)
 
     if (machX100 < 0) {
         machX100 = 0;
+    }
+
+    // Don't allow mach > maxMach
+    if (machX100 / 100.0 > simVars->asiMaxMach) {
+        machX100 = simVars->asiMaxMach * 100;
     }
 
     return machX100;

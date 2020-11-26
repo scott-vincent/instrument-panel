@@ -27,6 +27,7 @@ private:
     int selPush = -1;
     int prevVal = 0;
     int prevPush = 0;
+    time_t lastSwap = 0;
     time_t lastAdjust = 0;
     time_t now;
 

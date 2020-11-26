@@ -53,15 +53,15 @@ void radCom::resize()
     addBitmap(bmp);
 
     // 4 = Digits 2
-    bmp = al_create_bitmap(440, 86);
+    bmp = al_create_bitmap(440, 80);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 900, 440, 86, 0, 0, 440, 86, 0);
+    al_draw_scaled_bitmap(orig, 0, 900, 440, 80, 0, 0, 440, 80, 0);
     addBitmap(bmp);
 
     // 5 = Digits 2 selected
-    bmp = al_create_bitmap(440, 86);
+    bmp = al_create_bitmap(440, 80);
     al_set_target_bitmap(bmp);
-    al_draw_scaled_bitmap(orig, 0, 986, 440, 86, 0, 0, 440, 86, 0);
+    al_draw_scaled_bitmap(orig, 0, 980, 440, 80, 0, 0, 440, 80, 0);
     addBitmap(bmp);
 
     // 6 = Comm2
@@ -120,7 +120,7 @@ void radCom::render()
 
     // Add frequencies
     addFreq3dp(comFreq, 215, 220, true);
-    addFreq3dp(comStandby, 257, 515, false);
+    addFreq3dp(comStandby, 257, 518, false);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -159,7 +159,7 @@ void radCom::addFreq3dp(int freq, int x, int y, bool isLarge)
     }
     else {
         wide = 44;
-        tall = 86;
+        tall = 80;
         postDot = x + wide * 3 + 23;
         bmp = 4;
     }
@@ -285,11 +285,16 @@ void radCom::updateKnobs()
         if (prevPush % 2 == 1) {
             switch (switchSel) {
                 case Swap:
-                    if (simVars->com1Transmit) {
-                        globals.simVars->write(KEY_COM1_RADIO_SWAP);
-                    }
-                    else {
-                        globals.simVars->write(KEY_COM2_RADIO_SWAP);
+                    // Debounce
+                    time(&now);
+                    if (now - lastSwap > 0) {
+                        if (simVars->com1Transmit) {
+                            globals.simVars->write(KEY_COM1_RADIO_SWAP);
+                        }
+                        else {
+                            globals.simVars->write(KEY_COM2_RADIO_SWAP);
+                        }
+                        time(&lastSwap);
                     }
                     break;
 
