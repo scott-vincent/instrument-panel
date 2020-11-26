@@ -301,7 +301,7 @@ void radCom::updateKnobs()
 
                 case Adjusting:
                     if (adjustSetSel == 2) {
-                        switchSel = Adjust;
+                        switchSel = Swap;
                     }
                     else {
                         adjustSetSel++;
