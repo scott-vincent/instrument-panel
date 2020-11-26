@@ -81,9 +81,6 @@
     <ClCompile Include="instruments\savageCub\xpdrSavageCub.cpp">
       <Filter>instruments\savageCub</Filter>
     </ClCompile>
-    <ClCompile Include="instruments\radNav.cpp">
-      <Filter>instruments</Filter>
-    </ClCompile>
     <ClCompile Include="instruments\radCom.cpp">
       <Filter>instruments</Filter>
     </ClCompile>
@@ -168,9 +165,6 @@
     </ClInclude>
     <ClInclude Include="instruments\savageCub\xpdrSavageCub.h">
       <Filter>instruments\savageCub</Filter>
-    </ClInclude>
-    <ClInclude Include="instruments\radNav.h">
-      <Filter>instruments</Filter>
     </ClInclude>
     <ClInclude Include="instruments\radCom.h">
       <Filter>instruments</Filter>

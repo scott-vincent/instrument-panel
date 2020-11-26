@@ -7,7 +7,7 @@
 extern globalVars globals;
 
 // Set maximum number of knobs
-const int MaxKnobs = 16;
+const int MaxKnobs = 20;
 
 class knobs
 {

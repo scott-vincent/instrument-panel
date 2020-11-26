@@ -48,7 +48,7 @@
     "Position Y": 342,
     "Size": 284
   },
-  "Rad Com": {
+  "VOR2": {
     "Enabled": true,
     "Position X": 1553,
     "Position Y": 348,
@@ -66,11 +66,11 @@
     "Position Y": 669,
     "Size": 284
   },
-  "Rad Nav": {
+  "Rad Com": {
     "Enabled": true,
-    "Position X": 1556,
-    "Position Y": 672,
-    "Size": 266
+    "Position X": 1549,
+    "Position Y": 665,
+    "Size": 280
   },
   "Annunciator": {
     "Enabled": true,
@@ -115,9 +115,6 @@
     "Size": 589
   },
   "ADI Learjet": {
-    "Enabled": false
-  },
-  "VOR2": {
     "Enabled": false
   },
   "ADF": {

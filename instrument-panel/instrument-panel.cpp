@@ -69,7 +69,6 @@
 #include "hi.h"
 #include "vsi.h"
 #include "vor2.h"
-#include "radNav.h"
 #include "trimFlaps.h"
 #include "rpm.h"
 #include "adf.h"
@@ -504,10 +503,6 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("VOR2")) {
         instruments.push_back(new vor2(1500, 400, 300));
-    }
-
-    if (globals.simVars->isEnabled("Rad Nav")) {
-        instruments.push_back(new radNav(1500, 400, 300));
     }
 
     if (globals.simVars->isEnabled("Trim Flaps")) {
