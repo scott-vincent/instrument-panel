@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "vor1.h"
 #include "simvars.h"
 #include "knobs.h"
@@ -131,7 +132,7 @@ void vor1::render()
     }
 
     // Add locator needle
-    al_draw_scaled_rotated_bitmap(bitmaps[7], 15, 140, 400 * scaleFactor, 140 * scaleFactor, scaleFactor, scaleFactor, locAngle * DegreesToRadians, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[7], 15, 140, 400 * scaleFactor, 140 * scaleFactor, scaleFactor, scaleFactor, locAngle, 0);
 
     // Add glide slope needle
     al_draw_scaled_rotated_bitmap(bitmaps[8], 140, 15, 140 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, slopeAngle * DegreesToRadians, 0);
@@ -180,7 +181,7 @@ void vor1::update()
 
     // Calculate values
     compassAngle = -simVars->vor1Obs;
-    locAngle = -simVars->vor1RadialError * 15.0;
+    locAngle = -atan(simVars->vor1RadialError / 15.1); // Each dot is 2 degrees of radial error
     slopeAngle = 50;
     toFromOn = simVars->vor1ToFrom;
     glideSlopeOn = simVars->vor1GlideSlopeFlag;

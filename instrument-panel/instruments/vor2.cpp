@@ -160,7 +160,7 @@ void vor2::update()
 
     // Calculate values
     compassAngle = -simVars->vor2Obs;
-    locAngle = -simVars->vor2RadialError * 15.0;
+    locAngle = -simVars->vor2RadialError * 2.5;
     toFromOn = simVars->vor2ToFrom;
 
     if (abs(locAngle) > 50) {
