@@ -159,12 +159,16 @@ void vor2::update()
 #endif
 
     // Calculate values
+    double radialError = simVars->vor2RadialError;
+    if (abs(radialError) > 90) { // Range: -180 to +179
+        if (radialError > 0) radialError = 180 - radialError; else radialError = -180 - radialError;
+    }    
     compassAngle = -simVars->vor2Obs;
-    locAngle = -simVars->vor2RadialError * 2.5;
+    locAngle = -radialError * 2.5;
     toFromOn = simVars->vor2ToFrom;
 
-    if (abs(locAngle) > 50) {
-        if (locAngle > 0) locAngle = 50; else locAngle = -50;
+    if (abs(locAngle) > 35) {
+        if (locAngle > 0) locAngle = 35; else locAngle = -35;
     }
 }
 
