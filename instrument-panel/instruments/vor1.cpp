@@ -180,14 +180,18 @@ void vor1::update()
 #endif
 
     // Calculate values
+    double radialError = simVars->vor1RadialError;
+    if (abs(radialError) > 90) { // Range: -180 to +179
+        if (radialError > 0) radialError = 180 - radialError; else radialError = -180 - radialError;
+    }     
     compassAngle = -simVars->vor1Obs;
-    locAngle = -atan(simVars->vor1RadialError / 15.0); // Each dot is 2 degrees of radial error
+    locAngle = -atan(radialError / 15.0); // Each dot is 2 degrees of radial error
     slopeAngle = 50;
     toFromOn = simVars->vor1ToFrom;
     glideSlopeOn = simVars->vor1GlideSlopeFlag;
 
-    if (abs(locAngle) > 50) {
-        if (locAngle > 0) locAngle = 50; else locAngle = -50;
+    if (abs(locAngle) > (35 * DegreesToRadians)) {
+        if (locAngle > 0) locAngle = 35 * DegreesToRadians; else locAngle = -35 * DegreesToRadians;
     }
 
     slopeAngle = simVars->vor1GlideSlopeError * 25.0;
