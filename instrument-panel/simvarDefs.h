@@ -45,6 +45,10 @@ struct SimVars
     double vor2Obs = 0;
     double vor2RadialError = 0;
     double vor2ToFrom = 0;
+    double navHasLocalizer = 0;
+    double navLocalizer = 0;
+    double gpsDrivesNav1 = 0;
+    double gpsWpCrossTrk = 0;
     double adfRadial = 0;
     double adfCard = 0;
     double com1Status = 0;
