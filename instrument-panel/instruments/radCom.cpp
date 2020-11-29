@@ -126,8 +126,14 @@ void radCom::render()
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
-    if (!globals.active) {
+    if (!globals.avionics) {
+        // Full dim if avionics turned off
         dimInstrument();
+    }
+    else if (!globals.active) {
+        // Semi dim if screensaver activated but avionics turned on
+        // allows radio to be tuned when engine not started.
+        dimInstrument(false);
     }
 }
 
