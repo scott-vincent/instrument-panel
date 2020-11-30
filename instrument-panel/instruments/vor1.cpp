@@ -199,11 +199,13 @@ void vor1::update()
     crossTrkMeters = simVars->gpsWpCrossTrk;
 
     if (gpsControlsNavOn) {
-        // Cross Track Needle
-        // The dimensions of the full deflection triangle (to one side) are approx 2414 x 1609 meters 
-        locAngle = -atan(crossTrkMeters / 2414.0); // Each dot is 2 tenths of a mile
+        // CDI needle is GPS Cross Track
+        // The cross track CDI (to either side) is 1 nm; Each dot is 2 tenths of a nautical mile
+        // The dimensions of the full deflection triangle (to one side) is 1.5 nm x 1 nm  
+        double nmToMeters = 1852.0;
+        locAngle = -atan(crossTrkMeters / (1.5 * nmToMeters)); 
     } else {
-        // LOC needle
+        // CDI needle is VOR/LOC radial
         double radialError = simVars->vor1RadialError;
         if (abs(radialError) > 90) { // Range: -180 to +179
             // Compute the radial error when receiving a FROM radial 
@@ -216,12 +218,12 @@ void vor1::update()
             locAngle *= 3.5;
         }
     }
-    // Clamp the LOC needle to the edge of the bezel
+    // Clamp the CDI needle to the edge of the bezel
     if (abs(locAngle) > (35 * DegreesToRadians)) {
         if (locAngle > 0) locAngle = 35 * DegreesToRadians; else locAngle = -35 * DegreesToRadians;
     }
 
-    // GS needle
+    // Glideslope needle
     slopeAngle = simVars->vor1GlideSlopeError * 25.0;
     // Clamp the GS needle to the edge of the bezel
     if (abs(slopeAngle) > 35) {
