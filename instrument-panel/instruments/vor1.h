@@ -14,8 +14,10 @@ private:
     double compassAngle;
     double locAngle;
     double slopeAngle;
+    double crossTrkMeters;
     int toFromOn;
     int glideSlopeOn;
+    int gpsControlsNavOn;
 
     // Hardware knobs
     int obsKnob = -1;

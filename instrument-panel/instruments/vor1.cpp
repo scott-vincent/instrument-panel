@@ -97,6 +97,12 @@ void vor1::resize()
     al_draw_scaled_bitmap(orig, 1630, 180, 70, 180, 0, 0, 70 * scaleFactor, 180 * scaleFactor, 0);
     addBitmap(bmp);
 
+    // 11 = GPS flag
+    bmp = al_create_bitmap(100 * scaleFactor, 50 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 1100, 800, 100, 50, 0, 0, 100 * scaleFactor, 50 * scaleFactor, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -123,14 +129,20 @@ void vor1::render()
         al_draw_bitmap(bitmaps[4], 490 * scaleFactor, 335 * scaleFactor, 0);
     }
 
-    // Add to/from on
-    if (toFromOn == 1) {
-        al_draw_bitmap(bitmaps[6], 350 * scaleFactor, 549 * scaleFactor, 0);
+    // GPS drives NAV
+    if (gpsControlsNavOn == 1) {
+        // Add GPS flag over barber pole 
+        al_draw_bitmap(bitmaps[11], 350 * scaleFactor, 549 * scaleFactor, 0);
+    } 
+    else {
+        // Add to/from on
+        if (toFromOn == 1) {
+            al_draw_bitmap(bitmaps[6], 350 * scaleFactor, 549 * scaleFactor, 0);
+        }
+        else if (toFromOn == 2) {
+            al_draw_bitmap(bitmaps[5], 350 * scaleFactor, 549 * scaleFactor, 0);
+        }
     }
-    else if (toFromOn == 2) {
-        al_draw_bitmap(bitmaps[5], 350 * scaleFactor, 549 * scaleFactor, 0);
-    }
-
     // Add locator needle
     al_draw_scaled_rotated_bitmap(bitmaps[7], 15, 140, 400 * scaleFactor, 140 * scaleFactor, scaleFactor, scaleFactor, locAngle, 0);
 
@@ -180,23 +192,42 @@ void vor1::update()
 #endif
 
     // Calculate values
-    double radialError = simVars->vor1RadialError;
-    if (abs(radialError) > 90) { // Range: -180 to +179
-        if (radialError > 0) radialError = 180 - radialError; else radialError = -180 - radialError;
-    }     
     compassAngle = -simVars->vor1Obs;
-    locAngle = -atan(radialError / 15.0); // Each dot is 2 degrees of radial error
-    slopeAngle = 50;
-    toFromOn = simVars->vor1ToFrom;
     glideSlopeOn = simVars->vor1GlideSlopeFlag;
+    toFromOn = simVars->vor1ToFrom;
+    gpsControlsNavOn = simVars->gpsDrivesNav1;
+    crossTrkMeters = simVars->gpsWpCrossTrk;
 
+    if (gpsControlsNavOn) {
+        // CDI needle is GPS Cross Track
+        // The cross track CDI (to either side) is 1 nm; Each dot is 2 tenths of a nautical mile
+        // The dimensions of the full deflection triangle (to one side) is 1.5 nm x 1 nm  
+        double nmToMeters = 1852.0;
+        locAngle = -atan(crossTrkMeters / (1.5 * nmToMeters)); 
+    } else {
+        // CDI needle is VOR/LOC radial
+        double radialError = simVars->vor1RadialError;
+        if (abs(radialError) > 90) { // Range: -180 to +179
+            // Compute the radial error when receiving a FROM radial 
+            if (radialError > 0) radialError = 180 - radialError; else radialError = -180 - radialError;
+        }
+        // The dimensions of the full deflection triangle (to one side) are approx 15 x 10 (10 == 5 dots) 
+        locAngle = -atan(radialError / 15.0); // Each dot is 2 degrees of radial error for a VOR
+        if (simVars->navHasLocalizer) {
+            // When tuned to a localizer (e.g. for an ILS approach) the sensitivity is increased
+            locAngle *= 3.5;
+        }
+    }
+    // Clamp the CDI needle to the edge of the bezel
     if (abs(locAngle) > (35 * DegreesToRadians)) {
         if (locAngle > 0) locAngle = 35 * DegreesToRadians; else locAngle = -35 * DegreesToRadians;
     }
 
+    // Glideslope needle
     slopeAngle = simVars->vor1GlideSlopeError * 25.0;
-    if (abs(slopeAngle) > 50) {
-        if (slopeAngle > 0) slopeAngle = 50; else slopeAngle = -50;
+    // Clamp the GS needle to the edge of the bezel
+    if (abs(slopeAngle) > 35) {
+        if (slopeAngle > 0) slopeAngle = 35; else slopeAngle = -35;
     }
 }
 
@@ -209,7 +240,11 @@ void vor1::addVars()
     globals.simVars->addVar(name, "Nav Radial Error:1", false, 1, 0);
     globals.simVars->addVar(name, "Nav Glide Slope Error:1", false, 1, 0);
     globals.simVars->addVar(name, "Nav ToFrom:1", false, 1, 0);
-    globals.simVars->addVar(name, "Nav Gs Flag:1", false, 1, 0);
+    globals.simVars->addVar(name, "Nav Gs Flag:1", false, 1, 0);    
+    globals.simVars->addVar(name, "Nav Has Localizer:1", true, 1, 0);
+    globals.simVars->addVar(name, "Nav Localizer:1", false, 1, 0);
+    globals.simVars->addVar(name, "Gps Drives Nav1", true, 1, 0);
+    globals.simVars->addVar(name, "Gps Wp Cross Trk", false, 1, 0);
 }
 
 #ifndef _WIN32
