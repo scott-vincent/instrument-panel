@@ -80,8 +80,6 @@ const char* SimVarDefs[][2] = {
     { "Autopilot Airspeed Hold", "bool" },
     { "Autopilot Approach Hold", "bool" },
     { "Autopilot Glideslope Hold", "bool" },
-    { "Autopilot Flight Director Bank", "degrees" },
-    { "Autopilot Max Bank", "degrees" },
     { "General Eng Throttle Lever Position:1", "percent" },
     { "Autothrottle Active", "bool" },
     { "Is Gear Retractable", "bool" },
@@ -153,8 +151,6 @@ WriteEvent WriteEvents[] = {
     { KEY_HEADING_SLOT_INDEX_SET, "HEADING_SLOT_INDEX_SET" },
     { KEY_SPEED_SLOT_INDEX_SET, "SPEED_SLOT_INDEX_SET" },
     { KEY_ALTITUDE_SLOT_INDEX_SET, "ALTITUDE_SLOT_INDEX_SET" },
-    { KEY_AILERON_SET, "AILERON_SET" },
-    { KEY_ELEVATOR_SET, "ELEVATOR_SET" },
     { KEY_TUG_HEADING, "KEY_TUG_HEADING" },
     { SIM_STOP, NULL }
 };

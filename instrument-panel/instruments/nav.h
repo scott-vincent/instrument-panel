@@ -48,8 +48,6 @@ private:
     Aircraft loadedAircraft = NO_AIRCRAFT;
     float scaleFactorX;
     float scaleFactorY;
-    int autopilotMaxBank;
-    bool bankAssist;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     Switch switchSel = Com1;

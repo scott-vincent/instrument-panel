@@ -82,8 +82,6 @@ struct SimVars
     double autopilotAirspeedHold = 0;
     double autopilotApproachHold = 0;
     double autopilotGlideslopeHold = 0;
-    double autopilotBank = 0;
-    double autopilotMaxBank = 0;
     double throttlePosition = 0;
     double autothrottleActive = 0;
     double gearRetractable = 1;
@@ -156,8 +154,6 @@ enum EVENT_ID {
     KEY_HEADING_SLOT_INDEX_SET,
     KEY_SPEED_SLOT_INDEX_SET,
     KEY_ALTITUDE_SLOT_INDEX_SET,
-    KEY_AILERON_SET,
-    KEY_ELEVATOR_SET,
     KEY_TUG_HEADING
 };
 
