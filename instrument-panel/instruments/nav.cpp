@@ -1325,7 +1325,7 @@ void nav::captureVerticalSpeed()
         if (setVerticalSpeed <= 0 && simVars->altAltitude < simVars->autopilotAltitude) {
             setVerticalSpeed = 1000;
         }
-        else if (setVerticalSpeed >= 0 && simVars->altAltitude > simVars->autopilotAltitude) {
+        else if (setVerticalSpeed > 0 && simVars->altAltitude > simVars->autopilotAltitude) {
             setVerticalSpeed = -1000;
         }
 
