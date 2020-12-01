@@ -5,4 +5,5 @@ packages
 **/Debug
 **/release
 **/Release
+**/~AutoRecover*
 instrument-panel/instrument-panel
