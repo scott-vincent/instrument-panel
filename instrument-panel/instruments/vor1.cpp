@@ -195,7 +195,7 @@ void vor1::update()
     compassAngle = -simVars->vor1Obs;
     glideSlopeOn = simVars->vor1GlideSlopeFlag;
     toFromOn = simVars->vor1ToFrom;
-    gpsControlsNavOn = simVars->gpsDrivesNav1;
+    gpsControlsNavOn = simVars->gpsDrivesNav1 && !simVars->navHasLocalizer;
     crossTrkMeters = simVars->gpsWpCrossTrk;
 
     if (gpsControlsNavOn) {
