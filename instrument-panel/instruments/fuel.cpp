@@ -108,9 +108,34 @@ void fuel::update()
         resize();
     }
 
-    // Calculate values
-    angleLeft = 55 - simVars->fuelLeft * 1.144;
-    angleRight = 124 + simVars->fuelRight * 1.144;
+    // Split fuel from all tanks between left/right
+    // by using main tank percentages as a ratio.
+    double fuelPercent = 100 * simVars->fuelQuantity / simVars->fuelCapacity;
+
+    if (simVars->fuelLeftPercent == simVars->fuelRightPercent) {
+        leftPercent = fuelPercent;
+        rightPercent = fuelPercent;
+    }
+    else {
+        fuelPercent *= 2;
+        totalPercent = simVars->fuelLeftPercent + simVars->fuelRightPercent;
+        leftPercent = fuelPercent * simVars->fuelLeftPercent / totalPercent;
+        rightPercent = fuelPercent * simVars->fuelRightPercent / totalPercent;
+
+        // Normalise percentages (maintain overall percent)
+        if (leftPercent > 100) {
+            rightPercent += leftPercent - 100;
+            leftPercent = 100;
+        }
+
+        if (rightPercent > 100) {
+            leftPercent += rightPercent - 100;
+            rightPercent = 100;
+        }
+    }
+
+    angleLeft = 55 - leftPercent * 1.144;
+    angleRight = 124 + rightPercent * 1.144;
 }
 
 /// <summary>

@@ -11,6 +11,10 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    double fuelPercent;
+    double totalPercent;
+    double leftPercent;
+    double rightPercent;
     double angleLeft;
     double angleRight;
 

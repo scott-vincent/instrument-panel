@@ -23,6 +23,10 @@ private:
     bool fuelWarningR;
     bool oilWarning;
     bool voltsWarning;
+    double fuelPercent;
+    double totalPercent;
+    double leftPercent;
+    double rightPercent;
     double prevFuelL = 100;
     double prevFuelR = 100;
     int flashCount = 0;

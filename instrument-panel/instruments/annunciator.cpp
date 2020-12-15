@@ -235,8 +235,34 @@ void annunciator::update()
     vacWarningL = (simVars->suctionPressure < 1);
     vacWarningR = (simVars->suctionPressure < 1);
 
-    checkFuel(simVars->fuelLeft, &fuelWarningL, &prevFuelL);
-    checkFuel(simVars->fuelRight, &fuelWarningR, &prevFuelR);
+    // Split fuel from all tanks between left/right
+    // by using main tank percentages as a ratio.
+    double fuelPercent = 100 * simVars->fuelQuantity / simVars->fuelCapacity;
+
+    if (simVars->fuelLeftPercent == simVars->fuelRightPercent) {
+        leftPercent = fuelPercent;
+        rightPercent = fuelPercent;
+    }
+    else {
+        fuelPercent *= 2;
+        totalPercent = simVars->fuelLeftPercent + simVars->fuelRightPercent;
+        leftPercent = fuelPercent * simVars->fuelLeftPercent / totalPercent;
+        rightPercent = fuelPercent * simVars->fuelRightPercent / totalPercent;
+
+        // Normalise percentages (maintain overall percent)
+        if (leftPercent > 100) {
+            rightPercent += leftPercent - 100;
+            leftPercent = 100;
+        }
+
+        if (rightPercent > 100) {
+            leftPercent += rightPercent - 100;
+            rightPercent = 100;
+        }
+    }
+
+    checkFuel(leftPercent, &fuelWarningL, &prevFuelL);
+    checkFuel(rightPercent, &fuelWarningR, &prevFuelR);
 
     // Fuel warning flashes for 10 seconds
     if (flashCount > 0) {
@@ -265,13 +291,13 @@ void annunciator::update()
 
 void annunciator::checkFuel(double fuelLevel, bool *fuelWarning, double *prevFuel)
 {
-    // Fuel warning at 5 gallons = 18%
-    if (fuelLevel == 0 || fuelLevel > 18) {
+    // Fuel warning at 15%
+    if (fuelLevel == 0 || fuelLevel > 15) {
         *fuelWarning = false;
     }
     else {
         *fuelWarning = true;
-        if (*prevFuel > 18) {
+        if (*prevFuel > 15) {
             // Flash for 10 seconds
             if (flashCount == 0) {
 #ifdef _WIN32

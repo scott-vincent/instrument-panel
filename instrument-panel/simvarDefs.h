@@ -35,8 +35,10 @@ struct SimVars
     double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
-    double fuelLeft = 0;
-    double fuelRight = 0;
+    double fuelCapacity = 0;
+    double fuelQuantity = 0;
+    double fuelLeftPercent = 0;
+    double fuelRightPercent = 0;
     double vor1Obs = 0;
     double vor1RadialError = 0;
     double vor1GlideSlopeError = 0;
