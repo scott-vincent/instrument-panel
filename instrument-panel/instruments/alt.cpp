@@ -283,7 +283,7 @@ void alt::updateKnobs()
 
     if (val != INT_MIN) {
         // Change calibration by knob movement amount (adjust for desired sensitivity)
-        double adjust = (int)((prevVal - val) / 2) * 0.01;
+        double adjust = (int)((val - prevVal) / 2) * 0.01;
         if (adjust != 0) {
             double newVal = (simVars->altKollsman + adjust) * 541.82224;
 
