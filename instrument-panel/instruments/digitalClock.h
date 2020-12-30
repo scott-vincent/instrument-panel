@@ -25,7 +25,7 @@ private:
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     DisplayView displayView = Celsius;
-    ClockView clockView = LocalTime;
+    ClockView clockView = UtcTime;
     bool stopWatchRunning = false;
     int stopWatchSeconds = 0;
     time_t flightStartTime;
