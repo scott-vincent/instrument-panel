@@ -285,8 +285,8 @@ void trimFlaps::update()
         globals.simVars->write(KEY_TUG_HEADING, tugHeading * 11930464);
     }
 
-    // Warn if low altitude and gear is up
-    if (simVars->altAboveGround < 400 && simVars->altAboveGround > 30 && simVars->gearRetractable
+    // Warn if low altitude and flaps down but gear is up
+    if (simVars->tfFlapsIndex > 0 && simVars->altAboveGround < 400 && simVars->altAboveGround > 30 && simVars->gearRetractable
         && simVars->gearCentrePos < 20 && simVars->vsiVerticalSpeed < 0)
     {
         if (simVars->altAboveGround > 300) {
