@@ -14,7 +14,6 @@ struct SimVars
     double asiTrueSpeed = 0;
     double asiMachSpeed = 0;
     double asiAirspeedCal = -14;
-    double asiMaxMach = 0;
     double hiHeading = 0;
     double hiHeadingTrue = 0;
     double vsiVerticalSpeed = 0;

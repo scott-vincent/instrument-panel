@@ -709,11 +709,6 @@ void nav::update()
         autopilotSpd = NoSpd;
     }
 
-    // Don't overspeed when in mach mode
-    if (showMach && simVars->asiMachSpeed > simVars->asiMaxMach) {
-        globals.simVars->write(KEY_AP_MACH_VAR_SET, simVars->asiMaxMach * 100);
-    }
-
     if (simVars->autopilotHeadingLock == 1) {
         autopilotHdg = HdgSet;
     }
@@ -1553,11 +1548,6 @@ double nav::adjustMach(double val, int adjust)
 
     if (machX100 < 0) {
         machX100 = 0;
-    }
-
-    // Don't allow mach > maxMach
-    if (machX100 / 100.0 > simVars->asiMaxMach) {
-        machX100 = simVars->asiMaxMach * 100;
     }
 
     return machX100;

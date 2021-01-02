@@ -12,7 +12,6 @@ const char* SimVarDefs[][2] = {
     { "Airspeed True", "knots" },
     { "Airspeed Mach", "mach" },
     { "Airspeed True Calibrate", "degrees" },
-    { "Barber Pole Mach", "mach" },
     { "Plane Heading Degrees Magnetic", "degrees" },
     { "Plane Heading Degrees True", "degrees" },
     { "Vertical Speed", "feet per second" },
