@@ -115,7 +115,7 @@ void adiLearjet::render()
 
     // Blit wheel into wheel sized bitmap
     al_set_target_bitmap(bitmaps[2]);
-    al_draw_scaled_bitmap(bitmaps[0], 0, 900 - (pitchAngle * 5), 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
+    al_draw_scaled_bitmap(bitmaps[0], 0, 900 + (pitchAngle * 5), 506, 600, 0, 0, 506 * scaleFactor, 600 * scaleFactor, 0);
 
     // Set blender to multiply (shades of grey darken, white has no effect)
     al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
