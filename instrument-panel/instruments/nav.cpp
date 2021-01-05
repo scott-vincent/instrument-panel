@@ -1029,6 +1029,8 @@ void nav::autopilotSwitchPressed()
         if (autopilotHdg == HdgSet) {
             autopilotHdg = LevelFlight;
             globals.simVars->write(KEY_AP_HDG_HOLD_OFF);
+            // Keep heading bug setting when heading hold turned off
+            globals.simVars->write(KEY_HEADING_BUG_SET, simVars->autopilotHeading);
             manSelHeading();
         }
         else {
