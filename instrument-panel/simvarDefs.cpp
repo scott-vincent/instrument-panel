@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.4.1";
+const char* versionString = "v1.4.2";
 
 const char* SimVarDefs[][2] = {
     { "Indicated Altitude", "feet" },
