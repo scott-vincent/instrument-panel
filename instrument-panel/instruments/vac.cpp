@@ -115,8 +115,8 @@ void vac::update()
     else if (vacAngle > 60) {
         vacAngle = 60;
     }
-
-    ampAngle = 119 + (simVars->batteryLoad + 60);
+    // MSFS seems to have a bug in the battery load; the sign must be reversed.
+    ampAngle = 119 + (-simVars->batteryLoad + 60);
     if (ampAngle < 119) {
         ampAngle = 119;
     }
