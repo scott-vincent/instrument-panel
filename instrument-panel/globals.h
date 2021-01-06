@@ -17,6 +17,7 @@ enum Aircraft {
     CESSNA_152,
     CESSNA_172,
     SAVAGE_CUB,
+    SHOCK_ULTRA,
     AIRBUS_A320NEO,
     OTHER_AIRCRAFT,
     OTHER_AIRCRAFT2
@@ -30,6 +31,8 @@ struct globalVars
     const int Cessna_172_Len = 14;
     const char* Savage_Cub_Text = "Asobo Savage Cub";
     const int Savage_Cub_Len = 16;
+    const char* Shock_Ultra_Text = "Savage Shock Ultra";
+    const int Shock_Ultra_Len = 18;
     const char* Airbus_A320neo_Text = "Airbus A320 Neo";
     const int Airbus_A320neo_Len = 15;
     const int FastAircraftSpeed = 195;

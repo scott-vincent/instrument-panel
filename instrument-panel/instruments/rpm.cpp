@@ -161,7 +161,7 @@ void rpm::update()
             customInstrument = NULL;
         }
 
-        if (loadedAircraft == SAVAGE_CUB) {
+        if (loadedAircraft == SAVAGE_CUB || loadedAircraft == SHOCK_ULTRA) {
             customInstrument = new rpmSavageCub(xPos, yPos, size, name);
         }
     }
