@@ -189,23 +189,22 @@ void rpm::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    if (globals.aircraft == SAVAGE_CUB) {
-        if (simVars->rpmPercent > 10) {
-            angle = (simVars->rpmPercent - 10) * 2 + 25.0 - 123;
-        }
-        else {
-            angle = (simVars->rpmPercent / 10) * 25.0 - 123;
-        }
+    // Reference angles/points on the Cessna RPM gauge
+    double origin0 = 123.0;     // angle from vertical to the 0 RPM line
+    double origin1000 = 63.0;   // angle from vertical to the 1000 RPM line
+    double rangeTo1000 = 60.0;      // range in degrees from 0 to 1000 RPM
+    double range1kTo27k = 136.0;    // range in degrees from 1000 to 2700 RPM
+    // These blocks handle the difference in gauge's scale from 0-1000 versus 1000-2700
+    if (simVars->rpmEngine < 1000) {
+        // Indicator angle between 0 and 1000 RPM
+        angle = (rangeTo1000 * simVars->rpmEngine / 1000.0) - origin0;
     }
     else {
-        // Cessna
-        if (simVars->rpmPercent > 10) {
-            angle = (simVars->rpmPercent - 10) * 1.98 + 6.0 - 123;
-        }
-        else {
-            angle = (simVars->rpmPercent / 10) * 6.0 - 123;
-        }
+        // Compute indicator angle between 1000 and 2700 RPM (or greater)
+        angle = (range1kTo27k * (simVars->rpmEngine - 1000) / 1700.0) - origin1000;
     }
+    // TODO: Should also hanlde the scale difference between 2700 and 3500 RPM,
+    // however excursions into to this range are exceptional for the Cessna engine
 }
 
 /// <summary>
