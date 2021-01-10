@@ -77,6 +77,8 @@ private:
     double prevSpeed;
     double prevAltitude;
     double prevVerticalSpeed;
+    double setVerticalSpeed = 0;
+    double setAltitude;
     bool managedHeading = true;
     bool managedSpeed = true;
     bool managedAltitude = true;
@@ -111,7 +113,6 @@ private:
     void addFreq3dp(int freq, int x, int y);
     void addSquawk(int code, int x, int y);
     void addVerticalSpeed(int x, int y);
-    void bankingAssist();
     void addVars();
     void addKnobs();
     void updateKnobs();
@@ -124,6 +125,7 @@ private:
     void manSelAltitude();
     void captureCurrent();
     void captureVerticalSpeed();
+    void restoreVerticalSpeed();
     void navAdjustDigits(int adjust);
     void autopilotAdjustDigits(int adjust);
     double adjustCom(double val, int adjust);

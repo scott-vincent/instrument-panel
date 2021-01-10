@@ -377,7 +377,7 @@ void nav::renderAutopilot()
         // Add MAN TOGA display
         al_draw_scaled_bitmap(bitmaps[18], 0, 0, 172, 32, 391 * scaleFactorX, 187 * scaleFactorY, 172 * scaleFactorX, 32 * scaleFactorY, 0);
     }
-    else if (simVars->autothrottleActive && simVars->throttlePosition > 90) {
+    else if (simVars->autothrottleActive && simVars->throttlePosition > 91) {
         // Add MAN MCT display
         al_draw_scaled_bitmap(bitmaps[19], 0, 0, 148, 32, 403 * scaleFactorX, 187 * scaleFactorY, 148 * scaleFactorX, 32 * scaleFactorY, 0);
     }
@@ -640,6 +640,7 @@ void nav::update()
         prevSpeed = simVars->autopilotAirspeed;
         prevAltitude = simVars->autopilotAltitude;
         prevVerticalSpeed = simVars->autopilotVerticalSpeed;
+        setVerticalSpeed = 0;
         managedHeading = true;
         managedSpeed = true;
         managedAltitude = true;
@@ -739,6 +740,12 @@ void nav::update()
     }
     else {
         autopilotAlt = NoAlt;
+    }
+
+    // Alt hold can disengage when passing a waypoint so
+    // re-enable and set previous altitude / vertical speed.
+    if (managedAltitude && setVerticalSpeed != 0 && autopilotAlt != AltHold) {
+        restoreVerticalSpeed();
     }
 }
 
@@ -1050,6 +1057,7 @@ void nav::autopilotSwitchPressed()
             globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         }
         manSelAltitude();
+        setVerticalSpeed = 0;
         break;
     }
     case VerticalSpeed:
@@ -1057,8 +1065,8 @@ void nav::autopilotSwitchPressed()
         autopilotAlt = VerticalSpeedHold;
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, simVars->autopilotAltitude);
         globals.simVars->write(KEY_AP_ALT_HOLD_ON);
-        captureVerticalSpeed();
         manSelAltitude();
+        captureVerticalSpeed();
         break;
     }
     case LocatorHold:
@@ -1109,14 +1117,14 @@ void nav::toggleFlightDirector()
     globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
 
     // Adjust autopilot settings if just after take off
-    if (simVars->altAltitude > 1500) {
+    if (simVars->altAltitude > 1900) {
         return;
     }
 
     // Initial settings
     int holdSpeed = 200;
-    int holdAltitude = 4000;
-    int holdVerticalSpeed = 1500;
+    setAltitude = 4000;
+    setVerticalSpeed = 1500;
 
     managedSpeed = false;
     globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
@@ -1137,9 +1145,9 @@ void nav::toggleFlightDirector()
 
     globals.simVars->write(KEY_AP_SPD_VAR_SET, holdSpeed);
     globals.simVars->write(KEY_AP_ALT_HOLD_ON);
-    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, holdAltitude);
+    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, setAltitude);
     globals.simVars->write(KEY_AP_AIRSPEED_ON);
-    globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, holdVerticalSpeed);
+    globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
 
     showHeading = true;
     showSpeed = true;
@@ -1247,12 +1255,13 @@ void nav::captureCurrent()
 
 void nav::captureVerticalSpeed()
 {
+    setVerticalSpeed = simVars->autopilotVerticalSpeed;
+    setAltitude = simVars->autopilotAltitude;
+
     if (!showVerticalSpeed) {
         showVerticalSpeed = true;
 
         // Make sure VS is in correct direction when first shown
-        double setVerticalSpeed = simVars->autopilotVerticalSpeed;
-
         if (setVerticalSpeed <= 0 && simVars->altAltitude < simVars->autopilotAltitude) {
             setVerticalSpeed = 1000;
         }
@@ -1262,6 +1271,21 @@ void nav::captureVerticalSpeed()
 
         globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
     }
+}
+
+void nav::restoreVerticalSpeed()
+{
+    // Ignore if autopilot disabled or altitude already reached
+    if (!simVars->autopilotEngaged ||
+        (setVerticalSpeed < 0 && simVars->altAltitude < simVars->autopilotAltitude) ||
+        (setVerticalSpeed > 0 && simVars->altAltitude > simVars->autopilotAltitude)) {
+        setVerticalSpeed = 0;
+        return;
+    }
+
+    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, setAltitude);
+    globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
+    globals.simVars->write(KEY_AP_ALT_HOLD_ON);
 }
 
 void nav::navAdjustDigits(int adjust)
@@ -1344,6 +1368,9 @@ void nav::autopilotAdjustDigits(int adjust)
         showAltitude = true;
         double newVal = adjustAltitude(simVars->autopilotAltitude, adjust);
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, newVal);
+        if (setVerticalSpeed != 0) {
+            setAltitude = newVal;
+        }
         break;
     }
     case VerticalSpeed:
@@ -1351,6 +1378,9 @@ void nav::autopilotAdjustDigits(int adjust)
         showVerticalSpeed = true;
         double newVal = adjustVerticalSpeed(simVars->autopilotVerticalSpeed, adjust);
         globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, newVal);
+        if (setVerticalSpeed != 0) {
+            setVerticalSpeed = newVal;
+        }
         break;
     }
     }
