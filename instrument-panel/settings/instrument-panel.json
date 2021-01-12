@@ -114,6 +114,9 @@
     "Position Y": 900,
     "Size": 589
   },
+  "RPM Percent": {
+    "Enabled": false
+  },  
   "ADI Learjet": {
     "Enabled": false
   },
@@ -130,6 +133,9 @@
     "Enabled": false
   },
   "XPDR Savage Cub": {
+    "Enabled": false
+  },
+  "Rad Com": {
     "Enabled": false
   }
 }
