@@ -7,6 +7,7 @@
 #include "simvars.h"
 #include "knobs.h"
 
+
 rpm::rpm(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 {
     setName("RPM");
@@ -161,13 +162,19 @@ void rpm::update()
             delete customInstrument;
             customInstrument = NULL;
         }
-
-        if (loadedAircraft == SAVAGE_CUB || loadedAircraft == SHOCK_ULTRA) {
+        
+        // Test for high-reving Rotax piston engine (e.g., Savage Cub, Shock Ultra, et al)
+        if ((int)simVars->engineType == 0 && simVars->engineMaxRpm > 5000) {
             customInstrument = new rpmSavageCub(xPos, yPos, size, name);
         }
-        else if (loadedAircraft == AIRBUS_A320NEO) {
+        // Test for Jet (1) and Turbine (5) engines
+        else if ((int)simVars->engineType == 1 || (int)simVars->engineType == 5) {
             customInstrument = new rpmPercent(xPos, yPos, size, name);
         }
+        // Otherwise, use this standard RPM gauge is for a piston engine with a 
+        // typical red line at 2700 RPM. This gauge has a max of 3500 RPM.
+        // This gauge is also used with the DA40 and and DA62 aircraft that
+        // use a higher reving engine but display prop RPM in their panel.
     }
 
     if (customInstrument) {
@@ -193,22 +200,31 @@ void rpm::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    // Reference angles/points on the Cessna RPM gauge
+
+    // The Diamond DA40 and DA62 aircraft have a higher reving engine (> 2700)
+    // but display a much slower constant-speed prop RPM on their panel.  
+    // On other engines with fixed, non-geared props, the prop RPM and
+    // engine RPM are identical. So, we can just use propRpm for this gauge.
+    double rpm = simVars->propRpm;
+
+    // Reference angles/points on the standard RPM gauge
+    // There is a difference in the gauge's scale from 0-1000 versus 1000-2700
     double origin0 = 123.0;     // angle from vertical to the 0 RPM line
     double origin1000 = 63.0;   // angle from vertical to the 1000 RPM line
-    double rangeTo1000 = 60.0;      // range in degrees from 0 to 1000 RPM
-    double range1kTo27k = 136.0;    // range in degrees from 1000 to 2700 RPM
-    // These blocks handle the difference in gauge's scale from 0-1000 versus 1000-2700
-    if (simVars->rpmEngine < 1000) {
+    double rangeTo1000 = 60.0;      // range in degrees for arc from 0 to 1000 RPM
+    double range1kTo27k = 136.0;    // range in degrees for arc from 1000 to 2700 RPM
+    
+    if (rpm < 1000) {
         // Indicator angle between 0 and 1000 RPM
-        angle = (rangeTo1000 * simVars->rpmEngine / 1000.0) - origin0;
+        angle = (rangeTo1000 * rpm / 1000.0) - origin0;
     }
     else {
-        // Compute indicator angle between 1000 and 2700 RPM (or greater)
-        angle = (range1kTo27k * (simVars->rpmEngine - 1000) / 1700.0) - origin1000;
+        // Indicator angle in the 1700 RPM span between 1000 and 2700
+        angle = (range1kTo27k * (rpm - 1000) / 1700.0) - origin1000;
     }
-    // TODO: Should also hanlde the scale difference between 2700 and 3500 RPM,
-    // however excursions into to this range are exceptional for the Cessna engine
+    // TODO: Should also handle the scale difference between 2700 and 3500 RPM,
+    // however excursions into to this range are exceptional for the typical engines
+    // as the prop tips would go supersonic.
 }
 
 /// <summary>
@@ -216,7 +232,13 @@ void rpm::update()
 /// </summary>
 void rpm::addVars()
 {
-    globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
-    globals.simVars->addVar(name, "Eng Rpm Animation Percent:1", false, 1, 0);
+    globals.simVars->addVar(name, "Engine Type", false, 1, 0);
+    globals.simVars->addVar(name, "Max Rated Engine RPM", false, 1, 0);
+    globals.simVars->addVar(name, "Prop RPM:1", false, 1, 0);
     globals.simVars->addVar(name, "General Eng Elapsed Time:1", false, 1, 0);
+    // Values used by other RPM gauges
+    globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
+    globals.simVars->addVar(name, "Turb Eng N1:1", false, 1, 0);
+
+    globals.simVars->addVar(name, "Eng Rpm Animation Percent:1", false, 1, 0);
 }
