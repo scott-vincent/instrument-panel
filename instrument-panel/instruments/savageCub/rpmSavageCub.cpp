@@ -95,16 +95,16 @@ void rpmSavageCub::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Add white digits
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit1 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 238 * scaleFactor, 564 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit2 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 292 * scaleFactor, 564 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit3 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 346 * scaleFactor, 564 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit4 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 400 * scaleFactor, 564 * scaleFactor, 0);
+    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit1 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 238 * scaleFactor, 664 * scaleFactor, 0);
+    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit2 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 292 * scaleFactor, 664 * scaleFactor, 0);
+    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit3 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 346 * scaleFactor, 664 * scaleFactor, 0);
+    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit4 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 400 * scaleFactor, 664 * scaleFactor, 0);
 
     // Add black digits
-    al_draw_bitmap_region(bitmaps[6], 0, (499 - digit5 * 50.6) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 454 * scaleFactor, 564 * scaleFactor, 0);
+    al_draw_bitmap_region(bitmaps[6], 0, (499 - digit5 * 50.6) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 454 * scaleFactor, 664 * scaleFactor, 0);
 
     // Add hourglass
-    al_draw_bitmap_region(bitmaps[7], 0, 44 * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 508 * scaleFactor, 564 * scaleFactor, 0);
+    al_draw_bitmap_region(bitmaps[7], 0, 44 * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 508 * scaleFactor, 664 * scaleFactor, 0);
 
     // Add main dial
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
@@ -156,7 +156,8 @@ void rpmSavageCub::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    angle = pow(simVars->rpmPercent, 0.998) * 2.45 - 145;
+    // The dial's range is 8000 RPM over an arc of 290 degrees; the scale of the arc is uniform
+    angle = (290 * simVars->rpmEngine / 7000) - 145;
 }
 
 /// <summary>
@@ -165,6 +166,5 @@ void rpmSavageCub::update()
 void rpmSavageCub::addVars()
 {
     globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
-    globals.simVars->addVar(name, "Eng Rpm Animation Percent:1", false, 1, 0);
     globals.simVars->addVar(name, "General Eng Elapsed Time:1", false, 1, 0);
 }
