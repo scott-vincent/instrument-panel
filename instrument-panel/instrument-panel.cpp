@@ -71,7 +71,6 @@
 #include "vor2.h"
 #include "trimFlaps.h"
 #include "rpm.h"
-#include "rpmPercent.h"
 #include "adf.h"
 #include "radCom.h"
 #include "annunciator.h"
@@ -91,7 +90,7 @@
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
 const bool Debug = false;
-const bool UseOpenGL_ES3 = true;
+const bool UseOpenGL_ES3 = false;
 
 struct globalVars globals;
 
@@ -512,10 +511,6 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("RPM")) {
         instruments.push_back(new rpm(1100, 750, 300));
-    }
-
-    if (globals.simVars->isEnabled("RPM Percent")) {
-        instruments.push_back(new rpmPercent(350, 50, 300));
     }
 
     if (globals.simVars->isEnabled("ADF")) {
