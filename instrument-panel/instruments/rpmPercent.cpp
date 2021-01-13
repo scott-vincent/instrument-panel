@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "rpmSavageCub.h"
+#include "rpmPercent.h"
 
-rpmSavageCub::rpmSavageCub(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
+rpmPercent::rpmPercent(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
 {
     if (parentName) {
         // Use position, size and vars from parent
         setName(parentName);
     }
     else {
-        setName("RPM Savage Cub");
+        setName("RPM Percent");
         addVars();
     }
 
@@ -21,7 +21,7 @@ rpmSavageCub::rpmSavageCub(int xPos, int yPos, int size, const char* parentName)
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void rpmSavageCub::resize()
+void rpmPercent::resize()
 {
     destroyBitmaps();
 
@@ -29,7 +29,7 @@ void rpmSavageCub::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("rpm-savage-cub.png");
+    ALLEGRO_BITMAP* orig = loadBitmap("rpm-percent.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -82,7 +82,7 @@ void rpmSavageCub::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void rpmSavageCub::render()
+void rpmPercent::render()
 {
     if (bitmaps[0] == NULL) {
         return;
@@ -93,18 +93,6 @@ void rpmSavageCub::render()
 
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
-
-    // Add white digits
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit1 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 238 * scaleFactor, 664 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit2 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 292 * scaleFactor, 664 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit3 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 346 * scaleFactor, 664 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit4 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 400 * scaleFactor, 664 * scaleFactor, 0);
-
-    // Add black digits
-    al_draw_bitmap_region(bitmaps[6], 0, (499 - digit5 * 50.6) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 454 * scaleFactor, 664 * scaleFactor, 0);
-
-    // Add hourglass
-    al_draw_bitmap_region(bitmaps[7], 0, 44 * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 508 * scaleFactor, 664 * scaleFactor, 0);
 
     // Add main dial
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
@@ -136,7 +124,7 @@ void rpmSavageCub::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void rpmSavageCub::update()
+void rpmPercent::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -156,15 +144,23 @@ void rpmSavageCub::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
-    // The dial's range is 8000 RPM over an arc of 290 degrees; the scale of the arc is uniform
-    angle = (290 * simVars->rpmEngine / 7000) - 145;
+    // RPM percent dial begins at vertical and spans 315 degrees
+    // The scale changes at 60 percent
+    if (simVars->turbineEngineN1 < 60) {
+        // The 0-60% arc spans 135 degrees
+        angle = 135 * (simVars->turbineEngineN1 / 60 );
+    }
+    else {
+        // The remaining 40% arc (60-100%) starts at 135 degs and spans 180 degrees
+        angle = 135 + (181 * (simVars->turbineEngineN1 - 60) / 40.0);    
+    }
 }
 
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void rpmSavageCub::addVars()
+void rpmPercent::addVars()
 {
-    globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
     globals.simVars->addVar(name, "General Eng Elapsed Time:1", false, 1, 0);
+    globals.simVars->addVar(name, "Turb Eng N1:1", false, 1, 0);
 }

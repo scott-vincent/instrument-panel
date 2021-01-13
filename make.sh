@@ -21,6 +21,7 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/oil.cpp \
     instruments/radCom.cpp \
     instruments/rpm.cpp \
+    instruments/rpmPercent.cpp \
     instruments/tc.cpp \
     instruments/trimFlaps.cpp \
     instruments/vac.cpp \

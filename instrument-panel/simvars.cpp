@@ -752,6 +752,9 @@ void dataLink(simvars* t)
                         else if (strncmp(t->simVars.aircraft, globals.Savage_Cub_Text, globals.Savage_Cub_Len) == 0) {
                             globals.aircraft = SAVAGE_CUB;
                         }
+                        else if (strncmp(t->simVars.aircraft, globals.Shock_Ultra_Text, globals.Shock_Ultra_Len) == 0) {
+                            globals.aircraft = SHOCK_ULTRA;
+                        }
                         else if (strncmp(t->simVars.aircraft, globals.Airbus_A320neo_Text, globals.Airbus_A320neo_Len) == 0) {
                             globals.aircraft = AIRBUS_A320NEO;
                         }
