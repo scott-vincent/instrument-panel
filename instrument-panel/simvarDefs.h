@@ -98,6 +98,8 @@ struct SimVars
     double exhaustGasTemp = 0;
     double engineType = 0;
     double engineMaxRpm = 0;
+    double turbineEngineN1 = 0;
+    double propRpm = 0;
     double engineManifoldPressure = 0;
     double engineFuelFlow = 0;
     double suctionPressure = 1;
