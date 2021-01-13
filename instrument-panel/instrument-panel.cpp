@@ -90,7 +90,7 @@
 const bool HaveHardwareKnobs = true;
 const double FPS = 30.0;
 const bool Debug = false;
-const bool UseOpenGL_ES3 = false;
+const bool UseOpenGL_ES3 = true;
 
 struct globalVars globals;
 
