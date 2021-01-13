@@ -114,9 +114,6 @@
     "Position Y": 900,
     "Size": 589
   },
-  "RPM Percent": {
-    "Enabled": false
-  },  
   "ADI Learjet": {
     "Enabled": false
   },
