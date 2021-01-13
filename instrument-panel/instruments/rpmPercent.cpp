@@ -94,18 +94,6 @@ void rpmPercent::render()
     // Draw stuff into dest bitmap
     al_set_target_bitmap(bitmaps[1]);
 
-    // Add white digits
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit1 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 238 * scaleFactor, 564 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit2 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 292 * scaleFactor, 564 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit3 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 346 * scaleFactor, 564 * scaleFactor, 0);
-    al_draw_bitmap_region(bitmaps[5], 0, (499 - digit4 * 50.55) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 400 * scaleFactor, 564 * scaleFactor, 0);
-
-    // Add black digits
-    al_draw_bitmap_region(bitmaps[6], 0, (499 - digit5 * 50.6) * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 454 * scaleFactor, 564 * scaleFactor, 0);
-
-    // Add hourglass
-    al_draw_bitmap_region(bitmaps[7], 0, 44 * scaleFactor, 54 * scaleFactor, 72 * scaleFactor, 508 * scaleFactor, 564 * scaleFactor, 0);
-
     // Add main dial
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
@@ -158,13 +146,13 @@ void rpmPercent::update()
 
     // RPM percent dial begins at vertical and spans 315 degrees
     // The scale changes at 60 percent
-    if (simVars->rpmPercent < 60) {
+    if (simVars->turbineEngineN1 < 60) {
         // The 0-60% arc spans 135 degrees
-        angle = 135 * (simVars->rpmPercent / 60 );
+        angle = 135 * (simVars->turbineEngineN1 / 60 );
     }
     else {
-        // The remaining 40% arc (60-100%) starts at 135 degs and spans ~180 degrees
-        angle = 135 + (181 * (simVars->rpmPercent - 60) / 40.0);    
+        // The remaining 40% arc (60-100%) starts at 135 degs and spans 180 degrees
+        angle = 135 + (181 * (simVars->turbineEngineN1 - 60) / 40.0);    
     }
 }
 
@@ -173,7 +161,6 @@ void rpmPercent::update()
 /// </summary>
 void rpmPercent::addVars()
 {
-    globals.simVars->addVar(name, "General Eng Rpm:1", false, 1, 0);
-    globals.simVars->addVar(name, "Eng Rpm Animation Percent:1", false, 1, 0);
     globals.simVars->addVar(name, "General Eng Elapsed Time:1", false, 1, 0);
+    globals.simVars->addVar(name, "Turb Eng N1:1", false, 1, 0);
 }
