@@ -335,12 +335,11 @@ void getMessagePos(int *x, int *y, int *width)
     *width = 300;
 
     // Do we have an annunciator?
-    for (std::list<instrument*>::iterator it = instruments.begin(); it != instruments.end(); ++it) {
-        instrument* inst = *it;
-        if (_stricmp(inst->name, "Annunciator") == 0) {
-            *x = inst->xPos;
-            *y = inst->yPos;
-            *width = inst->size;
+    for (auto const& instrument : instruments) {
+        if (_stricmp(instrument->name, "Annunciator") == 0) {
+            *x = instrument->xPos;
+            *y = instrument->yPos;
+            *width = instrument->size;
             return;
         }
     }

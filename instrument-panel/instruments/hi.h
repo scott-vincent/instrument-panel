@@ -18,6 +18,8 @@ private:
     // Hardware knobs
     int hdgKnob = -1;
     int prevVal = 0;
+    time_t lastBugAdjust = 0;
+    time_t now;
 
 public:
     hi(int xPos, int yPos, int size);

@@ -71,7 +71,7 @@ private:
     bool showMach = false;
     bool showHeading = false;
     bool showSpeed = false;
-    bool showAltitude = false;
+    bool showAltitude = true;
     bool showVerticalSpeed = false;
     double prevHeading;
     double prevSpeed;

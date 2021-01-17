@@ -1606,16 +1606,19 @@ int nav::adjustAltitude(int val, int adjust)
         // Adjust thousands
         val += adjust * 1000;
 
-        if (val < -9900) {
-            val += 1000;
+        if (val < 100) {
+            val = 100;
+        }
+        else if (val == 1100) {
+            val = 1000;
         }
     }
     else {
         // Adjust thousands and hundreds
         val += adjust * 100;
 
-        if (val < -9900) {
-            val += 100;
+        if (val < 100) {
+            val = 100;
         }
     }
 

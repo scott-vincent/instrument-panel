@@ -6,6 +6,51 @@
 struct SimVars
 {
     double connected = 0;
+
+    // Vars required for all panels (screensaver, aircraft identification etc.)
+    char aircraft[32] = "\0";
+    double rpmEngine = 0;
+    double dcVolts = 23.7;
+
+    // Vars for Radio panel
+    double com1Status = 0;
+    double com1Transmit = 1;
+    double com1Freq = 119.225;
+    double com1Standby = 124.850;
+    double nav1Freq = 110.50;
+    double nav1Standby = 113.90;
+    double com2Status = 0;
+    double com2Transmit = 0;
+    double com2Freq = 124.850;
+    double com2Standby = 124.850;
+    double nav2Freq = 110.50;
+    double nav2Standby = 113.90;
+    double adfFreq = 394;
+    double adfStandby = 368;
+    double transponderCode = 4608;
+    // No vars after here required by Radio panel
+
+    // Vars for Autopilot panel
+    double autopilotAvailable = 1;
+    double autopilotEngaged = 0;
+    double flightDirectorActive = 0;
+    double autopilotHeading = 0;
+    double autopilotHeadingLock = 0;
+    double autopilotLevel = 0;
+    double autopilotAltitude = 0;
+    double autopilotAltLock = 0;
+    double autopilotPitchHold = 0;
+    double autopilotVerticalSpeed = 0;
+    double autopilotVerticalHold = 0;
+    double autopilotAirspeed = 0;
+    double autopilotMach = 0;
+    double autopilotAirspeedHold = 0;
+    double autopilotApproachHold = 0;
+    double autopilotGlideslopeHold = 0;
+    double throttlePosition = 0;
+    double autothrottleActive = 0;
+    // No vars after here required by Autopilot panel
+
     double altAltitude = 0;
     double altKollsman = 29.92;
     double adiPitch = 0;
@@ -28,10 +73,8 @@ struct SimVars
     double dcUtcSeconds = 43200;
     double dcLocalSeconds = 46800;
     double dcFlightSeconds = 0;
-    double dcVolts = 23.7;
     double dcTempC = 26.2;
     double batteryLoad = 0;
-    double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
     double fuelCapacity = 0;
@@ -52,39 +95,6 @@ struct SimVars
     double gpsWpCrossTrk = 0;
     double adfRadial = 0;
     double adfCard = 0;
-    double com1Status = 0;
-    double com1Transmit = 1;
-    double com1Freq = 119.225;
-    double com1Standby = 124.850;
-    double nav1Freq = 110.50;
-    double nav1Standby = 113.90;
-    double com2Status = 0;
-    double com2Transmit = 0;
-    double com2Freq = 124.850;
-    double com2Standby = 124.850;
-    double nav2Freq = 110.50;
-    double nav2Standby = 113.90;
-    double adfFreq = 394;
-    double adfStandby = 368;
-    double transponderCode = 4608;
-    double autopilotAvailable = 1;
-    double autopilotEngaged = 0;
-    double flightDirectorActive = 0;
-    double autopilotHeading = 0;
-    double autopilotHeadingLock = 0;
-    double autopilotLevel = 0;
-    double autopilotAltitude = 0;
-    double autopilotAltLock = 0;
-    double autopilotPitchHold = 0;
-    double autopilotVerticalSpeed = 0;
-    double autopilotVerticalHold = 0;
-    double autopilotAirspeed = 0;
-    double autopilotMach = 0;
-    double autopilotAirspeedHold = 0;
-    double autopilotApproachHold = 0;
-    double autopilotGlideslopeHold = 0;
-    double throttlePosition = 0;
-    double autothrottleActive = 0;
     double gearRetractable = 1;
     double gearLeftPos = 100;
     double gearCentrePos = 100;
@@ -103,11 +113,10 @@ struct SimVars
     double engineManifoldPressure = 0;
     double engineFuelFlow = 0;
     double suctionPressure = 1;
-    char atcTailNumber[64] = "\0";
-    char atcCallSign[64] = "\0";
+    char atcTailNumber[32] = "\0";
+    char atcCallSign[32] = "\0";
     char atcFlightNumber[8] = "\0";
     double atcHeavy = 0;
-    char aircraft[256] = "\0";
 };
 
 enum EVENT_ID {

@@ -141,8 +141,15 @@ void hi::update()
     // Calculate values
     angle = -simVars->hiHeading;
 
+    // Only update local value from sim if it is not currently being
+    // adjusted by the rotary encoder. This stops the displayed value
+    // from jumping around due to lag of fetch/update cycle.
+    if (lastBugAdjust == 0) {
+        headingBug = simVars->autopilotHeading;
+    }
+
     // Show bug setting to nearest 5 degrees
-    int bugSetting = (int)((simVars->autopilotHeading + 2.5) / 5) * 5;
+    int bugSetting = (int)((headingBug + 2.5) / 5) * 5;
     bugAngle = bugSetting - simVars->hiHeading;
 }
 
@@ -171,7 +178,7 @@ void hi::updateKnobs()
         // Convert knob value to heading (adjust for desired sensitivity)
         int adjust = ((int)(val - prevVal) / 2) * 5;
         if (adjust != 0) {
-            int newHeading = simVars->autopilotHeading += adjust;
+            int newHeading = headingBug += adjust;
             if (newHeading > 359) {
                 newHeading -= 360;
             }
@@ -180,6 +187,13 @@ void hi::updateKnobs()
             }
             globals.simVars->write(KEY_HEADING_BUG_SET, newHeading);
             prevVal = val;
+        }
+        time(&lastBugAdjust);
+    }
+    else if (lastBugAdjust != 0) {
+        time(&now);
+        if (now - lastBugAdjust > 1) {
+            lastBugAdjust = 0;
         }
     }
 }

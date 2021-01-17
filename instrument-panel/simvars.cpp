@@ -712,7 +712,7 @@ void dataLink(simvars* t)
     globals.aircraft = NO_AIRCRAFT;
     strcpy(lastAircraft, "");
 
-    int loop = 0;
+    int selFail = 0;
     while (!globals.quit) {
         // Poll instrument data link
         bytes = sendto(sockfd, (char*)&dataSize, sizeof(long), 0, (SOCKADDR*)&addr, sizeof(addr));
@@ -781,7 +781,11 @@ void dataLink(simvars* t)
                 }
             }
             else {
-                bytes = SOCKET_ERROR;
+                // Link can blip so wait for 5 failures in a row
+                selFail++;
+                if (selFail > 4) {
+                    bytes = SOCKET_ERROR;
+                }
             }
         }
         else {
@@ -795,10 +799,11 @@ void dataLink(simvars* t)
             strcpy(lastAircraft, "");
         }
 
+        // Update 30 times per second
 #ifdef _WIN32
-        Sleep(10);
+        Sleep(33);
 #else
-        usleep(10000);
+        usleep(33333);
 #endif
     }
 
