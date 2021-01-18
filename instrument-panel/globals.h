@@ -13,6 +13,7 @@ class simvars;
 class knobs;
 
 enum Aircraft {
+    UNDEFINED,
     NO_AIRCRAFT,
     CESSNA_152,
     CESSNA_172,

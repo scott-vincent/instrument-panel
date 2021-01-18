@@ -10,7 +10,7 @@ private:
     const double FastPlaneSizeFactor = 1.075;
 
     SimVars* simVars;
-    Aircraft loadedAircraft = NO_AIRCRAFT;
+    Aircraft loadedAircraft = UNDEFINED;
     bool fastAircraft = false;
     float scaleFactor;
 

@@ -8,7 +8,7 @@ class egt : public instrument
 {
 private:
     SimVars* simVars;
-    Aircraft loadedAircraft = NO_AIRCRAFT;
+    Aircraft loadedAircraft = UNDEFINED;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)

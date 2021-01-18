@@ -8,7 +8,7 @@ class alt : public instrument
 {
 private:
     SimVars* simVars;
-    Aircraft loadedAircraft = NO_AIRCRAFT;
+    Aircraft loadedAircraft = UNDEFINED;
     bool fastAircraft = false;
     float scaleFactor;
 
