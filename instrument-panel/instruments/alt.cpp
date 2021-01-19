@@ -291,7 +291,8 @@ void alt::updateKnobs()
         // Change calibration by knob movement amount (adjust for desired sensitivity)
         double adjust = (int)((val - prevVal) / 2) * 0.01;
         if (adjust != 0) {
-            double newVal = (inhg + adjust) * 541.82224;
+            inhg += adjust;
+            double newVal = inhg * 541.82224;
 
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
