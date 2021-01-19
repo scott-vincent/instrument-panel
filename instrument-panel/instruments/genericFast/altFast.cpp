@@ -259,9 +259,15 @@ void altFast::update()
     }
 #endif
 
+    // Only update local value from sim if it is not currently being
+    // adjusted by the rotary encoder. This stops the displayed value
+    // from jumping around due to lag of fetch/update cycle.
+    if (lastCalAdjust == 0) {
+        inhg = simVars->altKollsman;
+    }
+
     // Calculate values
-    mb = simVars->altKollsman * 33.86389;
-    inhg = simVars->altKollsman;
+    mb = inhg * 33.86389;
 
     double diff = abs(simVars->altAltitude - altitude);
 
@@ -314,10 +320,17 @@ void altFast::updateKnobs()
         // Change calibration by knob movement amount (adjust for desired sensitivity)
         double adjust = (int)((prevVal - val) / 2) * 0.01;
         if (adjust != 0) {
-            double newVal = (simVars->altKollsman + adjust) * 541.82224;
+            double newVal = (inhg + adjust) * 541.82224;
 
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
+        }
+        time(&lastCalAdjust);
+    }
+    else if (lastCalAdjust != 0) {
+        time(&now);
+        if (now - lastCalAdjust > 1) {
+            lastCalAdjust = 0;
         }
     }
 }
