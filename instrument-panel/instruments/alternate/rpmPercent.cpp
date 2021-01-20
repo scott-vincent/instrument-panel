@@ -103,6 +103,11 @@ void rpmPercent::render()
     // Add main dial
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
+    // Add reverse thrust indicator
+    if (simVars->throttlePosition < 0) {
+        al_draw_bitmap(bitmaps[8], 362 * scaleFactor, 496 * scaleFactor, 0);
+    }
+
     if (globals.enableShadows) {
         // Set blender to multiply (shades of grey darken, white has no effect)
         al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
@@ -116,11 +121,6 @@ void rpmPercent::render()
 
     // Add pointer
     al_draw_scaled_rotated_bitmap(bitmaps[3], 50, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
-
-    // Add reverse thrust indicator
-    if (simVars->throttlePosition < 0) {
-        al_draw_bitmap(bitmaps[8], 362 * scaleFactor, 496 * scaleFactor, 0);
-    }
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
