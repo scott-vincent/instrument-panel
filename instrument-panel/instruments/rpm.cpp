@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "rpm.h"
-#include "rpmPercent.h"
+#include "alternate/rpmPercent.h"
 #include "savageCub/rpmSavageCub.h"
 #include "simvars.h"
 #include "knobs.h"

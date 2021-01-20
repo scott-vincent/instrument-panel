@@ -76,6 +76,12 @@ void rpmPercent::resize()
     al_draw_scaled_bitmap(orig, 1108, 0, 54, 156, 0, 0, 54 * scaleFactor, 156 * scaleFactor, 0);
     addBitmap(bmp);
 
+    // 8 = Reverse thrust indicator
+    bmp = al_create_bitmap(75 * scaleFactor, 30 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 1000, 604, 75, 30, 0, 0, 75 * scaleFactor, 30 * scaleFactor, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -110,6 +116,11 @@ void rpmPercent::render()
 
     // Add pointer
     al_draw_scaled_rotated_bitmap(bitmaps[3], 50, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
+
+    // Add reverse thrust indicator
+    if (simVars->throttlePosition < 0) {
+        al_draw_bitmap(bitmaps[8], 362 * scaleFactor, 496 * scaleFactor, 0);
+    }
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);

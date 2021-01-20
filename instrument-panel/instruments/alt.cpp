@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "alt.h"
-#include "genericFast/altFast.h"
+#include "alternate/altFast.h"
 #include "simvars.h"
 #include "knobs.h"
 

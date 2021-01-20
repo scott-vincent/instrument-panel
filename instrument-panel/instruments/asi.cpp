@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "asi.h"
-#include "genericFast/asiFast.h"
+#include "alternate/asiFast.h"
 #include "savageCub/asiSavageCub.h"
 #include "simvars.h"
 #include "knobs.h"

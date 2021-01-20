@@ -21,7 +21,6 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/oil.cpp \
     instruments/radCom.cpp \
     instruments/rpm.cpp \
-    instruments/rpmPercent.cpp \
     instruments/tc.cpp \
     instruments/trimFlaps.cpp \
     instruments/vac.cpp \
@@ -29,8 +28,9 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/vor2.cpp \
     instruments/vsi.cpp \
     instrument-panel.cpp \
-    instruments/genericFast/altFast.cpp \
-    instruments/genericFast/asiFast.cpp \
+    instruments/alternate/altFast.cpp \
+    instruments/alternate/asiFast.cpp \
+    instruments/alternate/rpmPercent.cpp \
     instruments/learjet/adiLearjet.cpp \
     instruments/savageCub/asiSavageCub.cpp \
     instruments/savageCub/rpmSavageCub.cpp \
