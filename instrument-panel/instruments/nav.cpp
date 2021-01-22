@@ -788,6 +788,21 @@ void nav::addVars()
     globals.simVars->addVar(name, "Autothrottle Active", true, 1, 0);
 }
 
+void nav::restoreVerticalSpeed()
+{
+    // Ignore if autopilot disabled or altitude already reached
+    if (!simVars->autopilotEngaged ||
+        (setVerticalSpeed < 0 && simVars->altAltitude < simVars->autopilotAltitude) ||
+        (setVerticalSpeed > 0 && simVars->altAltitude > simVars->autopilotAltitude)) {
+        setVerticalSpeed = 0;
+        return;
+    }
+
+    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, setAltitude);
+    globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
+    globals.simVars->write(KEY_AP_ALT_HOLD_ON);
+}
+
 #ifndef _WIN32
 
 void nav::addKnobs()
@@ -1271,21 +1286,6 @@ void nav::captureVerticalSpeed()
 
         globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
     }
-}
-
-void nav::restoreVerticalSpeed()
-{
-    // Ignore if autopilot disabled or altitude already reached
-    if (!simVars->autopilotEngaged ||
-        (setVerticalSpeed < 0 && simVars->altAltitude < simVars->autopilotAltitude) ||
-        (setVerticalSpeed > 0 && simVars->altAltitude > simVars->autopilotAltitude)) {
-        setVerticalSpeed = 0;
-        return;
-    }
-
-    globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, setAltitude);
-    globals.simVars->write(KEY_AP_VS_VAR_SET_ENGLISH, setVerticalSpeed);
-    globals.simVars->write(KEY_AP_ALT_HOLD_ON);
 }
 
 void nav::navAdjustDigits(int adjust)
