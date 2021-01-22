@@ -27,6 +27,11 @@ const char* SimVarDefs[][2] = {
     { "Transponder Code:1", "bco16" },
 
     // Vars for Autopilot panel
+    { "Indicated Altitude", "feet" },
+    { "Airspeed True", "knots" },
+    { "Airspeed Mach", "mach" },
+    { "Plane Heading Degrees Magnetic", "degrees" },
+    { "Vertical Speed", "feet per second" },
     { "Autopilot Available", "bool" },
     { "Autopilot Master", "bool" },
     { "Autopilot Flight Director Active", "bool" },
@@ -47,17 +52,12 @@ const char* SimVarDefs[][2] = {
     { "Autothrottle Active", "bool" },
 
     // Remaining vars for Instrument panel
-    { "Indicated Altitude", "feet" },
     { "Kohlsman Setting Hg", "inHg" },
     { "Attitude Indicator Pitch Degrees", "degrees" },
     { "Attitude Indicator Bank Degrees", "degrees" },
     { "Airspeed Indicated", "knots" },
-    { "Airspeed True", "knots" },
-    { "Airspeed Mach", "mach" },
     { "Airspeed True Calibrate", "degrees" },
-    { "Plane Heading Degrees Magnetic", "degrees" },
     { "Plane Heading Degrees True", "degrees" },
-    { "Vertical Speed", "feet per second" },
     { "Plane Alt Above Ground", "feet" },
     { "Turn Indicator Rate", "radians per second" },
     { "Turn Coordinator Ball", "position" },

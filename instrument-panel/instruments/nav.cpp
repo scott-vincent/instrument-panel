@@ -1132,7 +1132,7 @@ void nav::toggleFlightDirector()
     globals.simVars->write(KEY_TOGGLE_FLIGHT_DIRECTOR);
 
     // Adjust autopilot settings if just after take off
-    if (simVars->altAltitude > 2500 || simVars->vsiVerticalSpeed < 100) {
+    if (simVars->altAltitude > 2500 || simVars->vsiVerticalSpeed < 1) {
         return;
     }
 

@@ -31,6 +31,11 @@ struct SimVars
     // No vars after here required by Radio panel
 
     // Vars for Autopilot panel
+    double altAltitude = 0;
+    double asiAirspeed = 0;
+    double asiMachSpeed = 0;
+    double hiHeading = 0;
+    double vsiVerticalSpeed = 0;
     double autopilotAvailable = 1;
     double autopilotEngaged = 0;
     double flightDirectorActive = 0;
@@ -51,17 +56,12 @@ struct SimVars
     double autothrottleActive = 0;
     // No vars after here required by Autopilot panel
 
-    double altAltitude = 0;
     double altKollsman = 29.92;
     double adiPitch = 0;
     double adiBank = 0;
-    double asiAirspeed = 0;
     double asiTrueSpeed = 0;
-    double asiMachSpeed = 0;
     double asiAirspeedCal = -14;
-    double hiHeading = 0;
     double hiHeadingTrue = 0;
-    double vsiVerticalSpeed = 0;
     double altAboveGround = 0;
     double tcRate = 0;
     double tcBall = 0;
