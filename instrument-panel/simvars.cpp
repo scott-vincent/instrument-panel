@@ -732,7 +732,7 @@ void dataLink(simvars* t)
                     globals.connected = (t->simVars.connected == 1);
 
                     // Activate screensaver?
-                    if (t->simVars.rpmEngine == lastRpm) {
+                    if (t->simVars.rpmEngine == lastRpm && t->simVars.rpmPercent < 20) {
                         rpmMatch++;
                     }
                     else {
@@ -781,9 +781,9 @@ void dataLink(simvars* t)
                 }
             }
             else {
-                // Link can blip so wait for 5 failures in a row
+                // Link can blip so wait for multiple failures
                 selFail++;
-                if (selFail > 4) {
+                if (selFail > 15) {
                     bytes = SOCKET_ERROR;
                 }
             }
