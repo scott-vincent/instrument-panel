@@ -702,7 +702,7 @@ void dataLink(simvars* t)
     int bytes;
 
     // Detect if sim is active by looking for rpm variance.
-    // Want about 30 seconds of inactivity before we activate
+    // Want about 60 seconds of inactivity before we activate
     // screensaver.
     double lastRpm = 0;
     int rpmMatch = 0;
@@ -739,7 +739,7 @@ void dataLink(simvars* t)
                         rpmMatch = 0;
                         lastRpm = t->simVars.rpmEngine;
                     }
-                    globals.active = (rpmMatch < 3000 && globals.electrics);
+                    globals.active = (rpmMatch < 6000 && globals.electrics);
 
                     // Identify aircraft
                     if (strcmp(t->simVars.aircraft, lastAircraft) != 0) {
