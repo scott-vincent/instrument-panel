@@ -28,7 +28,7 @@ const char* SimVarDefs[][2] = {
 
     // Vars for Autopilot panel
     { "Indicated Altitude", "feet" },
-    { "Airspeed True", "knots" },
+    { "Airspeed Indicated", "knots" },
     { "Airspeed Mach", "mach" },
     { "Plane Heading Degrees Magnetic", "degrees" },
     { "Vertical Speed", "feet per second" },
@@ -55,7 +55,7 @@ const char* SimVarDefs[][2] = {
     { "Kohlsman Setting Hg", "inHg" },
     { "Attitude Indicator Pitch Degrees", "degrees" },
     { "Attitude Indicator Bank Degrees", "degrees" },
-    { "Airspeed Indicated", "knots" },
+    { "Airspeed True", "knots" },
     { "Airspeed True Calibrate", "degrees" },
     { "Plane Heading Degrees True", "degrees" },
     { "Plane Alt Above Ground", "feet" },
