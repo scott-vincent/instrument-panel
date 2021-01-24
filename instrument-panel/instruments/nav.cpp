@@ -1636,8 +1636,11 @@ int nav::adjustAltitude(int val, int adjust)
 
 int nav::adjustVerticalSpeed(int val, int adjust)
 {
-    // Allow vertical speed to go negative
-    val += adjust * 100;
+    // Can only adjust vertical speed when in vertical speed hold mode
+    if (autopilotAlt == VerticalSpeedHold) {
+        // Allow vertical speed to go negative
+        val += adjust * 100;
+    }
 
     return val;
 }
