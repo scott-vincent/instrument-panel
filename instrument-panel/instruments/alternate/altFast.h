@@ -12,8 +12,7 @@ private:
     bool hasParent;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
-    double mb;            // millibars
-    double inhg;          // inches of mercury
+    double inhg;
     double angle;
     double altitude = 0;
 
@@ -27,6 +26,7 @@ public:
     altFast(int xPos, int yPos, int size, const char* parentName = NULL);
     void render();
     void update();
+    void updateCustom(double inhgVal) override;
 
 private:
     void resize();

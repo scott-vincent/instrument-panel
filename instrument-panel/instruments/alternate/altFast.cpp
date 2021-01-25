@@ -113,11 +113,11 @@ void altFast::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Add hPa Reels
-    int val = mb + 0.1;
+    int val = inhg * 33.8653075;
     addSmallNumber(157 * scaleFactor, val / 1000, (val % 1000) / 100, (val % 100) / 10, val % 10);
 
     // Draw InHg Reels
-    val = (inhg * 100) + 0.1;
+    val = inhg * 100;
     addSmallNumber(465 * scaleFactor, val / 1000, (val % 1000) / 100, (val % 100) / 10, val % 10);
 
     // Draw Altitude reels
@@ -241,6 +241,13 @@ void altFast::addLargeShadow()
 /// </summary>
 void altFast::update()
 {
+    updateCustom(inhg);
+}
+
+void altFast::updateCustom(double inhgVal)
+{
+    inhg = inhgVal;
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -259,16 +266,11 @@ void altFast::update()
     }
 #endif
 
-    // Only update local value from sim if it is not currently being
-    // adjusted by the rotary encoder. This stops the displayed value
-    // from jumping around due to lag of fetch/update cycle.
-    if (lastCalAdjust == 0) {
+    if (!hasParent && lastCalAdjust == 0) {
         inhg = simVars->altKollsman;
     }
 
     // Calculate values
-    mb = inhg * 33.86389;
-
     double diff = abs(simVars->altAltitude - altitude);
 
     if (diff > 500.0) {
@@ -300,7 +302,7 @@ void altFast::update()
 void altFast::addVars()
 {
     globals.simVars->addVar(name, "Indicated Altitude", false, 10, 0);
-    globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92f);
+    globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92);
 }
 
 #ifndef _WIN32
@@ -318,11 +320,13 @@ void altFast::updateKnobs()
 
     if (val != INT_MIN) {
         // Change calibration by knob movement amount (adjust for desired sensitivity)
-        double adjust = (int)((prevVal - val) / 2) * 0.01;
+        double adjust = (int)((val - prevVal) / 2) * 0.01;
         if (adjust != 0) {
             inhg += adjust;
-            double newVal = inhg * 541.82224;
-
+            if (inhg < 28 || inhg >= 31.01) {
+                inhg -= adjust;
+            }
+            double newVal = inhg * 33.8653075 * 16;
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
         }

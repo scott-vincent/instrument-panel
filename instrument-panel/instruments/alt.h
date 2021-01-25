@@ -13,7 +13,6 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
-    double mb;            // millibars
     double inhg;          // inches of mercury
     double angle;
     double altitude = 0;

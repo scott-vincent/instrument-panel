@@ -74,6 +74,11 @@ void instrument::addBitmap(ALLEGRO_BITMAP* bitmap)
     bitmapCount++;
 }
 
+void instrument::updateCustom(double val) {
+    // This function can be optionally overridden
+    update();
+}
+
 void instrument::destroyBitmaps()
 {
     // Destroy all bitmaps

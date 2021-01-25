@@ -122,11 +122,12 @@ void alt::render()
 
     // Add outer scale (inches of mercury) and rotate
     // 29.5 = 0 radians
-    angle = (29.5f - inhg) * 1.8f;
+    angle = (29.5 - inhg) * 1.8;
     al_draw_scaled_rotated_bitmap(bitmaps[2], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
 
     // Add inner scale (millibars) and rotate
     // 1000 = 0 radians
+    double mb = inhg * 33.8653075;
     angle = (1000.0f - mb) * 0.0525f;
     al_set_blender(ALLEGRO_ADD, ALLEGRO_INVERSE_DEST_COLOR, ALLEGRO_ONE);
     al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
@@ -211,8 +212,15 @@ void alt::update()
     }
 #endif
 
+    // Only update local value from sim if it is not currently being
+    // adjusted by the rotary encoder. This stops the displayed value
+    // from jumping around due to lag of fetch/update cycle.
+    if (lastCalAdjust == 0) {
+        inhg = simVars->altKollsman;
+    }
+
     if (customInstrument) {
-        customInstrument->update();
+        customInstrument->updateCustom(inhg);
         return;
     }
 
@@ -227,16 +235,7 @@ void alt::update()
         resize();
     }
 
-    // Only update local value from sim if it is not currently being
-    // adjusted by the rotary encoder. This stops the displayed value
-    // from jumping around due to lag of fetch/update cycle.
-    if (lastCalAdjust == 0) {
-        inhg = simVars->altKollsman;
-    }
-
     // Calculate values
-    mb = inhg * 33.86389;
-
     double diff = abs(simVars->altAltitude - altitude);
 
     if (diff > 4000.0) {
@@ -271,7 +270,7 @@ void alt::update()
 void alt::addVars()
 {
     globals.simVars->addVar(name, "Indicated Altitude", false, 10, 0);
-    globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92f);
+    globals.simVars->addVar(name, "Kohlsman Setting Hg", false, 0.01, 29.92);
 }
 
 #ifndef _WIN32
@@ -289,11 +288,13 @@ void alt::updateKnobs()
 
     if (val != INT_MIN) {
         // Change calibration by knob movement amount (adjust for desired sensitivity)
-        double adjust = (int)((val - prevVal) / 2) * 0.01;
+        double adjust = (int)((val - prevVal) / 2.0) * 0.01;
         if (adjust != 0) {
             inhg += adjust;
-            double newVal = inhg * 541.82224;
-
+            if (inhg < 28 || inhg >= 31.01) {
+                inhg -= adjust;
+            }
+            double newVal = inhg * 33.8653075 * 16;
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
         }

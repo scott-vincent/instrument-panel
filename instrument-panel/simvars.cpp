@@ -783,7 +783,7 @@ void dataLink(simvars* t)
             else {
                 // Link can blip so wait for multiple failures
                 selFail++;
-                if (selFail > 15) {
+                if (selFail > 50) {
                     bytes = SOCKET_ERROR;
                 }
             }

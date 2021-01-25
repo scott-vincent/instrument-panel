@@ -37,6 +37,7 @@ public:
     virtual void resize() = 0;
     virtual void render() = 0;
     virtual void update() = 0;
+    virtual void updateCustom(double val);
 
 protected:
     ALLEGRO_BITMAP* loadBitmap(const char* filename);
