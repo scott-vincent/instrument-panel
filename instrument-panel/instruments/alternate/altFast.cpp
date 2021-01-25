@@ -113,7 +113,7 @@ void altFast::render()
     al_set_target_bitmap(bitmaps[1]);
 
     // Add hPa Reels
-    int val = inhg * 33.8653075;
+    int val = (inhg * 33.86378746435) + 0.5;
     addSmallNumber(157 * scaleFactor, val / 1000, (val % 1000) / 100, (val % 100) / 10, val % 10);
 
     // Draw InHg Reels
@@ -326,7 +326,7 @@ void altFast::updateKnobs()
             if (inhg < 28 || inhg >= 31.01) {
                 inhg -= adjust;
             }
-            double newVal = inhg * 33.8653075 * 16;
+            double newVal = inhg * 33.86378746435 * 16;
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
         }

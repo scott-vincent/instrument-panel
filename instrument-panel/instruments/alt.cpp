@@ -127,7 +127,7 @@ void alt::render()
 
     // Add inner scale (millibars) and rotate
     // 1000 = 0 radians
-    double mb = inhg * 33.8653075;
+    double mb = inhg * 33.86378746435;
     angle = (1000.0f - mb) * 0.0525f;
     al_set_blender(ALLEGRO_ADD, ALLEGRO_INVERSE_DEST_COLOR, ALLEGRO_ONE);
     al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle, 0);
@@ -294,7 +294,7 @@ void alt::updateKnobs()
             if (inhg < 28 || inhg >= 31.01) {
                 inhg -= adjust;
             }
-            double newVal = inhg * 33.8653075 * 16;
+            double newVal = inhg * 33.86378746435 * 16;
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
             prevVal = val;
         }
