@@ -151,7 +151,7 @@ void asiFast::render()
     int fadjust = (fsize - size) / 2;
     al_draw_bitmap(bitmaps[1], xPos - fadjust, yPos - fadjust, 0);
 
-    if (!globals.active) {
+    if (!globals.electrics) {
         dimInstrument();
     }
 }

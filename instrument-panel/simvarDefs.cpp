@@ -6,7 +6,6 @@ const char* versionString = "v1.4.2";
 const char* SimVarDefs[][2] = {
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
-    { "General Eng Rpm:1", "rpm" },
     { "Electrical Main Bus Voltage", "volts" },
 
     // Vars for Radio panel
@@ -71,6 +70,7 @@ const char* SimVarDefs[][2] = {
     { "Absolute Time", "seconds" },
     { "Ambient Temperature", "celsius" },
     { "Electrical Battery Load", "amperes" },
+    { "General Eng Rpm:1", "rpm" },
     { "Eng Rpm Animation Percent:1", "percent" },
     { "General Eng Elapsed Time:1", "hours" },
     { "Fuel Total Capacity", "gallons" },

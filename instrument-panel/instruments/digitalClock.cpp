@@ -228,7 +228,7 @@ void digitalClock::render()
         // Full dim if avionics turned off
         dimInstrument();
     }
-    else if (!globals.active) {
+    else if (!globals.electrics) {
         // Semi dim if screensaver activated but avionics turned on
         dimInstrument(false);
     }

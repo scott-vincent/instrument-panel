@@ -180,7 +180,7 @@ void annunciator::render()
     else if (state < 2 && dimDelay > 0) {
         dimDelay--;
     }
-    else if (!globals.active && !globals.electrics) {
+    else if (!globals.electrics) {
         dimInstrument();
     }
 }

@@ -9,7 +9,6 @@ struct SimVars
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
-    double rpmEngine = 0;
     double dcVolts = 23.7;
 
     // Vars for Radio panel
@@ -75,6 +74,7 @@ struct SimVars
     double dcFlightSeconds = 0;
     double dcTempC = 26.2;
     double batteryLoad = 0;
+    double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
     double fuelCapacity = 0;

@@ -265,10 +265,10 @@ void updateCommon()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Electrics check
-    globals.electrics = (simVars->dcVolts > 0);
+    globals.electrics = globals.connected && simVars->dcVolts > 0;
 
     // Avionics check
-    globals.avionics = (simVars->com1Status == 0 || simVars->com2Status == 0);
+    globals.avionics = globals.connected && (simVars->com1Status == 0 || simVars->com2Status == 0);
 }
 
 /// <summary>
