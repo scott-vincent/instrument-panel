@@ -9,6 +9,7 @@ struct SimVars
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
+    double cruiseSpeed = 120;
     double dcVolts = 23.7;
 
     // Vars for Radio panel
@@ -102,7 +103,6 @@ struct SimVars
     double parkingBrakeOn = 1;
     double pushbackState = 3;
     double rudderPosition = 0;
-    double cruiseSpeed = 120;
     double oilTemp = 75;
     double oilPressure = 50;
     double exhaustGasTemp = 0;

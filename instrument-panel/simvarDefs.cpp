@@ -6,6 +6,7 @@ const char* versionString = "v1.4.2";
 const char* SimVarDefs[][2] = {
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
+    { "Estimated Cruise Speed", "knots" },
     { "Electrical Main Bus Voltage", "volts" },
 
     // Vars for Radio panel
@@ -98,7 +99,6 @@ const char* SimVarDefs[][2] = {
     { "Brake Parking Position", "bool" },
     { "Pushback State", "enum" },
     { "Rudder Position", "position" },
-    { "Estimated Cruise Speed", "knots" },
     { "General Eng Oil Temperature:1", "fahrenheit" },
     { "General Eng Oil Pressure:1", "psi" },
     { "General Eng Exhaust Gas Temperature:1", "celsius" },

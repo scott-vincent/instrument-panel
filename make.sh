@@ -37,5 +37,6 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/savageCub/comSavageCub.cpp \
     instruments/savageCub/xpdrSavageCub.cpp \
     || exit
+echo fs-restart
+fs-restart
 echo Done
-echo Run with: ./run.sh

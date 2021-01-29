@@ -628,15 +628,15 @@ void nav::update()
         showMach = false;
         showHeading = false;
         showSpeed = false;
-        showAltitude = false;
+        showAltitude = true;
         showVerticalSpeed = false;
         prevHeading = simVars->autopilotHeading;
         prevSpeed = simVars->autopilotAirspeed;
         prevAltitude = simVars->autopilotAltitude;
         prevVerticalSpeed = simVars->autopilotVerticalSpeed;
         setVerticalSpeed = 0;
-        managedHeading = true;
-        managedSpeed = true;
+        managedHeading = false;
+        managedSpeed = false;
         managedAltitude = true;
     }
 
@@ -1072,6 +1072,7 @@ void nav::autopilotSwitchPressed()
     case VerticalSpeed:
     {
         autopilotAlt = VerticalSpeedHold;
+        manSelAltitude();
         globals.simVars->write(KEY_AP_ALT_VAR_SET_ENGLISH, simVars->autopilotAltitude);
         globals.simVars->write(KEY_AP_ALT_HOLD_ON);
         manSelAltitude();

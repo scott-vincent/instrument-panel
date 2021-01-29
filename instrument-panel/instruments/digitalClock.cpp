@@ -224,13 +224,8 @@ void digitalClock::render()
     al_set_target_backbuffer(globals.display);
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
-    if (!globals.avionics) {
-        // Full dim if avionics turned off
+    if (!globals.electrics) {
         dimInstrument();
-    }
-    else if (!globals.electrics) {
-        // Semi dim if screensaver activated but avionics turned on
-        dimInstrument(false);
     }
 }
 
