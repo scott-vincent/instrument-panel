@@ -66,11 +66,11 @@
     "Position Y": 669,
     "Size": 284
   },
-  "Rad Com": {
+  "ADF": {
     "Enabled": true,
-    "Position X": 1549,
-    "Position Y": 665,
-    "Size": 280
+    "Position X": 1556,
+    "Position Y": 672,
+    "Size": 266
   },
   "Annunciator": {
     "Enabled": true,
@@ -117,7 +117,7 @@
   "ADI Learjet": {
     "Enabled": false
   },
-  "ADF": {
+  "Rad Com": {
     "Enabled": false
   },
   "ASI Savage Cub": {
