@@ -20,6 +20,12 @@ Note: There is a screensaver feature so the instrument panel will appear dim unt
 
 If you want to use the Savage Cub panel instead of the default Cessna panel or you want to define multiple panel layouts see section "Custom Panels" below.
 
+# Other Panels
+
+Autopilot Panel: https://github.com/scott-vincent/autopilot-panel
+
+Radio Panel: https://github.com/scott-vincent/radio-panel
+
 # Releases
 
 Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking on the Releases section on the right of this readme.
