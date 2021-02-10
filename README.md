@@ -2,7 +2,9 @@
 
 ![Screenshot](Screenshot.jpg)
 
-The instrument panle is running on a single 24" monitor with plywood placed in front of it and holes cut out for each instrument. The knobs are connected to the GPIO pins of the same Raspberry Pi that is running the display. You can also run the display on a PC but you won't have the knob inputs then although you can still use the knobs in the FS2020 cockpit and the changes will immediately be refelcted on the instrument panel display.
+The instrument panel is running on a single 24" monitor with plywood placed in front of it and holes cut out for each instrument. The knobs are connected to the GPIO pins of the same Raspberry Pi that is running the display.
+
+You can also run the display on a PC (the same one running FS2020 if you wish) but you won't have the knob inputs then although you can still use the knobs in the FS2020 cockpit and the changes will immediately be refelcted on the instrument panel display.
 
 # Quick Start
 
