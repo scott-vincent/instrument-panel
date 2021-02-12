@@ -61,6 +61,8 @@ Host IP address. If you just want to test the instrument panel on the same
 host where FS2020 is running leave the IP address as 127.0.0.1 and it will
 connect to the local host.
 
+Blaine Leckett made his own instrument panel using my software and he has a very good build video here: https://www.youtube.com/watch?v=iHpFrYcHiJM
+
 This program was heavily inspired by Dave Ault and contains original artwork by him.
 
   http://www.learjet45chimera.co.uk/
