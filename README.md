@@ -36,30 +36,18 @@ Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking
 
 # Introduction
 
-An instrument panel for MS FlightSim 2020. This program is designed to run
-on a separate computer to the one running FS2020 but you can just run it on
-a different monitor if you wish. It can run on either a PC or a Raspberry Pi.
+An instrument panel for MS FlightSim 2020. This program is designed to run on a separate computer to the one running FS2020 but you can just run it on a different monitor if you wish. It can run on either a PC or a Raspberry Pi.
 
 You can see it running on a Raspberry Pi 4 here: https://www.youtube.com/watch?v=vA6rveEP_9o
 and in action on a VFR flight with VATSIM from Gatwick to London City Airport here: https://www.youtube.com/watch?v=dC_PvOM0fI8
 
-It requires the companion program from here
+It requires the companion program from here: https://github.com/scott-vincent/instrument-data-link
 
-  https://github.com/scott-vincent/instrument-data-link
+The companion program runs on the same host as MS FS2020 and collects all the data required by the instrument panel.
 
-The companion program runs on the same host as MS FS2020 and collects all
-the data required by the instrument panel.
+The instrument panel connects to the instrument-data-link over your network and receives the data at regular intervals so that the instruments can be drawn with up-to-date values.
 
-The instrument panel connects to the instrument-data-link over your network and
-receives the data at regular intervals so that the instruments can be drawn with
-up-to-date values.
-
-You can run as many instrument panels as you like. They all connect to the same
-data-link. Each panel must be configured to point to the host where data-link
-is running. You do this by editing the settings file and updating the Data Link
-Host IP address. If you just want to test the instrument panel on the same
-host where FS2020 is running leave the IP address as 127.0.0.1 and it will
-connect to the local host.
+You can run as many instrument panels as you like. They all connect to the same data-link. Each panel must be configured to point to the host where data-link is running. You do this by editing the settings file and updating the Data Link Host IP address. If you just want to test the instrument panel on the same host where FS2020 is running leave the IP address as 127.0.0.1 and it will connect to the local host.
 
 Blaine Leckett made his own instrument panel using my software and he has a very good build video here: https://www.youtube.com/watch?v=iHpFrYcHiJM
 
@@ -71,8 +59,7 @@ This program was heavily inspired by Dave Ault and contains original artwork by 
   
 It has been completely rewritten and updated to use Allegro5.
 
-NOTE: Allegro5 must be built on RasPi4 as a standard Linux build, not the
-specific Raspberry Pi build, i.e.:
+NOTE: Allegro5 must be built on RasPi4 as a standard Linux build, not the specific Raspberry Pi build, i.e.:
 ```
   mkdir build
   cd allegro5/build
@@ -87,18 +74,13 @@ m ........ Move the display to the next monitor if multiple monitors are connect
 s ........ Enable/disable shadows on instruments. Shadows give a more realistic 3D look.
 Esc ...... Quit the program.
 ```
-To make adjustments use the arrow keys. Up/down arrows select the previous or next
-setting and left/right arrows change the value. You can also use numpad left/right
-arrows to make larger adjustments.
+To make adjustments use the arrow keys. Up/down arrows select the previous or next setting and left/right arrows change the value. You can also use numpad left/right arrows to make larger adjustments.
 
-You can choose which instruments are included in the panel by setting the Enabled
-attribute for each instrument in the settings file:
+You can choose which instruments are included in the panel by setting the Enabled attribute for each instrument in the settings file:
 ```
   settings/instrument-panel.json
 ```
-On Raspberry Pi you can configure hardware Rotary Encoders for each instrument.
-Each rotary encoder is connected to two BCM GPIO pins (+ ground on centre pin).
-See individual instruments for pins used. Not all instruments have manual controls.
+On Raspberry Pi you can configure hardware Rotary Encoders for each instrument. Each rotary encoder is connected to two BCM GPIO pins (+ ground on centre pin). See individual instruments for pins used. Not all instruments have manual controls.
 
 # Custom Panels
 
