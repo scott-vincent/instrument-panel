@@ -109,10 +109,7 @@
     "Size": 182
   },
   "Nav": {
-    "Enabled": true,
-    "Position X": 74,
-    "Position Y": 900,
-    "Size": 589
+    "Enabled": false
   },
   "ADI Learjet": {
     "Enabled": false

@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.4.2";
+const char* versionString = "v1.5.0";
 
 const char* SimVarDefs[][2] = {
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
     { "Estimated Cruise Speed", "knots" },
     { "Electrical Main Bus Voltage", "volts" },
+
+    // Vars for Power/Lights panel
+    { "Apu Pct Starter", "percent" },
+    { "Apu Pct Rpm", "percent" },
+    { "Bleed Air Apu", "bool" },
 
     // Vars for Radio panel
     { "Com Status:1", "enum" },
@@ -139,7 +144,7 @@ WriteEvent WriteEvents[] = {
     { KEY_NAV2_STBY_SET, "NAV2_STBY_SET" },
     { KEY_NAV2_RADIO_SWAP, "NAV2_RADIO_SWAP" },
     { KEY_ADF_COMPLETE_SET, "ADF_COMPLETE_SET" },
-    { KEY_ADF1_PRIMARY_SET, "ADF1_PRIMARY_SET" },       // ADF1_PRIMARY_SET not working (SDK bug)
+    { KEY_ADF_SET, "ADF_SET" },
     { KEY_XPNDR_SET, "XPNDR_SET" },
     { KEY_AP_MASTER, "AP_MASTER" },
     { KEY_TOGGLE_FLIGHT_DIRECTOR, "TOGGLE_FLIGHT_DIRECTOR" },
@@ -165,5 +170,37 @@ WriteEvent WriteEvents[] = {
     { KEY_SPEED_SLOT_INDEX_SET, "SPEED_SLOT_INDEX_SET" },
     { KEY_ALTITUDE_SLOT_INDEX_SET, "ALTITUDE_SLOT_INDEX_SET" },
     { KEY_TUG_HEADING, "KEY_TUG_HEADING" },
+    { KEY_TOGGLE_MASTER_BATTERY, "TOGGLE_MASTER_BATTERY" },
+    { KEY_TOGGLE_MASTER_ALTERNATOR, "TOGGLE_MASTER_ALTERNATOR" },
+    { KEY_TOGGLE_JETWAY, "TOGGLE_JETWAY" },
+    { KEY_FUEL_PUMP, "FUEL_PUMP" },
+    { KEY_BEACON_LIGHTS_SET, "BEACON_LIGHTS_SET" },
+    { KEY_LANDING_LIGHTS_SET, "LANDING_LIGHTS_SET" },
+    { KEY_TAXI_LIGHTS_SET, "TAXI_LIGHTS_SET" },
+    { KEY_NAV_LIGHTS_SET, "NAV_LIGHTS_SET" },
+    { KEY_STROBES_SET, "STROBES_SET" },
+    { KEY_PITOT_HEAT_SET, "PITOT_HEAT_SET" },
+    { KEY_ANTI_ICE_SET, "ANTI_ICE_SET" },
+    { KEY_APU_OFF_SWITCH, "APU_OFF_SWITCH" },
+    { KEY_APU_STARTER, "APU_STARTER" },
+    { KEY_BLEED_AIR_SOURCE_CONTROL_SET, "BLEED_AIR_SOURCE_CONTROL_SET" },
+    { VJOY_BUTTONS, "VJOY_BUTTONS" },
+    { VJOY_BUTTON_1, "VJOY_BUTTON_1" },
+    { VJOY_BUTTON_2, "VJOY_BUTTON_2" },
+    { VJOY_BUTTON_3, "VJOY_BUTTON_3" },
+    { VJOY_BUTTON_4, "VJOY_BUTTON_4" },
+    { VJOY_BUTTON_5, "VJOY_BUTTON_5" },
+    { VJOY_BUTTON_6, "VJOY_BUTTON_6" },
+    { VJOY_BUTTON_7, "VJOY_BUTTON_7" },
+    { VJOY_BUTTON_8, "VJOY_BUTTON_8" },
+    { VJOY_BUTTON_9, "VJOY_BUTTON_9" },
+    { VJOY_BUTTON_10, "VJOY_BUTTON_10" },
+    { VJOY_BUTTON_11, "VJOY_BUTTON_11" },
+    { VJOY_BUTTON_12, "VJOY_BUTTON_12" },
+    { VJOY_BUTTON_13, "VJOY_BUTTON_13" },
+    { VJOY_BUTTON_14, "VJOY_BUTTON_14" },
+    { VJOY_BUTTON_15, "VJOY_BUTTON_15" },
+    { VJOY_BUTTON_16, "VJOY_BUTTON_16" },
+    { VJOY_BUTTONS_END, "VJOY_BUTTONS_END" },
     { SIM_STOP, NULL }
 };

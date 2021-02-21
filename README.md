@@ -10,9 +10,9 @@ You can also run the display on a PC (the same one running FS2020 if you wish) b
 
 Download the following two zip files.
 
-Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v1.4.2-Windows-x64.zip)
+Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v1.5.0-Windows-x64.zip)
 
-Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v1.4.2-windows-x64.zip)
+Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v1.5.0-windows-x64.zip)
 
 Unzip instrument-data-link into its own folder and double-click instrument-data-link.exe to run it.
 
@@ -29,6 +29,8 @@ If you want to use the Savage Cub panel instead of the default Cessna panel or y
 Autopilot Panel: https://github.com/scott-vincent/autopilot-panel
 
 Radio Panel: https://github.com/scott-vincent/radio-panel
+
+Power/Lights Panel: https://github.com/scott-vincent/power-lights-panel
 
 # Releases
 

@@ -1000,8 +1000,7 @@ void nav::navSwitchPressed()
             int freq = adjustAdf(simVars->adfFreq, 0);
             int standby = adjustAdf(simVars->adfStandby, 0);
             globals.simVars->write(KEY_ADF_COMPLETE_SET, freq);
-            // This isn't working, looks like an SDK bug!
-            globals.simVars->write(KEY_ADF1_PRIMARY_SET, standby);
+            globals.simVars->write(KEY_ADF_SET, standby);
         }
         break;
     }

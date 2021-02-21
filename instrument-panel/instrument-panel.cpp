@@ -1,6 +1,6 @@
 /*
  * Flight Simulator Instrument Panel
- * Copyright (c) 2020 Scott Vincent
+ * Copyright (c) 2021 Scott Vincent
  * 
  * This program was heavily inspired by Dave Ault and contains original artwork
  * by him.

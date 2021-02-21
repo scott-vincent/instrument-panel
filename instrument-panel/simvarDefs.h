@@ -12,6 +12,11 @@ struct SimVars
     double cruiseSpeed = 120;
     double dcVolts = 23.7;
 
+    // Vars for Power/Lights panel
+    double apuPercentStart = 0;
+    double apuPercentRpm = 0;
+    double apuBleed = 0;
+
     // Vars for Radio panel
     double com1Status = 0;
     double com1Transmit = 1;
@@ -144,7 +149,7 @@ enum EVENT_ID {
     KEY_NAV2_STBY_SET,
     KEY_NAV2_RADIO_SWAP,
     KEY_ADF_COMPLETE_SET,
-    KEY_ADF1_PRIMARY_SET,
+    KEY_ADF_SET,
     KEY_XPNDR_SET,
     KEY_AP_MASTER,
     KEY_TOGGLE_FLIGHT_DIRECTOR,
@@ -169,7 +174,40 @@ enum EVENT_ID {
     KEY_HEADING_SLOT_INDEX_SET,
     KEY_SPEED_SLOT_INDEX_SET,
     KEY_ALTITUDE_SLOT_INDEX_SET,
-    KEY_TUG_HEADING
+    KEY_TUG_HEADING,
+    KEY_TOGGLE_MASTER_BATTERY,
+    KEY_TOGGLE_MASTER_ALTERNATOR,
+    KEY_TOGGLE_JETWAY,
+    KEY_FUEL_PUMP,
+    KEY_BEACON_LIGHTS_SET,
+    KEY_LANDING_LIGHTS_SET,
+    KEY_TAXI_LIGHTS_SET,
+    KEY_NAV_LIGHTS_SET,
+    KEY_STROBES_SET,
+    KEY_PITOT_HEAT_SET,
+    KEY_ANTI_ICE_SET,
+    KEY_APU_STARTER,
+    KEY_APU_OFF_SWITCH,
+    KEY_BLEED_AIR_SOURCE_CONTROL_SET,
+    VJOY_BUTTONS,
+    // Buttons must start from 1 and must be sequential until VJOY_BUTTONS_END
+    VJOY_BUTTON_1,
+    VJOY_BUTTON_2,
+    VJOY_BUTTON_3,
+    VJOY_BUTTON_4,
+    VJOY_BUTTON_5,
+    VJOY_BUTTON_6,
+    VJOY_BUTTON_7,
+    VJOY_BUTTON_8,
+    VJOY_BUTTON_9,
+    VJOY_BUTTON_10,
+    VJOY_BUTTON_11,
+    VJOY_BUTTON_12,
+    VJOY_BUTTON_13,
+    VJOY_BUTTON_14,
+    VJOY_BUTTON_15,
+    VJOY_BUTTON_16,
+    VJOY_BUTTONS_END,
 };
 
 struct WriteEvent {
