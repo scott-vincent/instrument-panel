@@ -502,7 +502,12 @@ void simvars::addVar(const char* group, const char* name, bool isBool, double sc
             break;
         }
 
-        offset++;
+        if (strcmp(SimVarDefs[i][1], "string32") == 0) {
+            offset += 4;
+        }
+        else {
+            offset++;
+        }
     }
 
     // Must not already be added
