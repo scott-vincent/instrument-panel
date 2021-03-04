@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.5.0";
+const char* versionString = "v1.5.1";
 
 const char* SimVarDefs[][2] = {
     // Vars required for all panels (screensaver, aircraft identification etc.)
