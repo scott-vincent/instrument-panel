@@ -87,6 +87,18 @@
     <ClCompile Include="instruments\alternate\rpmPercent.cpp">
       <Filter>instruments\alternate</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\spitfire\asiSpitfire.cpp">
+      <Filter>instruments\Spitfire</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\spitfire\boostSpitfire.cpp">
+      <Filter>instruments\Spitfire</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\spitfire\rpmSpitfire.cpp">
+      <Filter>instruments\Spitfire</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\spitfire\vsiSpitfire.cpp">
+      <Filter>instruments\Spitfire</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -175,6 +187,18 @@
     <ClInclude Include="instruments\alternate\rpmPercent.h">
       <Filter>instruments\alternate</Filter>
     </ClInclude>
+    <ClInclude Include="instruments\spitfire\asiSpitfire.h">
+      <Filter>instruments\Spitfire</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\spitfire\boostSpitfire.h">
+      <Filter>instruments\Spitfire</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\spitfire\rpmSpitfire.h">
+      <Filter>instruments\Spitfire</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\spitfire\vsiSpitfire.h">
+      <Filter>instruments\Spitfire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -203,6 +227,9 @@
     </Filter>
     <Filter Include="instruments\alternate">
       <UniqueIdentifier>{47c92d55-ae1e-4c17-8c25-c286ebb2fe3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="instruments\Spitfire">
+      <UniqueIdentifier>{0c1ab667-c2a6-4611-a874-3025ec3b78da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

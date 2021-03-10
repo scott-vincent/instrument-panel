@@ -747,6 +747,9 @@ void dataLink(simvars* t)
                         else if (strncmp(t->simVars.aircraft, globals.Airbus_A320neo_Text, globals.Airbus_A320neo_Len) == 0) {
                             globals.aircraft = AIRBUS_A320NEO;
                         }
+                        else if (strncmp(t->simVars.aircraft, globals.Supermarine_Spitfire_Text, globals.Supermarine_Spitfire_Len) == 0) {
+                            globals.aircraft = SUPERMARINE_SPITFIRE;
+                        }
                         else {
                             // Need to flip between other aircraft so that instruments
                             // can detect the aircraft has changed.

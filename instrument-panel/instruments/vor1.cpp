@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "vor1.h"
+#include "spitfire/boostSpitfire.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -111,7 +112,12 @@ void vor1::resize()
 /// </summary>
 void vor1::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+        return;
+    }
+
+    if (customInstrument) {
+        customInstrument->render();
         return;
     }
 
@@ -173,15 +179,25 @@ void vor1::render()
 /// </summary>
 void vor1::update()
 {
-    // Check for position or size change
-    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
 
-    xPos = settings[0];
-    yPos = settings[1];
+        // Load custom instrument for this aircraft if we have one
+        if (customInstrument) {
+            delete customInstrument;
+            customInstrument = NULL;
+        }
 
-    if (size != settings[2]) {
-        size = settings[2];
-        resize();
+        if (loadedAircraft == SUPERMARINE_SPITFIRE) {
+            customInstrument = new boostSpitfire(xPos, yPos, size, name);
+        }
+    }
+
+    if (customInstrument) {
+        customInstrument->update();
+        return;
     }
 
 #ifndef _WIN32
@@ -190,6 +206,17 @@ void vor1::update()
         updateKnobs();
     }
 #endif
+
+    // Check for position or size change
+    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+
+    xPos = settings[0];
+    yPos = settings[1];
+
+    if (size != settings[2] || aircraftChanged) {
+        size = settings[2];
+        resize();
+    }
 
     // Calculate values
     compassAngle = -simVars->vor1Obs;

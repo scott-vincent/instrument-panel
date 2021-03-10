@@ -182,6 +182,10 @@
     <ClCompile Include="instruments\savageCub\comSavageCub.cpp" />
     <ClCompile Include="instruments\savageCub\rpmSavageCub.cpp" />
     <ClCompile Include="instruments\savageCub\xpdrSavageCub.cpp" />
+    <ClCompile Include="instruments\spitfire\asiSpitfire.cpp" />
+    <ClCompile Include="instruments\spitfire\boostSpitfire.cpp" />
+    <ClCompile Include="instruments\spitfire\rpmSpitfire.cpp" />
+    <ClCompile Include="instruments\spitfire\vsiSpitfire.cpp" />
     <ClCompile Include="instruments\tc.cpp" />
     <ClCompile Include="instruments\trimFlaps.cpp" />
     <ClCompile Include="instruments\vac.cpp" />
@@ -216,6 +220,10 @@
     <ClInclude Include="instruments\savageCub\comSavageCub.h" />
     <ClInclude Include="instruments\savageCub\rpmSavageCub.h" />
     <ClInclude Include="instruments\savageCub\xpdrSavageCub.h" />
+    <ClInclude Include="instruments\spitfire\asiSpitfire.h" />
+    <ClInclude Include="instruments\spitfire\boostSpitfire.h" />
+    <ClInclude Include="instruments\spitfire\rpmSpitfire.h" />
+    <ClInclude Include="instruments\spitfire\vsiSpitfire.h" />
     <ClInclude Include="instruments\tc.h" />
     <ClInclude Include="instruments\trimFlaps.h" />
     <ClInclude Include="instruments\vac.h" />

@@ -36,6 +36,10 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/savageCub/rpmSavageCub.cpp \
     instruments/savageCub/comSavageCub.cpp \
     instruments/savageCub/xpdrSavageCub.cpp \
+    instruments/spitfire/asiSpitfire.cpp \
+    instruments/spitfire/rpmSpitfire.cpp \
+    instruments/spitfire/vsiSpitfire.cpp \
+    instruments/spitfire/boostSpitfire.cpp \
     || exit
 echo fs-restart
 fs-restart

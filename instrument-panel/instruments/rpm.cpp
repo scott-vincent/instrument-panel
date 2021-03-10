@@ -4,6 +4,7 @@
 #include "rpm.h"
 #include "alternate/rpmPercent.h"
 #include "savageCub/rpmSavageCub.h"
+#include "spitfire/rpmSpitfire.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -163,8 +164,11 @@ void rpm::update()
             customInstrument = NULL;
         }
         
+        if (loadedAircraft == SUPERMARINE_SPITFIRE) {
+            customInstrument = new rpmSpitfire(xPos, yPos, size, name);
+        }
         // Test for high-reving Rotax piston engine (e.g., Savage Cub, Shock Ultra, et al)
-        if ((int)simVars->engineType == 0 && simVars->engineMaxRpm > 5000) {
+        else if ((int)simVars->engineType == 0 && simVars->engineMaxRpm > 5000) {
             customInstrument = new rpmSavageCub(xPos, yPos, size, name);
         }
         // Test for Jet (1) and Turbine (5) engines
@@ -188,7 +192,7 @@ void rpm::update()
     xPos = settings[0];
     yPos = settings[1];
 
-    if (size != settings[2]) {
+    if (size != settings[2] || aircraftChanged) {
         size = settings[2];
         resize();
     }

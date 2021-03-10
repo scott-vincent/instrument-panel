@@ -8,6 +8,7 @@ class vor1 : public instrument
 {
 private:
     SimVars* simVars;
+    Aircraft loadedAircraft = UNDEFINED;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)

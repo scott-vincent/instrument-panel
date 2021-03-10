@@ -4,6 +4,7 @@
 #include "asi.h"
 #include "alternate/asiFast.h"
 #include "savageCub/asiSavageCub.h"
+#include "spitfire/asiSpitfire.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -153,6 +154,9 @@ void asi::update()
 
         if (loadedAircraft == SAVAGE_CUB) {
             customInstrument = new asiSavageCub(xPos, yPos, size, name);
+        }
+        else if (loadedAircraft == SUPERMARINE_SPITFIRE) {
+            customInstrument = new asiSpitfire(xPos, yPos, size, name);
         }
         else if (fastAircraft) {
             customInstrument = new asiFast(xPos, yPos, size, name);

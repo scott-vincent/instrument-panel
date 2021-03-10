@@ -1,0 +1,28 @@
+#ifndef _VSI_SPITFIRE_H_
+#define _VSI_SPITFIRE_H_
+
+#include "simvars.h"
+#include "instrument.h"
+
+class vsiSpitfire : public instrument
+{
+private:
+    SimVars* simVars;
+    float scaleFactor;
+
+    // Instrument values (calculated from variables and needed to draw the instrument)
+    double vertSpeed;
+    double angle = 0;
+    double targetAngle;
+
+public:
+    vsiSpitfire(int xPos, int yPos, int size, const char *parentName = NULL);
+    void render();
+    void update();
+
+private:
+    void resize();
+    void addVars();
+};
+
+#endif // _VSI_SPITFIRE_H

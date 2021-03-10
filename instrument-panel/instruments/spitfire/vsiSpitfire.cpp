@@ -1,14 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "vsi.h"
-#include "spitfire/vsiSpitfire.h"
-#include "simvars.h"
+#include "vsiSpitfire.h"
 
-vsi::vsi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+vsiSpitfire::vsiSpitfire(int xPos, int yPos, int size, const char *parentName) : instrument(xPos, yPos, size)
 {
-    setName("VSI");
-    addVars();
+    if (parentName) {
+        // Use position, size and vars from parent
+        setName(parentName);
+    }
+    else {
+        setName("VSI Spitfire");
+        addVars();
+    }
+
     simVars = &globals.simVars->simVars;
     resize();
 }
@@ -16,7 +21,7 @@ vsi::vsi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void vsi::resize()
+void vsiSpitfire::resize()
 {
     destroyBitmaps();
 
@@ -24,7 +29,7 @@ void vsi::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("vsi.png");
+    ALLEGRO_BITMAP* orig = loadBitmap("vsi-spitfire.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -42,15 +47,9 @@ void vsi::resize()
     addBitmap(bmp);
 
     // 3 = Pointer
-    bmp = al_create_bitmap(800, 100);
+    bmp = al_create_bitmap(80, 600);
     al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 800, 800, 100, 0, 0, 0);
-    addBitmap(bmp);
-
-    // 4 = Pointer shadow
-    bmp = al_create_bitmap(800, 100);
-    al_set_target_bitmap(bmp);
-    al_draw_bitmap_region(orig, 0, 900, 800, 100, 0, 0, 0);
+    al_draw_bitmap_region(orig, 800, 0, 80, 600, 0, 0, 0);
     addBitmap(bmp);
 
     al_set_target_backbuffer(globals.display);
@@ -59,14 +58,9 @@ void vsi::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void vsi::render()
+void vsiSpitfire::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
-        return;
-    }
-
-    if (customInstrument) {
-        customInstrument->render();
+    if (bitmaps[0] == NULL) {
         return;
     }
 
@@ -79,19 +73,8 @@ void vsi::render()
     // Add main dial
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
-    if (globals.enableShadows) {
-        // Set blender to multiply (shades of grey darken, white has no effect)
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
-
-        // Add pointer shadow
-        al_draw_scaled_rotated_bitmap(bitmaps[4], 400,50, 415 * scaleFactor, 415 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
-
-        // Restore normal blender
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
-    }
-
     // Add pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 400, 50, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 40, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, (angle - 90) * DegreesToRadians, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -106,36 +89,15 @@ void vsi::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void vsi::update()
+void vsiSpitfire::update()
 {
-    // Check for aircraft change
-    bool aircraftChanged = (loadedAircraft != globals.aircraft);
-    if (aircraftChanged) {
-        loadedAircraft = globals.aircraft;
-
-        // Load custom instrument for this aircraft if we have one
-        if (customInstrument) {
-            delete customInstrument;
-            customInstrument = NULL;
-        }
-
-        if (loadedAircraft == SUPERMARINE_SPITFIRE) {
-            customInstrument = new vsiSpitfire(xPos, yPos, size, name);
-        }
-    }
-
-    if (customInstrument) {
-        customInstrument->update();
-        return;
-    }
-
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];
 
-    if (size != settings[2] || aircraftChanged) {
+    if (size != settings[2]) {
         size = settings[2];
         resize();
     }
@@ -143,16 +105,10 @@ void vsi::update()
     // Convert feet per second to 100 feet per minute
     vertSpeed = abs(simVars->vsiVerticalSpeed * 0.6);
 
-    // Different scale after 10
-    if (vertSpeed > 10) {
-        targetAngle = 79.5 + (96.0 * (vertSpeed - 10.0)) / 20.0;
+    targetAngle = 3.44 * vertSpeed;  // 3.43
 
-        if (targetAngle > 175.5) {
-            targetAngle = 175.5;
-        }
-    }
-    else {
-        targetAngle = (79.5 * vertSpeed) / 10.0;
+    if (targetAngle > 145) {
+        targetAngle = 145;
     }
 
     if (simVars->vsiVerticalSpeed < 0) {
@@ -187,7 +143,7 @@ void vsi::update()
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void vsi::addVars()
+void vsiSpitfire::addVars()
 {
     globals.simVars->addVar(name, "Vertical Speed", false, 4, 0);
 }

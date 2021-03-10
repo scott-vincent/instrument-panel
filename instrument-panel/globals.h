@@ -20,6 +20,7 @@ enum Aircraft {
     SAVAGE_CUB,
     SHOCK_ULTRA,
     AIRBUS_A320NEO,
+    SUPERMARINE_SPITFIRE,
     OTHER_AIRCRAFT,
     OTHER_AIRCRAFT2
 };
@@ -36,6 +37,8 @@ struct globalVars
     const int Shock_Ultra_Len = 18;
     const char* Airbus_A320neo_Text = "Airbus A320 Neo";
     const int Airbus_A320neo_Len = 15;
+    const char* Supermarine_Spitfire_Text = "Supermarine Spitfire";
+    const int Supermarine_Spitfire_Len = 20;
     const int FastAircraftSpeed = 195;
 
     const char* BitmapDir = "bitmaps/";
