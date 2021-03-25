@@ -7,15 +7,19 @@ struct SimVars
 {
     double connected = 0;
 
+    // All Jetbridge vars must come first
+    double apuMasterSw = 0;
+    double apuStart = 0;
+    double apuStartAvail = 0;
+    double apuBleed = 0;
+
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
     double cruiseSpeed = 120;
     double dcVolts = 23.7;
 
     // Vars for Power/Lights panel
-    double apuPercentStart = 0;
     double apuPercentRpm = 0;
-    double apuBleed = 0;
 
     // Vars for Radio panel
     double com1Status = 0;

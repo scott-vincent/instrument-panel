@@ -4,15 +4,19 @@
 const char* versionString = "v1.5.1";
 
 const char* SimVarDefs[][2] = {
+    // Vars for Jetbridge (must come first)
+    { "Apu Master Sw", "jetbridge" },
+    { "Apu Start", "jetbridge" },
+    { "Apu Start Avail", "jetbridge" },
+    { "Apu Bleed", "jetbridge" },
+
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
     { "Estimated Cruise Speed", "knots" },
     { "Electrical Main Bus Voltage", "volts" },
 
     // Vars for Power/Lights panel
-    { "Apu Pct Starter", "percent" },
     { "Apu Pct Rpm", "percent" },
-    { "Bleed Air Apu", "bool" },
 
     // Vars for Radio panel
     { "Com Status:1", "enum" },

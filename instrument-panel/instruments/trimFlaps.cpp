@@ -227,6 +227,7 @@ void trimFlaps::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+        requestedTugHeading = simVars->hiHeadingTrue;
     }
 
     // Check for position or size change
@@ -276,13 +277,24 @@ void trimFlaps::update()
         double tugHeading = simVars->hiHeadingTrue;
 
         if (simVars->rudderPosition < -0.1) {
-            tugHeading += 90;
+            if (requestedTugHeading - tugHeading < 60) {
+                requestedTugHeading = tugHeading + 90;
+                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+            }
         }
         else if (simVars->rudderPosition > 0.1) {
-            tugHeading -= 90;
+            if (tugHeading - requestedTugHeading < 60) {
+                requestedTugHeading = tugHeading - 90;
+                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+            }
         }
-
-        globals.simVars->write(KEY_TUG_HEADING, tugHeading * 11930464);
+        else {
+            // Pushback straight
+            if (abs(tugHeading - requestedTugHeading) > 1) {
+                requestedTugHeading = tugHeading;
+                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+            }
+        }
     }
 
     // Warn if low altitude and flaps down but gear is up
