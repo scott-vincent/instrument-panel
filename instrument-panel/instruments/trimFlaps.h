@@ -14,6 +14,7 @@ private:
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     float trimOffset;
+    float rudderTrimOffset;
     float flapsOffset = 0;
     float targetFlaps;
     int gearUpWarning = 0;

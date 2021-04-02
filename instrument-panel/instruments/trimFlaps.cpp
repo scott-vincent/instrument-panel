@@ -120,6 +120,12 @@ void trimFlaps::resize()
     al_draw_scaled_bitmap(warn, 0, 0, 1, 1, 0, 0, size, size, 0);
     addBitmap(bmp);
 
+    // 15 = Rudder trim
+    bmp = al_create_bitmap(24 * scaleFactor, 40 * scaleFactor);
+    al_set_target_bitmap(bmp);
+    al_draw_scaled_bitmap(orig, 800, 96, 24, 40, 0, 0, 24 * scaleFactor, 40 * scaleFactor, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -148,6 +154,9 @@ void trimFlaps::render()
 
     // Add trim
     al_draw_bitmap(bitmaps[3], 262 * scaleFactor, (301 + trimOffset) * scaleFactor, 0);
+
+    // Add rudder trim
+    al_draw_bitmap(bitmaps[15], (270 + rudderTrimOffset) * scaleFactor, 481 * scaleFactor, 0);
 
     // Add flaps target
     al_draw_bitmap(bitmaps[5], 501 * scaleFactor, (161 + targetFlaps) * scaleFactor, 0);
@@ -258,6 +267,8 @@ void trimFlaps::update()
         trimOffset = 150;
     }
 
+    rudderTrimOffset = simVars->tfRudderTrim * 0.93;
+
     targetFlaps = 345.0 * simVars->tfFlapsIndex / simVars->tfFlapsCount;
 
     double diff = abs(targetFlaps - flapsOffset);
@@ -324,6 +335,7 @@ void trimFlaps::update()
 void trimFlaps::addVars()
 {
     globals.simVars->addVar(name, "Elevator Trim Position", false, 1, 0);
+    globals.simVars->addVar(name, "Rudder Trim Pct", false, 1, 0);
     globals.simVars->addVar(name, "Flaps Num Handle Positions", false, 1, 0);
     globals.simVars->addVar(name, "Flaps Handle Index", false, 1, 0);
     globals.simVars->addVar(name, "Is Gear Retractable", true, 1, 0);

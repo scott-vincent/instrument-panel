@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.5.1";
+const char* versionString = "v1.5.2";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
@@ -71,6 +71,7 @@ const char* SimVarDefs[][2] = {
     { "Turn Indicator Rate", "radians per second" },
     { "Turn Coordinator Ball", "position" },
     { "Elevator Trim Position", "degrees" },
+    { "Rudder Trim Pct", "percent" },
     { "Flaps Num Handle Positions", "number" },
     { "Flaps Handle Index", "number" },
     { "Spoilers Handle Position", "percent" },
