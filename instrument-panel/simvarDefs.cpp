@@ -33,6 +33,7 @@ const char* SimVarDefs[][2] = {
     { "Nav Standby Frequency:2", "mhz" },
     { "Adf Active Frequency:1", "khz" },
     { "Adf Standby Frequency:1", "khz" },
+    { "Transponder State:1", "enum" },
     { "Transponder Code:1", "bco16" },
 
     // Vars for Autopilot panel

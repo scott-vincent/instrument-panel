@@ -36,6 +36,7 @@ struct SimVars
     double nav2Standby = 113.90;
     double adfFreq = 394;
     double adfStandby = 368;
+    double transponderState = 0;
     double transponderCode = 4608;
     // No vars after here required by Radio panel
 
