@@ -17,6 +17,7 @@ enum Aircraft {
     NO_AIRCRAFT,
     CESSNA_152,
     CESSNA_172,
+    CESSNA_CJ4,
     SAVAGE_CUB,
     SHOCK_ULTRA,
     AIRBUS_A320NEO,
@@ -31,6 +32,8 @@ struct globalVars
     const int Cessna_152_Len = 10;
     const char* Cessna_172_Text = "Cessna Skyhawk";
     const int Cessna_172_Len = 14;
+    const char* Cessna_CJ4_Text = "Cessna CJ4";
+    const int Cessna_CJ4_Len = 10;
     const char* Savage_Cub_Text = "Asobo Savage Cub";
     const int Savage_Cub_Len = 16;
     const char* Shock_Ultra_Text = "Savage Shock Ultra";

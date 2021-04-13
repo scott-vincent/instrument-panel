@@ -738,6 +738,9 @@ void dataLink(simvars* t)
                         else if (strncmp(t->simVars.aircraft, globals.Cessna_172_Text, globals.Cessna_172_Len) == 0) {
                             globals.aircraft = CESSNA_172;
                         }
+                        else if (strncmp(t->simVars.aircraft, globals.Cessna_CJ4_Text, globals.Cessna_CJ4_Len) == 0) {
+                            globals.aircraft = CESSNA_CJ4;
+                        }
                         else if (strncmp(t->simVars.aircraft, globals.Savage_Cub_Text, globals.Savage_Cub_Len) == 0) {
                             globals.aircraft = SAVAGE_CUB;
                         }
