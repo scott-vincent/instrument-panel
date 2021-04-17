@@ -66,7 +66,7 @@ void receiveDelta(char *deltaData, long deltaSize, char* simVarsPtr)
         else {
             // Must be a string
             DeltaString* deltaString = (DeltaString*)dataPtr;
-            char* stringPtr = simVarsPtr + deltaString->offset;
+            char* stringPtr = simVarsPtr + deltaString->offset - 2048;
             strncpy(stringPtr, deltaString->data, 32);
 
             dataPtr += deltaStringSize;
