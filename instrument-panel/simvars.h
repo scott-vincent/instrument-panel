@@ -29,10 +29,7 @@ private:
 
     SOCKET writeSockfd = INVALID_SOCKET;
     sockaddr_in writeAddr;
-    struct {
-        long bytes;
-        WriteData writeData;
-    } sendBuffer;
+    Request request;
 
     int currentVar = 0;
     int varCount = 0;

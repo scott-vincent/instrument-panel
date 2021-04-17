@@ -99,6 +99,7 @@
     <ClCompile Include="instruments\spitfire\vsiSpitfire.cpp">
       <Filter>instruments\Spitfire</Filter>
     </ClCompile>
+    <ClCompile Include="globals.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />

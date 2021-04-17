@@ -6,6 +6,7 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     -I instruments \
     simvarDefs.cpp \
     simvars.cpp \
+    globals.cpp \
     knobs.cpp \
     instrument.cpp \
     instruments/adf.cpp \

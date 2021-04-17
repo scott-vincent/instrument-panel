@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="instrument-panel.cpp" />
     <ClCompile Include="instrument.cpp" />
     <ClCompile Include="instruments\adf.cpp" />

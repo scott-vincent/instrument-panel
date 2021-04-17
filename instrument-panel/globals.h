@@ -5,7 +5,7 @@
 #include <allegro5/allegro_font.h>
 
 #ifndef _WIN32
-#include <strings.h>
+#include <cstring>
 #define _stricmp strcasecmp
 #endif
 
@@ -65,6 +65,7 @@ struct globalVars
     int dataLinkPort = 52020;
     int startOnMonitor = 0;
     Aircraft aircraft;
+    char lastAircraft[32];
 
     bool quit = false;
     bool arranging = false;

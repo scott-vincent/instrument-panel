@@ -126,7 +126,7 @@ struct SimVars
     double suctionPressure = 1;
     char atcTailNumber[32] = "\0";
     char atcCallSign[32] = "\0";
-    char atcFlightNumber[8] = "\0";
+    char atcFlightNumber[32] = "\0";
     double atcHeavy = 0;
 };
 
@@ -235,6 +235,22 @@ struct WriteEvent {
 struct WriteData {
     EVENT_ID eventId;
     double value;
+};
+
+struct Request {
+    long requestedSize;
+    long wantFullData;
+    WriteData writeData;
+};
+
+struct DeltaDouble {
+    long offset;
+    double data;
+};
+
+struct DeltaString {
+    long offset;
+    char data[32];
 };
 
 #endif // _SIMVARDEFS_H_

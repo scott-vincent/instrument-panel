@@ -122,7 +122,7 @@ const char* SimVarDefs[][2] = {
     { "Suction Pressure", "inches of mercury" },
     { "Atc Id", "string32" },
     { "Atc Airline", "string32" },
-    { "Atc Flight Number", "string8" },
+    { "Atc Flight Number", "string32" },
     { "Atc Heavy", "bool" },
     { NULL, NULL }
 };

@@ -14,9 +14,11 @@ const char *MonitorGroup = "Monitor";
 const char *MonitorStartOn = "StartOn";
 
 extern const char* SimVarDefs[][2];
-char lastAircraft[256] = "\0";
+char deltaData[2048];
 
 void dataLink(simvars*);
+void identifyAircraft(char* aircraft);
+void receiveDelta(char* deltaData, long deltaSize, char* simVarsPtr);
 void showError(const char* msg);
 void fatalError(const char* msg);
 
@@ -640,9 +642,9 @@ void simvars::write(EVENT_ID eventId, double value)
         return;
     }
 
-    sendBuffer.bytes = sizeof(WriteData);
-    sendBuffer.writeData.eventId = eventId;
-    sendBuffer.writeData.value = value;
+    request.requestedSize = sizeof(WriteData);
+    request.writeData.eventId = eventId;
+    request.writeData.value = value;
 
     if (writeSockfd == INVALID_SOCKET) {
         if ((writeSockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
@@ -657,7 +659,7 @@ void simvars::write(EVENT_ID eventId, double value)
         inet_pton(AF_INET, globals.dataLinkHost, &writeAddr.sin_addr);
     }
 
-    int bytes = sendto(writeSockfd, (char*)&sendBuffer, sizeof(sendBuffer), 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
+    int bytes = sendto(writeSockfd, (char*)&request, sizeof(request), 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
     if (bytes <= 0) {
         sprintf(globals.error, "Failed to write event %d", eventId);
     }
@@ -703,18 +705,21 @@ void dataLink(simvars* t)
     timeout.tv_usec = 500000;
 
     long dataSize = sizeof(SimVars);
+    Request request;
+    request.requestedSize = dataSize;
+    request.wantFullData = 1;   // Want full data on first connect
     long actualSize;
     int bytes;
 
     // Detect current aircraft and convert to an int.
     // We do this here to save having to do it for each instrument.
     globals.aircraft = NO_AIRCRAFT;
-    strcpy(lastAircraft, "");
+    strcpy(globals.lastAircraft, "");
 
     int selFail = 0;
     while (!globals.quit) {
         // Poll instrument data link
-        bytes = sendto(sockfd, (char*)&dataSize, sizeof(long), 0, (SOCKADDR*)&addr, sizeof(addr));
+        bytes = sendto(sockfd, (char*)&request, sizeof(request), 0, (SOCKADDR*)&addr, sizeof(addr));
 
         if (bytes > 0) {
             fd_set fds;
@@ -723,53 +728,27 @@ void dataLink(simvars* t)
 
             int sel = select(FD_SETSIZE, &fds, 0, 0, &timeout);
             if (sel > 0) {
-                // Receive latest data
-                bytes = recv(sockfd, (char*)&t->simVars, dataSize, 0);
+                // Receive latest data (delta will never be larger than full data size)
+                bytes = recv(sockfd, deltaData, dataSize, 0);
 
                 if (bytes == dataSize) {
+                    // Full data received
+                    memcpy((char*)&t->simVars, deltaData, dataSize);
+                    request.wantFullData = 0;   // Want deltas from now on
                     globals.dataLinked = true;
                     globals.connected = (t->simVars.connected == 1);
-
-                    // Identify aircraft
-                    if (strcmp(t->simVars.aircraft, lastAircraft) != 0) {
-                        if (strncmp(t->simVars.aircraft, globals.Cessna_152_Text, globals.Cessna_152_Len) == 0) {
-                            globals.aircraft = CESSNA_152;
-                        }
-                        else if (strncmp(t->simVars.aircraft, globals.Cessna_172_Text, globals.Cessna_172_Len) == 0) {
-                            globals.aircraft = CESSNA_172;
-                        }
-                        else if (strncmp(t->simVars.aircraft, globals.Cessna_CJ4_Text, globals.Cessna_CJ4_Len) == 0) {
-                            globals.aircraft = CESSNA_CJ4;
-                        }
-                        else if (strncmp(t->simVars.aircraft, globals.Savage_Cub_Text, globals.Savage_Cub_Len) == 0) {
-                            globals.aircraft = SAVAGE_CUB;
-                        }
-                        else if (strncmp(t->simVars.aircraft, globals.Shock_Ultra_Text, globals.Shock_Ultra_Len) == 0) {
-                            globals.aircraft = SHOCK_ULTRA;
-                        }
-                        else if (strncmp(t->simVars.aircraft, globals.Airbus_A320neo_Text, globals.Airbus_A320neo_Len) == 0) {
-                            globals.aircraft = AIRBUS_A320NEO;
-                        }
-                        else if (strncmp(t->simVars.aircraft, globals.Supermarine_Spitfire_Text, globals.Supermarine_Spitfire_Len) == 0) {
-                            globals.aircraft = SUPERMARINE_SPITFIRE;
-                        }
-                        else {
-                            // Need to flip between other aircraft so that instruments
-                            // can detect the aircraft has changed.
-                            if (globals.aircraft == OTHER_AIRCRAFT) {
-                                globals.aircraft = OTHER_AIRCRAFT2;
-                            }
-                            else {
-                                globals.aircraft = OTHER_AIRCRAFT;
-                            }
-                        }
-                        strcpy(lastAircraft, t->simVars.aircraft);
-                    }
+                    identifyAircraft(t->simVars.aircraft);
+                }
+                else if (bytes == sizeof(long)) {
+                    // Data size mismatch
+                    memcpy(&actualSize, &t->simVars, sizeof(long));
+                    sprintf(errMsg, "DataLink: Requested %ld bytes but server has %ld bytes\n", request.requestedSize, actualSize);
+                    fatalError(errMsg);
                 }
                 else if (bytes > 0) {
-                    memcpy(&actualSize, &t->simVars, sizeof(long));
-                    sprintf(errMsg, "DataLink: Requested %ld bytes but server has %ld bytes\n", dataSize, actualSize);
-                    fatalError(errMsg);
+                    // Delta received
+                    receiveDelta(deltaData, bytes, (char*)&t->simVars);
+                    identifyAircraft(t->simVars.aircraft);
                 }
                 else {
                     bytes = SOCKET_ERROR;
@@ -791,7 +770,8 @@ void dataLink(simvars* t)
             globals.dataLinked = false;
             globals.connected = false;
             globals.aircraft = NO_AIRCRAFT;
-            strcpy(lastAircraft, "");
+            strcpy(globals.lastAircraft, "");
+            request.wantFullData = 1;
         }
 
         // Update 30 times per second
