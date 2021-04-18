@@ -29,7 +29,7 @@ private:
 
     SOCKET writeSockfd = INVALID_SOCKET;
     sockaddr_in writeAddr;
-    Request request;
+    Request writeRequest;
 
     int currentVar = 0;
     int varCount = 0;

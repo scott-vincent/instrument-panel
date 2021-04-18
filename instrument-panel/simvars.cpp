@@ -14,6 +14,9 @@ const char *MonitorGroup = "Monitor";
 const char *MonitorStartOn = "StartOn";
 
 extern const char* SimVarDefs[][2];
+bool prevConnected = false;
+long dataSize;
+Request request;
 char deltaData[2048];
 
 void dataLink(simvars*);
@@ -642,9 +645,9 @@ void simvars::write(EVENT_ID eventId, double value)
         return;
     }
 
-    request.requestedSize = sizeof(WriteData);
-    request.writeData.eventId = eventId;
-    request.writeData.value = value;
+    writeRequest.requestedSize = sizeof(WriteData);
+    writeRequest.writeData.eventId = eventId;
+    writeRequest.writeData.value = value;
 
     if (writeSockfd == INVALID_SOCKET) {
         if ((writeSockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET) {
@@ -659,19 +662,50 @@ void simvars::write(EVENT_ID eventId, double value)
         inet_pton(AF_INET, globals.dataLinkHost, &writeAddr.sin_addr);
     }
 
-    int bytes = sendto(writeSockfd, (char*)&request, sizeof(request), 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
+    int bytes = sendto(writeSockfd, (char*)&writeRequest, sizeof(writeRequest), 0, (SOCKADDR*)&writeAddr, sizeof(writeAddr));
     if (bytes <= 0) {
         sprintf(globals.error, "Failed to write event %d", eventId);
     }
+}
+
+void resetConnection()
+{
+    dataSize = sizeof(SimVars);
+    request.requestedSize = dataSize;
+
+    // Want full data on first connect
+    request.wantFullData = 1;
+
+    globals.dataLinked = false;
+    globals.connected = false;
+    globals.aircraft = NO_AIRCRAFT;
+    strcpy(globals.lastAircraft, "");
+}
+
+/// <summary>
+/// New data received so perform various checks
+/// </summary>
+void processData(simvars* thisPtr)
+{
+    globals.dataLinked = true;
+    globals.connected = (thisPtr->simVars.connected == 1);
+
+    identifyAircraft(thisPtr->simVars.aircraft);
 }
 
 /// <summary>
 /// A separate thread constantly collects the latest
 /// SimVar values from instrument-data-link.
 /// </summary>
-void dataLink(simvars* t)
+void dataLink(simvars* thisPtr)
 {
     char errMsg[256];
+    timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 500000;
+    long actualSize;
+    int bytes;
+    int selFail = 0;
 
 #ifdef _WIN32
     WSADATA wsaData;
@@ -700,23 +734,8 @@ void dataLink(simvars* t)
         fatalError(errMsg);
     }
 
-    timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 500000;
+    resetConnection();
 
-    long dataSize = sizeof(SimVars);
-    Request request;
-    request.requestedSize = dataSize;
-    request.wantFullData = 1;   // Want full data on first connect
-    long actualSize;
-    int bytes;
-
-    // Detect current aircraft and convert to an int.
-    // We do this here to save having to do it for each instrument.
-    globals.aircraft = NO_AIRCRAFT;
-    strcpy(globals.lastAircraft, "");
-
-    int selFail = 0;
     while (!globals.quit) {
         // Poll instrument data link
         bytes = sendto(sockfd, (char*)&request, sizeof(request), 0, (SOCKADDR*)&addr, sizeof(addr));
@@ -731,24 +750,26 @@ void dataLink(simvars* t)
                 // Receive latest data (delta will never be larger than full data size)
                 bytes = recv(sockfd, deltaData, dataSize, 0);
 
-                if (bytes == dataSize) {
-                    // Full data received
-                    memcpy((char*)&t->simVars, deltaData, dataSize);
-                    request.wantFullData = 0;   // Want deltas from now on
-                    globals.dataLinked = true;
-                    globals.connected = (t->simVars.connected == 1);
-                    identifyAircraft(t->simVars.aircraft);
-                }
-                else if (bytes == sizeof(long)) {
+                if (bytes == sizeof(long)) {
                     // Data size mismatch
-                    memcpy(&actualSize, &t->simVars, sizeof(long));
+                    memcpy(&actualSize, &thisPtr->simVars, sizeof(long));
                     sprintf(errMsg, "DataLink: Requested %ld bytes but server has %ld bytes\n", request.requestedSize, actualSize);
                     fatalError(errMsg);
                 }
                 else if (bytes > 0) {
-                    // Delta received
-                    receiveDelta(deltaData, bytes, (char*)&t->simVars);
-                    identifyAircraft(t->simVars.aircraft);
+                    if (bytes == dataSize) {
+                        // Full data received
+                        memcpy((char*)&thisPtr->simVars, deltaData, dataSize);
+
+                        // Want deltas from now on
+                        request.wantFullData = 0;
+                    }
+                    else {
+                        // Delta received
+                        receiveDelta(deltaData, bytes, (char*)&thisPtr->simVars);
+                    }
+
+                    processData(thisPtr);
                 }
                 else {
                     bytes = SOCKET_ERROR;
@@ -767,11 +788,7 @@ void dataLink(simvars* t)
         }
 
         if (bytes == SOCKET_ERROR && globals.dataLinked) {
-            globals.dataLinked = false;
-            globals.connected = false;
-            globals.aircraft = NO_AIRCRAFT;
-            strcpy(globals.lastAircraft, "");
-            request.wantFullData = 1;
+            resetConnection();
         }
 
         // Update 30 times per second
