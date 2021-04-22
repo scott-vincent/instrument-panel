@@ -25,8 +25,11 @@ void identifyAircraft(char* aircraft)
         else if (strncmp(aircraft, globals.Shock_Ultra_Text, globals.Shock_Ultra_Len) == 0) {
             globals.aircraft = SHOCK_ULTRA;
         }
-        else if (strncmp(aircraft, globals.Airbus_A320neo_Text, globals.Airbus_A320neo_Len) == 0) {
-            globals.aircraft = AIRBUS_A320NEO;
+        else if (strncmp(aircraft, globals.Asobo_A320neo_Text, globals.Asobo_A320neo_Len) == 0) {
+            globals.aircraft = ASOBO_A320NEO;
+        }
+        else if (strncmp(aircraft, globals.FBW_A320neo_Text, globals.FBW_A320neo_Len) == 0) {
+            globals.aircraft = FBW_A320NEO;
         }
         else if (strncmp(aircraft, globals.Supermarine_Spitfire_Text, globals.Supermarine_Spitfire_Len) == 0) {
             globals.aircraft = SUPERMARINE_SPITFIRE;
