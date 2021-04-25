@@ -9,6 +9,8 @@ const char* SimVarDefs[][2] = {
     { "Apu Start", "jetbridge" },
     { "Apu Start Avail", "jetbridge" },
     { "Apu Bleed", "jetbridge" },
+    { "Elec Bat1", "jetbridge" },
+    { "Elec Bat2", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
