@@ -167,7 +167,10 @@
     <ClCompile Include="instruments\alt.cpp" />
     <ClCompile Include="instruments\alternate\altFast.cpp" />
     <ClCompile Include="instruments\alternate\asiFast.cpp" />
+    <ClCompile Include="instruments\alternate\asiSupersonic.cpp" />
+    <ClCompile Include="instruments\alternate\gForce.cpp" />
     <ClCompile Include="instruments\alternate\rpmPercent.cpp" />
+    <ClCompile Include="instruments\alternate\vsiExtreme.cpp" />
     <ClCompile Include="instruments\annunciator.cpp" />
     <ClCompile Include="instruments\asi.cpp" />
     <ClCompile Include="instruments\digitalClock.cpp" />
@@ -205,7 +208,10 @@
     <ClInclude Include="instruments\alt.h" />
     <ClInclude Include="instruments\alternate\altFast.h" />
     <ClInclude Include="instruments\alternate\asiFast.h" />
+    <ClInclude Include="instruments\alternate\asiSupersonic.h" />
+    <ClInclude Include="instruments\alternate\gForce.h" />
     <ClInclude Include="instruments\alternate\rpmPercent.h" />
+    <ClInclude Include="instruments\alternate\vsiExtreme.h" />
     <ClInclude Include="instruments\annunciator.h" />
     <ClInclude Include="instruments\asi.h" />
     <ClInclude Include="instruments\digitalClock.h" />

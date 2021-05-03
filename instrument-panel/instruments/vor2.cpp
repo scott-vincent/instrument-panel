@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "vor2.h"
+#include "alternate/gForce.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -96,6 +97,11 @@ void vor2::render()
         return;
     }
 
+    if (customInstrument) {
+        customInstrument->render();
+        return;
+    }
+
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
 
@@ -140,6 +146,27 @@ void vor2::render()
 /// </summary>
 void vor2::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+
+        // Load custom instrument for this aircraft if we have one
+        if (customInstrument) {
+            delete customInstrument;
+            customInstrument = NULL;
+        }
+
+        if (loadedAircraft == F15_EAGLE) {
+            customInstrument = new gForce(xPos, yPos, size, name);
+        }
+    }
+
+    if (customInstrument) {
+        customInstrument->update();
+        return;
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 

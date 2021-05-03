@@ -12,6 +12,7 @@ private:
     SimVars* simVars;
     Aircraft loadedAircraft = UNDEFINED;
     bool fastAircraft = false;
+    bool supersonicAircraft = false;
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)

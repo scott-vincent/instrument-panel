@@ -3,6 +3,7 @@
 #include <math.h>
 #include "asi.h"
 #include "alternate/asiFast.h"
+#include "alternate/asiSupersonic.h"
 #include "savageCub/asiSavageCub.h"
 #include "spitfire/asiSpitfire.h"
 #include "simvars.h"
@@ -145,6 +146,7 @@ void asi::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+        supersonicAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.SupersonicAircraftSpeed);
 
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
@@ -157,6 +159,9 @@ void asi::update()
         }
         else if (loadedAircraft == SUPERMARINE_SPITFIRE) {
             customInstrument = new asiSpitfire(xPos, yPos, size, name);
+        }
+        else if (supersonicAircraft) {
+            customInstrument = new asiSupersonic(xPos, yPos, size, name);
         }
         else if (fastAircraft) {
             customInstrument = new asiFast(xPos, yPos, size, name);

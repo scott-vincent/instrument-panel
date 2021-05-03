@@ -100,6 +100,15 @@
       <Filter>instruments\Spitfire</Filter>
     </ClCompile>
     <ClCompile Include="globals.cpp" />
+    <ClCompile Include="instruments\alternate\asiSupersonic.cpp">
+      <Filter>instruments\alternate</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\alternate\vsiExtreme.cpp">
+      <Filter>instruments\alternate</Filter>
+    </ClCompile>
+    <ClCompile Include="instruments\alternate\gForce.cpp">
+      <Filter>instruments\alternate</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -199,6 +208,15 @@
     </ClInclude>
     <ClInclude Include="instruments\spitfire\vsiSpitfire.h">
       <Filter>instruments\Spitfire</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\alternate\asiSupersonic.h">
+      <Filter>instruments\alternate</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\alternate\vsiExtreme.h">
+      <Filter>instruments\alternate</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\alternate\gForce.h">
+      <Filter>instruments\alternate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "vsiSpitfire.h"
+#include "gForce.h"
 
-vsiSpitfire::vsiSpitfire(int xPos, int yPos, int size, const char *parentName) : instrument(xPos, yPos, size)
+gForce::gForce(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
 {
     if (parentName) {
         // Use position, size and vars from parent
         setName(parentName);
     }
     else {
-        setName("VSI Spitfire");
+        setName("G Force");
         addVars();
     }
 
@@ -21,7 +21,7 @@ vsiSpitfire::vsiSpitfire(int xPos, int yPos, int size, const char *parentName) :
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void vsiSpitfire::resize()
+void gForce::resize()
 {
     destroyBitmaps();
 
@@ -29,7 +29,7 @@ void vsiSpitfire::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("vsi-spitfire.png");
+    ALLEGRO_BITMAP* orig = loadBitmap("g-force.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -58,7 +58,7 @@ void vsiSpitfire::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void vsiSpitfire::render()
+void gForce::render()
 {
     if (bitmaps[0] == NULL) {
         return;
@@ -74,7 +74,7 @@ void vsiSpitfire::render()
     al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
     // Add pointer
-    al_draw_scaled_rotated_bitmap(bitmaps[3], 40, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, (angle - 90) * DegreesToRadians, 0);
+    al_draw_scaled_rotated_bitmap(bitmaps[3], 40, 400, 400 * scaleFactor, 400 * scaleFactor, scaleFactor, scaleFactor, angle * DegreesToRadians, 0);
 
     // Position dest bitmap on screen
     al_set_target_backbuffer(globals.display);
@@ -89,7 +89,7 @@ void vsiSpitfire::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void vsiSpitfire::update()
+void gForce::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -102,48 +102,20 @@ void vsiSpitfire::update()
         resize();
     }
 
-    // Convert feet per second to 100 feet per minute
-    vertSpeed = abs(simVars->vsiVerticalSpeed * 0.6);
-
-    targetAngle = 3.44 * vertSpeed;
-
-    if (targetAngle > 145) {
-        targetAngle = 145;
+    // Calculate values
+    angle = -112.5 + simVars->gForce * 22.5;
+    if (angle < -225) {
+        angle = -225;
     }
-
-    if (simVars->vsiVerticalSpeed < 0) {
-        targetAngle = -targetAngle;
-    }
-
-    double diff = abs(targetAngle - angle);
-
-    if (diff > 40.0) {
-        if (angle < targetAngle) angle += 20.0; else angle -= 20.0;
-    }
-    else if (diff > 20.0) {
-        if (angle < targetAngle) angle += 10.0; else angle -= 10.0;
-    }
-    else if (diff > 10.0) {
-        if (angle < targetAngle) angle += 5.0; else angle -= 5.0;
-    }
-    else if (diff > 5.0) {
-        if (angle < targetAngle) angle += 2.5; else angle -= 2.5;
-    }
-    else if (diff > 2.5) {
-        if (angle < targetAngle) angle += 1.25; else angle -= 1.25;
-    }
-    else if (diff > 0.625) {
-        if (angle < targetAngle) angle += 0.625; else angle -= 0.625;
-    }
-    else {
-        angle = targetAngle;
+    else if (angle > 112.5) {
+        angle = 112.5;
     }
 }
 
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void vsiSpitfire::addVars()
+void gForce::addVars()
 {
-    globals.simVars->addVar(name, "Vertical Speed", false, 4, 0);
+    globals.simVars->addVar(name, "G Force", false, 1, 0);
 }

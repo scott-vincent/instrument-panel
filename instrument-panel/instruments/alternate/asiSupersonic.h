@@ -1,10 +1,10 @@
-#ifndef _NEW_INSTRUMENT_H_
-#define _NEW_INSTRUMENT_H_
+#ifndef _ASI_SUPERSONIC_H_
+#define _ASI_SUPERSONIC_H_
 
 #include "simvars.h"
 #include "instrument.h"
 
-class newInstrument : public instrument
+class asiSupersonic : public instrument
 {
 private:
     SimVars* simVars;
@@ -13,19 +13,15 @@ private:
     // Instrument values (calculated from variables and needed to draw the instrument)
     double angle;
 
-    // Hardware knobs
-    int calKnob = -1;
-
 public:
-    newInstrument(int xPos, int yPos, int size);
+    asiSupersonic(int xPos, int yPos, int size, const char *parentName = NULL);
     void render();
     void update();
 
 private:
     void resize();
     void addVars();
-    void addKnobs();
-    void updateKnobs();
+
 };
 
-#endif // _NEW_INSTRUMENT_H
+#endif // _ASI_SUPERSONIC_H

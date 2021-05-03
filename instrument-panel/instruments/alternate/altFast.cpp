@@ -165,7 +165,14 @@ void altFast::render()
     // Display Dial
     al_draw_scaled_bitmap(bitmaps[0], 240, 312, 800, 800, 0, 0, size, size, 0);
 
-    angle = (altitude - (int)(altitude / 100) * 100.0) * 3.6 * DegreesToRadians;
+    if (globals.aircraft == F15_EAGLE) {
+        // Needle shows 1000's of feet
+        angle = (altitude - (int)(altitude / 1000) * 1000.0) * 0.36 * DegreesToRadians;
+    }
+    else {
+        // Needle shows 100's of feet
+        angle = (altitude - (int)(altitude / 100) * 100.0) * 3.6 * DegreesToRadians;
+    }
 
     if (globals.enableShadows) {
         // Fill shadow_background bitmap with white

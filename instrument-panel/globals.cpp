@@ -34,6 +34,9 @@ void identifyAircraft(char* aircraft)
         else if (strncmp(aircraft, globals.Supermarine_Spitfire_Text, globals.Supermarine_Spitfire_Len) == 0) {
             globals.aircraft = SUPERMARINE_SPITFIRE;
         }
+        else if (strncmp(aircraft, globals.F15_Eagle_Text, globals.F15_Eagle_Len) == 0) {
+            globals.aircraft = F15_EAGLE;
+        }
         else {
             // Need to flip between other aircraft so that instruments
             // can detect the aircraft has changed.

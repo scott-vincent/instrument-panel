@@ -31,7 +31,10 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instrument-panel.cpp \
     instruments/alternate/altFast.cpp \
     instruments/alternate/asiFast.cpp \
+    instruments/alternate/asiSupersonic.cpp \
+    instruments/alternate/gForce.cpp \
     instruments/alternate/rpmPercent.cpp \
+    instruments/alternate/vsiExtreme.cpp \
     instruments/learjet/adiLearjet.cpp \
     instruments/savageCub/asiSavageCub.cpp \
     instruments/savageCub/rpmSavageCub.cpp \

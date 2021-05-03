@@ -1,28 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "newInstrument.h"
-#include "knobs.h"
+#include <math.h>
+#include "vsiExtreme.h"
 
-newInstrument::newInstrument(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
+vsiExtreme::vsiExtreme(int xPos, int yPos, int size, const char *parentName) : instrument(xPos, yPos, size)
 {
-    setName("New Instrument");
-    addVars();
-    simVars = &globals.simVars->simVars;
-
-#ifndef _WIN32
-    // Only have hardware knobs on Raspberry Pi
-    if (globals.hardwareKnobs) {
-        addKnobs();
+    if (parentName) {
+        // Use position, size and vars from parent
+        setName(parentName);
     }
-#endif
+    else {
+        setName("VSI Extreme");
+        addVars();
+    }
 
+    simVars = &globals.simVars->simVars;
     resize();
 }
 
 /// <summary>
 /// Destroy and recreate all bitmaps as instrument has been resized
 /// </summary>
-void newInstrument::resize()
+void vsiExtreme::resize()
 {
     destroyBitmaps();
 
@@ -30,7 +29,7 @@ void newInstrument::resize()
     scaleFactor = size / 800.0f;
 
     // 0 = Original (loaded) bitmap
-    ALLEGRO_BITMAP* orig = loadBitmap("new-instrument.png");
+    ALLEGRO_BITMAP* orig = loadBitmap("vsi-extreme.png");
     addBitmap(orig);
 
     if (bitmaps[0] == NULL) {
@@ -65,7 +64,7 @@ void newInstrument::resize()
 /// <summary>
 /// Draw the instrument at the stored position
 /// </summary>
-void newInstrument::render()
+void vsiExtreme::render()
 {
     if (bitmaps[0] == NULL) {
         return;
@@ -107,7 +106,7 @@ void newInstrument::render()
 /// Fetch flightsim vars and then update all internal variables
 /// that affect this instrument.
 /// </summary>
-void newInstrument::update()
+void vsiExtreme::update()
 {
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
@@ -120,45 +119,54 @@ void newInstrument::update()
         resize();
     }
 
-#ifndef _WIN32
-    // Only have hardware knobs on Raspberry Pi
-    if (globals.hardwareKnobs) {
-        updateKnobs();
-    }
-#endif
+    // Convert feet per second to 1000 feet per minute
+    vertSpeed = abs(simVars->vsiVerticalSpeed * 0.06);
 
-    // Calculate values
-    angle = simVars->adiBank / 100.0;
+    // Different scale after 2
+    if (vertSpeed > 2) {
+        targetAngle = 79.5 + (vertSpeed - 2.0) * 96.5 / 4.0;
+
+        if (targetAngle > 175.5) {
+            targetAngle = 175.5;
+        }
+    }
+    else {
+        targetAngle = vertSpeed * 79.5 / 2.0;
+    }
+
+    if (simVars->vsiVerticalSpeed < 0) {
+        targetAngle = -targetAngle;
+    }
+
+    double diff = abs(targetAngle - angle);
+
+    if (diff > 40.0) {
+        if (angle < targetAngle) angle += 20.0; else angle -= 20.0;
+    }
+    else if (diff > 20.0) {
+        if (angle < targetAngle) angle += 10.0; else angle -= 10.0;
+    }
+    else if (diff > 10.0) {
+        if (angle < targetAngle) angle += 5.0; else angle -= 5.0;
+    }
+    else if (diff > 5.0) {
+        if (angle < targetAngle) angle += 2.5; else angle -= 2.5;
+    }
+    else if (diff > 2.5) {
+        if (angle < targetAngle) angle += 1.25; else angle -= 1.25;
+    }
+    else if (diff > 0.625) {
+        if (angle < targetAngle) angle += 0.625; else angle -= 0.625;
+    }
+    else {
+        angle = targetAngle;
+    }
 }
 
 /// <summary>
 /// Add FlightSim variables for this instrument (used for simulation mode)
 /// </summary>
-void newInstrument ::addVars()
+void vsiExtreme::addVars()
 {
-    //globals.simVars->addVar(name, "Value", false, 1, 0);
+    globals.simVars->addVar(name, "Vertical Speed", false, 4, 0);
 }
-
-#ifndef _WIN32
-
-void newInstrument::addKnobs()
-{
-    // BCM GPIO 2 and 3
-    calKnob = globals.hardwareKnobs->add(2, 3, -100, 100, 0);
-}
-
-void newInstrument::updateKnobs()
-{
-    // Read knob for new instrument calibration
-    int val = globals.hardwareKnobs->read(calKnob);
-
-    if (val != INT_MIN) {
-        // Convert knob value to new instrument value (adjust for desired sensitivity)
-        double simVarVal = val / 10;
-
-        // Update new instrument variable
-        //globals.simVars->write("simvar", simVarVal);
-    }
-}
-
-#endif // !_WIN32

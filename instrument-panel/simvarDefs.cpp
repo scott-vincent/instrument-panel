@@ -122,6 +122,7 @@ const char* SimVarDefs[][2] = {
     { "Eng Manifold Pressure:1", "inches of mercury" },
     { "Eng Fuel Flow GPH:1", "gallons per hour" },
     { "Suction Pressure", "inches of mercury" },
+    { "G Force", "gforce"},
     { "Atc Id", "string32" },
     { "Atc Airline", "string32" },
     { "Atc Flight Number", "string32" },

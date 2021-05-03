@@ -3,6 +3,7 @@
 #include <math.h>
 #include "vsi.h"
 #include "spitfire/vsiSpitfire.h"
+#include "alternate/vsiExtreme.h"
 #include "simvars.h"
 
 vsi::vsi(int xPos, int yPos, int size) : instrument(xPos, yPos, size)
@@ -121,6 +122,9 @@ void vsi::update()
 
         if (loadedAircraft == SUPERMARINE_SPITFIRE) {
             customInstrument = new vsiSpitfire(xPos, yPos, size, name);
+        }
+        else if (loadedAircraft == F15_EAGLE) {
+            customInstrument = new vsiExtreme(xPos, yPos, size, name);
         }
     }
 
