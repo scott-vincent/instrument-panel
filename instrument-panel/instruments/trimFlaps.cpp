@@ -310,7 +310,7 @@ void trimFlaps::update()
 
     // Warn if low altitude and flaps down but gear is up
     if (simVars->tfFlapsIndex > 0 && simVars->altAboveGround < 400 && simVars->altAboveGround > 30 && simVars->gearRetractable
-        && simVars->gearCentrePos < 20 && simVars->vsiVerticalSpeed < 0)
+        && simVars->gearLeftPos < 20 && simVars->vsiVerticalSpeed < 0)
     {
         if (simVars->altAboveGround > 300) {
             // Warning 1
