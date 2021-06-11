@@ -185,7 +185,8 @@ void simvars::saveSettings()
         fprintf(outfile, "{\n");
         fprintf(outfile, "  \"%s\": {\n", DataLinkGroup);
         fprintf(outfile, "    \"%s\": \"%s\",\n", DataLinkHost, globals.dataLinkHost);
-        fprintf(outfile, "    \"%s\": %d\n", DataLinkPort, globals.dataLinkPort);
+        fprintf(outfile, "    \"%s\": %d,\n", DataLinkPort, globals.dataLinkPort);
+        fprintf(outfile, "    \"%s\": %d\n", DataRateFps, globals.dataRateFps);
         fprintf(outfile, "  },\n");
 
         if (globals.startOnMonitor != 0) {
