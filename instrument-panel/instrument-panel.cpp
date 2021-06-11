@@ -200,7 +200,6 @@ void init(const char *settingsFile = NULL)
     al_inhibit_screensaver(true);
 
     al_register_event_source(eventQueue, al_get_keyboard_event_source());
-    al_register_event_source(eventQueue, al_get_timer_event_source(timer));
     al_register_event_source(eventQueue, al_get_display_event_source(globals.display));
 
     globals.simVars = new simvars(settingsFile);
@@ -208,6 +207,8 @@ void init(const char *settingsFile = NULL)
     if (!(timer = al_create_timer(1.0 / globals.dataRateFps))) {
         fatalError("Failed to create timer");
     }
+
+    al_register_event_source(eventQueue, al_get_timer_event_source(timer));
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
