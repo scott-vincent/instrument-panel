@@ -38,6 +38,7 @@ struct SimVars
     double nav2Standby = 113.90;
     double adfFreq = 394;
     double adfStandby = 368;
+    double seatBeltsSwitch = 0;
     double transponderState = 0;
     double transponderCode = 4608;
     // No vars after here required by Radio panel
@@ -211,6 +212,9 @@ enum EVENT_ID {
     KEY_APU_STARTER,
     KEY_APU_OFF_SWITCH,
     KEY_BLEED_AIR_SOURCE_CONTROL_SET,
+    KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE,
+    KEY_CHECK_CREW_SEATS,
+    KEY_TOGGLE_PUSHBACK,
     VJOY_BUTTONS,
     // Buttons must start from 1 and must be sequential until VJOY_BUTTONS_END
     VJOY_BUTTON_1,

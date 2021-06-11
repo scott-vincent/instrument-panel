@@ -35,6 +35,7 @@ const char* SimVarDefs[][2] = {
     { "Nav Standby Frequency:2", "mhz" },
     { "Adf Active Frequency:1", "khz" },
     { "Adf Standby Frequency:1", "khz" },
+    { "Cabin Seatbelts Alert Switch", "bool" },
     { "Transponder State:1", "enum" },
     { "Transponder Code:1", "bco16" },
 
@@ -206,6 +207,9 @@ WriteEvent WriteEvents[] = {
     { KEY_APU_OFF_SWITCH, "APU_OFF_SWITCH" },
     { KEY_APU_STARTER, "APU_STARTER" },
     { KEY_BLEED_AIR_SOURCE_CONTROL_SET, "BLEED_AIR_SOURCE_CONTROL_SET" },
+    { KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE, "CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE" },
+    { KEY_CHECK_CREW_SEATS, "CHECK_CREW_SEATS" },
+    { KEY_TOGGLE_PUSHBACK, "TOGGLE_PUSHBACK" },
     { VJOY_BUTTONS, "VJOY_BUTTONS" },
     { VJOY_BUTTON_1, "VJOY_BUTTON_1" },
     { VJOY_BUTTON_2, "VJOY_BUTTON_2" },
