@@ -10,6 +10,7 @@
 const char *DataLinkGroup = "Data Link";
 const char *DataLinkHost = "Host";
 const char *DataLinkPort = "Port";
+const char* DataRateFps = "Data Rate FPS";
 const char *MonitorGroup = "Monitor";
 const char *MonitorStartOn = "StartOn";
 
@@ -119,6 +120,9 @@ void simvars::loadSettings()
                     }
                     else if (_stricmp(name, DataLinkPort) == 0) {
                         globals.dataLinkPort = settingValue(value);
+                    }
+                    else if (_stricmp(name, DataRateFps) == 0) {
+                        globals.dataRateFps = settingValue(value);
                     }
                 }
                 else if (_stricmp(group, MonitorGroup) == 0) {
@@ -791,11 +795,11 @@ void dataLink(simvars* thisPtr)
             resetConnection();
         }
 
-        // Update 30 times per second
+        // Control update rate
 #ifdef _WIN32
-        Sleep(33);
+        Sleep(1000 / globals.dataRateFps);
 #else
-        usleep(33333);
+        usleep(1000000 / globals.dataRateFps);
 #endif
     }
 

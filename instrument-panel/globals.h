@@ -70,6 +70,7 @@ struct globalVars
 
     char dataLinkHost[64] = "127.0.0.1";
     int dataLinkPort = 52020;
+    int dataRateFps = 30;
     int startOnMonitor = 0;
     Aircraft aircraft;
     char lastAircraft[32];

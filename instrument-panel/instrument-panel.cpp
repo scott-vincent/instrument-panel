@@ -88,7 +88,6 @@
 #include "savageCub/xpdrSavageCub.h"
 
 const bool HaveHardwareKnobs = true;
-const double FPS = 30.0;
 const bool Debug = false;
 const bool UseOpenGL_ES3 = true;
 
@@ -154,10 +153,6 @@ void init(const char *settingsFile = NULL)
         fatalError("Failed to initialise keyboard");
     }
 
-    if (!(timer = al_create_timer(1.0 / FPS))) {
-        fatalError("Failed to create timer");
-    }
-
     if (!(eventQueue = al_create_event_queue())) {
         fatalError("Failed to create event queue");
     }
@@ -209,6 +204,10 @@ void init(const char *settingsFile = NULL)
     al_register_event_source(eventQueue, al_get_display_event_source(globals.display));
 
     globals.simVars = new simvars(settingsFile);
+
+    if (!(timer = al_create_timer(1.0 / globals.dataRateFps))) {
+        fatalError("Failed to create timer");
+    }
 
 #ifndef _WIN32
     // Only have hardware knobs on Raspberry Pi
