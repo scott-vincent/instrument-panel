@@ -117,7 +117,7 @@ void altFast::render()
     addSmallNumber(157 * scaleFactor, val / 1000, (val % 1000) / 100, (val % 100) / 10, val % 10);
 
     // Draw InHg Reels
-    val = inhg * 100;
+    val = (inhg * 100.0) + 0.5;
     addSmallNumber(465 * scaleFactor, val / 1000, (val % 1000) / 100, (val % 100) / 10, val % 10);
 
     // Draw Altitude reels
