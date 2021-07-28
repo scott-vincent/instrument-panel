@@ -17,6 +17,8 @@ struct SimVars
     double jbParkBrakePos = 0;
     double jbAutopilot = 0;
     double jbAutothrust = 0;
+    double jbAutopilotHeading;
+    double jbAutopilotVerticalSpeed;
     double jbLocMode = 0;
     double jbApprMode = 0;
 
@@ -219,6 +221,15 @@ enum EVENT_ID {
     KEY_BLEED_AIR_SOURCE_CONTROL_SET,
     KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE,
     KEY_TOGGLE_PUSHBACK,
+    A32NX_FCU_SPD_PUSH,
+    A32NX_FCU_SPD_PULL,
+    A32NX_FCU_HDG_PUSH,
+    A32NX_FCU_HDG_PULL,
+    A32NX_FCU_ALT_PUSH,
+    A32NX_FCU_ALT_PULL,
+    A32NX_FCU_VS_PUSH,
+    A32NX_FCU_VS_PULL,
+    A32NX_FCU_SPD_MACH_TOGGLE_PUSH,
     A32NX_FCU_APPR_PUSH,
     KEY_CHECK_EVENT,
     EVENT_NONE,
