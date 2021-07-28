@@ -196,7 +196,7 @@ void trimFlaps::render()
         }
     }
 
-    if (simVars->parkingBrakeOn || simVars->parkBrakePos == 1) {
+    if (simVars->parkingBrakeOn) {
         // Add parking brake
         al_draw_scaled_bitmap(bitmaps[9], 0, 0, 252, 33, 277 * scaleFactor, 703 * scaleFactor, 252 * scaleFactor, 33 * scaleFactor, 0);
     }
