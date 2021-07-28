@@ -12,6 +12,10 @@ const char* SimVarDefs[][2] = {
     { "Elec Bat1", "jetbridge" },
     { "Elec Bat2", "jetbridge" },
     { "Parking Brake", "jetbridge" },
+    { "Autopilot", "jetbridge" },
+    { "Autothrust", "jetbridge" },
+    { "Loc Mode", "jetbridge" },
+    { "Appr Mode", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
@@ -210,6 +214,7 @@ WriteEvent WriteEvents[] = {
     { KEY_BLEED_AIR_SOURCE_CONTROL_SET, "BLEED_AIR_SOURCE_CONTROL_SET" },
     { KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE, "CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE" },
     { KEY_TOGGLE_PUSHBACK, "TOGGLE_PUSHBACK" },
+    { A32NX_FCU_APPR_PUSH, "A32NX.FCU_APPR_PUSH" },
     { KEY_CHECK_EVENT, "CHECK_EVENT" },
     { EVENT_NONE, "EVENT_NONE" },
     { EVENT_DOORS_TO_MANUAL, "EVENT_DOORS_TO_MANUAL" },

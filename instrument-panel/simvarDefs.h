@@ -14,7 +14,11 @@ struct SimVars
     double apuBleed = 0;
     double elecBat1 = 0;
     double elecBat2 = 0;
-    double parkBrakePos = 0;
+    double jbParkBrakePos = 0;
+    double jbAutopilot = 0;
+    double jbAutothrust = 0;
+    double jbLocMode = 0;
+    double jbApprMode = 0;
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
@@ -215,6 +219,7 @@ enum EVENT_ID {
     KEY_BLEED_AIR_SOURCE_CONTROL_SET,
     KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE,
     KEY_TOGGLE_PUSHBACK,
+    A32NX_FCU_APPR_PUSH,
     KEY_CHECK_EVENT,
     EVENT_NONE,
     EVENT_DOORS_TO_MANUAL,
