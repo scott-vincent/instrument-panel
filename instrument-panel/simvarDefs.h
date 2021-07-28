@@ -14,6 +14,7 @@ struct SimVars
     double apuBleed = 0;
     double elecBat1 = 0;
     double elecBat2 = 0;
+    double parkBrakePos = 0;
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
