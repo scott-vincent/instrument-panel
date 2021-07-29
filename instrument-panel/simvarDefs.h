@@ -19,6 +19,10 @@ struct SimVars
     double jbAutothrust = 0;
     double jbAutopilotHeading;
     double jbAutopilotVerticalSpeed;
+    double jbManagedSpeed = 0;
+    double jbManagedHeading = 0;
+    double jbManagedAltitude = 0;
+    double jbVerticalMode = 0;
     double jbLocMode = 0;
     double jbApprMode = 0;
 

@@ -16,6 +16,10 @@ const char* SimVarDefs[][2] = {
     { "Autothrust", "jetbridge" },
     { "Autopilot Heading", "jetbridge" },
     { "Autopilot Vertical Speed", "jetbridge" },
+    { "Autopilot Managed Speed", "jetbridge" },
+    { "Autopilot Managed Heading", "jetbridge" },
+    { "Autopilot Managed Altitude", "jetbridge" },
+    { "Vertical Mode", "jetbridge" },
     { "Loc Mode", "jetbridge" },
     { "Appr Mode", "jetbridge" },
 
