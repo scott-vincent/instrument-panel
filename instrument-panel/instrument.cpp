@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
 #include "instrument.h"
 #include "simvars.h"
 
