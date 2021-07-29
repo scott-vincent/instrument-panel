@@ -31,7 +31,7 @@ public:
 
     instrument();
     instrument(int xPos, int yPos, int size);
-    ~instrument();
+    virtual ~instrument();
     void setName(const char* name);
     void dimInstrument(bool fullDim = true);
     virtual void resize() = 0;
