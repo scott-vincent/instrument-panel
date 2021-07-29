@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "rpmSpitfire.h"
 
 rpmSpitfire::rpmSpitfire(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)

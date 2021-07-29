@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "alt.h"
 #include "alternate/altFast.h"
 #include "simvars.h"

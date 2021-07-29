@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "adf.h"
 #include "simvars.h"
 #include "knobs.h"

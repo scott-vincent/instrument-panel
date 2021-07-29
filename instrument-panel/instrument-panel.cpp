@@ -44,8 +44,8 @@
  * all instruments have manual controls.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #ifdef _WIN32
 // Windows only
 #include <Windows.h>
@@ -54,9 +54,7 @@
 #include "knobs.h"
 #endif
 #include <list>
-#include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_font.h>
 #include "globals.h"
 #include "simvars.h"
 

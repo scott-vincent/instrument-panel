@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <allegro5/allegro.h>
 #ifdef _WIN32
 #include <WS2tcpip.h>

@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "rpmSavageCub.h"
 
 rpmSavageCub::rpmSavageCub(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)

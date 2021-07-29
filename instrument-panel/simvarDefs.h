@@ -1,7 +1,7 @@
 #ifndef _SIMVARDEFS_H_
 #define _SIMVARDEFS_H_
 
-#include <stdio.h>
+#include <cstdio>
 
 struct SimVars
 {

@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "vor2.h"
 #include "alternate/gForce.h"
 #include "simvars.h"

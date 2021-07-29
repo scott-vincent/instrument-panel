@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 #include "hi.h"
 #include "simvars.h"
 #include "knobs.h"

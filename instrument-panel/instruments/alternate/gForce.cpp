@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "gForce.h"
 
 gForce::gForce(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)

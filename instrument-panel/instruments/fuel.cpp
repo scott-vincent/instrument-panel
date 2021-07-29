@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
 #include "fuel.h"
 #include "simvars.h"
 #include "knobs.h"
