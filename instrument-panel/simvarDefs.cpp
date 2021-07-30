@@ -140,7 +140,7 @@ const char* SimVarDefs[][2] = {
     { "Atc Airline", "string32" },
     { "Atc Flight Number", "string32" },
     { "Atc Heavy", "bool" },
-    { NULL, NULL }
+    { nullptr, nullptr }
 };
 
 WriteEvent WriteEvents[] = {
@@ -270,5 +270,5 @@ WriteEvent WriteEvents[] = {
     { VJOY_BUTTON_15, "VJOY_BUTTON_15" },
     { VJOY_BUTTON_16, "VJOY_BUTTON_16" },
     { VJOY_BUTTONS_END, "VJOY_BUTTONS_END" },
-    { SIM_STOP, NULL }
+    { SIM_STOP, nullptr }
 };

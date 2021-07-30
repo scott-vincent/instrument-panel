@@ -16,7 +16,7 @@ private:
     double targetAngle;
 
 public:
-    vsiExtreme(int xPos, int yPos, int size, const char *parentName = NULL);
+    vsiExtreme(int xPos, int yPos, int size, const char *parentName = nullptr);
     void render();
     void update();
 

@@ -25,7 +25,7 @@ instrument::instrument(int xPos, int yPos, int size)
 /// </summary>
 instrument::~instrument()
 {
-    if (customInstrument != NULL) {
+    if (customInstrument != nullptr) {
         delete customInstrument;
     }
 
@@ -56,7 +56,7 @@ ALLEGRO_BITMAP *instrument::loadBitmap(const char* filename)
     ALLEGRO_BITMAP* bitmap = al_load_bitmap(filepath);
     if (!bitmap) {
         sprintf(globals.error, "Missing bitmap: %s", filepath);
-        return NULL;
+        return nullptr;
     }
 
     return bitmap;
@@ -89,12 +89,12 @@ void instrument::destroyBitmaps()
 
     if (dim) {
         al_destroy_bitmap(dim);
-        dim = NULL;
+        dim = nullptr;
     }
 
     if (semiDim) {
         al_destroy_bitmap(semiDim);
-        semiDim = NULL;
+        semiDim = nullptr;
     }
 }
 
@@ -103,11 +103,11 @@ void instrument::destroyBitmaps()
 /// </summary>
 void instrument::dimInstrument(bool fullDim)
 {
-    if (fullDim && dim == NULL) {
+    if (fullDim && dim == nullptr) {
         dim = loadBitmap("dim.png");
     }
 
-    if (!fullDim && semiDim == NULL) {
+    if (!fullDim && semiDim == nullptr) {
         semiDim = loadBitmap("semi-dim.png");
     }
 

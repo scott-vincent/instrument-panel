@@ -31,7 +31,7 @@ void asiSavageCub::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("asi-savage-cub.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -59,7 +59,7 @@ void asiSavageCub::resize()
 /// </summary>
 void asiSavageCub::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

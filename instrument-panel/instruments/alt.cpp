@@ -35,7 +35,7 @@ void alt::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("alt.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -105,7 +105,7 @@ void alt::resize()
 /// </summary>
 void alt::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+    if (bitmaps[0] == nullptr || loadedAircraft != globals.aircraft) {
         return;
     }
 
@@ -197,7 +197,7 @@ void alt::update()
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
             delete customInstrument;
-            customInstrument = NULL;
+            customInstrument = nullptr;
         }
 
         if (fastAircraft) {

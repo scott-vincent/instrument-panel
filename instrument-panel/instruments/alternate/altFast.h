@@ -23,7 +23,7 @@ private:
     time_t now;
 
 public:
-    altFast(int xPos, int yPos, int size, const char* parentName = NULL);
+    altFast(int xPos, int yPos, int size, const char* parentName = nullptr);
     void render();
     void update();
     void updateCustom(double inhgVal) override;

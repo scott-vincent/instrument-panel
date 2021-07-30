@@ -32,7 +32,7 @@ void rpmSpitfire::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("rpm-spitfire.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -60,7 +60,7 @@ void rpmSpitfire::resize()
 /// </summary>
 void rpmSpitfire::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

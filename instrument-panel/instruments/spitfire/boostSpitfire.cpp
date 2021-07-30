@@ -31,7 +31,7 @@ void boostSpitfire::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("boost-spitfire.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -59,7 +59,7 @@ void boostSpitfire::resize()
 /// </summary>
 void boostSpitfire::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

@@ -36,7 +36,7 @@ void hi::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("hi.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -76,7 +76,7 @@ void hi::resize()
 /// </summary>
 void hi::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

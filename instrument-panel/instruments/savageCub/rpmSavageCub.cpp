@@ -31,7 +31,7 @@ void rpmSavageCub::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("rpm-savage-cub.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -83,7 +83,7 @@ void rpmSavageCub::resize()
 /// </summary>
 void rpmSavageCub::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

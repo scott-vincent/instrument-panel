@@ -34,7 +34,7 @@ void adiLearjet::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("adi-learjet.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -100,7 +100,7 @@ void adiLearjet::resize()
 /// </summary>
 void adiLearjet::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

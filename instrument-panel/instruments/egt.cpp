@@ -25,7 +25,7 @@ void egt::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("egt.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -65,7 +65,7 @@ void egt::resize()
 /// </summary>
 void egt::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

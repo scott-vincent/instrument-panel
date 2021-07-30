@@ -32,7 +32,7 @@ void vsiExtreme::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("vsi-extreme.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -66,7 +66,7 @@ void vsiExtreme::resize()
 /// </summary>
 void vsiExtreme::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

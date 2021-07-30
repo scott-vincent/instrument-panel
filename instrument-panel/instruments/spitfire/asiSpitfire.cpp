@@ -31,7 +31,7 @@ void asiSpitfire::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("asi-spitfire.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -59,7 +59,7 @@ void asiSpitfire::resize()
 /// </summary>
 void asiSpitfire::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

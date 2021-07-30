@@ -31,7 +31,7 @@ void asiSupersonic::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("asi-supersonic.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -59,7 +59,7 @@ void asiSupersonic::resize()
 /// </summary>
 void asiSupersonic::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

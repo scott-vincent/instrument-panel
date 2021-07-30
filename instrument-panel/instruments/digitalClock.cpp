@@ -34,7 +34,7 @@ void digitalClock::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("digital-clock.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -146,7 +146,7 @@ void digitalClock::resize()
 /// </summary>
 void digitalClock::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

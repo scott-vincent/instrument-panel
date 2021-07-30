@@ -44,7 +44,7 @@ void asiFast::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("asi-fast.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -94,7 +94,7 @@ void asiFast::resize()
 /// </summary>
 void asiFast::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

@@ -35,7 +35,7 @@ void vor2::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("vor2.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -93,7 +93,7 @@ void vor2::resize()
 /// </summary>
 void vor2::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -154,7 +154,7 @@ void vor2::update()
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
             delete customInstrument;
-            customInstrument = NULL;
+            customInstrument = nullptr;
         }
 
         if (loadedAircraft == F15_EAGLE) {

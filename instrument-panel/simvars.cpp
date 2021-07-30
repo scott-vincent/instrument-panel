@@ -28,10 +28,10 @@ void fatalError(const char* msg);
 
 simvars::simvars(const char *customSettings)
 {
-    if (customSettings == NULL) {
+    if (customSettings == nullptr) {
         strcpy(settingsFile, globals.SettingsFile);
     }
-    else if (strchr(customSettings, '/') == NULL && strchr(customSettings, '\\') == NULL) {
+    else if (strchr(customSettings, '/') == nullptr && strchr(customSettings, '\\') == nullptr) {
         sprintf(settingsFile, "%s%s", globals.SettingsDir, customSettings);
     }
     else {
@@ -503,7 +503,7 @@ void simvars::addVar(const char* group, const char* name, bool isBool, double sc
     // Convert SimVar name to address offset (number of doubles)
     int offset = 1;
     for (int i = 0;; i++) {
-        if (SimVarDefs[i][0] == NULL) {
+        if (SimVarDefs[i][0] == nullptr) {
             sprintf(globals.error, "Unknown SimVar name: %s - %s", group, name);
             return;
         }

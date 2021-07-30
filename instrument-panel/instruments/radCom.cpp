@@ -32,7 +32,7 @@ void radCom::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("rad-com.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -90,7 +90,7 @@ void radCom::resize()
 /// </summary>
 void radCom::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

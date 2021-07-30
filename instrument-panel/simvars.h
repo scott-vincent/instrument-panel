@@ -24,7 +24,7 @@ public:
     SimVars simVars;
 
 private:
-    std::thread* dataLinkThread = NULL;
+    std::thread* dataLinkThread = nullptr;
     char settingsFile[256];
 
     SOCKET writeSockfd = INVALID_SOCKET;

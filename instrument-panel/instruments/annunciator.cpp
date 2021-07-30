@@ -36,7 +36,7 @@ void annunciator::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("annunciator.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -100,7 +100,7 @@ void annunciator::resize()
 /// </summary>
 void annunciator::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

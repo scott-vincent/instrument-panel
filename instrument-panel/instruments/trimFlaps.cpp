@@ -33,7 +33,7 @@ void trimFlaps::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("trim-flaps.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -134,7 +134,7 @@ void trimFlaps::resize()
 /// </summary>
 void trimFlaps::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

@@ -55,11 +55,11 @@ struct globalVars
     const char* SettingsDir = "settings/";
     const char* SettingsFile = "settings/instrument-panel.json";
 
-    simvars* simVars = NULL;
-    knobs* hardwareKnobs = NULL;
+    simvars* simVars = nullptr;
+    knobs* hardwareKnobs = nullptr;
 
-    ALLEGRO_FONT* font = NULL;
-    ALLEGRO_DISPLAY* display = NULL;
+    ALLEGRO_FONT* font = nullptr;
+    ALLEGRO_DISPLAY* display = nullptr;
 
     int displayX = 0;
     int displayY = 0;

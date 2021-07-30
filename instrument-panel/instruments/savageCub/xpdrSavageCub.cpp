@@ -26,7 +26,7 @@ void xpdrSavageCub::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("xpdr-savage-cub.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -54,7 +54,7 @@ void xpdrSavageCub::resize()
 /// </summary>
 void xpdrSavageCub::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

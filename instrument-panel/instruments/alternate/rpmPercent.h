@@ -19,7 +19,7 @@ private:
     double angle;
 
 public:
-    rpmPercent(int xPos, int yPos, int size, const char* parentName = NULL);
+    rpmPercent(int xPos, int yPos, int size, const char* parentName = nullptr);
     void render();
     void update();
 

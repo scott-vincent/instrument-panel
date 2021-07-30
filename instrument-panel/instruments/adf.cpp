@@ -34,7 +34,7 @@ void adf::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("adf.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -68,7 +68,7 @@ void adf::resize()
 /// </summary>
 void adf::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

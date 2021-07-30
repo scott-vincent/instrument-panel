@@ -30,7 +30,7 @@ void rpm::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("rpm.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -88,7 +88,7 @@ void rpm::resize()
 /// </summary>
 void rpm::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+    if (bitmaps[0] == nullptr || loadedAircraft != globals.aircraft) {
         return;
     }
 
@@ -160,7 +160,7 @@ void rpm::update()
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
             delete customInstrument;
-            customInstrument = NULL;
+            customInstrument = nullptr;
         }
         
         if (loadedAircraft == SUPERMARINE_SPITFIRE) {
