@@ -22,10 +22,12 @@ struct SimVars
     double jbManagedSpeed = 0;
     double jbManagedHeading = 0;
     double jbManagedAltitude = 0;
+    double jbLateralMode = 0;
     double jbVerticalMode = 0;
     double jbLocMode = 0;
     double jbApprMode = 0;
     double jbAutobrake = 0;
+    double jbBrakePedal = 0;
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
@@ -33,6 +35,7 @@ struct SimVars
     double dcVolts = 23.7;
 
     // Vars for Power/Lights panel
+    double lightStates = 0;
     double apuPercentRpm = 0;
 
     // Vars for Radio panel
@@ -226,14 +229,18 @@ enum EVENT_ID {
     KEY_BLEED_AIR_SOURCE_CONTROL_SET,
     KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE,
     KEY_TOGGLE_PUSHBACK,
+    KEY_AUTOBRAKE,
     A32NX_FCU_SPD_PUSH,
     A32NX_FCU_SPD_PULL,
+    A32NX_FCU_SPD_SET,
     A32NX_FCU_HDG_PUSH,
     A32NX_FCU_HDG_PULL,
+    A32NX_FCU_HDG_SET,
     A32NX_FCU_ALT_PUSH,
     A32NX_FCU_ALT_PULL,
     A32NX_FCU_VS_PUSH,
     A32NX_FCU_VS_PULL,
+    A32NX_FCU_VS_SET,
     A32NX_FCU_SPD_MACH_TOGGLE_PUSH,
     A32NX_FCU_APPR_PUSH,
     KEY_CHECK_EVENT,

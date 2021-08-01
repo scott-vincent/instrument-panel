@@ -186,6 +186,7 @@ void hi::updateKnobs()
                 newHeading += 360;
             }
             globals.simVars->write(KEY_HEADING_BUG_SET, newHeading);
+            globals.simVars->write(A32NX_FCU_HDG_SET, newHeading);
             prevVal = val;
         }
         time(&lastBugAdjust);

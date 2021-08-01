@@ -19,10 +19,12 @@ const char* SimVarDefs[][2] = {
     { "Autopilot Managed Speed", "jetbridge" },
     { "Autopilot Managed Heading", "jetbridge" },
     { "Autopilot Managed Altitude", "jetbridge" },
+    { "Lateral Mode", "jetbridge" },
     { "Vertical Mode", "jetbridge" },
     { "Loc Mode", "jetbridge" },
     { "Appr Mode", "jetbridge" },
     { "Autobrake Armed", "jetbridge" },
+    { "Brake Pedal", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
@@ -30,6 +32,7 @@ const char* SimVarDefs[][2] = {
     { "Electrical Main Bus Voltage", "volts" },
 
     // Vars for Power/Lights panel
+    { "Light On States", "mask" },
     { "Apu Pct Rpm", "percent" },
 
     // Vars for Radio panel
@@ -221,14 +224,18 @@ WriteEvent WriteEvents[] = {
     { KEY_BLEED_AIR_SOURCE_CONTROL_SET, "BLEED_AIR_SOURCE_CONTROL_SET" },
     { KEY_CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE, "CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE" },
     { KEY_TOGGLE_PUSHBACK, "TOGGLE_PUSHBACK" },
+    { KEY_AUTOBRAKE, "AUTOBRAKE" },
     { A32NX_FCU_SPD_PUSH, "A32NX.FCU_SPD_PUSH" },
     { A32NX_FCU_SPD_PULL, "A32NX.FCU_SPD_PULL" },
+    { A32NX_FCU_SPD_SET, "A32NX.FCU_SPD_SET" },
     { A32NX_FCU_HDG_PUSH, "A32NX.FCU_HDG_PUSH" },
     { A32NX_FCU_HDG_PULL, "A32NX.FCU_HDG_PULL" },
+    { A32NX_FCU_HDG_SET, "A32NX.FCU_HDG_SET" },
     { A32NX_FCU_ALT_PUSH, "A32NX.FCU_ALT_PUSH" },
     { A32NX_FCU_ALT_PULL, "A32NX.FCU_ALT_PULL" },
     { A32NX_FCU_VS_PUSH, "A32NX.FCU_VS_PUSH" },
     { A32NX_FCU_VS_PULL, "A32NX.FCU_VS_PULL" },
+    { A32NX_FCU_VS_SET, "A32NX.FCU_VS_SET" },
     { A32NX_FCU_SPD_MACH_TOGGLE_PUSH, "A32NX.FCU_SPD_MACH_TOGGLE_PUSH" },
     { A32NX_FCU_APPR_PUSH, "A32NX.FCU_APPR_PUSH" },
     { KEY_CHECK_EVENT, "CHECK_EVENT" },

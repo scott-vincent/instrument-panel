@@ -220,8 +220,16 @@ void vor1::update()
 
     // Calculate values
     compassAngle = -simVars->vor1Obs;
-    glideSlopeOn = simVars->vor1GlideSlopeFlag;
-    toFromOn = simVars->vor1ToFrom;
+
+    if (loadedAircraft == FBW_A320NEO) {
+        glideSlopeOn = simVars->jbVerticalMode > 29 && simVars->jbVerticalMode < 33;
+        toFromOn = simVars->jbLateralMode > 29 && simVars->jbLateralMode < 33;
+    }
+    else {
+        glideSlopeOn = simVars->vor1GlideSlopeFlag;
+        toFromOn = simVars->vor1ToFrom;
+    }
+
     gpsControlsNavOn = simVars->gpsDrivesNav1 && !simVars->navHasLocalizer;
     crossTrkMeters = simVars->gpsWpCrossTrk;
 
