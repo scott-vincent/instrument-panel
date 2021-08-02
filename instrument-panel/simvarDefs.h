@@ -26,6 +26,7 @@ struct SimVars
     double jbVerticalMode = 0;
     double jbLocMode = 0;
     double jbApprMode = 0;
+    double jbAutothrustMode = 0;
     double jbAutobrake = 0;
     double jbBrakePedal = 0;
 
