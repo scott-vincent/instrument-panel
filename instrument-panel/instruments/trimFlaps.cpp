@@ -126,6 +126,12 @@ void trimFlaps::resize()
     al_draw_scaled_bitmap(orig, 800, 96, 24, 40, 0, 0, 24 * scaleFactor, 40 * scaleFactor, 0);
     addBitmap(bmp);
 
+    // 16 = Brake
+    bmp = al_create_bitmap(130, 33);
+    al_set_target_bitmap(bmp);
+    al_draw_bitmap_region(orig, 514, 807, 130, 33, 0, 0, 0);
+    addBitmap(bmp);
+
     al_set_target_backbuffer(globals.display);
 }
 
@@ -199,6 +205,10 @@ void trimFlaps::render()
     if (simVars->parkingBrakeOn) {
         // Add parking brake
         al_draw_scaled_bitmap(bitmaps[9], 0, 0, 252, 33, 277 * scaleFactor, 703 * scaleFactor, 252 * scaleFactor, 33 * scaleFactor, 0);
+    }
+    else if (simVars->jbBrakePedal > 5) {
+        // Add brake
+        al_draw_scaled_bitmap(bitmaps[16], 0, 0, 130, 33, 340 * scaleFactor, 703 * scaleFactor, 130 * scaleFactor, 33 * scaleFactor, 0);
     }
     else if (simVars->pushbackState < 3) {
         // Add pushback
