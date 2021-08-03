@@ -37,6 +37,7 @@ struct SimVars
 
     // Vars for Power/Lights panel
     double lightStates = 0;
+    double parkingBrakeOn = 1;
     double apuPercentRpm = 0;
 
     // Vars for Radio panel
@@ -130,7 +131,6 @@ struct SimVars
     double gearLeftPos = 100;
     double gearCentrePos = 100;
     double gearRightPos = 100;
-    double parkingBrakeOn = 1;
     double pushbackState = 3;
     double rudderPosition = 0;
     double oilTemp = 75;

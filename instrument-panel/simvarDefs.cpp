@@ -34,6 +34,7 @@ const char* SimVarDefs[][2] = {
 
     // Vars for Power/Lights panel
     { "Light On States", "mask" },
+    { "Brake Parking Position", "bool" },
     { "Apu Pct Rpm", "percent" },
 
     // Vars for Radio panel
@@ -126,7 +127,6 @@ const char* SimVarDefs[][2] = {
     { "Gear Left Position", "percent" },
     { "Gear Center Position", "percent" },
     { "Gear Right Position", "percent" },
-    { "Brake Parking Position", "bool" },
     { "Pushback State", "enum" },
     { "Rudder Position", "position" },
     { "General Eng Oil Temperature:1", "fahrenheit" },
