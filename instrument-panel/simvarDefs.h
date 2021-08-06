@@ -29,6 +29,8 @@ struct SimVars
     double jbAutothrustMode = 0;
     double jbAutobrake = 0;
     double jbBrakePedal = 0;
+    double jbEngineEgt = 0;
+    double jbEngineFuelFlow = 0;
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";

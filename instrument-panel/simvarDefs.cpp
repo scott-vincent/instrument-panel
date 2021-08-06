@@ -26,6 +26,8 @@ const char* SimVarDefs[][2] = {
     { "Autothrust Mode", "jetbridge" },
     { "Autobrake Armed", "jetbridge" },
     { "Brake Pedal", "jetbridge" },
+    { "Engine EGT", "jetbridge" },
+    { "Engine Fuel Flow", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
