@@ -44,8 +44,8 @@ struct globalVars
     const int Asobo_A320neo_Len = 15;
     const char* FBW_A320neo_Text = "FBW Airbus A320 Neo";
     const int FBW_A320neo_Len = 19;
-    const char* Supermarine_Spitfire_Text = "Supermarine Spitfire";
-    const int Supermarine_Spitfire_Len = 20;
+    const char* Supermarine_Spitfire_Text = "FlyingIron Spitfire";
+    const int Supermarine_Spitfire_Len = 19;
     const char* F15_Eagle_Text = "DCD F-15";
     const int F15_Eagle_Len = 8;
     const int FastAircraftSpeed = 195;
