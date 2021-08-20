@@ -39,6 +39,8 @@ struct SimVars
 
     // Vars for Power/Lights panel
     double lightStates = 0;
+    double tfFlapsCount = 1;
+    double tfFlapsIndex = 0;
     double parkingBrakeOn = 1;
     double apuPercentRpm = 0;
 
@@ -99,8 +101,6 @@ struct SimVars
     double tcBall = 0;
     double tfElevatorTrim = 0;
     double tfRudderTrim = 0;
-    double tfFlapsCount = 1;
-    double tfFlapsIndex = 0;
     double tfSpoilersPosition = 0;
     double tfAutoBrake = 0;
     double dcUtcSeconds = 43200;
@@ -164,9 +164,7 @@ enum EVENT_ID {
     KEY_FLAPS_INCR,
     KEY_FLAPS_DECR,
     KEY_FLAPS_UP,
-    KEY_FLAPS_1,
-    KEY_FLAPS_2,
-    KEY_FLAPS_3,
+    KEY_FLAPS_SET,
     KEY_FLAPS_DOWN,
     KEY_SPOILERS_ARM_SET,
     KEY_SPOILERS_OFF,

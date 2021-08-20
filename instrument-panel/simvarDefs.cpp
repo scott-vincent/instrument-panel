@@ -36,6 +36,8 @@ const char* SimVarDefs[][2] = {
 
     // Vars for Power/Lights panel
     { "Light On States", "mask" },
+    { "Flaps Num Handle Positions", "number" },
+    { "Flaps Handle Index", "number" },
     { "Brake Parking Position", "bool" },
     { "Apu Pct Rpm", "percent" },
 
@@ -95,8 +97,6 @@ const char* SimVarDefs[][2] = {
     { "Turn Coordinator Ball", "position" },
     { "Elevator Trim Position", "degrees" },
     { "Rudder Trim Pct", "percent" },
-    { "Flaps Num Handle Positions", "number" },
-    { "Flaps Handle Index", "number" },
     { "Spoilers Handle Position", "percent" },
     { "Auto Brake Switch Cb", "number" },
     { "Zulu Time", "seconds" },
@@ -159,9 +159,7 @@ WriteEvent WriteEvents[] = {
     { KEY_FLAPS_INCR, "FLAPS_INCR" },
     { KEY_FLAPS_DECR, "FLAPS_DECR" },
     { KEY_FLAPS_UP, "FLAPS_UP" },
-    { KEY_FLAPS_1, "FLAPS_1" },
-    { KEY_FLAPS_2, "FLAPS_2" },
-    { KEY_FLAPS_3, "FLAPS_3" },
+    { KEY_FLAPS_SET, "FLAPS_SET" },
     { KEY_FLAPS_DOWN, "FLAPS_DOWN" },
     { KEY_SPOILERS_ARM_SET, "SPOILERS_ARM_SET" },
     { KEY_SPOILERS_OFF, "SPOILERS_OFF" },
