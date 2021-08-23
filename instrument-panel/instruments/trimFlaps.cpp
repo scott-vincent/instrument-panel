@@ -206,7 +206,7 @@ void trimFlaps::render()
         // Add parking brake
         al_draw_scaled_bitmap(bitmaps[9], 0, 0, 252, 33, 277 * scaleFactor, 703 * scaleFactor, 252 * scaleFactor, 33 * scaleFactor, 0);
     }
-    else if (simVars->jbBrakePedal > 5) {
+    else if (simVars->brakePedal > 5) {
         // Add brake
         al_draw_scaled_bitmap(bitmaps[16], 0, 0, 130, 33, 340 * scaleFactor, 703 * scaleFactor, 130 * scaleFactor, 33 * scaleFactor, 0);
     }
