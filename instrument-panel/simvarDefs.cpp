@@ -56,6 +56,7 @@ const char* SimVarDefs[][2] = {
     { "Nav Standby Frequency:2", "mhz" },
     { "Adf Active Frequency:1", "khz" },
     { "Adf Standby Frequency:1", "khz" },
+    { "Pilot Transmitter Type", "enum" },
     { "Cabin Seatbelts Alert Switch", "bool" },
     { "Transponder State:1", "enum" },
     { "Transponder Code:1", "bco16" },
