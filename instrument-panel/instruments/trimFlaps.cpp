@@ -278,7 +278,17 @@ void trimFlaps::update()
     }
 
     rudderTrimOffset = simVars->tfRudderTrim * 0.93;
-    targetFlaps = 345.0 * simVars->tfFlapsIndex / simVars->tfFlapsCount;
+    if (simVars->tfFlapsCount == 5) {
+        // A320 flaps pos 1 and 2 are effectively the same (2=1+F)
+        int flapsIndex = simVars->tfFlapsIndex;
+        if (flapsIndex > 1) {
+            flapsIndex--;
+        }
+        targetFlaps = 345.0 * flapsIndex / 4.0;
+    }
+    else {
+        targetFlaps = 345.0 * simVars->tfFlapsIndex / simVars->tfFlapsCount;
+    }
     double diff = abs(targetFlaps - flapsOffset);
 
     if (diff > 5.0) {
