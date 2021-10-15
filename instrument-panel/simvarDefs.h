@@ -28,7 +28,8 @@ struct SimVars
     double jbApprMode = 0;
     double jbAutothrustMode = 0;
     double jbAutobrake = 0;
-    double jbBrakePedal = 0;
+    double jbLeftBrakePedal = 0;
+    double jbRightBrakePedal = 0;
     double jbEngineEgt = 0;
     double jbEngineFuelFlow = 0;
 
