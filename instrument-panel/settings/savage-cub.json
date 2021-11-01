@@ -2,7 +2,7 @@
   "Data Link": {
     "Host": "127.0.0.1",
     "Port": 52020,
-    "Data Rate FPS": 30
+    "Data Rate FPS": 15
   },
   "VSI": {
     "Enabled": true,
