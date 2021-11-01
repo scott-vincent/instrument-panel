@@ -220,7 +220,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="settings\instrument-panel.json">
       <Filter>settings</Filter>
     </None>
@@ -230,6 +229,7 @@
     <None Include="settings\savage-cub.json">
       <Filter>settings</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="instruments">
