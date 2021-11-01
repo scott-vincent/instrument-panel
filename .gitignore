@@ -1,6 +1,6 @@
 .git
 .vs
-packages
+**/packages
 **/debug
 **/Debug
 **/release
