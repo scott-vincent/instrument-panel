@@ -24,6 +24,23 @@ Note: There is a screensaver feature so the instrument panel will appear dim unt
 
 If you want to use the Savage Cub panel instead of the default Cessna panel or you want to define multiple panel layouts see section "Custom Panels" below.
 
+# Quick Start on Raspberry Pi
+
+Follow the instructions above to download Instrument Data Link on Windows. You can then install Instrument Panel on Rapsberry Pi by doing the following:
+
+To Download:
+```
+tag=`curl -s https://github.com/scott-vincent/instrument-panel/releases/latest|cut -d'"' -f 2|cut -d'/' -f 8`;wget https://github.com/scott-vincent/instrument-panel/releases/download/$tag/instrument-panel-$tag-raspi4.tar.gz
+tar -xf instrument-panel-v* --one-top-level
+rm instrument-panel-v*.gz
+```
+To Run:
+Make sure you do this from a terminal started under a desktop session, not using SSH.
+```
+cd instrument-panel-v*/release/*
+nano settings/instrument-panel.json    (change HOST to the IP address of your PC) 
+./instrument-panel
+```
 # Other Panels
 
 Autopilot Panel: https://github.com/scott-vincent/autopilot-panel
