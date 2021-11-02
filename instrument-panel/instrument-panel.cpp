@@ -19,7 +19,7 @@
  *
  * To install Allegro on Raspberry Pi:
  *
- *     apt install liballegro5-dev
+ *     sudo apt install liballegro5-dev
  *
  * KEYS
  * 

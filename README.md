@@ -61,12 +61,16 @@ This program was heavily inspired by Dave Ault and contains original artwork by 
   
 It has been completely rewritten and updated to use Allegro5.
 
-NOTE: Allegro5 must be built on RasPi4 as a standard Linux build, not the specific Raspberry Pi build, i.e.:
+To install Allegro (5.2.7) on Windows:
+
+  Load instrument-panel.sln into Visual Studio Community Edition.
+  When you build the solution it will automatically download Allegro
+  as it is specified in packages.config. A new folder called
+  packages will be created under the main folder.
+
+To install Allegro on Raspberry Pi:
 ```
-  mkdir build
-  cd allegro5/build
-  cmake .. -DCMAKE_BUILD_TYPE=Release
-  make && sudo make install
+  sudo apt install liballegro5-dev
 ```
 ### KEYS
 ```
