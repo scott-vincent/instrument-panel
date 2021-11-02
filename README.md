@@ -29,10 +29,10 @@ If you want to use the Savage Cub panel instead of the default Cessna panel or y
 Follow the instructions above to download Instrument Data Link on Windows. You can then install Instrument Panel on Rapsberry Pi by doing the following:
 
 To Install Allegro:
-
+```
 sudo apt update
 sudo apt install liballegro5-dev
-
+```
 To Download:
 ```
 tag=`curl -s https://github.com/scott-vincent/instrument-panel/releases/latest|cut -d'"' -f 2|cut -d'/' -f 8`;wget https://github.com/scott-vincent/instrument-panel/releases/download/$tag/instrument-panel-$tag-raspi4.tar.gz
