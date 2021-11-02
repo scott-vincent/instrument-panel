@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "altFast.h"
 #include "knobs.h"
 
@@ -41,7 +41,7 @@ void altFast::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("alt-fast.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -87,7 +87,7 @@ void altFast::resize()
 /// </summary>
 void altFast::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

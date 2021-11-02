@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "rpmSavageCub.h"
 
 rpmSavageCub::rpmSavageCub(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
@@ -32,7 +31,7 @@ void rpmSavageCub::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("rpm-savage-cub.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -84,7 +83,7 @@ void rpmSavageCub::resize()
 /// </summary>
 void rpmSavageCub::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

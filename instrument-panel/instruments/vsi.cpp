@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "vsi.h"
 #include "spitfire/vsiSpitfire.h"
 #include "alternate/vsiExtreme.h"
@@ -28,7 +28,7 @@ void vsi::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("vsi.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -62,7 +62,7 @@ void vsi::resize()
 /// </summary>
 void vsi::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+    if (bitmaps[0] == nullptr || loadedAircraft != globals.aircraft) {
         return;
     }
 
@@ -117,7 +117,7 @@ void vsi::update()
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
             delete customInstrument;
-            customInstrument = NULL;
+            customInstrument = nullptr;
         }
 
         if (loadedAircraft == SUPERMARINE_SPITFIRE) {

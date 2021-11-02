@@ -28,7 +28,7 @@ private:
     int prevVal = 0;
 
 public:
-    asiFast(int xPos, int yPos, int size, const char* parentName = NULL);
+    asiFast(int xPos, int yPos, int size, const char* parentName = nullptr);
     void render();
     void update();
 

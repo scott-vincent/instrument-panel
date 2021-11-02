@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
 #include "vac.h"
 #include "simvars.h"
 
@@ -25,7 +24,7 @@ void vac::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("vac.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -59,7 +58,7 @@ void vac::resize()
 /// </summary>
 void vac::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

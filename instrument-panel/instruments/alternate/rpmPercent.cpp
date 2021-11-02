@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
 #include <math.h>
 #include "rpmPercent.h"
 
@@ -32,7 +31,7 @@ void rpmPercent::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("rpm-percent.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -90,7 +89,7 @@ void rpmPercent::resize()
 /// </summary>
 void rpmPercent::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

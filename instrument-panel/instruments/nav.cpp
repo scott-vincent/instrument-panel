@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "nav.h"
 #include "knobs.h"
 
@@ -34,7 +34,7 @@ void nav::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("nav.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -170,7 +170,7 @@ void nav::resize()
 /// </summary>
 void nav::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

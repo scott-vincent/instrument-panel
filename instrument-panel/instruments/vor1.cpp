@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "vor1.h"
 #include "spitfire/boostSpitfire.h"
 #include "simvars.h"
@@ -36,7 +36,7 @@ void vor1::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("vor1.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -112,7 +112,7 @@ void vor1::resize()
 /// </summary>
 void vor1::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+    if (bitmaps[0] == nullptr || loadedAircraft != globals.aircraft) {
         return;
     }
 
@@ -187,7 +187,7 @@ void vor1::update()
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
             delete customInstrument;
-            customInstrument = NULL;
+            customInstrument = nullptr;
         }
 
         if (loadedAircraft == SUPERMARINE_SPITFIRE) {

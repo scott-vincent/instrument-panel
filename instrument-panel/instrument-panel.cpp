@@ -47,8 +47,8 @@
  * all instruments have manual controls.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #ifdef _WIN32
 // Windows only
 #include <Windows.h>
@@ -57,9 +57,7 @@
 #include "knobs.h"
 #endif
 #include <list>
-#include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_font.h>
 #include "globals.h"
 #include "simvars.h"
 
@@ -96,8 +94,8 @@ const bool UseOpenGL_ES3 = false;
 
 struct globalVars globals;
 
-ALLEGRO_TIMER* timer = NULL;
-ALLEGRO_EVENT_QUEUE* eventQueue = NULL;
+ALLEGRO_TIMER* timer = nullptr;
+ALLEGRO_EVENT_QUEUE* eventQueue = nullptr;
 std::list<instrument*> instruments;
 char lastError[256] = "\0";
 int errorPersist;
@@ -138,7 +136,7 @@ void fatalError(const char* msg)
 /// <summary>
 /// Initialise Allegro etc.
 /// </summary>
-void init(const char *settingsFile = NULL)
+void init(const char *settingsFile = nullptr)
 {
     if (!al_init()) {
         fatalError("Failed to initialise Allegro");
@@ -192,7 +190,7 @@ void init(const char *settingsFile = NULL)
 
     // Resolution is ignored for fullscreen window (uses existing desktop resolution)
     // but fails on Rasberry Pi if set to 0!
-    if ((globals.display = al_create_display(1200, 800)) == NULL) {
+    if ((globals.display = al_create_display(1200, 800)) == nullptr) {
             fatalError("Failed to create display");
     }
 

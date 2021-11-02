@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
 #include "fuel.h"
 #include "simvars.h"
 #include "knobs.h"
@@ -26,7 +25,7 @@ void fuel::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("fuel.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -60,7 +59,7 @@ void fuel::resize()
 /// </summary>
 void fuel::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

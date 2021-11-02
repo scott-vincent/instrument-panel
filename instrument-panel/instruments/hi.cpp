@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 #include "hi.h"
 #include "simvars.h"
 #include "knobs.h"
@@ -36,7 +36,7 @@ void hi::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("hi.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -76,7 +76,7 @@ void hi::resize()
 /// </summary>
 void hi::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

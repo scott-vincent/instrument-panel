@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "gForce.h"
 
 gForce::gForce(int xPos, int yPos, int size, const char* parentName) : instrument(xPos, yPos, size)
@@ -32,7 +31,7 @@ void gForce::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("g-force.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -60,7 +59,7 @@ void gForce::resize()
 /// </summary>
 void gForce::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

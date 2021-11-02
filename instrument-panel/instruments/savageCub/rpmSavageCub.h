@@ -19,7 +19,7 @@ private:
     double angle;
 
 public:
-    rpmSavageCub(int xPos, int yPos, int size, const char* parentName = NULL);
+    rpmSavageCub(int xPos, int yPos, int size, const char* parentName = nullptr);
     void render();
     void update();
 

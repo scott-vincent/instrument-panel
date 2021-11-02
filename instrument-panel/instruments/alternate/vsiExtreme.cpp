@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "vsiExtreme.h"
 
 vsiExtreme::vsiExtreme(int xPos, int yPos, int size, const char *parentName) : instrument(xPos, yPos, size)
@@ -32,7 +32,7 @@ void vsiExtreme::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("vsi-extreme.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -66,7 +66,7 @@ void vsiExtreme::resize()
 /// </summary>
 void vsiExtreme::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

@@ -18,10 +18,10 @@ class instrument
 {
 protected:
     int bitmapCount = 0;
-    ALLEGRO_BITMAP* bitmaps[MaxBitmaps] = { NULL };
-    ALLEGRO_BITMAP* dim = NULL;
-    ALLEGRO_BITMAP* semiDim = NULL;
-    instrument* customInstrument = NULL;
+    ALLEGRO_BITMAP* bitmaps[MaxBitmaps] = { nullptr };
+    ALLEGRO_BITMAP* dim = nullptr;
+    ALLEGRO_BITMAP* semiDim = nullptr;
+    instrument* customInstrument = nullptr;
 
 public:
     char name[256];
@@ -31,7 +31,7 @@ public:
 
     instrument();
     instrument(int xPos, int yPos, int size);
-    ~instrument();
+    virtual ~instrument();
     void setName(const char* name);
     void dimInstrument(bool fullDim = true);
     virtual void resize() = 0;

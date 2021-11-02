@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "asi.h"
 #include "alternate/asiFast.h"
 #include "alternate/asiSupersonic.h"
@@ -39,7 +39,7 @@ void asi::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("asi.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -79,7 +79,7 @@ void asi::resize()
 /// </summary>
 void asi::render()
 {
-    if (bitmaps[0] == NULL || loadedAircraft != globals.aircraft) {
+    if (bitmaps[0] == nullptr || loadedAircraft != globals.aircraft) {
         return;
     }
 
@@ -151,7 +151,7 @@ void asi::update()
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
             delete customInstrument;
-            customInstrument = NULL;
+            customInstrument = nullptr;
         }
 
         if (loadedAircraft == SAVAGE_CUB) {

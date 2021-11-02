@@ -12,7 +12,7 @@ const int MaxKnobs = 20;
 class knobs
 {
 private:
-    std::thread *watcherThread = NULL;
+    std::thread *watcherThread = nullptr;
 
 public:
     int knobCount = 0;

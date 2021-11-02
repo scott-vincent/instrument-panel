@@ -16,7 +16,7 @@ private:
     double targetAngle;
 
 public:
-    rpmSpitfire(int xPos, int yPos, int size, const char* parentName = NULL);
+    rpmSpitfire(int xPos, int yPos, int size, const char* parentName = nullptr);
     void render();
     void update();
 

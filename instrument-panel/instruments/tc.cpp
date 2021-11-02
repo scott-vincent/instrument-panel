@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "tc.h"
 #include "simvars.h"
 
@@ -25,7 +25,7 @@ void tc::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("tc.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -71,7 +71,7 @@ void tc::resize()
 /// </summary>
 void tc::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

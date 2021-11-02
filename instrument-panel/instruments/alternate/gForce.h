@@ -14,7 +14,7 @@ private:
     double angle;
 
 public:
-    gForce(int xPos, int yPos, int size, const char* parentName = NULL);
+    gForce(int xPos, int yPos, int size, const char* parentName = nullptr);
     void render();
     void update();
 

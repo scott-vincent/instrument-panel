@@ -14,7 +14,7 @@ private:
     double angle;
 
 public:
-    asiSupersonic(int xPos, int yPos, int size, const char *parentName = NULL);
+    asiSupersonic(int xPos, int yPos, int size, const char *parentName = nullptr);
     void render();
     void update();
 

@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "comSavageCub.h"
 #include "knobs.h"
 
@@ -25,7 +25,7 @@ void comSavageCub::resize()
     ALLEGRO_BITMAP* orig = loadBitmap("com-savage-cub.png");
     addBitmap(orig);
 
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 
@@ -53,7 +53,7 @@ void comSavageCub::resize()
 /// </summary>
 void comSavageCub::render()
 {
-    if (bitmaps[0] == NULL) {
+    if (bitmaps[0] == nullptr) {
         return;
     }
 

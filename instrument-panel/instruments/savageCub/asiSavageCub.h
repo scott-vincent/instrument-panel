@@ -17,7 +17,7 @@ private:
     double angle;
 
 public:
-    asiSavageCub(int xPos, int yPos, int size, const char *parentName = NULL);
+    asiSavageCub(int xPos, int yPos, int size, const char *parentName = nullptr);
     void render();
     void update();
 
