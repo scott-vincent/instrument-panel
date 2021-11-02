@@ -114,6 +114,7 @@ If you get a black screen when running on a Raspberry Pi try setting UseOpenGL_E
 ```
 const bool UseOpenGL_ES3 = false;
 ```
+Note: This is now the default since switching to a pre-built version of Allegro.
 
 # Donate
 
