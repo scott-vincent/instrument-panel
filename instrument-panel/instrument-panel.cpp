@@ -47,7 +47,7 @@
  * all instruments have manual controls.
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <stdlib.h>
 #ifdef _WIN32
 // Windows only

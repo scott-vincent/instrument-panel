@@ -1,9 +1,6 @@
 echo Building instrument-panel
 cd instrument-panel
-g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
-    -o instrument-panel \
-    -I . \
-    -I instruments \
+g++ -o instrument-panel -I . -I instruments \
     simvarDefs.cpp \
     simvars.cpp \
     globals.cpp \
@@ -44,7 +41,7 @@ g++ -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font \
     instruments/spitfire/rpmSpitfire.cpp \
     instruments/spitfire/vsiSpitfire.cpp \
     instruments/spitfire/boostSpitfire.cpp \
-    || exit
+    -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font || exit
 echo fs-restart
 fs-restart
 echo Done

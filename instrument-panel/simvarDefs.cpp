@@ -74,6 +74,7 @@ const char* SimVarDefs[][2] = {
     { "Autopilot Heading Lock", "bool" },
     { "Autopilot Wing Leveler", "bool" },
     { "Autopilot Altitude Lock Var", "feet" },
+    { "Autopilot Altitude Lock Var:3", "feet" },
     { "Autopilot Altitude Lock", "bool" },
     { "Autopilot Pitch Hold", "bool" },
     { "Autopilot Vertical Hold Var", "feet/minute" },

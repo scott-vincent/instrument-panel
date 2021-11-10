@@ -78,6 +78,7 @@ struct SimVars
     double autopilotHeadingLock = 0;
     double autopilotLevel = 0;
     double autopilotAltitude = 0;
+    double autopilotAltitude3 = 0;
     double autopilotAltLock = 0;
     double autopilotPitchHold = 0;
     double autopilotVerticalSpeed = 0;

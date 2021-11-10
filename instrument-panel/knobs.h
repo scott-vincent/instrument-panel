@@ -1,6 +1,7 @@
 #ifndef _KNOB_H_
 #define _KNOB_H_
 
+#include <cstdio>
 #include <thread>
 #include "globals.h"
 
