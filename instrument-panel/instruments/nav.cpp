@@ -1136,19 +1136,19 @@ void nav::toggleFlightDirector()
     setVerticalSpeed = 1500;
 
     managedSpeed = false;
-    globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
+    globals.simVars->write(KEY_AP_SPEED_SLOT_INDEX_SET, 1);
     managedAltitude = true;
-    globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 2);
+    globals.simVars->write(KEY_AP_VS_SLOT_INDEX_SET, 2);
 
     if (turnedOn) {
         // Use managed heading if FD turned on
         managedHeading = true;
-        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 2);
+        globals.simVars->write(KEY_AP_HEADING_SLOT_INDEX_SET, 2);
     }
     else {
         // Use current heading if FD turned off
         managedHeading = false;
-        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 1);
+        globals.simVars->write(KEY_AP_HEADING_SLOT_INDEX_SET, 1);
         globals.simVars->write(KEY_HEADING_BUG_SET, simVars->hiHeading);
     }
 
@@ -1166,7 +1166,6 @@ void nav::toggleFlightDirector()
 
 /// <summary>
 /// Switch between managed and selected speed.
-/// This is undocumented but works for the Airbus A320 neo.
 /// </summary>
 void nav::manSelSpeed()
 {
@@ -1178,16 +1177,15 @@ void nav::manSelSpeed()
     }
 
     if (managedSpeed) {
-        globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 2);
+        globals.simVars->write(KEY_AP_SPEED_SLOT_INDEX_SET, 2);
     }
     else {
-        globals.simVars->write(KEY_SPEED_SLOT_INDEX_SET, 1);
+        globals.simVars->write(KEY_AP_SPEED_SLOT_INDEX_SET, 1);
     }
 }
 
 /// <summary>
 /// Switch between managed and selected heading.
-/// This is undocumented but works for the Airbus A320 neo.
 /// </summary>
 void nav::manSelHeading()
 {
@@ -1199,25 +1197,24 @@ void nav::manSelHeading()
     }
 
     if (managedHeading) {
-        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 2);
+        globals.simVars->write(KEY_AP_HEADING_SLOT_INDEX_SET, 2);
     }
     else {
-        globals.simVars->write(KEY_HEADING_SLOT_INDEX_SET, 1);
+        globals.simVars->write(KEY_AP_HEADING_SLOT_INDEX_SET, 1);
     }
 }
 
 /// <summary>
 /// Switch between managed and selected altitude.
-/// This is undocumented but works for the Airbus A320 neo.
 /// </summary>
 void nav::manSelAltitude()
 {
     managedAltitude = !managedAltitude;
     if (managedAltitude) {
-        globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 2);
+        globals.simVars->write(KEY_AP_VS_SLOT_INDEX_SET, 2);
     }
     else {
-        globals.simVars->write(KEY_ALTITUDE_SLOT_INDEX_SET, 1);
+        globals.simVars->write(KEY_AP_VS_SLOT_INDEX_SET, 1);
     }
 }
 

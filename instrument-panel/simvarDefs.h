@@ -9,8 +9,8 @@ struct SimVars
 
     // All Jetbridge vars must come first
     double apuMasterSw = 0;
-    double apuStart = 0;
-    double apuStartAvail = 0;
+    double jbApuStart = 0;
+    double jbApuStartAvail = 0;
     double apuBleed = 0;
     double elecBat1 = 0;
     double elecBat2 = 0;
@@ -43,6 +43,7 @@ struct SimVars
     double tfFlapsCount = 1;
     double tfFlapsIndex = 0;
     double parkingBrakeOn = 1;
+    double apuStartSwitch = 0;
     double apuPercentRpm = 0;
 
     // Vars for Radio panel
@@ -76,6 +77,7 @@ struct SimVars
     double flightDirectorActive = 0;
     double autopilotHeading = 0;
     double autopilotHeadingLock = 0;
+    double autopilotHeadingSlotIndex = 1;
     double autopilotLevel = 0;
     double autopilotAltitude = 0;
     double autopilotAltitude3 = 0;
@@ -83,6 +85,7 @@ struct SimVars
     double autopilotPitchHold = 0;
     double autopilotVerticalSpeed = 0;
     double autopilotVerticalHold = 0;
+    double autopilotVsSlotIndex = 1;
     double autopilotAirspeed = 0;
     double autopilotMach = 0;
     double autopilotAirspeedHold = 0;
@@ -210,9 +213,9 @@ enum EVENT_ID {
     KEY_AP_APR_HOLD_OFF,
     KEY_AP_PANEL_ALTITUDE_ON,
     KEY_AUTO_THROTTLE_ARM,
-    KEY_HEADING_SLOT_INDEX_SET,
-    KEY_SPEED_SLOT_INDEX_SET,
-    KEY_ALTITUDE_SLOT_INDEX_SET,
+    KEY_AP_HEADING_SLOT_INDEX_SET,
+    KEY_AP_SPEED_SLOT_INDEX_SET,
+    KEY_AP_VS_SLOT_INDEX_SET,
     KEY_TUG_HEADING,
     KEY_ELEC_BAT1,
     KEY_ELEC_BAT2,
