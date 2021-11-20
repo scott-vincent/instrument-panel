@@ -52,7 +52,6 @@ struct globalVars
     const char* F18_Hornet_Text = "Boeing F/A 18E";
     const int F18_Hornet_Len = 14;
     const int FastAircraftSpeed = 195;
-    const int SupersonicAircraftSpeed = 480;
 
     const char* BitmapDir = "bitmaps/";
     const char* SettingsDir = "settings/";

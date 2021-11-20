@@ -146,7 +146,7 @@ void asi::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
-        supersonicAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.SupersonicAircraftSpeed);
+        supersonicAircraft = (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET);
 
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
