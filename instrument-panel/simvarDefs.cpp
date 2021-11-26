@@ -11,6 +11,7 @@ const char* SimVarDefs[][2] = {
     { "Apu Bleed", "jetbridge" },
     { "Elec Bat1", "jetbridge" },
     { "Elec Bat2", "jetbridge" },
+    { "Flaps Index", "jetbridge" },
     { "Parking Brake", "jetbridge" },
     { "Autopilot", "jetbridge" },
     { "Autothrust", "jetbridge" },

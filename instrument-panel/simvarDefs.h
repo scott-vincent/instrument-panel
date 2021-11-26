@@ -14,6 +14,7 @@ struct SimVars
     double apuBleed = 0;
     double elecBat1 = 0;
     double elecBat2 = 0;
+    double jbFlapsIndex = 0;
     double jbParkBrakePos = 0;
     double jbAutopilot = 0;
     double jbAutothrust = 0;
