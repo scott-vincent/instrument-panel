@@ -150,6 +150,7 @@ const char* SimVarDefs[][2] = {
     { "Suction Pressure", "inches of mercury" },
     { "Sim On Ground", "bool" },
     { "Plane Touchdown Normal Velocity", "feet per second" },
+    { "Is Any Interior Light On", "bool" },
     { "G Force", "gforce"},
     { "Atc Id", "string32" },
     { "Atc Airline", "string32" },

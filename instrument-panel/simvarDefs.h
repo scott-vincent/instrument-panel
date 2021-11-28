@@ -154,6 +154,7 @@ struct SimVars
     double suctionPressure = 1;
     double onGround = 0;
     double touchdownVs = -999;
+    double isActive = 0;
     double gForce = 0;
     char atcTailNumber[32] = "\0";
     char atcCallSign[32] = "\0";
