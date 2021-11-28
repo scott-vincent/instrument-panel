@@ -152,6 +152,8 @@ struct SimVars
     double engineManifoldPressure = 0;
     double engineFuelFlow = 0;
     double suctionPressure = 1;
+    double onGround = 0;
+    double touchdownVs = -999;
     double gForce = 0;
     char atcTailNumber[32] = "\0";
     char atcCallSign[32] = "\0";

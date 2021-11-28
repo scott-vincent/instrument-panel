@@ -279,6 +279,11 @@ void updateCommon()
 
     // Avionics check
     globals.avionics = globals.connected && (simVars->com1Status == 0 || simVars->com2Status == 0);
+
+    // Show touchdown vertical speed
+    if (simVars->touchdownVs != -999) {
+        sprintf(globals.error, "Touchdown Vertical Speed: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
+    }
 }
 
 /// <summary>
