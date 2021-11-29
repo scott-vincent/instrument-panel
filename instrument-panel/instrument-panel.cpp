@@ -103,6 +103,7 @@ char lastError[256] = "\0";
 int errorPersist;
 extern const char* versionString;
 int versionPersist = 500;
+int displayLandingRate = 0;
 
 /// <summary>
 /// Display an error message
@@ -281,8 +282,14 @@ void updateCommon()
     globals.avionics = globals.connected && (simVars->com1Status == 0 || simVars->com2Status == 0);
 
     // Show touchdown vertical speed
-    if (globals.connected && simVars->touchdownVs != -999) {
-        sprintf(globals.error, "Landing Rate: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
+    if (globals.connected && simVars->onGround && simVars->touchdownVs != -999) {
+        displayLandingRate++;
+        if (displayLandingRate > 30) {
+            sprintf(globals.error, "Landing Rate: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
+        }
+    }
+    else {
+        displayLandingRate = 0;
     }
 }
 
