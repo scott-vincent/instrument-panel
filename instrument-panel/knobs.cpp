@@ -1,5 +1,7 @@
 #ifndef _WIN32
+#ifndef NoKnobs
 #include <wiringPi.h>
+#endif
 #include "knobs.h"
 
 void watcher(knobs*);
@@ -7,7 +9,9 @@ void watcher(knobs*);
 knobs::knobs()
 {
     // Use BCM GPIO pin numbers
+#ifndef NoKnobs
     wiringPiSetupGpio();
+#endif
 }
 
 knobs::~knobs()
@@ -42,13 +46,17 @@ int knobs::add(int gpio1, int gpio2, int minVal, int maxVal, int startVal)
     // to use raspi-gpio command line to pull up resistors.
     char command[256];
 
+#ifndef NoKnobs
     pinMode(gpio1, INPUT);
+#endif
 
     if (gpio2 == 0) {
         sprintf(command, "raspi-gpio set %d pu", gpio1);
     }
     else {
+#ifndef NoKnobs
         pinMode(gpio2, INPUT);
+#endif
         sprintf(command, "raspi-gpio set %d,%d pu", gpio1, gpio2);
     }
 
@@ -99,15 +107,19 @@ int knobs::read(int knobNum)
 /// </summary>
 void watcher(knobs *t)
 {
-    int state;
+    int state = 0;
 
     while (!globals.quit) {
         for (int num = 0; num < t->knobCount; num++) {
             bool isSwitch = (t->gpio[num][1] == 0);
 
+#ifndef NoKnobs
             state = digitalRead(t->gpio[num][0]);
+#endif
             if (!isSwitch) {
+#ifndef NoKnobs
                 state += digitalRead(t->gpio[num][1]) * 2;
+#endif
             }
 
             if (state != t->lastState[num]) {
@@ -154,7 +166,11 @@ void watcher(knobs *t)
             }
         }
 
+#ifndef NoKnobs
         delay(1);
+#else
+	sleep(1000);
+#endif
     }
 }
 

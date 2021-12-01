@@ -90,7 +90,11 @@
 #include "savageCub/comSavageCub.h"
 #include "savageCub/xpdrSavageCub.h"
 
+#ifdef NoKnobs
+const bool HaveHardwareKnobs = false;
+#else
 const bool HaveHardwareKnobs = true;
+#endif
 const bool Debug = false;
 const bool UseOpenGL_ES3 = false;
 
