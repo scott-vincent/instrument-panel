@@ -285,11 +285,12 @@ void updateCommon()
     if (globals.connected && simVars->onGround && simVars->touchdownVs != -999) {
         displayLandingRate++;
         if (displayLandingRate > 30) {
-            sprintf(globals.error, "Landing Rate: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
+            sprintf(globals.info, "Landing Rate: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
         }
     }
     else {
         displayLandingRate = 0;
+        globals.info[0] = '\0';
     }
 }
 
@@ -430,6 +431,10 @@ void doRender()
             strcpy(lastError, globals.error);
             errorPersist = 200;
         }
+    }
+    else if (globals.info[0] != '\0') {
+        // Display info message
+        showMessage(al_map_rgb(0x10, 0x10, 0x50), globals.info);
     }
     else if (globals.arranging || globals.simulating) {
         char* text = globals.simVars->view();
