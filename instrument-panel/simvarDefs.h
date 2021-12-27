@@ -160,6 +160,7 @@ struct SimVars
     char atcCallSign[32] = "\0";
     char atcFlightNumber[32] = "\0";
     double atcHeavy = 0;
+    double skytrackState = 0;
 };
 
 enum EVENT_ID {
@@ -242,6 +243,7 @@ enum EVENT_ID {
     KEY_TOGGLE_PUSHBACK,
     KEY_PARKING_BRAKES,
     KEY_AUTOBRAKE,
+    KEY_SKYTRACK_STATE,
     A32NX_FCU_SPD_PUSH,
     A32NX_FCU_SPD_PULL,
     A32NX_FCU_SPD_SET,

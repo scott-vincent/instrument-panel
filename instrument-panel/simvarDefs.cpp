@@ -156,6 +156,8 @@ const char* SimVarDefs[][2] = {
     { "Atc Airline", "string32" },
     { "Atc Flight Number", "string32" },
     { "Atc Heavy", "bool" },
+    // Internal variables must come last
+    { "Skytrack State", "internal" },
     { NULL, NULL }
 };
 
@@ -237,6 +239,7 @@ WriteEvent WriteEvents[] = {
     { KEY_TOGGLE_PUSHBACK, "TOGGLE_PUSHBACK" },
     { KEY_PARKING_BRAKES, "PARKING_BRAKES" },
     { KEY_AUTOBRAKE, "AUTOBRAKE" },
+    { KEY_SKYTRACK_STATE, "SKYTRACK_STATE" },
     { A32NX_FCU_SPD_PUSH, "A32NX.FCU_SPD_PUSH" },
     { A32NX_FCU_SPD_PULL, "A32NX.FCU_SPD_PULL" },
     { A32NX_FCU_SPD_SET, "A32NX.FCU_SPD_SET" },

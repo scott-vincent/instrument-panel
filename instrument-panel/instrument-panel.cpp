@@ -285,8 +285,8 @@ void updateCommon()
     // Avionics check
     globals.avionics = globals.connected && (simVars->com1Status == 0 || simVars->com2Status == 0);
 
-    // Show touchdown vertical speed
     if (globals.electrics && simVars->onGround && simVars->touchdownVs != -999) {
+        // Show touchdown vertical speed
         displayLandingRate++;
         if (displayLandingRate > 30) {
             sprintf(globals.info, "Landing Rate: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
@@ -295,6 +295,14 @@ void updateCommon()
     else {
         displayLandingRate = 0;
         globals.info[0] = '\0';
+    }
+
+    // Show error if SkyTrack not recording but pushing back or running engines
+    if (simVars->skytrackState == 1 && (simVars->pushbackState < 3 ||simVars->rpmEngine > 0)) {
+        sprintf(globals.error, "SkyTrack not started");
+    }
+    else if (strcmp(globals.error, "SkyTrack not started") == 0 && simVars->skytrackState != 1) {
+        globals.error[0] = '\0';
     }
 }
 
