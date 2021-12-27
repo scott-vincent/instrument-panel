@@ -298,7 +298,7 @@ void updateCommon()
     }
 
     // Show error if SkyTrack not recording but pushing back or running engines
-    if (simVars->skytrackState == 1 && (simVars->pushbackState < 3 ||simVars->rpmEngine > 0)) {
+    if (simVars->skytrackState == 1 && (simVars->pushbackState < 3 || simVars->rpmEngine > 100)) {
         sprintf(globals.error, "SkyTrack not started");
     }
     else if (strcmp(globals.error, "SkyTrack not started") == 0 && simVars->skytrackState != 1) {
