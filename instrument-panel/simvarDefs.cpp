@@ -149,14 +149,13 @@ const char* SimVarDefs[][2] = {
     { "Eng Fuel Flow GPH:1", "gallons per hour" },
     { "Suction Pressure", "inches of mercury" },
     { "Sim On Ground", "bool" },
-    { "Plane Touchdown Normal Velocity", "feet per second" },
-    { "Is Any Interior Light On", "bool" },
     { "G Force", "gforce"},
     { "Atc Id", "string32" },
     { "Atc Airline", "string32" },
     { "Atc Flight Number", "string32" },
     { "Atc Heavy", "bool" },
     // Internal variables must come last
+    { "Landing Rate", "internal" },
     { "Skytrack State", "internal" },
     { NULL, NULL }
 };

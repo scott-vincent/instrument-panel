@@ -285,11 +285,11 @@ void updateCommon()
     // Avionics check
     globals.avionics = globals.connected && (simVars->com1Status == 0 || simVars->com2Status == 0);
 
-    if (globals.electrics && simVars->onGround && simVars->touchdownVs != -999) {
+    if (globals.electrics && simVars->onGround && simVars->landingRate != -999) {
         // Show touchdown vertical speed
         displayLandingRate++;
         if (displayLandingRate > 30) {
-            sprintf(globals.info, "Landing Rate: %d FPM", (int)((simVars->touchdownVs * 60) + 0.5));
+            sprintf(globals.info, "Landing Rate: %d FPM", (int)((simVars->landingRate * 60) + 0.5));
         }
     }
     else {
