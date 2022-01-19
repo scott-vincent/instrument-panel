@@ -158,6 +158,8 @@ struct SimVars
     char atcCallSign[32] = "\0";
     char atcFlightNumber[32] = "\0";
     double atcHeavy = 0;
+    double gpsLat = 0;
+    double gpsLon = 0;
     double landingRate = -999;
     double skytrackState = 0;
 };
@@ -306,6 +308,12 @@ struct WriteEvent {
 struct WriteData {
     EVENT_ID eventId;
     double value;
+};
+
+struct PosData {
+    double lat;
+    double lon;
+    double heading;
 };
 
 struct Request {
