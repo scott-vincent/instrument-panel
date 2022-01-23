@@ -20,6 +20,7 @@ struct SimVars
     double jbAutothrust = 0;
     double jbAutopilotHeading;
     double jbAutopilotVerticalSpeed;
+    double jbAutopilotFpa;
     double jbManagedSpeed = 0;
     double jbManagedHeading = 0;
     double jbManagedAltitude = 0;
@@ -258,6 +259,7 @@ enum EVENT_ID {
     A32NX_FCU_VS_SET,
     A32NX_FCU_SPD_MACH_TOGGLE_PUSH,
     A32NX_FCU_APPR_PUSH,
+    A32NX_FCU_TRK_FPA_TOGGLE_PUSH,
     KEY_CHECK_EVENT,
     EVENT_NONE,
     EVENT_DOORS_TO_MANUAL,
