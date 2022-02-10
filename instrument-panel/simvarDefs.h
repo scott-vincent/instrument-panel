@@ -61,6 +61,8 @@ struct SimVars
     double com2Standby = 124.850;
     double nav2Freq = 110.50;
     double nav2Standby = 113.90;
+    double com1Receive = 1;
+    double com2Receive = 0;
     double adfFreq = 394;
     double adfStandby = 368;
     double seatBeltsSwitch = 0;
@@ -184,10 +186,12 @@ enum EVENT_ID {
     KEY_GEAR_SET,
     KEY_ADF_CARD_SET,
     KEY_COM1_TRANSMIT_SELECT,
+    KEY_COM1_RECEIVE_SELECT,
     KEY_COM1_STBY_RADIO_SET,
     KEY_COM1_RADIO_FRACT_INC,
     KEY_COM1_RADIO_SWAP,
     KEY_COM2_TRANSMIT_SELECT,
+    KEY_COM2_RECEIVE_SELECT,
     KEY_COM2_STBY_RADIO_SET,
     KEY_COM2_RADIO_FRACT_INC,
     KEY_COM2_RADIO_SWAP,
