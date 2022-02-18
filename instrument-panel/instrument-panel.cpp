@@ -273,7 +273,7 @@ void updateCommon()
     SimVars* simVars = &globals.simVars->simVars;
 
     // Electrics check
-    if (globals.aircraft == FBW_A320NEO) {
+    if (globals.aircraft == FBW_A320) {
         // Instruments don't come on if running on batteries only.
         // Need external power, APU or main engines.
         globals.electrics = globals.connected && simVars->dcVolts > 25.4;

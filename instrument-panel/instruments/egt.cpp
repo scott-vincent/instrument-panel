@@ -137,7 +137,7 @@ void egt::update()
         egtRefAngle = egtAngle;
     }
 
-    if (loadedAircraft == FBW_A320NEO) {
+    if (loadedAircraft == FBW_A320) {
         if (simVars->engineFuelFlow > 300) {
             flowAngle = 126 + (simVars->engineFuelFlow - 300) * 0.039;
         }
