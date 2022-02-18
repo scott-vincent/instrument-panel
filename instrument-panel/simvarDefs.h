@@ -16,7 +16,8 @@ struct SimVars
     double elecBat2 = 0;
     double jbFlapsIndex = 0;
     double jbParkBrakePos = 0;
-    double jbAutopilot = 0;
+    double jbAutopilot1 = 0;
+    double jbAutopilot2 = 0;
     double jbAutothrust = 0;
     double jbAutopilotHeading;
     double jbAutopilotVerticalSpeed;

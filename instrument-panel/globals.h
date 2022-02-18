@@ -45,8 +45,8 @@ struct globalVars
     const int Shock_Ultra_Len = 18;
     const char* Asobo_A320neo_Text = "Airbus A320 Neo";
     const int Asobo_A320neo_Len = 15;
-    const char* FBW_A320neo_Text = "FBW Airbus A320 Neo";
-    const int FBW_A320neo_Len = 19;
+    const char* FBW_A320neo_Text = "FBW";
+    const int FBW_A320neo_Len = 3;
     const char* Boeing_747_Text = "Boeing 747";
     const int Boeing_747_Len = 10;
     const char* Boeing_787_Text = "Boeing 787";
