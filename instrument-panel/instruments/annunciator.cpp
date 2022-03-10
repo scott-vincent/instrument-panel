@@ -126,10 +126,10 @@ void annunciator::render()
     else {
         state = 2;
 
-        //if (selection == 0) {
-        //    showAtcInfo();
-        //}
-        //else {
+        if (selection == 0) {
+            showAtcInfo();
+        }
+        else {
             // Draw no warnings (warnings get overlayed)
             al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
@@ -166,7 +166,7 @@ void annunciator::render()
                     al_draw_bitmap(bitmaps[6], 590 * scaleFactor, 90 * scaleFactor, 0);
                 }
             }
-        //}
+        }
     }
 
     // Position dest bitmap on screen
