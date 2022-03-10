@@ -16,9 +16,11 @@ struct SimVars
     double elecBat2 = 0;
     double jbFlapsIndex = 0;
     double jbParkBrakePos = 0;
+    double jbXpndrMode = 0;
     double jbAutopilot1 = 0;
     double jbAutopilot2 = 0;
     double jbAutothrust = 0;
+    double jbTcasMode = 0;
     double jbAutopilotHeading;
     double jbAutopilotVerticalSpeed;
     double jbAutopilotFpa;
@@ -67,6 +69,7 @@ struct SimVars
     double adfFreq = 394;
     double adfStandby = 368;
     double seatBeltsSwitch = 0;
+    double tcasState = 0;   // Store TCAS state instead of xpndr avail
     double transponderState = 0;
     double transponderCode = 4608;
     // No vars after here required by Radio panel

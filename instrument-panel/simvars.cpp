@@ -18,7 +18,7 @@ extern const char* SimVarDefs[][2];
 bool prevConnected = false;
 long dataSize;
 Request request;
-char deltaData[2048];
+char deltaData[8192];
 
 void dataLink(simvars*);
 void identifyAircraft(char* aircraft);

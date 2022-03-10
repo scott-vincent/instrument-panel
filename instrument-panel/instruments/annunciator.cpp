@@ -126,10 +126,10 @@ void annunciator::render()
     else {
         state = 2;
 
-        if (selection == 0) {
-            showAtcInfo();
-        }
-        else {
+        //if (selection == 0) {
+        //    showAtcInfo();
+        //}
+        //else {
             // Draw no warnings (warnings get overlayed)
             al_draw_bitmap(bitmaps[2], 0, 0, 0);
 
@@ -166,7 +166,7 @@ void annunciator::render()
                     al_draw_bitmap(bitmaps[6], 590 * scaleFactor, 90 * scaleFactor, 0);
                 }
             }
-        }
+        //}
     }
 
     // Position dest bitmap on screen
@@ -202,8 +202,6 @@ void annunciator::showAtcInfo()
 
     al_draw_bitmap(bitmaps[9], 0, 0, 0);
     al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 20, 0, simVars->atcTailNumber);
-    // Debug - Uncomment to show aircraft name
-    //strcpy(callSign, simVars->aircraft);
     al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 40, 0, callSign);
 }
 
