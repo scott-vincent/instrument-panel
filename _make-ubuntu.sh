@@ -1,8 +1,6 @@
-echo fs-stop
-fs-stop
 echo Building instrument-panel
 cd instrument-panel
-g++ -o instrument-panel -I . -I instruments \
+g++ -o instrument-panel -w -DNoKnobs -I . -I instruments \
     simvarDefs.cpp \
     simvars.cpp \
     globals.cpp \
@@ -43,8 +41,5 @@ g++ -o instrument-panel -I . -I instruments \
     instruments/spitfire/rpmSpitfire.cpp \
     instruments/spitfire/vsiSpitfire.cpp \
     instruments/spitfire/boostSpitfire.cpp \
-    -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font || exit
-strip instrument-panel
-echo fs-restart
-fs-restart
+    -lpthread -lallegro -lallegro_image -lallegro_font || exit
 echo Done
