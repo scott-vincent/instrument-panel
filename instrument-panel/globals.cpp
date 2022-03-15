@@ -65,7 +65,7 @@ void identifyAircraft(char* aircraft)
 /// </summary>
 void receiveDelta(char *deltaData, long deltaSize, char* simVarsPtr)
 {
-    char* dataPtr = &deltaData[0];
+    char* dataPtr = deltaData;
 
     while (deltaSize > 0) {
         DeltaDouble* deltaDouble = (DeltaDouble*)dataPtr;
