@@ -187,21 +187,25 @@ void annunciator::render()
 
 void annunciator::showAtcInfo()
 {
-    char callSign[256];
+    char tailNumber[64];
+    snprintf(tailNumber, 63, "%s", simVars->atcTailNumber);
+    tailNumber[63] = '\0';
 
+    char callSign[64];
     if (simVars->atcFlightNumber[0] == '\0') {
-        sprintf(callSign, "%s ", simVars->atcCallSign);
+        snprintf(callSign, 63, "%s", simVars->atcCallSign);
     }
     else {
-        sprintf(callSign, "%s %s ", simVars->atcCallSign, simVars->atcFlightNumber);
+        snprintf(callSign, 63, "%s %s", simVars->atcCallSign, simVars->atcFlightNumber);
     }
+    callSign[63] = '\0';
 
-    if (simVars->atcHeavy == 1) {
-        strcat(callSign, "Heavy");
+    if (simVars->atcHeavy == 1 && strlen(callSign) < 26) {
+        strcat(callSign, " Heavy");
     }
 
     al_draw_bitmap(bitmaps[9], 0, 0, 0);
-    al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 20, 0, simVars->atcTailNumber);
+    al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 20, 0, tailNumber);
     al_draw_text(globals.font, al_map_rgb(0x80, 0x80, 0x80), 20, 40, 0, callSign);
 }
 
