@@ -997,10 +997,7 @@ void nav::navSwitchPressed()
     case Adf:
     {
         if (hasAdfStandby) {
-            int freq = adjustAdf(simVars->adfFreq, 0);
-            int standby = adjustAdf(simVars->adfStandby, 0);
-            globals.simVars->write(KEY_ADF_COMPLETE_SET, freq);
-            globals.simVars->write(KEY_ADF_SET, standby);
+            globals.simVars->write(KEY_ADF1_RADIO_SWAP);
         }
         break;
     }
@@ -1318,7 +1315,7 @@ void nav::navAdjustDigits(int adjust)
         int newVal = adjustAdf(oldVal, adjust);
         prevAdf = simVars->adfFreq;
         prevAdfStandby = simVars->adfStandby;
-        globals.simVars->write(KEY_ADF_COMPLETE_SET, newVal);
+        globals.simVars->write(KEY_ADF_STBY_SET, newVal);
         adfChanged = true;
         break;
     }
