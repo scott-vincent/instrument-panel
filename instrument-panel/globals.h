@@ -26,6 +26,7 @@ enum Aircraft {
     SUPERMARINE_SPITFIRE,
     F15_EAGLE,
     F18_HORNET,
+    JUSTFLIGHT_PA28,
     OTHER_AIRCRAFT,
     OTHER_AIRCRAFT2
 };
@@ -56,6 +57,8 @@ struct globalVars
     const int F15_Eagle_Len = 8;
     const char* F18_Hornet_Text = "Boeing F/A 18E";
     const int F18_Hornet_Len = 14;
+    const char* JustFlight_PA28_Text = "Just Flight PA28";
+    const int JustFlight_PA28_Len = 16;
     const int FastAircraftSpeed = 195;
 
     const char* BitmapDir = "bitmaps/";
