@@ -47,8 +47,8 @@ struct globalVars
     const int Airbus_A320_Len = 11;
     const char* FBW_A320_Text = "FBW";
     const int FBW_A320_Len = 3;
-    const char* Boeing_747_Text = "Boeing 747";
-    const int Boeing_747_Len = 10;
+    const char* Boeing_747_Text = "Salty Boeing 747";
+    const int Boeing_747_Len = 16;
     const char* Boeing_787_Text = "Boeing 787";
     const int Boeing_787_Len = 10;
     const char* Supermarine_Spitfire_Text = "FlyingIron Spitfire";
