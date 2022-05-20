@@ -48,6 +48,7 @@ struct SimVars
     double tfFlapsCount = 1;
     double tfFlapsIndex = 0;
     double parkingBrakeOn = 1;
+    double pushbackState = 3;
     double apuStartSwitch = 0;
     double apuPercentRpm = 0;
 
@@ -146,7 +147,6 @@ struct SimVars
     double gearLeftPos = 100;
     double gearCentrePos = 100;
     double gearRightPos = 100;
-    double pushbackState = 3;
     double rudderPosition = 0;
     double brakePedal = 0;
     double oilTemp = 75;

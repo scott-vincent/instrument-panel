@@ -45,6 +45,7 @@ const char* SimVarDefs[][2] = {
     { "Flaps Num Handle Positions", "number" },
     { "Flaps Handle Index", "number" },
     { "Brake Parking Position", "bool" },
+    { "Pushback State", "enum" },
     { "Apu Switch", "bool" },
     { "Apu Pct Rpm", "percent" },
 
@@ -142,7 +143,6 @@ const char* SimVarDefs[][2] = {
     { "Gear Left Position", "percent" },
     { "Gear Center Position", "percent" },
     { "Gear Right Position", "percent" },
-    { "Pushback State", "enum" },
     { "Rudder Position", "position" },
     { "Brake Left Position", "percent" },
     { "General Eng Oil Temperature:1", "fahrenheit" },
