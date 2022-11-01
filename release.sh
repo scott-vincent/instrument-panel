@@ -1,4 +1,4 @@
-rel=v1.6.6
+rel=v1.7.0
 mkdir release >/dev/null 2>&1
 rm -rf release/$rel >/dev/null 2>&1
 mkdir release/$rel

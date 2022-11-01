@@ -59,7 +59,7 @@ struct globalVars
     const int F18_Hornet_Len = 14;
     const char* JustFlight_PA28_Text = "Just Flight PA28";
     const int JustFlight_PA28_Len = 16;
-    const int FastAircraftSpeed = 195;
+    const int FastAircraftSpeed = 198;
 
     const char* BitmapDir = "bitmaps/";
     const char* SettingsDir = "settings/";
