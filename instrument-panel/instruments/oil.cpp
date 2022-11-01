@@ -118,8 +118,8 @@ void oil::update()
     if (tempAngle < -61.5) {
         tempAngle = -61.5;
     }
-    else if (tempAngle > 70) {
-        tempAngle = 70;
+    else if (tempAngle > 65) {
+        tempAngle = 65;
     }
 
     pressureAngle = 129 + simVars->oilPressure;

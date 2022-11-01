@@ -127,7 +127,7 @@ struct SimVars
     double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
-    double fuelCapacity = 0;
+    double fuelCapacity = 50;
     double fuelQuantity = 0;
     double fuelLeftPercent = 0;
     double fuelRightPercent = 0;
@@ -151,8 +151,8 @@ struct SimVars
     double gearRightPos = 100;
     double rudderPosition = 0;
     double brakePedal = 0;
-    double oilTemp = 75;
-    double oilPressure = 50;
+    double oilTemp = 0;
+    double oilPressure = 0;
     double exhaustGasTemp = 0;
     double engineType = 0;
     double engineMaxRpm = 0;
