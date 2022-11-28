@@ -10,9 +10,9 @@ You can also run the display on a PC (the same one running FS2020 if you wish) b
 
 Download the following two zip files.
 
-Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v1.7.0-Windows-x64.zip)
+Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v1.7.1-Windows-x64.zip)
 
-Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v1.7.0-windows-x64.zip)
+Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v1.7.1-windows-x64.zip)
 
 Unzip instrument-data-link into its own folder and double-click instrument-data-link.exe to run it.
 
