@@ -278,6 +278,9 @@ void updateCommon()
         // Need external power, APU or main engines.
         globals.electrics = globals.connected && simVars->dcVolts > 25.4;
     }
+    else if (globals.aircraft == AIRBUS_A310) {
+        globals.electrics = globals.connected && simVars->batteryLoad < 0;
+    }
     else {
         globals.electrics = globals.connected && simVars->dcVolts > 0;
     }

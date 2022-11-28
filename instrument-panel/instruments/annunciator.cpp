@@ -215,6 +215,14 @@ void annunciator::showAtcInfo()
 /// </summary>
 void annunciator::update()
 {
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+        prevFuelL = 100;
+        prevFuelR = 100;
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -293,13 +301,27 @@ void annunciator::update()
 
 void annunciator::checkFuel(double fuelLevel, bool *fuelWarning, double *prevFuel)
 {
-    // Fuel warning at 15%
-    if (fuelLevel == 0 || fuelLevel > 15) {
+    double warnPercent;
+
+    if (loadedAircraft == AIRBUS_A310 || loadedAircraft == BOEING_747) {
+        // Long haul - Fuel warning at 3%
+        warnPercent = 3;
+    }
+    else if (fastAircraft) {
+        // Fuel warning at 6%
+        warnPercent = 6;
+    }
+    else {
+        // Fuel warning at 12%
+        warnPercent = 12;
+    }
+
+    if (fuelLevel == 0 || fuelLevel > warnPercent) {
         *fuelWarning = false;
     }
     else {
         *fuelWarning = true;
-        if (*prevFuel > 15) {
+        if (*prevFuel > warnPercent) {
             // Flash for 10 seconds
             if (flashCount == 0) {
 #ifdef _WIN32

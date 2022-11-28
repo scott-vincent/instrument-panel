@@ -1,27 +1,14 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.7.0";
+const char* versionString = "v1.7.1";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
     { "Apu Master Sw", "jetbridge" },
-    { "Apu Start", "jetbridge" },
-    { "Apu Start Avail", "jetbridge" },
     { "Apu Bleed", "jetbridge" },
     { "Elec Bat1", "jetbridge" },
     { "Elec Bat2", "jetbridge" },
-    { "Flaps Index", "jetbridge" },
-    { "Parking Brake", "jetbridge" },
-    { "Spoilers Handle Pos", "jetbridge" },
-    { "Transponder Mode", "jetbridge" },
-    { "Autopilot 1", "jetbridge" },
-    { "Autopilot 2", "jetbridge" },
-    { "Autothrust", "jetbridge" },
-    { "Tcas Mode", "jetbridge" },
-    { "Autopilot Heading", "jetbridge" },
-    { "Autopilot Vertical Speed", "jetbridge" },
-    { "Autopilot Flight Path Angle", "jetbridge" },
     { "Autopilot Managed Speed", "jetbridge" },
     { "Autopilot Managed Heading", "jetbridge" },
     { "Autopilot Managed Altitude", "jetbridge" },
@@ -30,17 +17,16 @@ const char* SimVarDefs[][2] = {
     { "Loc Mode", "jetbridge" },
     { "Appr Mode", "jetbridge" },
     { "Autothrust Mode", "jetbridge" },
+    { "Show Mach", "jetbridge" },
     { "Autobrake Armed", "jetbridge" },
-    { "Left Brake Pedal", "jetbridge" },
-    { "Right Brake Pedal", "jetbridge" },
-    { "Rudder Pedal Position", "jetbridge" },
-    { "Engine EGT", "jetbridge" },
-    { "Engine Fuel Flow", "jetbridge" },
+    { "Pitch Trim", "jetbridge" },
+    { "Tcas Mode", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
     { "Estimated Cruise Speed", "knots" },
     { "Electrical Main Bus Voltage", "volts" },
+    { "Electrical Battery Load", "amperes" },
 
     // Vars for Power/Lights panel
     { "Light On States", "mask" },
@@ -69,7 +55,6 @@ const char* SimVarDefs[][2] = {
     { "Adf Active Frequency:1", "khz" },
     { "Adf Standby Frequency:1", "khz" },
     { "Cabin Seatbelts Alert Switch", "bool" },
-    { "Transponder Available", "bool" },
     { "Transponder State:1", "enum" },
     { "Transponder Code:1", "bco16" },
 
@@ -119,7 +104,6 @@ const char* SimVarDefs[][2] = {
     { "Local Time", "seconds" },
     { "Absolute Time", "seconds" },
     { "Ambient Temperature", "celsius" },
-    { "Electrical Battery Load", "amperes" },
     { "General Eng Rpm:1", "rpm" },
     { "Eng Rpm Animation Percent:1", "percent" },
     { "General Eng Elapsed Time:1", "hours" },
@@ -147,6 +131,7 @@ const char* SimVarDefs[][2] = {
     { "Gear Right Position", "percent" },
     { "Rudder Position", "position" },
     { "Brake Left Position", "percent" },
+    { "Brake Right Position", "percent" },
     { "General Eng Oil Temperature:1", "fahrenheit" },
     { "General Eng Oil Pressure:1", "psi" },
     { "General Eng Exhaust Gas Temperature:1", "celsius" },
@@ -208,6 +193,9 @@ WriteEvent WriteEvents[] = {
     { KEY_ADF_STBY_SET, "ADF_STBY_SET" },
     { KEY_ADF1_RADIO_SWAP, "ADF1_RADIO_SWAP" },
     { KEY_XPNDR_SET, "XPNDR_SET" },
+    { KEY_XPNDR_HIGH_SET, "XPNDR_HIGH_SET" },
+    { KEY_XPNDR_LOW_SET, "XPNDR_LOW_SET" },
+    { KEY_XPNDR_STATE, "XPNDR_STATE" },
     { KEY_AP_MASTER, "AP_MASTER" },
     { KEY_TOGGLE_FLIGHT_DIRECTOR, "TOGGLE_FLIGHT_DIRECTOR" },
     { KEY_AP_SPD_VAR_SET, "AP_SPD_VAR_SET" },
@@ -257,7 +245,7 @@ WriteEvent WriteEvents[] = {
     { KEY_AUTOBRAKE, "AUTOBRAKE" },
     { KEY_TANK_SELECT_1, "TANK_SELECT_1" },
     { KEY_TANK_SELECT_2, "TANK_SELECT_2" },
-    { KEY_RUDDER_SENSITIVITY, "RUDDER_SENSITIVITY" },
+    { KEY_ENG_CRANK, "ENGINE_CRANK" },
     { KEY_SKYTRACK_STATE, "SKYTRACK_STATE" },
     { KEY_G1000_PFD_SOFTKEY_1, "MobiFlight.AS1000_PFD_SOFTKEYS_1" },
     { KEY_G1000_PFD_SOFTKEY_2, "MobiFlight.AS1000_PFD_SOFTKEYS_2" },

@@ -9,22 +9,9 @@ struct SimVars
 
     // All Jetbridge vars must come first
     double apuMasterSw = 0;
-    double jbApuStart = 0;
-    double jbApuStartAvail = 0;
     double apuBleed = 0;
     double elecBat1 = 0;
     double elecBat2 = 0;
-    double jbFlapsIndex = 0;
-    double jbParkBrakePos = 0;
-    double jbSpoilersHandlePos = 0;
-    double jbXpndrMode = 0;
-    double jbAutopilot1 = 0;
-    double jbAutopilot2 = 0;
-    double jbAutothrust = 0;
-    double jbTcasMode = 0;
-    double jbAutopilotHeading;
-    double jbAutopilotVerticalSpeed;
-    double jbAutopilotFpa;
     double jbManagedSpeed = 0;
     double jbManagedHeading = 0;
     double jbManagedAltitude = 0;
@@ -33,17 +20,16 @@ struct SimVars
     double jbLocMode = 0;
     double jbApprMode = 0;
     double jbAutothrustMode = 0;
+    double jbShowMach = 0;
     double jbAutobrake = 0;
-    double jbLeftBrakePedal = 0;
-    double jbRightBrakePedal = 0;
-    double jbRudderPedalPos = 0;
-    double jbEngineEgt = 0;
-    double jbEngineFuelFlow = 0;
+    double jbPitchTrim = 0;
+    double jbTcasMode = 0;
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
     double cruiseSpeed = 120;
     double dcVolts = 23.7;
+    double batteryLoad = 0;
 
     // Vars for Power/Lights panel
     double lightStates = 0;
@@ -72,7 +58,6 @@ struct SimVars
     double adfFreq = 394;
     double adfStandby = 368;
     double seatBeltsSwitch = 0;
-    double tcasState = 0;   // Store TCAS state instead of xpndr avail
     double transponderState = 0;
     double transponderCode = 4608;
     // No vars after here required by Radio panel
@@ -123,7 +108,6 @@ struct SimVars
     double dcLocalSeconds = 46800;
     double dcFlightSeconds = 0;
     double dcTempC = 26.2;
-    double batteryLoad = 0;
     double rpmEngine = 0;
     double rpmPercent = 0;
     double rpmElapsedTime = 0;
@@ -150,7 +134,8 @@ struct SimVars
     double gearCentrePos = 100;
     double gearRightPos = 100;
     double rudderPosition = 0;
-    double brakePedal = 0;
+    double brakeLeftPedal = 0;
+    double brakeRightPedal = 0;
     double oilTemp = 0;
     double oilPressure = 0;
     double exhaustGasTemp = 0;
@@ -212,6 +197,9 @@ enum EVENT_ID {
     KEY_ADF_STBY_SET,
     KEY_ADF1_RADIO_SWAP,
     KEY_XPNDR_SET,
+    KEY_XPNDR_HIGH_SET,
+    KEY_XPNDR_LOW_SET,
+    KEY_XPNDR_STATE,
     KEY_AP_MASTER,
     KEY_TOGGLE_FLIGHT_DIRECTOR,
     KEY_AP_SPD_VAR_SET,
@@ -261,7 +249,7 @@ enum EVENT_ID {
     KEY_AUTOBRAKE,
     KEY_TANK_SELECT_1,
     KEY_TANK_SELECT_2,
-    KEY_RUDDER_SENSITIVITY,
+    KEY_ENG_CRANK,
     KEY_SKYTRACK_STATE,
     KEY_G1000_PFD_SOFTKEY_1,
     KEY_G1000_PFD_SOFTKEY_2,

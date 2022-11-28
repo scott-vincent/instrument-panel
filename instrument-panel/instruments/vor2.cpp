@@ -185,12 +185,17 @@ void vor2::update()
     }
 #endif
 
+    if (lastObsAdjust == 0) {
+        vor2Obs = simVars->vor2Obs;
+    }
+
     // Calculate values
+    compassAngle = -vor2Obs;
+
     double radialError = simVars->vor2RadialError;
     if (abs(radialError) > 90) { // Range: -180 to +179
         if (radialError > 0) radialError = 180 - radialError; else radialError = -180 - radialError;
     }    
-    compassAngle = -simVars->vor2Obs;
     locAngle = -radialError * 2.5;
     toFromOn = simVars->vor2ToFrom;
 
@@ -223,19 +228,35 @@ void vor2::updateKnobs()
     int val = globals.hardwareKnobs->read(obsKnob);
 
     if (val != INT_MIN) {
-        // Change Obs by knob movement amount (adjust for desired sensitivity)
-        int adjust = (int)((val - prevVal) / 2) * 5;
-        if (adjust != 0) {
-            double newVal = globals.simVars->simVars.vor2Obs + adjust;
+        // Change Obs by knob movement amount.
+        // Turn knob slowly for small increments or quickly for larger increments.
+        double adjust = 0;
+        int knobRate = (val - prevVal) / 2;
+        if (knobRate == 1 || knobRate == -1) {
+            adjust = knobRate * 0.5;
+        }
+        else if (knobRate > 1 || knobRate < -1) {
+            adjust = knobRate * 2.0;
+        }
 
-            if (newVal < 0) {
-                newVal += 360;
+        if (adjust != 0) {
+            vor2Obs += adjust;
+
+            if (vor2Obs < 0) {
+                vor2Obs += 360;
             }
-            else if (newVal >= 360) {
-                newVal -= 360;
+            else if (vor2Obs >= 360) {
+                vor2Obs -= 360;
             }
-            globals.simVars->write(KEY_VOR2_SET, newVal);
+            globals.simVars->write(KEY_VOR2_SET, vor2Obs);
             prevVal = val;
+        }
+        time(&lastObsAdjust);
+    }
+    else if (lastObsAdjust != 0) {
+        time(&now);
+        if (now - lastObsAdjust > 1) {
+            lastObsAdjust = 0;
         }
     }
 }

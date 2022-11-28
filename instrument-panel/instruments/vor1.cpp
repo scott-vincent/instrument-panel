@@ -218,8 +218,12 @@ void vor1::update()
         resize();
     }
 
+    if (lastObsAdjust == 0) {
+        vor1Obs = simVars->vor1Obs;
+    }
+
     // Calculate values
-    compassAngle = -simVars->vor1Obs;
+    compassAngle = -vor1Obs;
 
     if (loadedAircraft == FBW_A320) {
         glideSlopeOn = simVars->jbVerticalMode > 29 && simVars->jbVerticalMode < 33;
@@ -296,19 +300,41 @@ void vor1::updateKnobs()
     int val = globals.hardwareKnobs->read(obsKnob);
 
     if (val != INT_MIN) {
-        // Change Obs by knob movement amount (adjust for desired sensitivity)
-        int adjust = (int)((val - prevVal) / 2) * 5;
-        if (adjust != 0) {
-            double newVal = globals.simVars->simVars.vor1Obs + adjust;
+        // Change Obs by knob movement amount.
+        // Turn knob slowly for small increments or quickly for larger increments.
+        double adjust = 0;
+        int knobRate = (val - prevVal) / 2;
+        if (knobRate == 1 || knobRate == -1) {
+            if (loadedAircraft == AIRBUS_A310) {
+                // A310 uses Obs1 to set ILS Course
+                adjust = knobRate;
+            }
+            else {
+                adjust = knobRate * 0.5;
+            }
+        }
+        else if (knobRate > 1 || knobRate < -1) {
+            adjust = knobRate * 2.0;
+        }
 
-            if (newVal < 0) {
-                newVal += 360;
+        if (adjust != 0) {
+            vor1Obs += adjust;
+
+            if (vor1Obs < 0) {
+                vor1Obs += 360;
             }
-            else if (newVal >= 360) {
-                newVal -= 360;
+            else if (vor1Obs >= 360) {
+                vor1Obs -= 360;
             }
-            globals.simVars->write(KEY_VOR1_SET, newVal);
+            globals.simVars->write(KEY_VOR1_SET, vor1Obs);
             prevVal = val;
+        }
+        time(&lastObsAdjust);
+    }
+    else if (lastObsAdjust != 0) {
+        time(&now);
+        if (now - lastObsAdjust > 1) {
+            lastObsAdjust = 0;
         }
     }
 }
