@@ -28,6 +28,9 @@ void identifyAircraft(char* aircraft)
         else if (strncmp(aircraft, globals.Airbus_A310_Text, globals.Airbus_A310_Len) == 0) {
             globals.aircraft = AIRBUS_A310;
         }
+        else if (strncmp(aircraft, globals.IniBuilds_A310_Text, globals.IniBuilds_A310_Len) == 0) {
+            globals.aircraft = AIRBUS_A310;
+        }
         else if (strncmp(aircraft, globals.Airbus_A320_Text, globals.Airbus_A320_Len) == 0) {
             globals.aircraft = FBW_A320;
         }
