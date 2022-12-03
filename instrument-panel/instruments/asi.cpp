@@ -6,6 +6,7 @@
 #include "alternate/asiSupersonic.h"
 #include "savageCub/asiSavageCub.h"
 #include "spitfire/asiSpitfire.h"
+#include "glider/asiGlider.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -160,6 +161,9 @@ void asi::update()
         }
         else if (loadedAircraft == SUPERMARINE_SPITFIRE) {
             customInstrument = new asiSpitfire(xPos, yPos, size, name);
+        }
+        else if (loadedAircraft == GLIDER) {
+            customInstrument = new asiGlider(xPos, yPos, size, name);
         }
         else if (supersonicAircraft) {
             customInstrument = new asiSupersonic(xPos, yPos, size, name);

@@ -55,6 +55,12 @@ void identifyAircraft(char* aircraft)
         else if (strncmp(aircraft, globals.JustFlight_PA28_Text, globals.JustFlight_PA28_Len) == 0) {
             globals.aircraft = JUSTFLIGHT_PA28;
         }
+        else if (strncmp(aircraft, globals.Glider_DG_LS8_Text, globals.Glider_DG_LS8_Len) == 0) {
+            globals.aircraft = GLIDER;
+        }
+        else if (strncmp(aircraft, globals.Glider_DG_1001E_Text, globals.Glider_DG_1001E_Len) == 0) {
+            globals.aircraft = GLIDER;
+        }
         else {
             // Need to flip between other aircraft so that instruments
             // can detect the aircraft has changed.

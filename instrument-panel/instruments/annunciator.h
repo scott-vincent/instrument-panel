@@ -19,12 +19,12 @@ private:
     // Instrument values (calculated from variables and needed to draw the instrument)
     int selection = 1;
     int prevState = -1;
-    bool vacWarningL;
-    bool vacWarningR;
-    bool fuelWarningL;
-    bool fuelWarningR;
-    bool oilWarning;
-    bool voltsWarning;
+    bool vacWarningL = false;
+    bool vacWarningR = false;
+    bool fuelWarningL = false;
+    bool fuelWarningR = false;
+    bool oilWarning = false;
+    bool voltsWarning = false;
     double fuelPercent;
     double totalPercent;
     double leftPercent;

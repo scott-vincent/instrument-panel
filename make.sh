@@ -43,6 +43,7 @@ g++ -o instrument-panel -I . -I instruments \
     instruments/spitfire/rpmSpitfire.cpp \
     instruments/spitfire/vsiSpitfire.cpp \
     instruments/spitfire/boostSpitfire.cpp \
+    instruments/glider/asiGlider.cpp \
     -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font || exit
 strip instrument-panel
 echo fs-restart

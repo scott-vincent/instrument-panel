@@ -221,6 +221,12 @@ void annunciator::update()
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
         prevFuelL = 100;
         prevFuelR = 100;
+        vacWarningL = false;
+        vacWarningR = false;
+        fuelWarningL = false;
+        fuelWarningR = false;
+        oilWarning = false;
+        voltsWarning = false;
     }
 
     // Check for position or size change
@@ -240,10 +246,6 @@ void annunciator::update()
         updateKnobs();
     }
 #endif
-
-    // VAC warning if < 1 inHG
-    vacWarningL = (simVars->suctionPressure < 1);
-    vacWarningR = (simVars->suctionPressure < 1);
 
     // Split fuel from all tanks between left/right
     // by using main tank percentages as a ratio.
@@ -271,8 +273,20 @@ void annunciator::update()
         }
     }
 
-    checkFuel(leftPercent, &fuelWarningL, &prevFuelL);
-    checkFuel(rightPercent, &fuelWarningR, &prevFuelR);
+    if (loadedAircraft != GLIDER) {
+        checkFuel(leftPercent, &fuelWarningL, &prevFuelL);
+        checkFuel(rightPercent, &fuelWarningR, &prevFuelR);
+
+        // VAC warning if < 1 inHG
+        vacWarningL = (simVars->suctionPressure < 1);
+        vacWarningR = (simVars->suctionPressure < 1);
+
+        // Oil warning if pressure < 20 PSI
+        oilWarning = (simVars->oilPressure < 20);
+
+        // Volts warning if battery load too high, i.e. alternator off or not charging quick enough
+        voltsWarning = (simVars->batteryLoad > 18);
+    }
 
     // Fuel warning flashes for 10 seconds
     if (flashCount > 0) {
@@ -291,12 +305,6 @@ void annunciator::update()
             lastFlash = now;
         }
     }
-
-    // Oil warning if pressure < 20 PSI
-    oilWarning = (simVars->oilPressure < 20);
-
-    // Volts warning if battery load too high, i.e. alternator off or not charging quick enough
-    voltsWarning = (simVars->batteryLoad > 18);
 }
 
 void annunciator::checkFuel(double fuelLevel, bool *fuelWarning, double *prevFuel)
