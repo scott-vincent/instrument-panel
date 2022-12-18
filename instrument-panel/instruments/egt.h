@@ -12,6 +12,8 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    double exhaustGasTemp;
+    double engineFuelFlow;
     double egtAngle;
     double egtRefAngle = 62;
     double flowAngle;

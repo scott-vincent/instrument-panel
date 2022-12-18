@@ -273,6 +273,19 @@ void annunciator::update()
         }
     }
 
+    if (simVars->numberOfEngines == 2) {
+        oilPressure = (simVars->oilPressure1 + simVars->oilPressure2) / 2;
+    }
+    else if (simVars->numberOfEngines > 3) {
+        oilPressure = (simVars->oilPressure1 + simVars->oilPressure2 + simVars->oilPressure3 + simVars->oilPressure4) / 4;
+    }
+    else if (simVars->numberOfEngines == 3) {
+        oilPressure = (simVars->oilPressure1 + simVars->oilPressure2 + simVars->oilPressure3) / 3;
+    }
+    else {
+        oilPressure = simVars->oilPressure1;
+    }
+
     if (loadedAircraft != GLIDER) {
         checkFuel(leftPercent, &fuelWarningL, &prevFuelL);
         checkFuel(rightPercent, &fuelWarningR, &prevFuelR);
@@ -282,7 +295,7 @@ void annunciator::update()
         vacWarningR = (simVars->suctionPressure < 1);
 
         // Oil warning if pressure < 20 PSI
-        oilWarning = (simVars->oilPressure < 20);
+        oilWarning = (oilPressure < 20);
 
         // Volts warning if battery load too high, i.e. alternator off or not charging quick enough
         voltsWarning = (simVars->batteryLoad > 18);
@@ -357,6 +370,9 @@ void annunciator::updateKnobs()
 {
     // Read switch
     int val = globals.hardwareKnobs->read(selSwitch);
+
+    // This switch has a short so ignore for now
+    val = INT_MIN;
 
     if (val != INT_MIN) {
         selection = 1 - (val % 2);

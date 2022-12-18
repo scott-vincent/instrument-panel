@@ -11,6 +11,7 @@ private:
     float scaleFactor;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
+    double turbineEngineN1;
     int digit1;
     int digit2;
     int digit3;

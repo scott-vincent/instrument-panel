@@ -125,7 +125,24 @@ void egt::update()
     }
 
     // Calculate values
-    egtAngle = 62 - (simVars->exhaustGasTemp - 680) * 0.527885;
+    if (simVars->numberOfEngines == 2) {
+        exhaustGasTemp = (simVars->exhaustGasTemp1 + simVars->exhaustGasTemp2) / 2;
+        engineFuelFlow = (simVars->engineFuelFlow1 + simVars->engineFuelFlow2) / 2;
+    }
+    else if (simVars->numberOfEngines > 3) {
+        exhaustGasTemp = (simVars->exhaustGasTemp1 + simVars->exhaustGasTemp2 + simVars->exhaustGasTemp3 + simVars->exhaustGasTemp4) / 4;
+        engineFuelFlow = (simVars->engineFuelFlow1 + simVars->engineFuelFlow2 + simVars->engineFuelFlow3 + simVars->engineFuelFlow4) / 4;
+    }
+    else if (simVars->numberOfEngines == 3) {
+        exhaustGasTemp = (simVars->exhaustGasTemp1 + simVars->exhaustGasTemp2 + simVars->exhaustGasTemp3) / 3;
+        engineFuelFlow = (simVars->engineFuelFlow1 + simVars->engineFuelFlow2 + simVars->engineFuelFlow3) / 3;
+    }
+    else {
+        exhaustGasTemp = simVars->exhaustGasTemp1;
+        engineFuelFlow = simVars->engineFuelFlow1;
+    }
+
+    egtAngle = 62 - (exhaustGasTemp - 680) * 0.527885;
     if (egtAngle < -60) {
         egtAngle = -60;
     }
@@ -138,19 +155,19 @@ void egt::update()
     }
 
     if (loadedAircraft == FBW_A320) {
-        if (simVars->engineFuelFlow > 300) {
-            flowAngle = 126 + (simVars->engineFuelFlow - 300) * 0.039;
+        if (engineFuelFlow > 300) {
+            flowAngle = 126 + (engineFuelFlow - 300) * 0.039;
         }
         else {
-            flowAngle = 118 + simVars->engineFuelFlow * 0.0267;
+            flowAngle = 118 + engineFuelFlow * 0.0267;
         }
     }
     else {
-        if (simVars->engineFuelFlow > 5) {
-            flowAngle = 126 + (simVars->engineFuelFlow - 5) * 8;
+        if (engineFuelFlow > 5) {
+            flowAngle = 126 + (engineFuelFlow - 5) * 8;
         }
         else {
-            flowAngle = 118 + simVars->engineFuelFlow * 1.6;
+            flowAngle = 118 + engineFuelFlow * 1.6;
         }
     }
 

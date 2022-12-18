@@ -11,6 +11,8 @@ private:
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
+    double oilTemp;
+    double oilPressure;
     double tempAngle;
     double pressureAngle;
 

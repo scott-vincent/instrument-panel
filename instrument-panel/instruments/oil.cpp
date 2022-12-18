@@ -108,11 +108,28 @@ void oil::update()
     }
 
     // Calculate values
-    if (simVars->oilTemp > 100) {
-        tempAngle = 40 - (simVars->oilTemp - 100) * 0.7;
+    if (simVars->numberOfEngines == 2) {
+        oilTemp = (simVars->oilTemp1 + simVars->oilTemp2) / 2;
+        oilPressure = (simVars->oilPressure1 + simVars->oilPressure2) / 2;
+    }
+    else if (simVars->numberOfEngines > 3) {
+        oilTemp = (simVars->oilTemp1 + simVars->oilTemp2 + simVars->oilTemp3 + simVars->oilTemp4) / 4;
+        oilPressure = (simVars->oilPressure1 + simVars->oilPressure2 + simVars->oilPressure3 + simVars->oilPressure4) / 4;
+    }
+    else if (simVars->numberOfEngines == 3) {
+        oilTemp = (simVars->oilTemp1 + simVars->oilTemp2 + simVars->oilTemp3) / 3;
+        oilPressure = (simVars->oilPressure1 + simVars->oilPressure2 + simVars->oilPressure3) / 3;
     }
     else {
-        tempAngle = 50 - (simVars->oilTemp - 75) * 0.4;
+        oilTemp = simVars->oilTemp1;
+        oilPressure = simVars->oilPressure1;
+    }
+
+    if (oilTemp > 100) {
+        tempAngle = 40 - (oilTemp - 100) * 0.7;
+    }
+    else {
+        tempAngle = 50 - (oilTemp - 75) * 0.4;
     }
 
     if (tempAngle < -61.5) {
@@ -122,7 +139,7 @@ void oil::update()
         tempAngle = 65;
     }
 
-    pressureAngle = 129 + simVars->oilPressure;
+    pressureAngle = 129 + oilPressure;
     if (pressureAngle < 129) {
         pressureAngle = 129;
     }

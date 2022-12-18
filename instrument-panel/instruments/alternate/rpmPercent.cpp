@@ -155,15 +155,28 @@ void rpmPercent::update()
     digit4 = (int)simVars->rpmElapsedTime % 10;
     digit5 = (int)(simVars->rpmElapsedTime * 10) % 10;
 
+    if (simVars->numberOfEngines == 2) {
+        turbineEngineN1 = (simVars->turbineEngine1N1 + simVars->turbineEngine2N1) / 2;
+    }
+    else if (simVars->numberOfEngines > 3) {
+        turbineEngineN1 = (simVars->turbineEngine1N1 + simVars->turbineEngine2N1 + simVars->turbineEngine3N1 + simVars->turbineEngine4N1) / 4;
+    }
+    else if (simVars->numberOfEngines == 3) {
+        turbineEngineN1 = (simVars->turbineEngine1N1 + simVars->turbineEngine2N1 + simVars->turbineEngine3N1) / 3;
+    }
+    else {
+        turbineEngineN1 = simVars->turbineEngine1N1;
+    }
+
     // RPM percent dial begins at vertical and spans 315 degrees
     // The scale changes at 60 percent
-    if (simVars->turbineEngineN1 < 60) {
+    if (turbineEngineN1 < 60) {
         // The 0-60% arc spans 135 degrees
-        angle = 135 * (simVars->turbineEngineN1 / 60 );
+        angle = 135 * (turbineEngineN1 / 60 );
     }
     else {
         // The remaining 40% arc (60-100%) starts at 135 degs and spans 180 degrees
-        angle = 135 + (181 * (simVars->turbineEngineN1 - 60) / 40.0);    
+        angle = 135 + (181 * (turbineEngineN1 - 60) / 40.0);    
     }
 }
 

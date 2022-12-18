@@ -29,6 +29,7 @@ private:
     double totalPercent;
     double leftPercent;
     double rightPercent;
+    double oilPressure;
     double prevFuelL = 100;
     double prevFuelR = 100;
     int flashCount = 0;
