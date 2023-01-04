@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.7.2";
+const char* versionString = "v1.7.3";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
@@ -236,6 +236,7 @@ WriteEvent WriteEvents[] = {
     { KEY_AP_SPEED_SLOT_INDEX_SET, "AP_SPEED_SLOT_INDEX_SET" },
     { KEY_AP_VS_SLOT_INDEX_SET, "AP_VS_SLOT_INDEX_SET" },
     { KEY_AP_VS_SET, "AP_VS_SET" },
+    { KEY_AP_PANEL_HEADING_SET, "AP_PANEL_HEADING_SET" },
     { KEY_TUG_HEADING, "KEY_TUG_HEADING" },
     { KEY_ELEC_BAT1, "ELEC BAT1" },
     { KEY_ELEC_BAT2, "ELEC BAT2" },

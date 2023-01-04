@@ -11,6 +11,7 @@ private:
     Aircraft loadedAircraft = UNDEFINED;
     bool fastAircraft = false;
     float scaleFactor;
+    double cabinLights = 0;
 
     // Instrument values (calculated from variables and needed to draw the instrument)
     float trimOffset;
@@ -25,6 +26,7 @@ private:
     int flapsKnob = -1;
     int lastTrimVal;
     int lastFlapsVal;
+    int prevVal;
 
 public:
     trimFlaps(int xPos, int yPos, int size);
