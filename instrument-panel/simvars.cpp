@@ -211,16 +211,16 @@ void simvars::saveSettings()
         fprintf(outfile, "  },\n");
 
         fprintf(outfile, "  \"%s\": {\n", MonitorGroup);
-        fprintf(outfile, "    \"%s\": %d\n", MonitorStartOn, globals.startOnMonitor);
+        fprintf(outfile, "    \"%s\": %d,\n", MonitorStartOn, globals.startOnMonitor);
         if (globals.monitorFullscreen) {
-            fprintf(outfile, "    \"%s\": true\n", MonitorFullscreen);
+            fprintf(outfile, "    \"%s\": true,\n", MonitorFullscreen);
         }
         else {
-            fprintf(outfile, "    \"%s\": false\n", MonitorFullscreen);
+            fprintf(outfile, "    \"%s\": false,\n", MonitorFullscreen);
         }
-        fprintf(outfile, "    \"%s\": %d\n", MonitorWidth, globals.monitorWidth);
-        fprintf(outfile, "    \"%s\": %d\n", MonitorHeight, globals.monitorHeight);
-        fprintf(outfile, "    \"%s\": %d\n", MonitorPositionX, globals.monitorPositionX);
+        fprintf(outfile, "    \"%s\": %d,\n", MonitorWidth, globals.monitorWidth);
+        fprintf(outfile, "    \"%s\": %d,\n", MonitorHeight, globals.monitorHeight);
+        fprintf(outfile, "    \"%s\": %d,\n", MonitorPositionX, globals.monitorPositionX);
         fprintf(outfile, "    \"%s\": %d\n", MonitorPositionY, globals.monitorPositionY);
         fprintf(outfile, "  },\n");
 
