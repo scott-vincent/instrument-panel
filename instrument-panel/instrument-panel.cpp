@@ -145,6 +145,8 @@ void fatalError(const char* msg)
 /// </summary>
 void init(const char *settingsFile = NULL)
 {
+    globals.simVars = new simvars(settingsFile);
+
     if (!al_init()) {
         fatalError("Failed to initialise Allegro");
     }
@@ -174,7 +176,7 @@ void init(const char *settingsFile = NULL)
     // Use existing desktop resolution/refresh rate and force OpenGL ES 3
     // for Raspberry Pi 4 hardware acceleration compatibility.
     int flags;
-    if (Debug) {
+    if (Debug || !globals.monitorFullscreen) {
         flags = ALLEGRO_WINDOWED;
     }
     else {
@@ -197,20 +199,22 @@ void init(const char *settingsFile = NULL)
 
     // Resolution is ignored for fullscreen window (uses existing desktop resolution)
     // but fails on Rasberry Pi if set to 0!
-    if ((globals.display = al_create_display(1200, 800)) == NULL) {
+    if ((globals.display = al_create_display(globals.monitorWidth, globals.monitorHeight)) == NULL) {
             fatalError("Failed to create display");
     }
 
     globals.displayHeight = al_get_display_height(globals.display);
     globals.displayWidth = al_get_display_width(globals.display);
 
+    if (Debug || !globals.monitorFullscreen) {
+        al_set_window_position(globals.display, globals.monitorPositionX, globals.monitorPositionY);
+    }
+
     al_hide_mouse_cursor(globals.display);
     al_inhibit_screensaver(true);
 
     al_register_event_source(eventQueue, al_get_keyboard_event_source());
     al_register_event_source(eventQueue, al_get_display_event_source(globals.display));
-
-    globals.simVars = new simvars(settingsFile);
 
     if (!(timer = al_create_timer(1.0 / globals.dataRateFps))) {
         fatalError("Failed to create timer");

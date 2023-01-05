@@ -5,7 +5,12 @@
     "Data Rate FPS": 20
   },
   "Monitor": {
-    "StartOn": 1
+    "StartOn": 1,
+    "Fullscreen": true,
+    "Width": 1200,
+    "Height": 800,
+    "PositionX": 0,
+    "PositionY": 0
   },
   "ASI": {
     "Enabled": true,
@@ -51,27 +56,27 @@
   },
   "VOR2": {
     "Enabled": true,
-    "Position X": 1553,
-    "Position Y": 348,
+    "Position X": 1227,
+    "Position Y": 674,
     "Size": 276
-  },
-  "Trim Flaps": {
-    "Enabled": true,
-    "Position X": 888,
-    "Position Y": 676,
-    "Size": 280
   },
   "RPM": {
     "Enabled": true,
-    "Position X": 1222,
-    "Position Y": 669,
+    "Position X": 1551,
+    "Position Y": 346,
     "Size": 284
   },
   "ADF": {
     "Enabled": true,
-    "Position X": 1556,
-    "Position Y": 672,
+    "Position X": 896,
+    "Position Y": 677,
     "Size": 266
+  },
+  "Trim Flaps": {
+    "Enabled": true,
+    "Position X": 1551,
+    "Position Y": 672,
+    "Size": 280
   },
   "Annunciator": {
     "Enabled": true,

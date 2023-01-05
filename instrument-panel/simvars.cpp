@@ -13,6 +13,11 @@ const char *DataLinkPort = "Port";
 const char* DataRateFps = "Data Rate FPS";
 const char *MonitorGroup = "Monitor";
 const char *MonitorStartOn = "StartOn";
+const char* MonitorFullscreen = "Fullscreen";
+const char* MonitorWidth = "Width";
+const char* MonitorHeight = "Height";
+const char* MonitorPositionX = "PositionX";
+const char* MonitorPositionY = "PositionY";
 
 extern const char* SimVarDefs[][2];
 bool prevConnected = false;
@@ -129,6 +134,21 @@ void simvars::loadSettings()
                 else if (_stricmp(group, MonitorGroup) == 0) {
                     if (_stricmp(name, MonitorStartOn) == 0) {
                         globals.startOnMonitor = atoi(value);
+                    }
+                    else if (_stricmp(name, MonitorFullscreen) == 0) {
+                        globals.monitorFullscreen = settingValue(value);
+                    }
+                    else if (_stricmp(name, MonitorWidth) == 0) {
+                        globals.monitorWidth = atoi(value);
+                    }
+                    else if (_stricmp(name, MonitorHeight) == 0) {
+                        globals.monitorHeight = atoi(value);
+                    }
+                    else if (_stricmp(name, MonitorPositionX) == 0) {
+                        globals.monitorPositionX = atoi(value);
+                    }
+                    else if (_stricmp(name, MonitorPositionY) == 0) {
+                        globals.monitorPositionY = atoi(value);
                     }
                 }
                 else if (groupCount == 0 || strcmp(groups[groupCount - 1].name, group) != 0) {

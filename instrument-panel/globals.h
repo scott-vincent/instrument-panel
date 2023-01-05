@@ -93,6 +93,11 @@ struct globalVars
     int dataLinkPort = 52020;
     int dataRateFps = 30;
     int startOnMonitor = 0;
+    bool monitorFullscreen = true;
+    int monitorWidth = 1200;
+    int monitorHeight = 800;
+    int monitorPositionX = 0;
+    int monitorPositionY = 0;
     Aircraft aircraft;
     char lastAircraft[32];
 

@@ -4,6 +4,14 @@
     "Port": 52020,
     "Data Rate FPS": 20
   },
+  "Monitor": {
+    "StartOn": 0,
+    "Fullscreen": true,
+    "Width": 1200,
+    "Height": 800,
+    "PositionX": 0,
+    "PositionY": 0
+  },
   "ASI": {
     "Enabled": true,
     "Position X": 566,
