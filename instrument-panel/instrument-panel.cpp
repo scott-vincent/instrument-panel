@@ -147,6 +147,10 @@ void init(const char *settingsFile = NULL)
 {
     globals.simVars = new simvars(settingsFile);
 
+    if (Debug) {
+        globals.monitorFullscreen = false;
+    }
+
     if (!al_init()) {
         fatalError("Failed to initialise Allegro");
     }
@@ -176,11 +180,11 @@ void init(const char *settingsFile = NULL)
     // Use existing desktop resolution/refresh rate and force OpenGL ES 3
     // for Raspberry Pi 4 hardware acceleration compatibility.
     int flags;
-    if (Debug || !globals.monitorFullscreen) {
-        flags = ALLEGRO_WINDOWED;
+    if (globals.monitorFullscreen) {
+        flags = ALLEGRO_FULLSCREEN_WINDOW | ALLEGRO_FRAMELESS;
     }
     else {
-        flags = ALLEGRO_FULLSCREEN_WINDOW | ALLEGRO_FRAMELESS;
+        flags = ALLEGRO_WINDOWED;
     }
 
     if (UseOpenGL_ES3) {
@@ -206,7 +210,7 @@ void init(const char *settingsFile = NULL)
     globals.displayHeight = al_get_display_height(globals.display);
     globals.displayWidth = al_get_display_width(globals.display);
 
-    if (Debug || !globals.monitorFullscreen) {
+    if (!globals.monitorFullscreen) {
         al_set_window_position(globals.display, globals.monitorPositionX, globals.monitorPositionY);
     }
 
@@ -364,7 +368,12 @@ void switchMonitor()
     globals.displayX = monX[monNum];
     globals.displayY = monY[monNum];
 
-    al_set_window_position(globals.display, globals.displayX, globals.displayY);
+    if (globals.monitorFullscreen) {
+        al_set_window_position(globals.display, globals.displayX, globals.displayY);
+    }
+    else {
+        al_set_window_position(globals.display, globals.monitorPositionX, globals.monitorPositionY);
+    }
 }
 
 /// <summary>
