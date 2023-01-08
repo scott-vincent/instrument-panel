@@ -149,6 +149,7 @@ void asi::update()
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && loadedAircraft != JUSTFLIGHT_PA28
             && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
         supersonicAircraft = (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET);
+        cabinLights = 0;
 
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {
@@ -242,13 +243,30 @@ void asi::updateKnobs()
     int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
-        // Change calibration by knob movement amount (adjust for desired sensitivity)
-        int adjust = (int)((prevVal - val) / 2);
-        if (adjust != 0) {
-            double newVal = simVars->asiAirspeedCal + adjust;
+        if (loadedAircraft == FBW_A320) {
+            // Use knob for interior lighting instead
+            double adjust = val - prevVal;
+            if (adjust != 0) {
+                cabinLights += adjust;
+                if (cabinLights < 0) {
+                    cabinLights = 0;
+                }
+                else if (cabinLights > 100) {
+                    cabinLights = 100;
+                }
+                globals.simVars->write(KEY_CABIN_LIGHTS_SET, cabinLights);
+                prevVal = val;
+            }
+        }
+        else {
+            // Change calibration by knob movement amount (adjust for desired sensitivity)
+            int adjust = (int)((prevVal - val) / 2);
+            if (adjust != 0) {
+                double newVal = simVars->asiAirspeedCal + adjust;
 
-            globals.simVars->write(KEY_TRUE_AIRSPEED_CAL_SET, newVal);
-            prevVal = val;
+                globals.simVars->write(KEY_TRUE_AIRSPEED_CAL_SET, newVal);
+                prevVal = val;
+            }
         }
     }
 }

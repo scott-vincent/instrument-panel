@@ -112,6 +112,9 @@
     <ClCompile Include="instruments\glider\asiGlider.cpp">
       <Filter>instruments\glider</Filter>
     </ClCompile>
+    <ClCompile Include="instruments\trimFlaps2.cpp">
+      <Filter>instruments</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="instrument.h" />
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="instruments\glider\asiGlider.h">
       <Filter>instruments\glider</Filter>
+    </ClInclude>
+    <ClInclude Include="instruments\trimFlaps2.h">
+      <Filter>instruments</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

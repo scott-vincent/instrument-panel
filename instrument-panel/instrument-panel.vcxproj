@@ -176,6 +176,7 @@
     <ClCompile Include="instruments\digitalClock.cpp" />
     <ClCompile Include="instruments\egt.cpp" />
     <ClCompile Include="instruments\fuel.cpp" />
+    <ClCompile Include="instruments\trimFlaps2.cpp" />
     <ClCompile Include="instruments\glider\asiGlider.cpp" />
     <ClCompile Include="instruments\hi.cpp" />
     <ClCompile Include="instruments\learjet\adiLearjet.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="instruments\digitalClock.h" />
     <ClInclude Include="instruments\egt.h" />
     <ClInclude Include="instruments\fuel.h" />
+    <ClInclude Include="instruments\trimFlaps2.h" />
     <ClInclude Include="instruments\glider\asiGlider.h" />
     <ClInclude Include="instruments\hi.h" />
     <ClInclude Include="instruments\learjet\adiLearjet.h" />

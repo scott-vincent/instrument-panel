@@ -68,13 +68,13 @@
   },
   "ADF": {
     "Enabled": true,
-    "Position X": 896,
+    "Position X": 1555,
     "Position Y": 677,
     "Size": 266
   },
   "Trim Flaps": {
     "Enabled": true,
-    "Position X": 1551,
+    "Position X": 888,
     "Position Y": 672,
     "Size": 280
   },
@@ -83,6 +83,12 @@
     "Position X": 135,
     "Position Y": 20,
     "Size": 300
+  },
+  "Trim Flaps 2": {
+    "Enabled": true,
+    "Position X": 66,
+    "Position Y": 120,
+    "Size": 210
   },
   "Digital Clock": {
     "Enabled": true,

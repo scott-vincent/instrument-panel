@@ -20,6 +20,7 @@ private:
     double airspeedKnots;
     double airspeedAngle = 0;
     double angle;
+    double cabinLights = 0;
 
     // Hardware knobs
     int calKnob = -1;

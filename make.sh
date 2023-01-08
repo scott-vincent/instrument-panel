@@ -23,6 +23,7 @@ g++ -o instrument-panel -I . -I instruments \
     instruments/rpm.cpp \
     instruments/tc.cpp \
     instruments/trimFlaps.cpp \
+    instruments/trimFlaps2.cpp \
     instruments/vac.cpp \
     instruments/vor1.cpp \
     instruments/vor2.cpp \

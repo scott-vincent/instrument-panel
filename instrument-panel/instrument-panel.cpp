@@ -77,6 +77,7 @@
 #include "adf.h"
 #include "radCom.h"
 #include "annunciator.h"
+#include "trimFlaps2.h"
 #include "digitalClock.h"
 #include "fuel.h"
 #include "egt.h"
@@ -577,6 +578,10 @@ void addInstruments()
 
     if (globals.simVars->isEnabled("Annunciator")) {
         instruments.push_back(new annunciator(50, 50, 200));
+    }
+
+    if (globals.simVars->isEnabled("Trim Flaps 2")) {
+        instruments.push_back(new trimFlaps2(50, 250, 200));
     }
 
     if (globals.simVars->isEnabled("Digital Clock")) {
