@@ -235,7 +235,7 @@ void trimFlaps2::render()
     al_draw_bitmap(bitmaps[1], xPos, yPos, 0);
 
     if (!globals.electrics) {
-        //dimInstrument();
+        dimInstrument();
     }
 }
 
