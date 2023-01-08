@@ -86,9 +86,9 @@
   },
   "Trim Flaps 2": {
     "Enabled": true,
-    "Position X": 66,
-    "Position Y": 120,
-    "Size": 210
+    "Position X": 69,
+    "Position Y": 123,
+    "Size": 200
   },
   "Digital Clock": {
     "Enabled": true,
