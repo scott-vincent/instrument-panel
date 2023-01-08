@@ -226,7 +226,7 @@ void trimFlaps2::render()
         al_draw_scaled_bitmap(bitmaps[9], 0, 0, 25, 253, 555 * scaleFactor, 204 * scaleFactor, 25 * scaleFactor, 253 * scaleFactor, 0);
     }
 
-    if (simVars->seatBeltsSwitch > 0) {
+    if (globals.electrics && simVars->seatBeltsSwitch > 0) {
         // Add seatbelts on
         al_draw_scaled_bitmap(bitmaps[13], 0, 0, 384, 76, 97 * scaleFactor, 460 * scaleFactor, 384 * scaleFactor, 76 * scaleFactor, 0);
     }
