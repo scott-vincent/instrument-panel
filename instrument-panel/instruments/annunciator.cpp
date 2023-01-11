@@ -290,9 +290,11 @@ void annunciator::update()
         checkFuel(leftPercent, &fuelWarningL, &prevFuelL);
         checkFuel(rightPercent, &fuelWarningR, &prevFuelR);
 
-        // VAC warning if < 1 inHG
-        vacWarningL = (simVars->suctionPressure < 1);
-        vacWarningR = (simVars->suctionPressure < 1);
+        if (loadedAircraft != KODIAK_100) {
+            // VAC warning if < 1 inHG
+            vacWarningL = (simVars->suctionPressure < 1);
+            vacWarningR = (simVars->suctionPressure < 1);
+        }
 
         // Oil warning if pressure < 20 PSI
         oilWarning = (oilPressure < 20);
