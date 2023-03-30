@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "vor2.h"
-#include "alternate/gForce.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -158,7 +157,8 @@ void vor2::update()
         }
 
         if (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET || loadedAircraft == HAWKER_HUNTER) {
-            customInstrument = new gForce(xPos, yPos, size, name);
+            // Moved to ADF
+            //customInstrument = new gForce(xPos, yPos, size, name);
         }
     }
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "adf.h"
+#include "alternate/gForce.h"
 #include "simvars.h"
 #include "knobs.h"
 
@@ -72,6 +73,11 @@ void adf::render()
         return;
     }
 
+    if (customInstrument) {
+        customInstrument->render();
+        return;
+    }
+
     // Use normal blender
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA);
 
@@ -102,6 +108,27 @@ void adf::render()
 /// </summary>
 void adf::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+
+        // Load custom instrument for this aircraft if we have one
+        if (customInstrument) {
+            delete customInstrument;
+            customInstrument = NULL;
+        }
+
+        if (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET || loadedAircraft == HAWKER_HUNTER) {
+            customInstrument = new gForce(xPos, yPos, size, name);
+        }
+    }
+
+    if (customInstrument) {
+        customInstrument->update();
+        return;
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
