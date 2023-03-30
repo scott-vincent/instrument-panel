@@ -27,6 +27,7 @@ enum Aircraft {
     SUPERMARINE_SPITFIRE,
     F15_EAGLE,
     F18_HORNET,
+    HAWKER_HUNTER,
     JUSTFLIGHT_PA28,
     KODIAK_100,
     GLIDER,
@@ -64,6 +65,8 @@ struct globalVars
     const int F15_Eagle_Len = 8;
     const char* F18_Hornet_Text = "Boeing F/A 18E";
     const int F18_Hornet_Len = 14;
+    const char* Hawker_Hunter_Text = "Hawker Hunter";
+    const int Hawker_Hunter_Len = 13;
     const char* JustFlight_PA28_Text = "Just Flight PA28";
     const int JustFlight_PA28_Len = 16;
     const char* SWS_Kodiak_100_Text = "Kodiak 100";

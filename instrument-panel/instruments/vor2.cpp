@@ -157,7 +157,7 @@ void vor2::update()
             customInstrument = NULL;
         }
 
-        if (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET) {
+        if (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET || loadedAircraft == HAWKER_HUNTER) {
             customInstrument = new gForce(xPos, yPos, size, name);
         }
     }
