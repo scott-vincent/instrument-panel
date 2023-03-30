@@ -148,7 +148,7 @@ void asi::update()
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && loadedAircraft != JUSTFLIGHT_PA28
             && loadedAircraft != HELI_H135 && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
-        supersonicAircraft = (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET);
+        supersonicAircraft = (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET || loadedAircraft == HAWKER_HUNTER);
         cabinLights = 0;
 
         // Load custom instrument for this aircraft if we have one
