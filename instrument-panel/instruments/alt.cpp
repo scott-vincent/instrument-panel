@@ -193,7 +193,7 @@ void alt::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && loadedAircraft != JUSTFLIGHT_PA28
-            && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+            && loadedAircraft != HELI_H135 && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
 
         // Load custom instrument for this aircraft if we have one
         if (customInstrument) {

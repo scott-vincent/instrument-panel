@@ -29,6 +29,7 @@ enum Aircraft {
     F18_HORNET,
     JUSTFLIGHT_PA28,
     KODIAK_100,
+    HELI_H135,
     GLIDER,
     OTHER_AIRCRAFT,
     OTHER_AIRCRAFT2
@@ -68,6 +69,8 @@ struct globalVars
     const int JustFlight_PA28_Len = 16;
     const char* SWS_Kodiak_100_Text = "Kodiak 100";
     const int SWS_Kodiak_100_Len = 10;
+    const char* Heli_H135_Text = "Airbus H135";
+    const int Heli_H135_Len = 11;
     const char* Glider_DG_LS8_Text = "Asobo LS8";
     const int Glider_DG_LS8_Len = 9;
     const char* Glider_DG_1001E_Text = "Asobo DG1001E";

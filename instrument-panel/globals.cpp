@@ -58,6 +58,9 @@ void identifyAircraft(char* aircraft)
         else if (strncmp(aircraft, globals.SWS_Kodiak_100_Text, globals.SWS_Kodiak_100_Len) == 0) {
             globals.aircraft = KODIAK_100;
         }
+        else if (strncmp(aircraft, globals.Heli_H135_Text, globals.Heli_H135_Len) == 0) {
+            globals.aircraft = HELI_H135;
+        }
         else if (strncmp(aircraft, globals.Glider_DG_LS8_Text, globals.Glider_DG_LS8_Len) == 0) {
             globals.aircraft = GLIDER;
         }

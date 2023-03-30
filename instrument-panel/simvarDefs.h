@@ -57,6 +57,8 @@ struct SimVars
     double com2Receive = 0;
     double adfFreq = 394;
     double adfStandby = 368;
+    double com1Volume = 0;
+    double com2Volume = 0;
     double seatBeltsSwitch = 0;
     double transponderState = 0;
     double transponderCode = 4608;

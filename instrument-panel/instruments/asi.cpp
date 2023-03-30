@@ -147,7 +147,7 @@ void asi::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && loadedAircraft != JUSTFLIGHT_PA28
-            && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+            && loadedAircraft != HELI_H135 && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
         supersonicAircraft = (loadedAircraft == F15_EAGLE || loadedAircraft == F18_HORNET);
         cabinLights = 0;
 
