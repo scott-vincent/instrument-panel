@@ -35,7 +35,8 @@ sudo apt install liballegro5-dev
 ```
 To Download:
 ```
-tag=`curl -s https://github.com/scott-vincent/instrument-panel/releases/latest|cut -d'"' -f 2|cut -d'/' -f 8`;wget https://github.com/scott-vincent/instrument-panel/releases/download/$tag/instrument-panel-$tag-raspi4.tar.gz
+tag=`curl -s -i https://github.com/scott-vincent/instrument-panel/releases/latest|grep location|cut -d '/' -f 8|tr -d '\r'`
+wget https://github.com/scott-vincent/instrument-panel/releases/download/$tag/instrument-panel-$tag-raspi4.tar.gz
 tar -xf instrument-panel-v* --one-top-level
 rm instrument-panel-v*.gz
 ```
