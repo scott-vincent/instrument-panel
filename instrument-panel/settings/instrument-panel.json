@@ -73,7 +73,7 @@
     "Size": 266
   },
   "Trim Flaps": {
-    "Enabled": true,
+    "Enabled": false,
     "Position X": 888,
     "Position Y": 672,
     "Size": 280
