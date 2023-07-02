@@ -18,6 +18,7 @@ private:
     float flapsOffset = 0;
     float targetFlaps;
     int gearUpWarning = 0;
+    double requestedTugHeading = -1;
 
 public:
     trimFlaps2(int xPos, int yPos, int size);
@@ -27,6 +28,8 @@ public:
 private:
     void resize();
     void addVars();
+    void addKnobs();
+    void updateKnobs();
 };
 
 #endif // _TRIM_FLAPS2_H_

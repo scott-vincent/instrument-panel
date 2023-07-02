@@ -250,6 +250,7 @@ void trimFlaps2::update()
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+        requestedTugHeading = simVars->hiHeadingTrue;
     }
 
     // Check for position or size change
@@ -292,6 +293,31 @@ void trimFlaps2::update()
         flapsOffset = targetFlaps;
     }
 
+    // If pushing back use rudder to steer
+    if (simVars->pushbackState < 3) {
+        double tugHeading = simVars->hiHeadingTrue;
+
+        if (simVars->rudderPosition < -0.1) {
+            if (requestedTugHeading - tugHeading < 60) {
+                requestedTugHeading = tugHeading + 90;
+                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+            }
+        }
+        else if (simVars->rudderPosition > 0.1) {
+            if (tugHeading - requestedTugHeading < 60) {
+                requestedTugHeading = tugHeading - 90;
+                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+            }
+        }
+        else {
+            // Pushback straight
+            if (abs(tugHeading - requestedTugHeading) > 1) {
+                requestedTugHeading = tugHeading;
+                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+            }
+        }
+    }
+
     // Warn if low altitude and flaps down but gear is up
     if (simVars->tfFlapsIndex > 0 && simVars->altAboveGround < 400 && simVars->altAboveGround > 30 && simVars->gearRetractable
         && simVars->gearLeftPos < 20 && simVars->vsiVerticalSpeed < 0)
@@ -318,4 +344,16 @@ void trimFlaps2::update()
 /// </summary>
 void trimFlaps2::addVars()
 {
+    globals.simVars->addVar(name, "Elevator Trim Position", false, 1, 0);
+    globals.simVars->addVar(name, "Rudder Trim Pct", false, 1, 0);
+    globals.simVars->addVar(name, "Flaps Num Handle Positions", false, 1, 0);
+    globals.simVars->addVar(name, "Flaps Handle Index", false, 1, 0);
+    globals.simVars->addVar(name, "Is Gear Retractable", true, 1, 0);
+    globals.simVars->addVar(name, "Gear Left Position", false, 1, 0);
+    globals.simVars->addVar(name, "Gear Center Position", false, 1, 0);
+    globals.simVars->addVar(name, "Gear Right Position", false, 1, 0);
+    globals.simVars->addVar(name, "Brake Parking Position", true, 1, 0);
+    globals.simVars->addVar(name, "Spoilers Handle Position", false, 1, 0);
+    globals.simVars->addVar(name, "Auto Brake Switch Cb", false, 1, 0);
+    globals.simVars->addVar(name, "Plane Alt Above Ground", false, 1, 0);
 }

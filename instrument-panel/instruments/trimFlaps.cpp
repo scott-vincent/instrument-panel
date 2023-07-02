@@ -247,7 +247,6 @@ void trimFlaps::update()
         loadedAircraft = globals.aircraft;
         fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
         requestedTugHeading = simVars->hiHeadingTrue;
-        cabinLights = 0;
     }
 
     // Check for position or size change
@@ -396,29 +395,15 @@ void trimFlaps::updateKnobs()
     // Read knob for flaps
     val = globals.hardwareKnobs->read(flapsKnob);
     if (val != INT_MIN) {
-        //if (val - lastFlapsVal > 1) {
-        //    // Flaps up one notch
-        //    globals.simVars->write(KEY_FLAPS_DECR);
-        //    lastFlapsVal = val;
-        //}
-        //else if (lastFlapsVal - val > 1 ) {
-        //    // Flaps down one notch
-        //    globals.simVars->write(KEY_FLAPS_INCR);
-        //    lastFlapsVal = val;
-        //}
-
-        // Knob now used for interior lighting instead of flaps
-        double adjust = val - prevVal;
-        if (adjust != 0) {
-            cabinLights += adjust;
-            if (cabinLights < 0) {
-                cabinLights = 0;
-            }
-            else if (cabinLights > 100) {
-                cabinLights = 100;
-            }
-            globals.simVars->write(KEY_CABIN_LIGHTS_SET, cabinLights);
-            prevVal = val;
+        if (val - lastFlapsVal > 1) {
+            // Flaps up one notch
+            globals.simVars->write(KEY_FLAPS_DECR);
+            lastFlapsVal = val;
+        }
+        else if (lastFlapsVal - val > 1 ) {
+            // Flaps down one notch
+            globals.simVars->write(KEY_FLAPS_INCR);
+            lastFlapsVal = val;
         }
     }
 }
