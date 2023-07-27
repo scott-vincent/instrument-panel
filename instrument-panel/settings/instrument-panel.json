@@ -56,9 +56,9 @@
   },
   "VOR2": {
     "Enabled": true,
-    "Position X": 1227,
-    "Position Y": 674,
-    "Size": 276
+    "Position X": 1552,
+    "Position Y": 672,
+    "Size": 274
   },
   "RPM": {
     "Enabled": true,
@@ -68,8 +68,8 @@
   },
   "ADF": {
     "Enabled": true,
-    "Position X": 1555,
-    "Position Y": 677,
+    "Position X": 1230,
+    "Position Y": 680,
     "Size": 266
   },
   "Trim Flaps": {
