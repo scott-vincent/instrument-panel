@@ -8,6 +8,7 @@ class hi : public instrument
 {
 private:
     SimVars* simVars;
+    Aircraft loadedAircraft = UNDEFINED;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)
@@ -18,6 +19,7 @@ private:
     // Hardware knobs
     int hdgKnob = -1;
     int prevVal = 0;
+    int prevValSb = 0;
     time_t lastBugAdjust = 0;
     time_t now;
 

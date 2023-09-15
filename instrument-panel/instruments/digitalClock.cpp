@@ -390,6 +390,12 @@ void digitalClock::updateKnobs()
     val = globals.hardwareKnobs->read(rightButton);
     if (val != INT_MIN) {
         if (prevRightVal % 2 == 1) {
+            if (prevTopVal % 2 == 0) {
+                // Top and right buttons pressed at same time so reboot
+                strcpy(globals.error, "Forced reboot\n");
+                system("sudo reboot");
+            }
+
             time(&stopWatchPressed);
 
             if (clockView == ElapsedTime) {

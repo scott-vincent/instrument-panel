@@ -19,6 +19,7 @@ private:
     // Hardware knobs
     int calKnob = -1;
     int prevVal = 0;
+    int prevValSb = 0;
     time_t lastCalAdjust = 0;
     time_t now;
 

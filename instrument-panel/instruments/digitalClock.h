@@ -49,7 +49,7 @@ private:
     int topButton = -1;
     int leftButton = -1;
     int rightButton = -1;
-    int prevTopVal = 0;
+    int prevTopVal = -1;
     int prevLeftVal = 0;
     int prevRightVal = 0;
 

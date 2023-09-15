@@ -193,6 +193,8 @@ void vor1::update()
         if (loadedAircraft == SUPERMARINE_SPITFIRE) {
             customInstrument = new boostSpitfire(xPos, yPos, size, name);
         }
+
+        prevVal = simVars->sbEncoder[1];
     }
 
     if (customInstrument) {
@@ -218,6 +220,9 @@ void vor1::update()
         resize();
     }
 
+    // Only update local value from sim if it is not currently being
+    // adjusted by the rotary encoder. This stops the displayed value
+    // from jumping around due to lag of fetch/update cycle.
     if (lastObsAdjust == 0) {
         vor1Obs = simVars->vor1Obs;
     }
@@ -291,42 +296,66 @@ void vor1::addVars()
 void vor1::addKnobs()
 {
     // BCM GPIO 11 and 5
-    obsKnob = globals.hardwareKnobs->add(11, 5, -1, -1, 0);
+    obsKnob = globals.hardwareKnobs->add(5, 11, -1, -1, 0);
 }
 
 void vor1::updateKnobs()
 {
     // Read knob for new instrument calibration
     int val = globals.hardwareKnobs->read(obsKnob);
+    int diff = (val - prevVal) / 2;
+    bool switchBox = false;
 
-    if (val != INT_MIN) {
+    if (simVars->sbMode != 3) {
+        prevValSb = simVars->sbEncoder[1];
+    }
+    else if (simVars->sbEncoder[1] != prevValSb) {
+        val = simVars->sbEncoder[1];
+        diff = val - prevValSb;
+        switchBox = true;
+    }
+
+    if (val != INT_MIN && diff != 0) {
         // Change Obs by knob movement amount.
         // Turn knob slowly for small increments or quickly for larger increments.
         double adjust = 0;
-        int knobRate = (val - prevVal) / 2;
-        if (knobRate == 1 || knobRate == -1) {
-            if (loadedAircraft == AIRBUS_A310) {
-                // A310 uses Obs1 to set ILS Course
-                adjust = knobRate;
+        if (switchBox) {
+            if (diff == 1 || diff == -1) {
+                adjust = diff * 2;
+            }
+            else if (diff > 0) {
+                adjust = 9;
             }
             else {
-                adjust = knobRate * 0.5;
+                adjust = -9;
             }
         }
-        else if (knobRate > 1 || knobRate < -1) {
-            adjust = knobRate * 2.0;
+        else if (diff == 1 || diff == -1) {
+            if (loadedAircraft == AIRBUS_A310) {
+                // A310 uses Obs1 to set ILS Course
+                adjust = diff;
+            }
+            else {
+                adjust = diff * 0.5;
+            }
+        }
+        else {
+            adjust = diff * 2.0;
         }
 
-        if (adjust != 0) {
-            vor1Obs += adjust;
+        vor1Obs += adjust;
 
-            if (vor1Obs < 0) {
-                vor1Obs += 360;
-            }
-            else if (vor1Obs >= 360) {
-                vor1Obs -= 360;
-            }
-            globals.simVars->write(KEY_VOR1_SET, vor1Obs);
+        if (vor1Obs < 0) {
+            vor1Obs += 360;
+        }
+        else if (vor1Obs >= 360) {
+            vor1Obs -= 360;
+        }
+        globals.simVars->write(KEY_VOR1_SET, vor1Obs);
+        if (switchBox) {
+            prevValSb = val;
+        }
+        else {
             prevVal = val;
         }
         time(&lastObsAdjust);

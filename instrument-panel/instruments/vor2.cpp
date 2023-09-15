@@ -160,6 +160,8 @@ void vor2::update()
             // Moved to ADF
             //customInstrument = new gForce(xPos, yPos, size, name);
         }
+
+        prevVal = simVars->sbEncoder[0];
     }
 
     if (customInstrument) {
@@ -219,36 +221,66 @@ void vor2::addVars()
 void vor2::addKnobs()
 {
     // BCM GPIO 24 and 25
-    obsKnob = globals.hardwareKnobs->add(24, 25, -1, -1, 0);
+    obsKnob = globals.hardwareKnobs->add(25, 24, -1, -1, 0);
 }
 
 void vor2::updateKnobs()
 {
     // Read knob for new instrument calibration
     int val = globals.hardwareKnobs->read(obsKnob);
+    int diff = (val - prevVal) / 2;
+    bool switchBox = false;
 
-    if (val != INT_MIN) {
+    if (simVars->sbMode != 3) {
+        prevValSb = simVars->sbEncoder[0];
+    }
+    else if (simVars->sbEncoder[0] != prevValSb) {
+        val = simVars->sbEncoder[0];
+        diff = val - prevValSb;
+        switchBox = true;
+    }
+
+    if (val != INT_MIN && diff != 0) {
         // Change Obs by knob movement amount.
         // Turn knob slowly for small increments or quickly for larger increments.
         double adjust = 0;
-        int knobRate = (val - prevVal) / 2;
-        if (knobRate == 1 || knobRate == -1) {
-            adjust = knobRate * 0.5;
+        if (switchBox) {
+            if (diff == 1 || diff == -1) {
+                adjust = diff * 2;
+            }
+            else if (diff > 0) {
+                adjust = 9;
+            }
+            else {
+                adjust = -9;
+            }
         }
-        else if (knobRate > 1 || knobRate < -1) {
-            adjust = knobRate * 2.0;
+        else if (diff == 1 || diff == -1) {
+            if (loadedAircraft == AIRBUS_A310) {
+                // A310 uses Obs1 to set ILS Course
+                adjust = diff;
+            }
+            else {
+                adjust = diff * 0.5;
+            }
+        }
+        else {
+            adjust = diff * 2.0;
         }
 
-        if (adjust != 0) {
-            vor2Obs += adjust;
+        vor2Obs += adjust;
 
-            if (vor2Obs < 0) {
-                vor2Obs += 360;
-            }
-            else if (vor2Obs >= 360) {
-                vor2Obs -= 360;
-            }
-            globals.simVars->write(KEY_VOR2_SET, vor2Obs);
+        if (vor2Obs < 0) {
+            vor2Obs += 360;
+        }
+        else if (vor2Obs >= 360) {
+            vor2Obs -= 360;
+        }
+        globals.simVars->write(KEY_VOR2_SET, vor2Obs);
+        if (switchBox) {
+            prevValSb = val;
+        }
+        else {
             prevVal = val;
         }
         time(&lastObsAdjust);

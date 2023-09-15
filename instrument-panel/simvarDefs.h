@@ -24,6 +24,9 @@ struct SimVars
     double jbAutobrake = 0;
     double jbPitchTrim = 0;
     double jbTcasMode = 0;
+    double sbEncoder[4];    // SwitchBox
+    double sbButton[7];     // SwitchBox
+    double sbMode;          // SwitchBox
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
@@ -360,6 +363,9 @@ enum EVENT_ID {
     EVENT_LANDING_PREPARE_CABIN,
     EVENT_SEATS_FOR_LANDING,
     EVENT_GO_AROUND,
+    EVENT_IS_CESSNA_152,
+    EVENT_NOT_CESSNA_152,
+    SWITCHBOX_JOY,
     VJOY_BUTTONS,
     // Buttons must start from 1 and must be sequential until VJOY_BUTTONS_END
     VJOY_BUTTON_1,

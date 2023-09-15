@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v1.7.7";
+const char* versionString = "v1.7.8";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
@@ -21,6 +21,18 @@ const char* SimVarDefs[][2] = {
     { "Autobrake Armed", "jetbridge" },
     { "Pitch Trim", "jetbridge" },
     { "Tcas Mode", "jetbridge" },
+    { "SwitchBox Encoder 1", "jetbridge" },
+    { "SwitchBox Encoder 2", "jetbridge" },
+    { "SwitchBox Encoder 3", "jetbridge" },
+    { "SwitchBox Encoder 4", "jetbridge" },
+    { "SwitchBox Button 1", "jetbridge" },
+    { "SwitchBox Button 2", "jetbridge" },
+    { "SwitchBox Button 3", "jetbridge" },
+    { "SwitchBox Button 4", "jetbridge" },
+    { "SwitchBox Button 5", "jetbridge" },
+    { "SwitchBox Button 6", "jetbridge" },
+    { "SwitchBox Button 7", "jetbridge" },
+    { "SwitchBox Mode", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },
@@ -96,7 +108,7 @@ const char* SimVarDefs[][2] = {
     { "Airspeed True Calibrate", "degrees" },
     { "Plane Heading Degrees True", "degrees" },
     { "Plane Alt Above Ground", "feet" },
-    { "Turn Indicator Rate", "radians per second" },
+    { "Turn Indicator Rate", "degrees per second" },
     { "Turn Coordinator Ball", "position" },
     { "Elevator Trim Position", "degrees" },
     { "Rudder Trim Pct", "percent" },
@@ -356,6 +368,9 @@ WriteEvent WriteEvents[] = {
     { EVENT_LANDING_PREPARE_CABIN, "EVENT_LANDING_PREPARE_CABIN" },
     { EVENT_SEATS_FOR_LANDING, "EVENT_SEATS_FOR_LANDING" },
     { EVENT_GO_AROUND, "EVENT_GO_AROUND" },
+    { EVENT_IS_CESSNA_152, "EVENT_IS_CESSNA_152" },
+    { EVENT_NOT_CESSNA_152, "EVENT_NOT_CESSNA_152" },
+    { SWITCHBOX_JOY, "SWITCHBOX_JOY" },
     { VJOY_BUTTONS, "VJOY_BUTTONS" },
     { VJOY_BUTTON_1, "VJOY_BUTTON_1" },
     { VJOY_BUTTON_2, "VJOY_BUTTON_2" },

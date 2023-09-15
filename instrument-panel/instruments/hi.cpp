@@ -120,6 +120,13 @@ void hi::render()
 /// </summary>
 void hi::update()
 {
+    // Check for aircraft change
+    bool aircraftChanged = (loadedAircraft != globals.aircraft);
+    if (aircraftChanged) {
+        loadedAircraft = globals.aircraft;
+        prevVal = simVars->sbEncoder[3];
+    }
+
     // Check for position or size change
     long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
@@ -173,10 +180,21 @@ void hi::updateKnobs()
 {
     // Read knob for new instrument calibration
     int val = globals.hardwareKnobs->read(hdgKnob);
+    int diff = (val - prevVal) / 2;
+    bool switchBox = false;
+
+    if (simVars->sbMode != 3) {
+        prevValSb = simVars->sbEncoder[3];
+    }
+    else if (simVars->sbEncoder[3] != prevValSb) {
+        val = simVars->sbEncoder[3];
+        diff = val - prevValSb;
+        switchBox = true;
+    }
 
     if (val != INT_MIN) {
         // Convert knob value to heading (adjust for desired sensitivity)
-        int adjust = ((int)(val - prevVal) / 2) * 5;
+        int adjust = diff * 5;
         if (adjust != 0) {
             int newHeading = headingBug += adjust;
             if (newHeading > 359) {
@@ -187,7 +205,12 @@ void hi::updateKnobs()
             }
             globals.simVars->write(KEY_HEADING_BUG_SET, newHeading);
             globals.simVars->write(A32NX_FCU_HDG_SET, newHeading);
-            prevVal = val;
+            if (switchBox) {
+                prevValSb = val;
+            }
+            else {
+                prevVal = val;
+            }
         }
         time(&lastBugAdjust);
     }

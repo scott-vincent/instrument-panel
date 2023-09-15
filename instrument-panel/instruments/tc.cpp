@@ -131,13 +131,13 @@ void tc::update()
     }
 
     // Calculate values
-    planeAngle = simVars->tcRate * 200;
+    planeAngle = simVars->tcRate * 5;
 
-    if (planeAngle < -23) {
-        planeAngle = -23;
+    if (planeAngle < -35) {
+        planeAngle = -35;
     }
-    else if (planeAngle > 23) {
-        planeAngle = 23;
+    else if (planeAngle > 35) {
+        planeAngle = 35;
     }
 
     // Need to turn ball by -90 degrees = -64

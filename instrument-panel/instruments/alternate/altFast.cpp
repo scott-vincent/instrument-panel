@@ -324,10 +324,21 @@ void altFast::updateKnobs()
 {
     // Read knob for pressure calibration
     int val = globals.hardwareKnobs->read(calKnob);
+    int diff = (val - prevVal) / 2;
+    bool switchBox = false;
+
+    if (prevValSb == 0) {
+        prevValSb = simVars->sbEncoder[2];
+    }
+    else if (simVars->sbEncoder[2] != prevValSb) {
+        val = simVars->sbEncoder[2];
+        diff = val - prevValSb;
+        switchBox = true;
+    }
 
     if (val != INT_MIN) {
         // Change calibration by knob movement amount (adjust for desired sensitivity)
-        double adjust = (int)((val - prevVal) / 2) * 0.01;
+        double adjust = diff * 0.01;
         if (adjust != 0) {
             inhg += adjust;
             if (inhg < 28 || inhg >= 31.01) {
@@ -335,7 +346,12 @@ void altFast::updateKnobs()
             }
             double newVal = inhg * 33.86378746435 * 16;
             globals.simVars->write(KEY_KOHLSMAN_SET, newVal);
-            prevVal = val;
+            if (switchBox) {
+                prevValSb = val;
+            }
+            else {
+                prevVal = val;
+            }
         }
         time(&lastCalAdjust);
     }

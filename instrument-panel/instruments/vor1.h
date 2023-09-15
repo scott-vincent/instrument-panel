@@ -23,6 +23,7 @@ private:
     // Hardware knobs
     int obsKnob = -1;
     int prevVal = 0;
+    int prevValSb = 0;
     double vor1Obs;
     time_t lastObsAdjust = 0;
     time_t now;
