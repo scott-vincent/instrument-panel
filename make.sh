@@ -1,3 +1,13 @@
+# If you have an older Raspberry Pi uncomment the next line to use WiringPi instead of gpiod
+#NoGpiod=1
+
+if [ "$NoGpiod" = 1 ]
+then
+  gpioLib="wiringPi"
+else
+  gpioLib="gpiod"
+fi
+
 echo fs-stop
 fs-stop
 echo Building instrument-panel
@@ -45,7 +55,7 @@ g++ -o instrument-panel -I . -I instruments \
     instruments/spitfire/vsiSpitfire.cpp \
     instruments/spitfire/boostSpitfire.cpp \
     instruments/glider/asiGlider.cpp \
-    -lwiringPi -lpthread -lallegro -lallegro_image -lallegro_font || exit
+    -l${gpioLib} -lpthread -lallegro -lallegro_image -lallegro_font || exit
 strip instrument-panel
 echo fs-restart
 fs-restart

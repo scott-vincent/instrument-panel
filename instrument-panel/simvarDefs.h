@@ -228,7 +228,7 @@ enum EVENT_ID {
     KEY_TOGGLE_FLIGHT_DIRECTOR,
     KEY_AP_SPD_VAR_SET,
     KEY_AP_MACH_VAR_SET,
-    KEY_HEADING_BUG_SET,
+    KEY_HEADING_BUG_SET,            // 50
     KEY_AP_ALT_VAR_SET_ENGLISH,
     KEY_AP_VS_VAR_SET_ENGLISH,
     KEY_AP_AIRSPEED_ON,
@@ -276,7 +276,7 @@ enum EVENT_ID {
     KEY_TANK_SELECT_1,
     KEY_TANK_SELECT_2,
     KEY_ENG_CRANK,
-    KEY_SKYTRACK_STATE,
+    KEY_SKYTRACK_STATE,             // 98
     KEY_G1000_PFD_SOFTKEY_1,
     KEY_G1000_PFD_SOFTKEY_2,
     KEY_G1000_PFD_SOFTKEY_3,
@@ -365,6 +365,7 @@ enum EVENT_ID {
     EVENT_GO_AROUND,
     EVENT_IS_CESSNA_152,
     EVENT_NOT_CESSNA_152,
+    EVENT_RESET_DRONE_FOV,
     SWITCHBOX_JOY,
     VJOY_BUTTONS,
     // Buttons must start from 1 and must be sequential until VJOY_BUTTONS_END
@@ -404,18 +405,18 @@ struct PosData {
 };
 
 struct Request {
-    long requestedSize;
-    long wantFullData;
+    int requestedSize;
+    int wantFullData;
     WriteData writeData;
 };
 
 struct DeltaDouble {
-    long offset;
+    int offset;
     double data;
 };
 
 struct DeltaString {
-    long offset;
+    int offset;
     char data[32];
 };
 

@@ -280,7 +280,7 @@ void digitalClock::drawClock(int digit1, int digit2, int digit3, int digit4)
 void digitalClock::update()
 {
     // Check for position or size change
-    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+    int *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];

@@ -21,14 +21,14 @@ const char* MonitorPositionY = "PositionY";
 
 extern const char* SimVarDefs[][2];
 bool prevConnected = false;
-long dataSize;
+int dataSize;
 Request request;
 char deltaData[8192];
 int nextFull = 0;
 
 void dataLink(simvars*);
 void identifyAircraft(char* aircraft);
-void receiveDelta(char* deltaData, long deltaSize, char* simVarsPtr);
+void receiveDelta(char* deltaData, int deltaSize, char* simVarsPtr);
 void showError(const char* msg);
 void fatalError(const char* msg);
 
@@ -570,7 +570,7 @@ void simvars::addVar(const char* group, const char* name, bool isBool, double sc
 void simvars::addSetting(const char* group, const char* name)
 {
     // Get value from loaded settings
-    long val = 0;
+    int val = 0;
     int groupNum = 0;
     while (groupNum < groupCount)
     {
@@ -608,7 +608,7 @@ void simvars::addSetting(const char* group, const char* name)
 bool simvars::isEnabled(const char* group)
 {
     // Get value from loaded settings
-    long val = -1;
+    int val = -1;
     int groupNum = 0;
     while (groupNum < groupCount)
     {
@@ -636,9 +636,9 @@ bool simvars::isEnabled(const char* group)
 /// Reads the settings, initially from the json file.
 /// If the settings are not yet in the json file use the supplied defaults.
 /// </summary>
-long * simvars::readSettings(const char* group, int defaultX, int defaultY, int defaultSize)
+int * simvars::readSettings(const char* group, int defaultX, int defaultY, int defaultSize)
 {
-    static long vals[3];
+    static int vals[3];
 
     int idx = 0;
     while (idx < varCount)
@@ -738,7 +738,7 @@ void dataLink(simvars* thisPtr)
     timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 500000;
-    long actualSize;
+    int actualSize;
     int bytes;
     int selFail = 0;
 
@@ -793,9 +793,9 @@ void dataLink(simvars* thisPtr)
                 // Receive latest data (delta will never be larger than full data size)
                 bytes = recv(sockfd, deltaData, dataSize, 0);
 
-                if (bytes == sizeof(long)) {
+                if (bytes == 4) {
                     // Data size mismatch
-                    memcpy(&actualSize, &thisPtr->simVars, sizeof(long));
+                    memcpy(&actualSize, &thisPtr->simVars, 4);
                     sprintf(errMsg, "DataLink: Requested %ld bytes but server has %ld bytes\n", request.requestedSize, actualSize);
                     fatalError(errMsg);
                 }

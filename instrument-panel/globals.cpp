@@ -87,7 +87,7 @@ void identifyAircraft(char* aircraft)
 /// <summary>
 /// Server can send us a delta rather than full data so we need to unpack it.
 /// </summary>
-void receiveDelta(char *deltaData, long deltaSize, char* simVarsPtr)
+void receiveDelta(char *deltaData, int deltaSize, char* simVarsPtr)
 {
     char* dataPtr = deltaData;
 

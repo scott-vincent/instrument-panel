@@ -46,7 +46,7 @@ private:
         char name[256];
         int settingsCount;
         char settingName[256][256];
-        long settingVal[256];
+        int settingVal[256];
     };
     
     int groupCount = 0;
@@ -59,7 +59,7 @@ public:
     void doKeypress(int keycode);
     void addVar(const char* group, const char* name, bool isBool, double scaling, double val);
     void addSetting(const char* group, const char* name);
-    long* readSettings(const char* group, int defaultX, int defaultY, int defaultSize);
+    int* readSettings(const char* group, int defaultX, int defaultY, int defaultSize);
     bool isEnabled(const char* group);
     void write(EVENT_ID eventId, double value = 0);
     

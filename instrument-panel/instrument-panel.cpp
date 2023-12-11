@@ -91,6 +91,12 @@
 #include "savageCub/comSavageCub.h"
 #include "savageCub/xpdrSavageCub.h"
 
+// If you don't have any hardware knobs uncomment the next line
+//#define NoKnobs
+
+// If you have an older Raspberry Pi uncomment the next line to use WiringPi instead of gpiod
+//#define NoGpiod
+
 #ifdef NoKnobs
 const bool HaveHardwareKnobs = false;
 #else

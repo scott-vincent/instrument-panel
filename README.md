@@ -10,9 +10,9 @@ You can also run the display on a PC (the same one running FS2020 if you wish) b
 
 Download the following two zip files.
 
-Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v1.7.8-Windows-x64.zip)
+Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v2.0.0-Windows-x64.zip)
 
-Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v1.7.8-windows-x64.zip)
+Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v2.0.0-windows-x64.zip)
 
 Unzip instrument-data-link into its own folder and double-click instrument-data-link.exe to run it.
 
@@ -36,10 +36,13 @@ sudo apt install liballegro5-dev
 To Download:
 ```
 tag=`curl -s -i https://github.com/scott-vincent/instrument-panel/releases/latest|grep location|cut -d '/' -f 8|tr -d '\r'`
-wget https://github.com/scott-vincent/instrument-panel/releases/download/$tag/instrument-panel-$tag-raspi4.tar.gz
+wget https://github.com/scott-vincent/instrument-panel/releases/download/$tag/instrument-panel-$tag-raspi5-64.tar.gz
 tar -xf instrument-panel-v* --one-top-level
 rm instrument-panel-v*.gz
 ```
+
+NOTE: Version 2.0.0 and later is built for 64-bit OS only. If you are running a 32-bit OS please download version 1.7.8 instead.
+
 To Run:
 
 Make sure you do this from a terminal started under a desktop session, not using SSH.
@@ -58,7 +61,7 @@ Power/Lights Panel: https://github.com/scott-vincent/power-lights-panel
 
 # Releases
 
-Ready-built releases for Windows x64 and Raspberry Pi 4 can be found by clicking on the Releases section on the right of this readme.
+Ready-built releases for Windows x64 and Raspberry Pi 5 (64-bit) can be found by clicking on the Releases section on the right of this readme. The newer releases (v2.0.0 and later) will also run fine on a Raspberry Pi 4 (64-bit).
 
 # Introduction
 

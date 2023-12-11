@@ -124,11 +124,12 @@ void hi::update()
     bool aircraftChanged = (loadedAircraft != globals.aircraft);
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
+        airliner = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= 300);
         prevVal = simVars->sbEncoder[3];
     }
 
     // Check for position or size change
-    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+    int *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];
@@ -183,7 +184,9 @@ void hi::updateKnobs()
     int diff = (val - prevVal) / 2;
     bool switchBox = false;
 
-    if (simVars->sbMode != 3) {
+    // For airliner first switchbox knob does autopilot heading
+    // so ignore it here.
+    if (simVars->sbMode != 3 || airliner) {
         prevValSb = simVars->sbEncoder[3];
     }
     else if (simVars->sbEncoder[3] != prevValSb) {

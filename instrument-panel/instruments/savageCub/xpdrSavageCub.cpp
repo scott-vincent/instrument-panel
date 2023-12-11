@@ -109,7 +109,7 @@ void xpdrSavageCub::addSquawk(int code, int x, int y)
 void xpdrSavageCub::update()
 {
     // Check for position or size change
-    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+    int *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];

@@ -134,7 +134,7 @@ void vsi::update()
     }
 
     // Check for position or size change
-    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+    int *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];

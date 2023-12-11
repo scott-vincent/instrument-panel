@@ -9,6 +9,7 @@ class hi : public instrument
 private:
     SimVars* simVars;
     Aircraft loadedAircraft = UNDEFINED;
+    bool airliner = false;
     float scaleFactor;
 
     // Instrument values (caclulated from variables and needed to draw the instrument)

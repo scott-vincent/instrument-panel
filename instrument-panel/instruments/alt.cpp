@@ -227,7 +227,7 @@ void alt::update()
     }
 
     // Check for position or size change
-    long *settings = globals.simVars->readSettings(name, xPos, yPos, size);
+    int *settings = globals.simVars->readSettings(name, xPos, yPos, size);
 
     xPos = settings[0];
     yPos = settings[1];
@@ -290,7 +290,8 @@ void alt::updateKnobs()
     int diff = (val - prevVal) / 2;
     bool switchBox = false;
 
-    if (prevValSb == 0) {
+    // Don't set pressure in Navigation mode
+    if (simVars->sbMode == 4 || prevValSb == 0) {
         prevValSb = simVars->sbEncoder[2];
     }
     else if (simVars->sbEncoder[2] != prevValSb) {
@@ -323,6 +324,142 @@ void alt::updateKnobs()
         if (now - lastCalAdjust > 1) {
             lastCalAdjust = 0;
         }
+    }
+
+    // Do all Navigation (G1000) knobs here
+
+    // 2nd knob rotate = MFD Range (Zoom)
+    if (simVars->sbMode != 4 || prevZoomSb == 0) {
+        prevZoomSb = simVars->sbEncoder[2];
+    }
+    else if (simVars->sbEncoder[2] != prevZoomSb) {
+        val = simVars->sbEncoder[2];
+        diff = val - prevZoomSb;
+        if (diff > 0) {
+            globals.simVars->write(KEY_G1000_MFD_RANGE_DEC);
+        }
+        else {
+            globals.simVars->write(KEY_G1000_MFD_RANGE_INC);
+        }
+        prevZoomSb = val;
+    }
+
+    // 3rd knob rotate = MFD Lower
+    if (simVars->sbMode != 4 || prevOuterSb == 0) {
+        prevOuterSb = simVars->sbEncoder[1];
+    }
+    else if (simVars->sbEncoder[1] != prevOuterSb) {
+        val = simVars->sbEncoder[1];
+        diff = val - prevOuterSb;
+        if (diff > 0) {
+            globals.simVars->write(KEY_G1000_MFD_LOWER_INC);
+        }
+        else {
+            globals.simVars->write(KEY_G1000_MFD_LOWER_DEC);
+        }
+        prevOuterSb = val;
+    }
+
+    // 4th knob rotate = MFD Upper
+    if (simVars->sbMode != 4 || prevInnerSb == 0) {
+        prevInnerSb = simVars->sbEncoder[0];
+    }
+    else if (simVars->sbEncoder[0] != prevInnerSb) {
+        val = simVars->sbEncoder[0];
+        diff = val - prevInnerSb;
+        if (diff > 0) {
+            globals.simVars->write(KEY_G1000_MFD_UPPER_INC);
+        }
+        else {
+            globals.simVars->write(KEY_G1000_MFD_UPPER_DEC);
+        }
+        prevInnerSb = val;
+    }
+
+    // Do all Navigation (G1000) pushes here
+
+    // 1st knob click = MFD Enter
+    if (simVars->sbMode != 4 || prevEnterSb == 0) {
+        prevEnterSb = simVars->sbButton[3];
+    }
+    else if (simVars->sbButton[3] != prevEnterSb) {
+        val = simVars->sbButton[3];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_ENT);
+        }
+        prevEnterSb = val;
+    }
+
+    // 2nd knob click = Button 10 (Follow)
+    if (simVars->sbMode != 4 || prevButton10Sb == 0) {
+        prevButton10Sb = simVars->sbButton[2];
+    }
+    else if (simVars->sbButton[2] != prevButton10Sb) {
+        val = simVars->sbButton[2];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_SOFTKEY_10);
+        }
+        prevButton10Sb = val;
+    }
+
+    // 3rd knob click = MFD Push
+    if (simVars->sbMode != 4 || prevOuterPushSb == 0) {
+        prevOuterPushSb = simVars->sbButton[1];
+    }
+    else if (simVars->sbButton[1] != prevOuterPushSb) {
+        val = simVars->sbButton[1];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_PUSH);
+        }
+        prevOuterPushSb = val;
+    }
+
+    // 4th knob click = MFD Push (again)
+    if (simVars->sbMode != 4 || prevInnerPushSb == 0) {
+        prevInnerPushSb = simVars->sbButton[0];
+    }
+    else if (simVars->sbButton[0] != prevInnerPushSb) {
+        val = simVars->sbButton[0];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_PUSH);
+        }
+        prevInnerPushSb = val;
+    }
+
+    // 2nd button click = Soft Button 5 (IFR High Map / Activate Flight Plan)
+    if (simVars->sbMode != 4 || prevButton5Sb == 0) {
+        prevButton5Sb = simVars->sbButton[6];
+    }
+    else if (simVars->sbButton[6] != prevButton5Sb) {
+        val = simVars->sbButton[6];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_SOFTKEY_5);
+        }
+        prevButton5Sb = val;
+    }
+
+    // 3rd button click = Soft Button 7 (VFR Map)
+    if (simVars->sbMode != 4 || prevButton7Sb == 0) {
+        prevButton7Sb = simVars->sbButton[5];
+    }
+    else if (simVars->sbButton[5] != prevButton7Sb) {
+        val = simVars->sbButton[5];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_SOFTKEY_7);
+        }
+        prevButton7Sb = val;
+    }
+
+    // 4th button click = Soft Button 8 (World Map)
+    if (simVars->sbMode != 4 || prevButton8Sb == 0) {
+        prevButton8Sb = simVars->sbButton[4];
+    }
+    else if (simVars->sbButton[4] != prevButton8Sb) {
+        val = simVars->sbButton[4];
+        if (val % 2 == 0) {
+            globals.simVars->write(KEY_G1000_MFD_SOFTKEY_8);
+        }
+        prevButton8Sb = val;
     }
 }
 

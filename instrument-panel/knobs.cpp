@@ -1,16 +1,120 @@
 #ifndef _WIN32
 #ifndef NoKnobs
+#ifdef NoGpiod
 #include <wiringPi.h>
+#else
+#include <gpiod.h>
+#endif
 #endif
 #include "knobs.h"
 
 void watcher(knobs*);
 
-knobs::knobs()
+#ifdef NoGpiod
+static void gpioInit()
 {
     // Use BCM GPIO pin numbers
-#ifndef NoKnobs
     wiringPiSetupGpio();
+}
+
+static void gpioAdd(int gpioNum)
+{
+    // NOTE: pullUpDnControl does not work on RasPi4 so have
+    // to use raspi-gpio command line to pull up resistors.
+    char command[256];
+
+    pinMode(gpioNum, INPUT);
+    sprintf(command, "raspi-gpio set %d pu", gpioNum);
+
+    if (system(command) != 0) {
+        strcpy(globals.error, "Failed to run raspi-gpio command");
+    }
+}
+
+static void gpioReadAll()
+{
+    // Nothing to do as states are read individually
+}
+
+static int gpioGetState(int gpioNum)
+{
+    return digitalRead(gpioNum);
+}
+
+#else
+
+const int MaxGpio = 28;
+char chipName[16];
+struct gpiod_chip* gpioChip;
+struct gpiod_line_bulk gpioLines;
+int gpioValues[MaxGpio];
+
+static void gpioInit()
+{
+    unsigned int offsets[MaxGpio];
+
+    // Raspberry Pi 5 uses gpiochip4 rather than gpiochip0
+    FILE* inf = fopen("/dev/gpiochip4", "r");
+    if (inf) {
+        fclose(inf);
+        strcpy(chipName, "gpiochip4");
+    }
+    else {
+        strcpy(chipName, "gpiochip0");
+    }
+
+    gpioChip = gpiod_chip_open_by_name(chipName);
+    if (!gpioChip) {
+        sprintf(globals.error, "Failed to open chip %s\n", chipName);
+        return;
+    }
+
+    for (int i = 0; i < MaxGpio; i++) {
+        offsets[i] = i;
+    }
+
+    if (gpiod_chip_get_lines(gpioChip, offsets, MaxGpio, &gpioLines)) {
+        sprintf(globals.error, "Failed to get chip %s lines", chipName);
+        return;
+    }
+
+    struct gpiod_line_request_config config;
+    memset(&config, 0, sizeof(config));
+    config.consumer = "instrument-panel";
+    config.request_type = GPIOD_LINE_REQUEST_DIRECTION_INPUT;
+    config.flags = GPIOD_LINE_REQUEST_FLAG_BIAS_PULL_UP;
+
+    if (gpiod_line_request_bulk(&gpioLines, &config, gpioValues)) {
+        sprintf(globals.error, "Failed to bulk request chip %s lines", chipName);
+        return;
+    }
+}
+
+static void gpioAdd(int gpioNum)
+{
+    // Nothing to do as all lines have been set to inputs and pulled-up
+}
+
+static void gpioReadAll()
+{
+    // Just read every gpio state in a single call
+    if (gpiod_line_get_value_bulk(&gpioLines, gpioValues)) {
+        sprintf(globals.error, "Failed to get gpio values");
+        return;
+    }
+}
+
+static int gpioGetState(int gpioNum)
+{
+    // States have already been read so just return the requested one
+    return gpioValues[gpioNum];
+}
+#endif
+
+knobs::knobs()
+{
+#ifndef NoKnobs
+    gpioInit();
 #endif
 }
 
@@ -42,27 +146,13 @@ int knobs::add(int gpio1, int gpio2, int minVal, int maxVal, int startVal)
         fflush(stdout);
     }
 
-    // NOTE: pullUpDnControl does not work on RasPi4 so have
-    // to use raspi-gpio command line to pull up resistors.
-    char command[256];
-
 #ifndef NoKnobs
-    pinMode(gpio1, INPUT);
-#endif
+    gpioAdd(gpio1);
 
-    if (gpio2 == 0) {
-        sprintf(command, "raspi-gpio set %d pu", gpio1);
+    if (gpio2 != 0) {
+        gpioAdd(gpio2);
     }
-    else {
-#ifndef NoKnobs
-        pinMode(gpio2, INPUT);
 #endif
-        sprintf(command, "raspi-gpio set %d,%d pu", gpio1, gpio2);
-    }
-
-    if (system(command) != 0) {
-        strcpy(globals.error, "Failed to run raspi-gpio command");
-    }
 
     gpio[knobCount][0] = gpio1;
     gpio[knobCount][1] = gpio2;
@@ -110,15 +200,20 @@ void watcher(knobs *t)
     int state = 0;
 
     while (!globals.quit) {
+#ifndef NoKnobs
+        gpioReadAll();
+#endif
+
         for (int num = 0; num < t->knobCount; num++) {
             bool isSwitch = (t->gpio[num][1] == 0);
 
 #ifndef NoKnobs
-            state = digitalRead(t->gpio[num][0]);
+            state = gpioGetState(t->gpio[num][0]);
 #endif
+
             if (!isSwitch) {
 #ifndef NoKnobs
-                state += digitalRead(t->gpio[num][1]) * 2;
+                state += gpioGetState(t->gpio[num][1]) * 2;
 #endif
             }
 
@@ -167,7 +262,13 @@ void watcher(knobs *t)
         }
 
 #ifndef NoKnobs
-        delay(1);
+        // Sleep for 1 millisec
+        struct timespec sleeper, dummy;
+
+        sleeper.tv_sec = 0;
+        sleeper.tv_nsec = 1000000;
+
+        nanosleep(&sleeper, &dummy);
 #else
 	sleep(1000);
 #endif
