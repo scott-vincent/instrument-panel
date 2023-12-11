@@ -137,22 +137,7 @@ Note that only a few specific instruments have been created so far as this proje
 
 # Known Issues
 
-The wiringPi library is no longer supported but there is an unofficial version here:
-
-https://github.com/WiringPi/WiringPi
-
-You can download and build it by doing:
-```
-git clone https://github.com/WiringPi/WiringPi
-cd WiringPi
-./build
-```
-
-The Allegro library can sometimes give you a black screen when running on a Raspberry Pi. Try setting UseOpenGL_ES3 to false in instrument-panel.cpp, i.e.
-```
-const bool UseOpenGL_ES3 = false;
-```
-Note: This is now the default since switching to a pre-built version of Allegro so this issue should no longer occur.
+No known issues. All issues have been resolved from version 2.0.0 onwards.
 
 # Donate
 
