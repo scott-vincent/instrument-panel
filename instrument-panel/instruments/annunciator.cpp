@@ -218,7 +218,7 @@ void annunciator::update()
     bool aircraftChanged = (loadedAircraft != globals.aircraft);
     if (aircraftChanged) {
         loadedAircraft = globals.aircraft;
-        fastAircraft = (loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed);
+        fastAircraft = ((loadedAircraft != NO_AIRCRAFT && simVars->cruiseSpeed >= globals.FastAircraftSpeed)) || loadedAircraft == ORNITHOPTER;
         prevFuelL = 100;
         prevFuelR = 100;
         vacWarningL = false;
@@ -297,7 +297,7 @@ void annunciator::update()
         }
 
         // Oil warning if pressure < 20 PSI
-        oilWarning = (oilPressure < 20);
+        oilWarning = (oilPressure < 20) && loadedAircraft != ORNITHOPTER;
 
         // Volts warning if battery load too high, i.e. alternator off or not charging quick enough
         voltsWarning = (simVars->batteryLoad > 18);

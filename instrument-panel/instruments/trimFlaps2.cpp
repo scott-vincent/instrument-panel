@@ -176,7 +176,7 @@ void trimFlaps2::render()
             // Add gear down
             al_draw_scaled_bitmap(bitmaps[5], 0, 0, 88, 70, 111 * scaleFactor, 205 * scaleFactor, 88 * scaleFactor, 70 * scaleFactor, 0);
         }
-        else if (simVars->gearLeftPos > 0) {
+        else if (simVars->gearLeftPos > 2) {
             // Add UNLK
             al_draw_scaled_bitmap(bitmaps[4], 0, 0, 104, 37, 102 * scaleFactor, 217 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
@@ -185,7 +185,7 @@ void trimFlaps2::render()
             // Add gear down
             al_draw_scaled_bitmap(bitmaps[5], 0, 0, 88, 70, 246 * scaleFactor, 205 * scaleFactor, 88 * scaleFactor, 70 * scaleFactor, 0);
         }
-        else if (simVars->gearCentrePos > 0) {
+        else if (simVars->gearCentrePos > 2) {
             // Add UNLK
             al_draw_scaled_bitmap(bitmaps[4], 0, 0, 104, 37, 237 * scaleFactor, 217 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }
@@ -194,7 +194,7 @@ void trimFlaps2::render()
             // Add gear down
             al_draw_scaled_bitmap(bitmaps[5], 0, 0, 88, 70, 381 * scaleFactor, 205 * scaleFactor, 88 * scaleFactor, 70 * scaleFactor, 0);
         }
-        else if (simVars->gearRightPos > 0) {
+        else if (simVars->gearRightPos > 2) {
             // Add UNLK
             al_draw_scaled_bitmap(bitmaps[4], 0, 0, 104, 37, 372 * scaleFactor, 217 * scaleFactor, 104 * scaleFactor, 37 * scaleFactor, 0);
         }

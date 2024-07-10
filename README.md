@@ -10,9 +10,9 @@ You can also run the display on a PC (the same one running FS2020 if you wish) b
 
 Download the following two zip files.
 
-Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v2.0.0-Windows-x64.zip)
+Link: [Latest release of Instrument Panel for Windows](https://github.com/scott-vincent/instrument-panel/releases/latest/download/instrument-panel-v2.0.1-Windows-x64.zip)
 
-Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v2.0.0-windows-x64.zip)
+Link: [Latest release of Instrument Data Link for Windows](https://github.com/scott-vincent/instrument-data-link/releases/latest/download/instrument-data-link-v2.0.1-windows-x64.zip)
 
 Unzip instrument-data-link into its own folder and double-click instrument-data-link.exe to run it.
 
@@ -62,6 +62,8 @@ Power/Lights Panel: https://github.com/scott-vincent/power-lights-panel
 # Releases
 
 Ready-built releases for Windows x64 and Raspberry Pi 5 (64-bit) can be found by clicking on the Releases section on the right of this readme. The newer releases (v2.0.0 and later) will also run fine on a Raspberry Pi 4 (64-bit).
+
+If your Raspberry Pi is running a 32-bit OS please install version 1.7.8 instead. Only the 64-bit OS is supported from version 2.0.0 onwards as this is the version recommended by the Raspberry Pi Organisation.
 
 # Introduction
 

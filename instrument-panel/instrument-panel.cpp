@@ -315,11 +315,17 @@ void updateCommon()
         globals.info[0] = '\0';
     }
 
-    // Show error if SkyTrack not recording but pushing back or running engines
-    if (simVars->skytrackState == 1 && (simVars->pushbackState < 3 || simVars->rpmPercent > 10)) {
-        sprintf(globals.error, "SkyTrack not started");
+    // Show error if SkyTrack not recording (or CIX Logger not logging) but pushing back or running engines
+    if ((simVars->skytrackState == 1 || simVars->skytrackState == 3) && (simVars->pushbackState < 3 || simVars->rpmPercent > 10)) {
+        if (simVars->skytrackState == 1) {
+            sprintf(globals.error, "SkyTrack not started");
+        }
+        else {
+            sprintf(globals.error, "CIX Logger not started");
+        }
     }
-    else if (strcmp(globals.error, "SkyTrack not started") == 0 && simVars->skytrackState != 1) {
+    else if ((strcmp(globals.error, "SkyTrack not started") == 0 || strcmp(globals.error, "CIX Logger not started") == 0)
+        && simVars->skytrackState != 1 && simVars->skytrackState != 3) {
         globals.error[0] = '\0';
     }
 }

@@ -123,7 +123,7 @@ void vsi::update()
         if (loadedAircraft == SUPERMARINE_SPITFIRE) {
             customInstrument = new vsiSpitfire(xPos, yPos, size, name);
         }
-        else if (loadedAircraft == F15_EAGLE) {
+        else if (loadedAircraft == F15_EAGLE || loadedAircraft == ORNITHOPTER) {
             customInstrument = new vsiExtreme(xPos, yPos, size, name);
         }
     }

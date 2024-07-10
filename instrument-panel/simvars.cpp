@@ -773,14 +773,15 @@ void dataLink(simvars* thisPtr)
 
     while (!globals.quit) {
         // Poll instrument data link
-        if (nextFull > 0) {
-            nextFull--;
-            request.wantFullData = 0;
-        }
-        else {
-            nextFull = globals.dataRateFps * 2;
-            request.wantFullData = 1;
-        }
+        //if (nextFull > 0) {
+        //    nextFull--;
+        //    request.wantFullData = 0;
+        //}
+        //else {
+        //    nextFull = globals.dataRateFps * 2;
+        //    request.wantFullData = 1;
+        //}
+        request.wantFullData = 1;
         bytes = sendto(sockfd, (char*)&request, sizeof(request), 0, (SOCKADDR*)&addr, sizeof(addr));
 
         if (bytes > 0) {

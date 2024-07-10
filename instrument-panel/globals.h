@@ -32,6 +32,7 @@ enum Aircraft {
     KODIAK_100,
     HELI_H135,
     GLIDER,
+    ORNITHOPTER,
     OTHER_AIRCRAFT,
     OTHER_AIRCRAFT2
 };
@@ -78,6 +79,8 @@ struct globalVars
     const int Glider_DG_LS8_Len = 9;
     const char* Glider_DG_1001E_Text = "Asobo DG1001E";
     const int Glider_DG_1001E_Len = 13;
+    const char* Ornithopter_Text = "Ornithopter";
+    const int Ornithopter_Len = 11;
     const int FastAircraftSpeed = 198;
 
     const char* BitmapDir = "bitmaps/";

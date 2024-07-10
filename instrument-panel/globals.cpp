@@ -9,6 +9,7 @@ const int deltaStringSize = sizeof(DeltaString);
 void identifyAircraft(char* aircraft)
 {
     // Identify aircraft
+    //sprintf(globals.error, aircraft);
     if (strcmp(aircraft, globals.lastAircraft) != 0) {
         if (strncmp(aircraft, globals.Cessna_152_Text, globals.Cessna_152_Len) == 0) {
             globals.aircraft = CESSNA_152;
@@ -69,6 +70,9 @@ void identifyAircraft(char* aircraft)
         }
         else if (strncmp(aircraft, globals.Glider_DG_1001E_Text, globals.Glider_DG_1001E_Len) == 0) {
             globals.aircraft = GLIDER;
+        }
+        else if (strncmp(aircraft, globals.Ornithopter_Text, globals.Ornithopter_Len) == 0) {
+            globals.aircraft = ORNITHOPTER;
         }
         else {
             // Need to flip between other aircraft so that instruments
