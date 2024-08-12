@@ -27,6 +27,7 @@ public:
 
 private:
     void resize();
+    void writeTugHeading(double heading);
     void addVars();
     void addKnobs();
     void updateKnobs();

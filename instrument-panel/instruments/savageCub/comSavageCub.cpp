@@ -177,7 +177,7 @@ void comSavageCub::updateKnobs()
 
         if (adjust != 0) {
             double newVal = adjustCom(simVars->com1Standby, adjust);
-            globals.simVars->write(KEY_COM1_STBY_RADIO_SET, newVal);
+            globals.simVars->write(KEY_COM1_STBY_RADIO_SET_HZ, newVal);
             prevAdjustVal = val;
         }
         time(&lastAdjust);
@@ -254,23 +254,10 @@ double comSavageCub::adjustCom(double val, int adjust)
         else if (frac2 == 20 || frac2 == 45 || frac2 == 70) {
             frac2 += adjust * 5;
         }
-
-        // .020 shows as .025 and .070 shows as .075
-        if (frac2 == 25 || frac2 == 75) {
-            frac2 -= 5;
-        }
     }
 
-    // Convert to BCD
-    int digit1 = whole / 100;
-    int digit2 = (whole % 100) / 10;
-    int digit3 = whole % 10;
-    int digit4 = frac1;
-    int digit5 = frac2 / 10;
-    int digit6 = frac2 % 10;
-
-    // Return digit6 as fraction
-    return 65536 * digit1 + 4096 * digit2 + 256 * digit3 + 16 * digit4 + digit5 + digit6 * 0.1;
+    // Convert to Hz
+    return whole * 1000000 + (frac1 * 100 + frac2) * 1000;
 }
 
 #endif // !_WIN32

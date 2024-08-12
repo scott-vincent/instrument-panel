@@ -300,20 +300,20 @@ void trimFlaps2::update()
         if (simVars->rudderPosition < -0.1) {
             if (requestedTugHeading - tugHeading < 60) {
                 requestedTugHeading = tugHeading + 90;
-                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+                writeTugHeading(requestedTugHeading);
             }
         }
         else if (simVars->rudderPosition > 0.1) {
             if (tugHeading - requestedTugHeading < 60) {
                 requestedTugHeading = tugHeading - 90;
-                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+                writeTugHeading(requestedTugHeading);
             }
         }
         else {
             // Pushback straight
             if (abs(tugHeading - requestedTugHeading) > 1) {
                 requestedTugHeading = tugHeading;
-                globals.simVars->write(KEY_TUG_HEADING, requestedTugHeading * 11930464);
+                writeTugHeading(requestedTugHeading);
             }
         }
     }
@@ -337,6 +337,18 @@ void trimFlaps2::update()
     else {
         gearUpWarning = 0;
     }
+}
+
+void trimFlaps2::writeTugHeading(double heading)
+{
+    double orig = heading;
+    if (heading >= 180) {
+        heading = heading - 360.0;
+    }
+    else if (heading < -180) {
+        heading = heading + 360.0;
+    }
+    globals.simVars->write(KEY_TUG_HEADING, heading * 11930464);
 }
 
 /// <summary>
