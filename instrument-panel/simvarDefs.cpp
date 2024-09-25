@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v2.0.2";
+const char* versionString = "v2.0.3";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
@@ -33,6 +33,7 @@ const char* SimVarDefs[][2] = {
     { "SwitchBox Button 6", "jetbridge" },
     { "SwitchBox Button 7", "jetbridge" },
     { "SwitchBox Mode", "jetbridge" },
+    { "SwitchBox Park Brake", "jetbridge" },
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     { "Title", "string32" },

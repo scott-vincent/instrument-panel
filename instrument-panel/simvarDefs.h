@@ -27,6 +27,7 @@ struct SimVars
     double sbEncoder[4];    // SwitchBox
     double sbButton[7];     // SwitchBox
     double sbMode;          // SwitchBox
+    double sbParkBrake;     // SwitchBox
 
     // Vars required for all panels (screensaver, aircraft identification etc.)
     char aircraft[32] = "\0";
