@@ -325,6 +325,24 @@ void alt::updateKnobs()
             lastCalAdjust = 0;
         }
     }
+
+    val = simVars->sbButton[2];
+    if (simVars->sbMode == 4) {
+        prevPushSb = val;
+    }
+    else if (val != prevPushSb) {
+        // Push toggles Std pressure
+        if (prevPushSb % 2 == 1) {
+            isStdMode = !isStdMode;
+            if (isStdMode) {
+                globals.simVars->write(KEY_BARO_MODE, 2);
+            }
+            else {
+                globals.simVars->write(KEY_BARO_MODE, 1);
+            }
+        }
+        prevPushSb = val;
+    }
 }
 
 #endif // !_WIN32

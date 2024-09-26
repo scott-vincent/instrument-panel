@@ -16,21 +16,13 @@ private:
     double inhg;          // inches of mercury
     double angle;
     double altitude = 0;
+    bool isStdMode = false;
 
     // Hardware knobs
     int calKnob = -1;
     int prevVal = 0;
     int prevValSb = 0;
-    int prevZoomSb = 0;
-    int prevOuterSb = 0;
-    int prevInnerSb = 0;
-    int prevOuterPushSb = 0;
-    int prevInnerPushSb = 0;
-    int prevEnterSb = 0;
-    int prevButton10Sb = 0;
-    int prevButton5Sb = 0;
-    int prevButton7Sb = 0;
-    int prevButton8Sb = 0;
+    int prevPushSb = 0;
     time_t lastCalAdjust = 0;
     time_t now;
 
