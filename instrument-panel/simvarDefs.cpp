@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v2.0.3";
+const char* versionString = "v2.0.4";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
