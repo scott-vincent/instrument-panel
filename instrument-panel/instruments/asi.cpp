@@ -243,7 +243,7 @@ void asi::updateKnobs()
     int val = globals.hardwareKnobs->read(calKnob);
 
     if (val != INT_MIN) {
-        if (loadedAircraft == FBW_A320) {
+        if (loadedAircraft == FBW) {
             // Use knob for interior lighting instead
             double adjust = val - prevVal;
             if (adjust != 0) {
