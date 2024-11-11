@@ -230,7 +230,7 @@ void vor1::update()
     // Calculate values
     compassAngle = -vor1Obs;
 
-    if (loadedAircraft == FBW_A320) {
+    if (loadedAircraft == FBW) {
         glideSlopeOn = simVars->jbVerticalMode > 29 && simVars->jbVerticalMode < 33;
         toFromOn = simVars->jbLateralMode > 29 && simVars->jbLateralMode < 33;
     }
