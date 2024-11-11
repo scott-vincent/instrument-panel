@@ -21,7 +21,7 @@ enum Aircraft {
     SAVAGE_CUB,
     SHOCK_ULTRA,
     AIRBUS_A310,
-    FBW_A320,
+    FBW,
     BOEING_747,
     BOEING_787,
     SUPERMARINE_SPITFIRE,
@@ -49,14 +49,6 @@ struct globalVars
     const int Savage_Cub_Len = 16;
     const char* Shock_Ultra_Text = "Savage Shock Ultra";
     const int Shock_Ultra_Len = 18;
-    const char* Airbus_A310_Text = "Airbus A310";
-    const int Airbus_A310_Len = 11;
-    const char* IniBuilds_A310_Text = "A310";
-    const int IniBuilds_A310_Len = 4;
-    const char* Airbus_A320_Text = "Airbus A320";
-    const int Airbus_A320_Len = 11;
-    const char* FBW_A320_Text = "FBW";
-    const int FBW_A320_Len = 3;
     const char* Boeing_747_Text = "Salty Boeing 747";
     const int Boeing_747_Len = 16;
     const char* Boeing_787_Text = "Boeing 787";
