@@ -84,6 +84,8 @@ struct SimVars
     double autopilotAltitude = 0;
     double autopilotAltitude3 = 0;
     double autopilotAltLock = 0;
+    double autopilotNav1Lock = 0;
+    double gpsDrivesNav1 = 0;
     double autopilotPitchHold = 0;
     double autopilotVerticalSpeed = 0;
     double autopilotVerticalHold = 0;
@@ -132,7 +134,6 @@ struct SimVars
     double vor2ToFrom = 0;
     double navHasLocalizer = 0;
     double navLocalizer = 0;
-    double gpsDrivesNav1 = 0;
     double gpsWpCrossTrk = 0;
     double adfRadial = 0;
     double adfCard = 0;
@@ -244,6 +245,8 @@ enum EVENT_ID {
     KEY_AP_LOC_HOLD,
     KEY_AP_APR_HOLD_ON,
     KEY_AP_APR_HOLD_OFF,
+    KEY_AP_NAV1_HOLD_ON,
+    KEY_AP_NAV1_HOLD_OFF,
     KEY_AP_PANEL_ALTITUDE_ON,
     KEY_AUTO_THROTTLE_ARM,
     KEY_AP_HEADING_SLOT_INDEX_SET,

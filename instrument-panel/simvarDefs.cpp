@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simvarDefs.h"
 
-const char* versionString = "v2.0.4";
+const char* versionString = "v2.0.5";
 
 const char* SimVarDefs[][2] = {
     // Vars for Jetbridge (must come first)
@@ -89,6 +89,8 @@ const char* SimVarDefs[][2] = {
     { "Autopilot Altitude Lock Var", "feet" },
     { "Autopilot Altitude Lock Var:3", "feet" },
     { "Autopilot Altitude Lock", "bool" },
+    { "Autopilot Nav1 Lock", "bool" },
+    { "Gps Drives Nav1", "bool" },
     { "Autopilot Pitch Hold", "bool" },
     { "Autopilot Vertical Hold Var", "feet/minute" },
     { "Autopilot Vertical Hold", "bool" },
@@ -137,7 +139,6 @@ const char* SimVarDefs[][2] = {
     { "Nav ToFrom:2", "enum" },
     { "Nav Has Localizer:1", "bool" },
     { "Nav Localizer:1", "degrees" },
-    { "Gps Drives Nav1", "bool" },
     { "Gps Wp Cross Trk", "meters" },
     { "Adf Radial:1", "degrees" },
     { "Adf Card", "degrees" },
@@ -251,6 +252,8 @@ WriteEvent WriteEvents[] = {
     { KEY_AP_LOC_HOLD, "AP_LOC_HOLD" },
     { KEY_AP_APR_HOLD_ON, "AP_APR_HOLD_ON" },
     { KEY_AP_APR_HOLD_OFF, "AP_APR_HOLD_OFF" },
+    { KEY_AP_NAV1_HOLD_ON, "AP_NAV1_HOLD_ON" },
+    { KEY_AP_NAV1_HOLD_OFF, "AP_NAV1_HOLD_OFF" },
     { KEY_AP_PANEL_ALTITUDE_ON, "AP_PANEL_ALTITUDE_ON" },
     { KEY_AUTO_THROTTLE_ARM, "AUTO_THROTTLE_ARM" },
     { KEY_AP_HEADING_SLOT_INDEX_SET, "AP_HEADING_SLOT_INDEX_SET" },
